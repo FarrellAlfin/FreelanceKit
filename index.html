@@ -744,8 +744,8 @@ footer p{font-size:12px;color:var(--ink-light)}
   <nav class="top-nav">
     <div class="nav-logo" onclick="">Freelance<span>Kit</span></div>
     <div class="nav-links">
-      <a onclick="scrollTo('features')">Templates</a>
-      <a onclick="scrollTo('pricing')">Pricing</a>
+      <a onclick="scrollToSection('features')">Templates</a>
+      <a onclick="scrollToSection('pricing')">Pricing</a>
       <a>Community</a>
     </div>
     <div class="nav-actions">
@@ -762,7 +762,7 @@ footer p{font-size:12px;color:var(--ink-light)}
       <p class="hero-sub">Every contract, invoice, proposal, and tracker you need to run your freelance business like a pro — built by freelancers who learned the hard way.</p>
       <div class="hero-btns">
         <button class="btn-hero-primary" onclick="showAuth('signup','pro')">Start free trial →</button>
-        <button class="btn-hero-ghost" onclick="scrollTo('pricing')">See pricing</button>
+        <button class="btn-hero-ghost" onclick="scrollToSection('pricing')">See pricing</button>
       </div>
       <p class="hero-note">7-day free trial · No credit card required · Cancel anytime</p>
     </div>
@@ -1915,21 +1915,23 @@ footer p{font-size:12px;color:var(--ink-light)}
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════ SHARED ═══════════════
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>t.classList.remove('show'),3200)}
-function scrollTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+function scrollToSection(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 function fm(n,sym='$'){return sym+Math.round(n).toLocaleString()}
 function fmD(n){return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
 
 // ═══════════════ NAVIGATION ═══════════════
 function showDash(panel='home'){
-  document.getElementById('page-landing').classList.remove('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-dash').classList.add('active');
   if(panel)showPanel(panel,document.getElementById('nav-'+panel));
-  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
 }
 function showLanding(){
-  document.getElementById('page-dash').classList.remove('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-landing').classList.add('active');
-  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
 }
 
 function showPanel(id,el){
@@ -1940,7 +1942,7 @@ function showPanel(id,el){
   if(el)el.classList.add('active');
   // Also select 'home' nav if showing home
   if(id==='home'){const hn=document.getElementById('nav-home');if(hn)hn.classList.add('active')}
-  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;document.body.scrollTop=0;
   // Init interactive panels on first show
   if(id==='invoice'&&!window._invInit){window._invInit=true;initInvoice()}
   if(id==='pipeline'&&!window._pipeInit){window._pipeInit=true;renderPipeline()}
@@ -2263,7 +2265,7 @@ function renderBriefForm(){
     </div>`;
 }
 function saveBfCheck(id){bAnswers[id]=[...document.querySelectorAll(`input[data-bf="${id}"]:checked`)].map(el=>el.value)}
-function bNav(dir){bStep=Math.max(0,Math.min(5,bStep+dir));renderBriefSteps();renderBriefForm();window.scrollTo(0,0)}
+function bNav(dir){bStep=Math.max(0,Math.min(5,bStep+dir));renderBriefSteps();renderBriefForm();document.documentElement.scrollTop=0;document.body.scrollTop=0;}
 function renderBriefSummary(container){
   container.innerHTML=`
     <div class="brief-step-header"><div class="bsh-step">Complete</div><div class="bsh-title">Brief summary</div><div class="bsh-desc">Review before copying to your project notes.</div></div>
