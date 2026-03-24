@@ -145,6 +145,10 @@ h2 em{font-style:italic;color:var(--amber)}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0}
 .auth-divider-line{flex:1;height:1px;background:var(--border)}
 .auth-divider-txt{font-size:11px;color:var(--ink-light)}
+.auth-error{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:#B91C1C;margin-bottom:14px;display:none}
+.auth-error.show{display:block}
+.auth-input.error{border-color:#F87171}
+.auth-loading{opacity:.6;pointer-events:none}
 .auth-google{width:100%;padding:11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-family:var(--font-body);font-size:14px;color:var(--ink-mid);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
 .auth-google:hover{border-color:var(--ink);color:var(--ink)}
 .auth-switch{text-align:center;margin-top:20px;font-size:13px;color:var(--ink-light)}
@@ -723,6 +727,14 @@ footer p{font-size:12px;color:var(--ink-light)}
   .doc-body{padding:28px 22px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ─── REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE ───
+  var SUPABASE_URL = 'https://xbntqbnbjqwnzhfapman.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhibnRxYm5ianF3bnpoZmFwbWFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODgxMzAsImV4cCI6MjA4OTk2NDEzMH0.ghv8f5KsaktDp6XRhV72gVukucjskq8C_4-_PcvXIv4';
+  // ─────────────────────────────────────────────────────────────
+  var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 </head>
 <body>
 
@@ -1091,7 +1103,7 @@ footer p{font-size:12px;color:var(--ink-light)}
               <button class="auth-tab" onclick="switchAuthTab('signin')">Sign in</button>
             </div>
 
-            <button class="auth-google" onclick="showDash()">
+            <button class="auth-google" onclick="handleGoogleAuth()">
               <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
               Continue with Google
             </button>
@@ -1137,7 +1149,8 @@ footer p{font-size:12px;color:var(--ink-light)}
               </div>
             </div>
 
-            <button class="auth-cta" onclick="showDash()" id="signup-cta">Start free trial →</button>
+            <div class="auth-error" id="su-error"></div>
+            <button class="auth-cta" onclick="handleSignUp()" id="signup-cta">Start free trial →</button>
 
             <div class="auth-switch">Already have an account? <span onclick="switchAuthTab('signin')">Sign in</span></div>
 
@@ -1155,7 +1168,7 @@ footer p{font-size:12px;color:var(--ink-light)}
               <button class="auth-tab active" onclick="switchAuthTab('signin')">Sign in</button>
             </div>
 
-            <button class="auth-google" onclick="showDash()">
+            <button class="auth-google" onclick="handleGoogleAuth()">
               <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
               Continue with Google
             </button>
@@ -1174,9 +1187,9 @@ footer p{font-size:12px;color:var(--ink-light)}
               <div class="auth-field-lbl">Password</div>
               <input class="auth-input" type="password" placeholder="Your password" id="si-pass">
             </div>
-            <div class="auth-forgot" onclick="showToast('Password reset coming soon')">Forgot password?</div>
-
-            <button class="auth-cta" onclick="showDash()">Sign in →</button>
+            <div class="auth-forgot" onclick="handleForgotPassword()">Forgot password?</div>
+            <div class="auth-error" id="si-error"></div>
+            <button class="auth-cta" onclick="handleSignIn()" id="signin-cta">Sign in →</button>
 
             <div class="auth-switch">Don't have an account? <span onclick="switchAuthTab('signup')">Start free trial</span></div>
           </div>
@@ -1251,7 +1264,7 @@ footer p{font-size:12px;color:var(--ink-light)}
     </div>
     <div class="nav-actions">
       <span style="font-size:13px;color:var(--ink-mid)">Alex Chen</span>
-      <div class="nav-avatar">AC</div>
+      <div class="nav-avatar" onclick="handleSignOut()" title="Sign out" style="cursor:pointer">AC</div>
     </div>
   </nav>
 
@@ -2251,6 +2264,154 @@ function copyBrief(){
 
 
 // ═══════════════ AUTH ═══════════════
+// ═══════════════ SUPABASE AUTH ═══════════════
+
+// On page load — check if user is already signed in
+_supabase.auth.getSession().then(function(result) {
+  var session = result.data.session;
+  if (session && session.user) {
+    setLoggedInUser(session.user);
+    showDash();
+  }
+});
+
+// Listen for auth state changes (e.g. after Google OAuth redirect)
+_supabase.auth.onAuthStateChange(function(event, session) {
+  if (event === 'SIGNED_IN' && session) {
+    setLoggedInUser(session.user);
+    showDash();
+  }
+  if (event === 'SIGNED_OUT') {
+    showLanding();
+  }
+});
+
+function setLoggedInUser(user) {
+  var name = (user.user_metadata && user.user_metadata.full_name)
+    ? user.user_metadata.full_name
+    : (user.email ? user.email.split('@')[0] : 'there');
+  // Update dashboard nav name and avatar
+  var nameEl = document.querySelector('#page-dash .nav-actions span');
+  if (nameEl) nameEl.textContent = name;
+  var avEl = document.querySelector('#page-dash .nav-avatar');
+  if (avEl) avEl.textContent = name.slice(0,2).toUpperCase();
+  // Update dashboard welcome message
+  var wbEl = document.querySelector('.wb-text h3');
+  if (wbEl) wbEl.textContent = 'Welcome back, ' + name.split(' ')[0] + '.';
+}
+
+function showAuthError(formId, msg) {
+  var el = document.getElementById(formId);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 5000);
+}
+
+function setAuthLoading(btnId, loading, defaultText) {
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.textContent = loading ? 'Please wait...' : defaultText;
+  btn.classList.toggle('auth-loading', loading);
+}
+
+async function handleSignUp() {
+  var name = document.getElementById('su-name').value.trim();
+  var email = document.getElementById('su-email').value.trim();
+  var pass = document.getElementById('su-pass').value;
+  var plan = document.querySelector('.auth-plan.selected');
+  var planId = plan ? plan.id.replace('plan-','') : 'pro';
+
+  if (!name) { showAuthError('su-error', 'Please enter your name.'); return; }
+  if (!email) { showAuthError('su-error', 'Please enter your email address.'); return; }
+  if (pass.length < 8) { showAuthError('su-error', 'Password must be at least 8 characters.'); return; }
+
+  var ctaText = document.getElementById('signup-cta').textContent;
+  setAuthLoading('signup-cta', true, ctaText);
+
+  var result = await _supabase.auth.signUp({
+    email: email,
+    password: pass,
+    options: { data: { full_name: name, plan: planId } }
+  });
+
+  setAuthLoading('signup-cta', false, ctaText);
+
+  if (result.error) {
+    showAuthError('su-error', result.error.message);
+    return;
+  }
+
+  // If email confirmation is off, user is signed in immediately
+  if (result.data.session) {
+    setLoggedInUser(result.data.user);
+    showDash();
+  } else {
+    // Email confirmation is on — tell the user to check their inbox
+    showAuthError('su-error', 'Account created! Check your email to confirm before signing in.');
+    document.getElementById('su-error').style.background = '#F0FFF4';
+    document.getElementById('su-error').style.borderColor = '#86EFAC';
+    document.getElementById('su-error').style.color = '#166534';
+  }
+}
+
+async function handleSignIn() {
+  var email = document.getElementById('si-email').value.trim();
+  var pass = document.getElementById('si-pass').value;
+
+  if (!email) { showAuthError('si-error', 'Please enter your email address.'); return; }
+  if (!pass) { showAuthError('si-error', 'Please enter your password.'); return; }
+
+  setAuthLoading('signin-cta', true, 'Sign in →');
+
+  var result = await _supabase.auth.signInWithPassword({
+    email: email,
+    password: pass
+  });
+
+  setAuthLoading('signin-cta', false, 'Sign in →');
+
+  if (result.error) {
+    showAuthError('si-error', result.error.message);
+    return;
+  }
+
+  setLoggedInUser(result.data.user);
+  showDash();
+}
+
+async function handleGoogleAuth() {
+  await _supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin }
+  });
+  // Page will redirect to Google and come back — onAuthStateChange handles the rest
+}
+
+async function handleForgotPassword() {
+  var email = document.getElementById('si-email').value.trim();
+  if (!email) {
+    showAuthError('si-error', 'Enter your email address above first.');
+    return;
+  }
+  var result = await _supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '?reset=true'
+  });
+  if (result.error) {
+    showAuthError('si-error', result.error.message);
+  } else {
+    showAuthError('si-error', 'Password reset email sent — check your inbox.');
+    document.getElementById('si-error').style.background = '#F0FFF4';
+    document.getElementById('si-error').style.borderColor = '#86EFAC';
+    document.getElementById('si-error').style.color = '#166534';
+  }
+}
+
+async function handleSignOut() {
+  await _supabase.auth.signOut();
+  showLanding();
+}
+
 function showAuth(mode, plan) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-auth').classList.add('active');
