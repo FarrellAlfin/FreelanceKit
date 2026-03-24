@@ -374,7 +374,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .btn-outline:hover{border-color:var(--ink);color:var(--ink)}
 
 /* Doc wrapper */
-.doc-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px}
+.doc-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:visible;box-shadow:var(--shadow);margin-bottom:24px}
 .doc-bar{background:var(--cream-dark);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:6px}
 .db-dot{width:10px;height:10px;border-radius:50%}
 .db-name{font-size:12px;color:var(--ink-mid);font-weight:500;margin-left:5px;flex:1}
@@ -431,7 +431,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .cf-hint{font-size:11px;font-weight:400;color:var(--ink-light)}
 .cf-inp{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--ink);background:var(--cream);transition:border-color .15s}
 .cf-inp:focus{outline:none;border-color:var(--amber);background:var(--white)}
-.cf-inp.prefix-${padding-left:26px}
+.cf-inp-prefix{padding-left:28px}
 .cf-wrap{position:relative}
 .cf-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--ink-mid);pointer-events:none}
 .cf-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--ink-light);pointer-events:none}
@@ -463,7 +463,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 
 /* Invoice builder */
 .inv-layout{display:grid;grid-template-columns:370px 1fr;gap:24px}
-.inv-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.inv-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:visible}
 .ip-head{background:var(--ink);padding:13px 18px;display:flex;align-items:center;gap:8px}
 .ip-head-title{font-size:13px;font-weight:500;color:var(--cream)}
 .ip-head-badge{font-size:10px;background:rgba(232,169,106,0.25);color:var(--amber-mid);padding:2px 8px;border-radius:20px;margin-left:auto}
@@ -725,6 +725,40 @@ footer p{font-size:12px;color:var(--ink-light)}
   .nav-links{display:none}
   .inv-paper{padding:24px 20px}
   .doc-body{padding:28px 22px}
+}
+
+@media print {
+  /* Hide everything except the active document */
+  body * { visibility: hidden; }
+  .print-target, .print-target * { visibility: visible; }
+  .print-target {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    background: white;
+    padding: 40px 56px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    line-height: 1.85;
+    color: #1A1713;
+  }
+  /* Remove borders and shadows in print */
+  .print-target .doc-bar,
+  .print-target .doc-wrap,
+  .print-target .inv-paper { box-shadow: none; border: none; }
+  /* Show amber fields as plain text */
+  .print-target .field,
+  .print-target .wp-field {
+    background: transparent;
+    border: none;
+    color: #1A1713;
+    font-family: Georgia, serif;
+    font-size: 13px;
+  }
+  /* Invoice table */
+  .print-target .inv-table th,
+  .print-target .inv-table td { border-bottom: 0.5px solid #E2DAD0; }
+  @page { margin: 20mm; size: A4; }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1375,8 +1409,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
           <div class="tv-actions">
             <button class="btn-use" onclick="copyDoc('contract-doc-body',this)">📋 Copy contract</button>
-            <button class="btn-outline" onclick="copyAndOpen('contract-doc-body','https://www.notion.so')">&#8599; Copy &amp; open Notion</button>
-            <button class="btn-outline" onclick="copyAndOpen('contract-doc-body','https://docs.new')">&#8599; Copy &amp; open Docs</button>
+            <button class="btn-outline" onclick="printDoc('contract-doc-body')">&#128438; Download / Print PDF</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> This template is for general informational purposes only. It does not constitute legal advice. Laws vary by jurisdiction — consult a qualified attorney for high-value or complex engagements. FreelanceKit accepts no liability for outcomes arising from use of this template.</div>
@@ -1445,7 +1478,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
           <div class="tv-actions">
             <button class="btn-use" onclick="copyDoc('scope-doc-body',this)">📋 Copy change order</button>
-            <button class="btn-outline" onclick="copyAndOpen('scope-doc-body','https://docs.new')">&#8599; Copy &amp; open Docs</button>
+            <button class="btn-outline" onclick="printDoc('scope-doc-body')">&#128438; Download / Print PDF</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> For general use. Ensure your primary contract includes a provision allowing for written scope changes. Consult a local attorney for complex arrangements.</div>
@@ -1552,7 +1585,7 @@ footer p{font-size:12px;color:var(--ink-light)}
             </div>
             <div class="ip-actions">
               <button class="ip-btn-p" onclick="copyInvoice()">📋 Copy as text</button>
-              <button class="ip-btn-g" onclick="showToast('🖨️ Print / Save as PDF: Ctrl+P or Cmd+P')">Print / PDF</button>
+              <button class="ip-btn-g" onclick="printDoc('inv-paper')">Print / PDF</button>
             </div>
           </div>
           <div class="inv-preview">
@@ -1672,12 +1705,12 @@ footer p{font-size:12px;color:var(--ink-light)}
         <div class="calc-grid">
           <div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
-              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp prefix-$" type="number" id="rc-takehome" value="60000" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="60000" oninput="calcRate()"></div></div>
               <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option></select></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
-              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp prefix-$" type="number" id="rc-expenses" value="3600" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="3600" oninput="calcRate()"></div></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Weeks off per year: <strong id="rc-woff-lbl">6</strong> <span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="2" max="20" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>2 wks</span><span>20 wks</span></div></div>
@@ -1775,7 +1808,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-title">Client Pipeline<br><em>Tracker</em></div>
           <div class="tv-desc">See your next 8 weeks of revenue at a glance. Drag cards between stages. The forecast updates automatically based on each stage's close probability.</div>
         </div>
-        <div class="tv-actions"><button class="btn-use" onclick="openPipelineModal()">+ Add client</button><button class="btn-outline" onclick="window.open('https://www.notion.so','_blank')">&#8599; Open Notion</button></div>
+        <div class="tv-actions"><button class="btn-use" onclick="openPipelineModal()">+ Add client</button></div>
         <div class="pipeline-forecast">
           <div class="pf-top"><div><div class="pf-title">Pipeline forecast</div><div class="pf-sub">Weighted by close probability per stage</div></div><div style="text-align:right"><div class="pf-total-n" id="pf-total">$0</div><div class="pf-total-l">weighted pipeline value</div></div></div>
           <div class="pf-bars" id="pf-bars-el"></div>
@@ -1820,7 +1853,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Canva</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
           <div class="tv-title">Client Welcome<br><em>Packet</em></div>
           <div class="tv-desc">Send this within 24 hours of a client signing. Sets expectations, explains how you work, and immediately signals that you run a professional operation.</div>
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('wp-body',this)">📋 Copy as text</button><button class="btn-outline" onclick="copyAndOpen('wp-body','https://www.canva.com/create/')">&#8599; Copy &amp; open Canva</button></div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('wp-body',this)">📋 Copy as text</button><button class="btn-outline" onclick="printDoc('wp-body')">&#128438; Download / Print PDF</button></div>
         </div>
         <div class="doc-wrap">
           <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt" style="background:var(--amber-light);color:var(--amber)">PDF / Canva</span></div>
@@ -2060,6 +2093,22 @@ function updateInv(){
   if(tr)tr.style.display=tax>0?'':'none';if(g('p-tax-val'))g('p-tax-val').textContent='+'+fmD(ta)+' ('+tax+'%)';
   g('p-total').textContent=fmD(tot);
 }
+function printDoc(docId) {
+  // Remove any previous print-target
+  document.querySelectorAll('.print-target').forEach(function(el) {
+    el.classList.remove('print-target');
+  });
+  var el = document.getElementById(docId);
+  if (!el) { showToast('Document not found'); return; }
+  // Walk up to the nearest doc-wrap or inv-paper container
+  var target = el.closest('.doc-wrap') || el.closest('.inv-paper') || el;
+  target.classList.add('print-target');
+  showToast('Tip: choose "Save as PDF" in the print dialog');
+  setTimeout(function() {
+    window.print();
+    target.classList.remove('print-target');
+  }, 400);
+}
 function copyAndOpen(docId, url){
   var el=document.getElementById(docId);
   if(el){
@@ -2294,24 +2343,33 @@ function copyBrief(){
 // ═══════════════ AUTH ═══════════════
 // ═══════════════ SUPABASE AUTH ═══════════════
 
-// On page load — check if user is already signed in
+// On page load — restore session if already logged in
 _supabase.auth.getSession().then(function(result) {
   var session = result.data.session;
   if (session && session.user) {
     setLoggedInUser(session.user);
     showDash();
   }
+  // If no session, stay on landing (default .page.active state)
 });
 
-// Listen for auth state changes (e.g. after Google OAuth redirect)
+// Listen for auth state changes
+// INITIAL_SESSION fires on every page load with an existing session —
+// we ignore it here because getSession() above already handles that.
+// We only act on genuine new sign-ins (PASSWORD/OAuth) and sign-outs.
 _supabase.auth.onAuthStateChange(function(event, session) {
-  if (event === 'SIGNED_IN' && session) {
-    setLoggedInUser(session.user);
-    showDash();
+  if ((event === 'SIGNED_IN') && session) {
+    // Skip INITIAL_SESSION — already handled by getSession() above
+    if (window._authInitDone) {
+      setLoggedInUser(session.user);
+      showDash();
+    }
   }
   if (event === 'SIGNED_OUT') {
     showLanding();
   }
+  // Mark that the initial load is complete
+  window._authInitDone = true;
 });
 
 function setLoggedInUser(user) {
