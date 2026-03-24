@@ -727,9 +727,6 @@ footer p{font-size:12px;color:var(--ink-light)}
   .doc-body{padding:28px 22px}
 }
 
-@media print {
-  /* Hide everything except the active document */
-  body * { visibility: hidden; }
   .print-target, .print-target * { visibility: visible; }
   .print-target {
     position: fixed;
@@ -762,6 +759,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 <script>
   // ─── REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE ───
   var SUPABASE_URL = 'https://xbntqbnbjqwnzhfapman.supabase.co';
@@ -1154,11 +1152,11 @@ footer p{font-size:12px;color:var(--ink-light)}
             </div>
             <div class="auth-field">
               <div class="auth-field-lbl">Email address</div>
-              <input class="auth-input" type="email" placeholder="you@example.com" id="su-email">
+              <input class="auth-input" type="email" placeholder="you@example.com" id="su-email" onkeydown="if(event.key==='Enter')handleSignUp()">
             </div>
             <div class="auth-field">
               <div class="auth-field-lbl">Password</div>
-              <input class="auth-input" type="password" placeholder="At least 8 characters" id="su-pass">
+              <input class="auth-input" type="password" placeholder="At least 8 characters" id="su-pass" onkeydown="if(event.key==='Enter')handleSignUp()">
             </div>
 
             <div style="margin-bottom:6px">
@@ -1215,11 +1213,11 @@ footer p{font-size:12px;color:var(--ink-light)}
 
             <div class="auth-field">
               <div class="auth-field-lbl">Email address</div>
-              <input class="auth-input" type="email" placeholder="you@example.com" id="si-email">
+              <input class="auth-input" type="email" placeholder="you@example.com" id="si-email" onkeydown="if(event.key==='Enter')handleSignIn()">
             </div>
             <div class="auth-field">
               <div class="auth-field-lbl">Password</div>
-              <input class="auth-input" type="password" placeholder="Your password" id="si-pass">
+              <input class="auth-input" type="password" placeholder="Your password" id="si-pass" onkeydown="if(event.key==='Enter')handleSignIn()">
             </div>
             <div class="auth-forgot" onclick="handleForgotPassword()">Forgot password?</div>
             <div class="auth-error" id="si-error"></div>
@@ -1409,7 +1407,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
           <div class="tv-actions">
             <button class="btn-use" onclick="copyDoc('contract-doc-body',this)">📋 Copy contract</button>
-            <button class="btn-outline" onclick="printDoc('contract-doc-body')">&#128438; Download / Print PDF</button>
+            <button class="btn-outline" onclick="generateDocx('contract-doc-body','FreelanceKit_Client_Contract.docx')">&#128196; Download Word doc</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> This template is for general informational purposes only. It does not constitute legal advice. Laws vary by jurisdiction — consult a qualified attorney for high-value or complex engagements. FreelanceKit accepts no liability for outcomes arising from use of this template.</div>
@@ -1478,7 +1476,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
           <div class="tv-actions">
             <button class="btn-use" onclick="copyDoc('scope-doc-body',this)">📋 Copy change order</button>
-            <button class="btn-outline" onclick="printDoc('scope-doc-body')">&#128438; Download / Print PDF</button>
+            <button class="btn-outline" onclick="generateDocx('scope-doc-body','FreelanceKit_Scope_Change_Order.docx')">&#128196; Download Word doc</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> For general use. Ensure your primary contract includes a provision allowing for written scope changes. Consult a local attorney for complex arrangements.</div>
@@ -1585,7 +1583,7 @@ footer p{font-size:12px;color:var(--ink-light)}
             </div>
             <div class="ip-actions">
               <button class="ip-btn-p" onclick="copyInvoice()">📋 Copy as text</button>
-              <button class="ip-btn-g" onclick="printDoc('inv-paper')">Print / PDF</button>
+              <button class="ip-btn-g" onclick="generateInvoiceDocx()">&#128196; Download Word doc</button>
             </div>
           </div>
           <div class="inv-preview">
@@ -1853,7 +1851,7 @@ footer p{font-size:12px;color:var(--ink-light)}
           <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Canva</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
           <div class="tv-title">Client Welcome<br><em>Packet</em></div>
           <div class="tv-desc">Send this within 24 hours of a client signing. Sets expectations, explains how you work, and immediately signals that you run a professional operation.</div>
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('wp-body',this)">📋 Copy as text</button><button class="btn-outline" onclick="printDoc('wp-body')">&#128438; Download / Print PDF</button></div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('wp-body',this)">📋 Copy as text</button><button class="btn-outline" onclick="generateDocx('wp-body','FreelanceKit_Client_Welcome_Packet.docx')">&#128196; Download Word doc</button></div>
         </div>
         <div class="doc-wrap">
           <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt" style="background:var(--amber-light);color:var(--amber)">PDF / Canva</span></div>
@@ -2093,22 +2091,474 @@ function updateInv(){
   if(tr)tr.style.display=tax>0?'':'none';if(g('p-tax-val'))g('p-tax-val').textContent='+'+fmD(ta)+' ('+tax+'%)';
   g('p-total').textContent=fmD(tot);
 }
-function printDoc(docId) {
-  // Remove any previous print-target
-  document.querySelectorAll('.print-target').forEach(function(el) {
-    el.classList.remove('print-target');
+
+// ═══════════════ WORD DOCUMENT GENERATOR ═══════════════
+
+function dlDocx(blob, filename) {
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+// Amber colour for placeholder fields
+var AMBER = 'C8621A';
+var AMBER_SHADE = 'F5E6D3';
+
+function extractRuns(node, D) {
+  // Convert a DOM node's inline content into an array of TextRun objects
+  var runs = [];
+  node.childNodes.forEach(function(child) {
+    if (child.nodeType === 3) { // text node
+      var txt = child.textContent;
+      if (txt) runs.push(new D.TextRun({ text: txt }));
+    } else if (child.nodeType === 1) {
+      var tag = child.tagName.toLowerCase();
+      var cls = child.className || '';
+      var isField = cls.includes('field') || cls.includes('wp-field');
+      var isBold = tag === 'strong' || tag === 'b';
+      var isEm = tag === 'em' || tag === 'i';
+      var txt2 = child.innerText || child.textContent || '';
+      if (!txt2.trim() && !child.childNodes.length) return;
+      if (child.childNodes.length && !isField) {
+        // recurse for nested spans
+        var inner = extractRuns(child, D);
+        inner.forEach(function(r) {
+          if (isBold) { try { r.bold = true; } catch(e){} }
+          runs.push(r);
+        });
+      } else {
+        var opts = { text: txt2 };
+        if (isField) {
+          opts.color = AMBER;
+          opts.underline = { type: 'single', color: AMBER };
+        }
+        if (isBold) opts.bold = true;
+        if (isEm) opts.italics = true;
+        runs.push(new D.TextRun(opts));
+      }
+    }
   });
+  return runs.length ? runs : [new D.TextRun({ text: '' })];
+}
+
+function nodeToDocxParagraphs(el, D, numbering) {
+  var paras = [];
+  var tag = (el.tagName || '').toLowerCase();
+  var cls = (el.className || '');
+  var align = el.style && el.style.textAlign === 'center'
+    ? D.AlignmentType.CENTER : D.AlignmentType.LEFT;
+
+  // Skip decorative/structural elements
+  if (cls.includes('doc-bar') || cls.includes('db-dot') || cls.includes('db-fmt') ||
+      cls.includes('doc-wrap') || cls.includes('sig-label') || tag === 'button') return paras;
+
+  if (tag === 'h2') {
+    paras.push(new D.Paragraph({
+      heading: D.HeadingLevel.HEADING_2,
+      children: extractRuns(el, D),
+      spacing: { before: 280, after: 120 }
+    }));
+    return paras;
+  }
+
+  if (tag === 'hr' || cls.includes('doc-divider') || cls.includes('doc-thick') ||
+      cls.includes('wp-divider')) {
+    var thick = cls.includes('doc-thick');
+    paras.push(new D.Paragraph({
+      children: [new D.TextRun({ text: '' })],
+      border: { bottom: { style: D.BorderStyle.SINGLE, size: thick ? 6 : 2,
+                          color: thick ? '1A1713' : 'E2DAD0', space: 1 } },
+      spacing: { before: 160, after: 160 }
+    }));
+    return paras;
+  }
+
+  if (tag === 'table' || cls.includes('wp-table') || cls.includes('doc-table')) {
+    var border = { style: D.BorderStyle.SINGLE, size: 1, color: 'E2DAD0' };
+    var borders = { top: border, bottom: border, left: border, right: border };
+    var rows = [];
+    el.querySelectorAll('tr').forEach(function(tr) {
+      var cells = [];
+      tr.querySelectorAll('th,td').forEach(function(td) {
+        var isTh = td.tagName.toLowerCase() === 'th';
+        var cellRuns = extractRuns(td, D);
+        if (isTh) cellRuns.forEach(function(r){ r.bold = true; r.size = 18; });
+        cells.push(new D.TableCell({
+          borders: borders,
+          shading: isTh ? { fill: 'F0EBE1', type: D.ShadingType.CLEAR } : undefined,
+          margins: { top: 80, bottom: 80, left: 120, right: 120 },
+          width: { size: Math.floor(9360 / Math.max(tr.children.length, 1)),
+                   type: D.WidthType.DXA },
+          children: [new D.Paragraph({ children: cellRuns })]
+        }));
+      });
+      if (cells.length) rows.push(new D.TableRow({ children: cells }));
+    });
+    if (rows.length) {
+      paras.push(new D.Table({
+        width: { size: 9360, type: D.WidthType.DXA },
+        rows: rows
+      }));
+      paras.push(new D.Paragraph({ children: [new D.TextRun('')],
+                                   spacing: { after: 160 } }));
+    }
+    return paras;
+  }
+
+  if (tag === 'ul' || tag === 'ol') {
+    el.querySelectorAll('li').forEach(function(li, idx) {
+      paras.push(new D.Paragraph({
+        numbering: { reference: 'bullets', level: 0 },
+        children: extractRuns(li, D),
+        spacing: { after: 80 }
+      }));
+    });
+    return paras;
+  }
+
+  if (tag === 'li') {
+    paras.push(new D.Paragraph({
+      numbering: { reference: 'bullets', level: 0 },
+      children: extractRuns(el, D),
+      spacing: { after: 80 }
+    }));
+    return paras;
+  }
+
+  if (cls.includes('callout') || cls.includes('doc-callout') || cls.includes('wp-callout')) {
+    paras.push(new D.Paragraph({
+      children: extractRuns(el, D),
+      indent: { left: 720 },
+      border: { left: { style: D.BorderStyle.SINGLE, size: 6,
+                        color: 'C8621A', space: 8 } },
+      spacing: { before: 160, after: 160 },
+      shading: { fill: 'FAF7F2', type: D.ShadingType.CLEAR }
+    }));
+    return paras;
+  }
+
+  if (cls.includes('sig-grid')) {
+    paras.push(new D.Paragraph({ children: [new D.TextRun('')],
+                                 spacing: { before: 480 } }));
+    var cols = el.querySelectorAll('.sig-line, div');
+    paras.push(new D.Paragraph({
+      children: [
+        new D.TextRun({ text: 'Freelancer:', bold: true }),
+        new D.TextRun({ text: '\t\t\t\tClient:', bold: true })
+      ],
+      tabStops: [{ type: D.TabStopType ? D.TabStopType.LEFT : 'left', position: 4680 }]
+    }));
+    paras.push(new D.Paragraph({
+      children: [new D.TextRun({ text: '' })],
+      border: { bottom: { style: D.BorderStyle.SINGLE, size: 1,
+                          color: '1A1713', space: 1 } },
+      spacing: { before: 480, after: 80 }
+    }));
+    paras.push(new D.Paragraph({
+      children: [new D.TextRun({ text: 'Signature · Printed name · Date',
+                                 color: '8C8580', size: 16 })],
+      spacing: { after: 240 }
+    }));
+    return paras;
+  }
+
+  // wp-h1 section headers (amber uppercase labels)
+  if (cls.includes('wp-h1')) {
+    paras.push(new D.Paragraph({
+      children: [new D.TextRun({
+        text: (el.textContent || '').toUpperCase(),
+        color: 'C8621A', bold: true, size: 18
+      })],
+      spacing: { before: 360, after: 120 }
+    }));
+    return paras;
+  }
+
+  // Cover/title blocks
+  if (cls.includes('wp-cover') || cls.includes('cover')) {
+    var titleTxt = el.textContent || '';
+    if (titleTxt.trim()) {
+      paras.push(new D.Paragraph({
+        alignment: D.AlignmentType.CENTER,
+        children: [new D.TextRun({ text: titleTxt.trim(), bold: true, size: 32 })],
+        spacing: { before: 240, after: 240 }
+      }));
+    }
+    return paras;
+  }
+
+  // field-block (multiline amber placeholder)
+  if (cls.includes('field-block')) {
+    paras.push(new D.Paragraph({
+      children: [new D.TextRun({ text: el.textContent || '', color: AMBER,
+                                 underline: { type: 'single', color: AMBER } })],
+      shading: { fill: 'F5E6D3', type: D.ShadingType.CLEAR },
+      spacing: { before: 80, after: 120 }
+    }));
+    return paras;
+  }
+
+  // Generic paragraph / div with text
+  var text = el.textContent || '';
+  if (!text.trim() && tag === 'div') {
+    // Recurse into div children
+    Array.from(el.children).forEach(function(child) {
+      var childParas = nodeToDocxParagraphs(child, D, numbering);
+      childParas.forEach(function(p){ paras.push(p); });
+    });
+    return paras;
+  }
+
+  if (text.trim() || extractRuns(el, D).length) {
+    var style = el.style || {};
+    var isBold = style.fontWeight === '700' || style.fontWeight === 'bold';
+    var isCentered = style.textAlign === 'center' || align === D.AlignmentType.CENTER;
+    var isSmall = style.fontSize && parseFloat(style.fontSize) <= 11;
+    paras.push(new D.Paragraph({
+      alignment: isCentered ? D.AlignmentType.CENTER : D.AlignmentType.LEFT,
+      children: el.children.length
+        ? extractRuns(el, D)
+        : [new D.TextRun({ text: text, bold: isBold,
+                           color: isSmall ? '8C8580' : undefined })],
+      spacing: { after: 160 }
+    }));
+  }
+
+  return paras;
+}
+
+async function generateDocx(docId, filename) {
+  if (!window.docx) { showToast('Word library loading, try again in a moment'); return; }
+  var D = window.docx;
   var el = document.getElementById(docId);
   if (!el) { showToast('Document not found'); return; }
-  // Walk up to the nearest doc-wrap or inv-paper container
-  var target = el.closest('.doc-wrap') || el.closest('.inv-paper') || el;
-  target.classList.add('print-target');
-  showToast('Tip: choose "Save as PDF" in the print dialog');
-  setTimeout(function() {
-    window.print();
-    target.classList.remove('print-target');
-  }, 400);
+  showToast('Building Word document\u2026');
+
+  var children = [];
+  Array.from(el.children).forEach(function(child) {
+    nodeToDocxParagraphs(child, D).forEach(function(p){ children.push(p); });
+  });
+  if (!children.length) children.push(new D.Paragraph({ children: [new D.TextRun('')] }));
+
+  var doc = new D.Document({
+    numbering: {
+      config: [{
+        reference: 'bullets',
+        levels: [{
+          level: 0, format: D.LevelFormat.BULLET, text: '\u2022',
+          alignment: D.AlignmentType.LEFT,
+          style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+        }]
+      }]
+    },
+    styles: {
+      default: {
+        document: { run: { font: 'Georgia', size: 26 } }
+      },
+      paragraphStyles: [
+        { id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal',
+          quickFormat: true,
+          run: { size: 20, bold: true, font: 'Arial', color: '1A1713',
+                 allCaps: true },
+          paragraph: { spacing: { before: 280, after: 120 }, outlineLevel: 1 } }
+      ]
+    },
+    sections: [{
+      properties: {
+        page: {
+          size: { width: 12240, height: 15840 },
+          margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+        }
+      },
+      children: children
+    }]
+  });
+
+  var blob = await D.Packer.toBlob(doc);
+  dlDocx(blob, filename || 'FreelanceKit_Template.docx');
+  setTimeout(function(){ showToast('\u2713 Word document downloaded'); }, 300);
 }
+
+async function generateInvoiceDocx() {
+  if (!window.docx) { showToast('Word library loading, try again in a moment'); return; }
+  var D = window.docx;
+  showToast('Building invoice\u2026');
+
+  var g = function(id){ var el=document.getElementById(id); return el?el.value||'':'' };
+  var yourName = g('i-yourname');
+  var yourEmail = g('i-youremail');
+  var invNum = g('i-num');
+  var issued = g('i-issued');
+  var due = g('i-due');
+  var client = g('i-client');
+  var contact = g('i-contact');
+  var clientEmail = g('i-email');
+  var project = g('i-project');
+  var notes = g('i-notes');
+  var taxPct = parseFloat(g('i-tax'))||0;
+  var discPct = parseFloat(g('i-disc'))||0;
+  var payMethod = getInvPay();
+
+  var sub = lineItems.reduce(function(s,li){ return s+li.qty*li.rate; }, 0);
+  var disc = sub*discPct/100;
+  var tax = (sub-disc)*taxPct/100;
+  var total = sub-disc+tax;
+  var fmt = function(n){ return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); };
+
+  var border = { style: D.BorderStyle.SINGLE, size: 1, color: 'E2DAD0' };
+  var borders = { top: border, bottom: border, left: border, right: border };
+  var cell = function(txt, bold, shade, w) {
+    return new D.TableCell({
+      borders: borders,
+      shading: shade ? { fill: 'F0EBE1', type: D.ShadingType.CLEAR } : undefined,
+      margins: { top: 80, bottom: 80, left: 120, right: 120 },
+      width: { size: w||2340, type: D.WidthType.DXA },
+      children: [new D.Paragraph({
+        children: [new D.TextRun({ text: txt, bold: !!bold, size: 22 })]
+      })]
+    });
+  };
+
+  var hdrCell = function(txt, w) { return cell(txt, true, true, w); };
+  var thick = { style: D.BorderStyle.SINGLE, size: 6, color: '1A1713', space: 1 };
+  var none = { style: D.BorderStyle.NONE, size: 0 };
+
+  var children = [
+    // Header row: name left, INVOICE right
+    new D.Table({
+      width: { size: 9360, type: D.WidthType.DXA },
+      borders: { top: none, bottom: none, left: none, right: none,
+                 insideH: none, insideV: none },
+      columnWidths: [5500, 3860],
+      rows: [new D.TableRow({ children: [
+        new D.TableCell({
+          borders: { top: none, bottom: none, left: none, right: none },
+          width: { size: 5500, type: D.WidthType.DXA },
+          margins: { top: 0, bottom: 0, left: 0, right: 0 },
+          children: [
+            new D.Paragraph({ children: [new D.TextRun({ text: yourName, bold: true, size: 32, font: 'Georgia' })] }),
+            new D.Paragraph({ children: [new D.TextRun({ text: yourEmail, size: 20, color: '8C8580' })] })
+          ]
+        }),
+        new D.TableCell({
+          borders: { top: none, bottom: none, left: none, right: none },
+          width: { size: 3860, type: D.WidthType.DXA },
+          margins: { top: 0, bottom: 0, left: 0, right: 0 },
+          children: [
+            new D.Paragraph({
+              alignment: D.AlignmentType.RIGHT,
+              children: [new D.TextRun({ text: 'Invoice', italics: true, size: 56, font: 'Georgia', color: '4A453D' })]
+            }),
+            new D.Paragraph({
+              alignment: D.AlignmentType.RIGHT,
+              children: [new D.TextRun({ text: invNum, size: 18, font: 'Courier New', color: '8C8580' })]
+            })
+          ]
+        })
+      ]})]
+    }),
+    new D.Paragraph({ children: [new D.TextRun('')], spacing: { after: 360 } }),
+
+    // Meta: Bill To + Project
+    new D.Table({
+      width: { size: 9360, type: D.WidthType.DXA },
+      borders: { top: none, bottom: none, left: none, right: none,
+                 insideH: none, insideV: none },
+      columnWidths: [4680, 4680],
+      rows: [new D.TableRow({ children: [
+        new D.TableCell({
+          borders: { top: none, bottom: none, left: none, right: none },
+          width: { size: 4680, type: D.WidthType.DXA },
+          children: [
+            new D.Paragraph({ children: [new D.TextRun({ text: 'BILL TO', bold: true, size: 18, color: '8C8580', allCaps: true })] }),
+            new D.Paragraph({ children: [new D.TextRun({ text: client, bold: true, size: 24 })] }),
+            new D.Paragraph({ children: [new D.TextRun({ text: contact, size: 22 })] }),
+            new D.Paragraph({ children: [new D.TextRun({ text: clientEmail, size: 20, color: '8C8580' })] })
+          ]
+        }),
+        new D.TableCell({
+          borders: { top: none, bottom: none, left: none, right: none },
+          width: { size: 4680, type: D.WidthType.DXA },
+          children: [
+            new D.Paragraph({ children: [new D.TextRun({ text: 'PROJECT', bold: true, size: 18, color: '8C8580', allCaps: true })] }),
+            new D.Paragraph({ children: [new D.TextRun({ text: project, size: 22 })] })
+          ]
+        })
+      ]})]
+    }),
+    new D.Paragraph({ children: [new D.TextRun('')], spacing: { before: 200, after: 200 },
+                      border: { bottom: { style: D.BorderStyle.SINGLE, size: 1, color: 'E2DAD0', space: 1 } } }),
+
+    // Dates row
+    new D.Paragraph({
+      children: [
+        new D.TextRun({ text: 'Issue date: ', bold: true, size: 20 }),
+        new D.TextRun({ text: (issued||'\u2014') + '    ', size: 20, font: 'Courier New' }),
+        new D.TextRun({ text: 'Due date: ', bold: true, size: 20 }),
+        new D.TextRun({ text: (due||'\u2014') + '    ', size: 20, font: 'Courier New' }),
+        new D.TextRun({ text: 'Terms: Net ' + invTerms, size: 20, font: 'Courier New' })
+      ],
+      spacing: { before: 200, after: 240 }
+    }),
+
+    // Line items table header
+    new D.Table({
+      width: { size: 9360, type: D.WidthType.DXA },
+      columnWidths: [4400, 900, 1800, 2260],
+      rows: [
+        new D.TableRow({
+          tableHeader: true,
+          children: [
+            hdrCell('Description', 4400), hdrCell('Qty', 900),
+            hdrCell('Rate', 1800), hdrCell('Amount', 2260)
+          ]
+        })
+      ].concat(lineItems.map(function(li) {
+        return new D.TableRow({ children: [
+          cell(li.desc||'\u2014', false, false, 4400),
+          cell(String(li.qty), false, false, 900),
+          cell(fmt(li.rate), false, false, 1800),
+          cell(fmt(li.qty*li.rate), false, false, 2260)
+        ]});
+      }))
+    }),
+
+    // Subtotal / discount / tax / total
+    new D.Paragraph({ children: [new D.TextRun('')], spacing: { after: 120 } }),
+    new D.Paragraph({ alignment: D.AlignmentType.RIGHT, children: [new D.TextRun({ text: 'Subtotal: ' + fmt(sub), size: 22 })], spacing: { after: 60 } }),
+  ];
+
+  if (discPct > 0) children.push(new D.Paragraph({ alignment: D.AlignmentType.RIGHT, children: [new D.TextRun({ text: 'Discount (\u2212' + discPct + '%): \u2212' + fmt(disc), size: 22, color: '8C8580' })], spacing: { after: 60 } }));
+  if (taxPct > 0) children.push(new D.Paragraph({ alignment: D.AlignmentType.RIGHT, children: [new D.TextRun({ text: 'Tax (' + taxPct + '%): +' + fmt(tax), size: 22, color: '8C8580' })], spacing: { after: 60 } }));
+
+  children.push(
+    new D.Paragraph({
+      alignment: D.AlignmentType.RIGHT,
+      children: [new D.TextRun({ text: 'Total due: ' + fmt(total), bold: true, size: 26, color: 'C8621A' })],
+      border: { top: { style: D.BorderStyle.SINGLE, size: 2, color: '1A1713', space: 1 } },
+      spacing: { before: 120, after: 400 }
+    }),
+    new D.Paragraph({ children: [new D.TextRun({ text: 'Payment: ' + payMethod, size: 20, color: '4A453D' })], spacing: { after: 60 } }),
+    new D.Paragraph({ children: [new D.TextRun({ text: 'Late fee of 1.5%/month applies after due date.', size: 18, color: 'C0392B' })], spacing: { after: 120 } }),
+    new D.Paragraph({ children: [new D.TextRun({ text: notes || '', size: 20, color: '8C8580' })], spacing: { after: 0 } })
+  );
+
+  var doc = new D.Document({
+    sections: [{
+      properties: { page: { size: { width: 12240, height: 15840 },
+                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 } } },
+      children: children
+    }]
+  });
+
+  var blob = await D.Packer.toBlob(doc);
+  dlDocx(blob, 'FreelanceKit_Invoice_' + invNum + '.docx');
+  setTimeout(function(){ showToast('\u2713 Invoice downloaded'); }, 300);
+}
+
 function copyAndOpen(docId, url){
   var el=document.getElementById(docId);
   if(el){
