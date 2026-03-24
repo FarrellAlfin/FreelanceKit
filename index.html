@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreelanceKit — Run your freelance business like a pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#FAF7F2;--cream-dark:#F0EBE1;--ink:#1A1713;--ink-mid:#4A453D;
+  --ink-light:#8C8580;--amber:#C8621A;--amber-light:#F5E6D3;--amber-mid:#E8A96A;
+  --sage:#5A7A65;--sage-light:#EAF1EC;--border:#E2DAD0;--white:#FFFFFF;
+  --red:#C0392B;--red-light:#FEF2F2;--blue:#1967D2;--blue-light:#E8F0FE;
+  --purple:#6D28D9;--purple-light:#EDE9FE;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 2px 16px rgba(26,23,19,0.08);
+  --shadow-md:0 8px 40px rgba(26,23,19,0.14);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--cream);color:var(--ink);line-height:1.6}
+
+/* ── PAGE VIEWS ── */
+.page{display:none}.page.active{display:block}
+
+/* ── SHARED NAV ── */
+.top-nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(250,247,242,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);height:62px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 40px;
+}
+.nav-logo{font-family:var(--font-display);font-size:20px;font-weight:500;color:var(--ink);cursor:pointer;letter-spacing:-0.02em}
+.nav-logo span{color:var(--amber)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.btn-nav-ghost{padding:9px 18px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:transparent;color:var(--ink-mid);font-family:var(--font-body);font-size:14px;cursor:pointer;transition:all .2s}
+.btn-nav-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.btn-nav-cta{padding:9px 20px;border-radius:var(--radius-sm);border:none;background:var(--ink);color:var(--cream);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-nav-cta:hover{background:var(--amber);transform:translateY(-1px)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:14px;color:var(--ink-mid);text-decoration:none;cursor:pointer;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:var(--amber-light);border:2px solid var(--amber-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--amber);cursor:pointer}
+
+/* ════════════════════════════════════
+   LANDING PAGE
+════════════════════════════════════ */
+/* Hero */
+.hero{max-width:1100px;margin:0 auto;padding:88px 40px 64px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--amber-light);color:var(--amber);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber)}
+h1{font-family:var(--font-display);font-weight:400;font-size:54px;line-height:1.1;letter-spacing:-.03em;color:var(--ink);margin-bottom:18px}
+h1 em{font-style:italic;color:var(--amber)}
+.hero-sub{font-size:17px;color:var(--ink-mid);line-height:1.7;margin-bottom:32px;font-weight:300;max-width:440px}
+.hero-btns{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-hero-primary{background:var(--ink);color:var(--cream);border:none;padding:14px 28px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-hero-primary:hover{background:var(--amber);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.btn-hero-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border);padding:14px 28px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:15px;cursor:pointer;transition:all .2s}
+.btn-hero-ghost:hover{border-color:var(--ink)}
+.hero-note{font-size:12px;color:var(--ink-light);margin-top:12px}
+
+/* Hero mockup */
+.hero-mockup{background:var(--white);border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden}
+.hm-bar{background:var(--cream-dark);padding:12px 16px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+.hm-dot{width:10px;height:10px;border-radius:50%}
+.hm-url{font-size:11px;color:var(--ink-light);margin-left:6px;font-family:var(--font-mono)}
+.hm-body{padding:18px}
+.hm-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--cream);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.hm-row:hover{border-color:var(--amber-mid);transform:translateX(3px)}
+.hm-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.hm-info{flex:1}
+.hm-name{font-size:13px;font-weight:500;color:var(--ink)}
+.hm-meta{font-size:11px;color:var(--ink-light);margin-top:1px}
+.hm-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.badge-new{background:var(--amber-light);color:var(--amber)}
+.badge-pop{background:var(--sage-light);color:var(--sage)}
+
+/* Social proof strip */
+.proof-strip{background:var(--cream-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 40px}
+.proof-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:40px;flex-wrap:wrap}
+.proof-label{font-size:12px;color:var(--ink-light)}
+.proof-avatars{display:flex}
+.proof-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--cream-dark);margin-right:-7px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.proof-divider{width:1px;height:28px;background:var(--border)}
+.proof-stat{display:flex;align-items:center;gap:10px}
+.ps-num{font-family:var(--font-display);font-size:22px;font-weight:400;color:var(--ink)}
+.ps-lbl{font-size:12px;color:var(--ink-mid)}
+
+/* Features */
+.lp-section{max-width:1100px;margin:0 auto;padding:72px 40px}
+.lp-label{font-size:12px;color:var(--amber);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+h2{font-family:var(--font-display);font-weight:400;font-size:40px;letter-spacing:-.03em;line-height:1.15;color:var(--ink);margin-bottom:14px}
+h2 em{font-style:italic;color:var(--amber)}
+.lp-sub{font-size:16px;color:var(--ink-mid);font-weight:300;max-width:520px;line-height:1.7;margin-bottom:52px}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.feat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px 24px 24px 22px;transition:all .2s;border-left:3px solid transparent}
+.feat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);border-left-color:var(--amber)}
+.feat-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:12px}
+.feat-problem{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:6px}
+.feat-card h3{font-size:16px;font-weight:500;color:var(--ink);margin-bottom:8px;line-height:1.3;letter-spacing:-.01em}
+.feat-card p{font-size:13px;color:var(--ink-mid);line-height:1.65;font-weight:300}
+.feat-templates{display:flex;gap:5px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.feat-t-chip{font-size:10px;background:var(--cream);border:1px solid var(--border);color:var(--ink-light);padding:2px 8px;border-radius:20px}
+
+
+
+/* Auth page */
+.page-auth-wrap{min-height:100vh;display:flex;flex-direction:column;background:var(--cream)}
+.auth-nav{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid var(--border);background:rgba(250,247,242,0.95);backdrop-filter:blur(12px)}
+.auth-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-mid);cursor:pointer;text-decoration:none;transition:color .2s;background:none;border:none;font-family:var(--font-body)}
+.auth-back:hover{color:var(--ink)}
+.auth-body{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 62px)}
+.auth-form-col{display:flex;align-items:center;justify-content:center;padding:48px 40px;background:var(--white)}
+.auth-panel-col{background:var(--ink);padding:48px 56px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.auth-panel-col::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%, rgba(200,98,26,0.12) 0%, transparent 60%);pointer-events:none}
+.auth-card{width:100%;max-width:400px}
+.auth-logo{font-family:var(--font-display);font-size:22px;font-weight:500;color:var(--ink);margin-bottom:32px;letter-spacing:-.02em}
+.auth-logo span{color:var(--amber)}
+.auth-heading{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px;line-height:1.2}
+.auth-heading em{font-style:italic;color:var(--amber)}
+.auth-subhead{font-size:14px;color:var(--ink-mid);font-weight:300;margin-bottom:28px;line-height:1.6}
+.auth-tabs{display:flex;background:var(--cream-dark);border-radius:var(--radius-sm);padding:3px;margin-bottom:24px;gap:3px}
+.auth-tab{flex:1;padding:8px;border-radius:6px;border:none;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:400;color:var(--ink-mid);cursor:pointer;transition:all .2s}
+.auth-tab.active{background:var(--white);color:var(--ink);font-weight:500;box-shadow:0 1px 4px rgba(26,23,19,0.08)}
+.auth-field{margin-bottom:14px}
+.auth-field-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:5px}
+.auth-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--ink);background:var(--cream);transition:all .15s;outline:none}
+.auth-input:focus{border-color:var(--amber);background:var(--white)}
+.auth-input::placeholder{color:var(--ink-light)}
+.auth-plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.auth-plan{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 10px;cursor:pointer;transition:all .15s;background:var(--white);text-align:center;position:relative}
+.auth-plan:hover{border-color:var(--ink)}
+.auth-plan.selected{border-color:var(--ink);background:var(--ink)}
+.auth-plan.selected .auth-plan-price{color:var(--amber-mid)}
+.auth-plan.selected .auth-plan-name,.auth-plan.selected .auth-plan-note{color:var(--cream)}
+.auth-plan-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.auth-plan-price{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--amber);line-height:1;margin-bottom:3px}
+.auth-plan-note{font-size:10px;color:var(--ink-light);line-height:1.4}
+.auth-plan-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--amber);color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.auth-cta{width:100%;padding:13px;background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:4px}
+.auth-cta:hover{background:var(--amber)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.auth-divider-line{flex:1;height:1px;background:var(--border)}
+.auth-divider-txt{font-size:11px;color:var(--ink-light)}
+.auth-google{width:100%;padding:11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-family:var(--font-body);font-size:14px;color:var(--ink-mid);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.auth-google:hover{border-color:var(--ink);color:var(--ink)}
+.auth-switch{text-align:center;margin-top:20px;font-size:13px;color:var(--ink-light)}
+.auth-switch span{color:var(--amber);cursor:pointer;font-weight:500}
+.auth-switch span:hover{text-decoration:underline}
+.auth-forgot{font-size:12px;color:var(--amber);cursor:pointer;float:right;margin-top:-10px;margin-bottom:14px;font-weight:500}
+.auth-forgot:hover{text-decoration:underline}
+/* Right panel */
+.ap-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber-mid);margin-bottom:12px}
+.ap-heading{font-family:var(--font-display);font-size:32px;font-weight:400;color:var(--cream);line-height:1.15;letter-spacing:-.02em;margin-bottom:10px}
+.ap-heading em{font-style:italic;color:var(--amber-mid)}
+.ap-sub{font-size:14px;color:rgba(250,247,242,0.5);font-weight:300;line-height:1.7;margin-bottom:36px;max-width:320px}
+.ap-items{display:flex;flex-direction:column;gap:18px;margin-bottom:36px}
+.ap-item{display:flex;align-items:flex-start;gap:14px}
+.ap-item-icon{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ap-item-title{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:2px}
+.ap-item-desc{font-size:12px;color:rgba(250,247,242,0.45);line-height:1.5}
+.ap-avatars{display:flex;align-items:center;gap:10px}
+.ap-avs{display:flex}
+.ap-av{width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-right:-8px}
+.ap-av-text{font-size:12px;color:rgba(250,247,242,0.5)}
+@media(max-width:768px){
+  .auth-body{grid-template-columns:1fr}
+  .auth-panel-col{display:none}
+  .auth-form-col{padding:32px 20px;align-items:flex-start}
+  .auth-nav{padding:0 20px}
+}
+
+/* How it works */
+.hiw-section{background:var(--cream-dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 40px}
+.hiw-inner{max-width:1100px;margin:0 auto}
+.hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:52px;position:relative}
+.hiw-steps::before{content:'';position:absolute;top:28px;left:calc(16.66% + 24px);right:calc(16.66% + 24px);height:1px;background:var(--border);z-index:0}
+.hiw-step{padding:0 32px;position:relative;z-index:1}
+.hiw-step:first-child{padding-left:0}
+.hiw-step:last-child{padding-right:0}
+.hiw-num{width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;font-weight:400;margin-bottom:24px;font-style:italic;flex-shrink:0}
+.hiw-step-title{font-family:var(--font-display);font-size:22px;font-weight:400;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px;line-height:1.2}
+.hiw-step-title em{font-style:italic;color:var(--amber)}
+.hiw-step-desc{font-size:14px;color:var(--ink-mid);line-height:1.7;font-weight:300;margin-bottom:20px;max-width:280px}
+.hiw-mini{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow)}
+.hiw-mini-bar{background:var(--cream-dark);padding:7px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:4px}
+.hiw-mini-dot{width:7px;height:7px;border-radius:50%}
+.hiw-mini-body{padding:12px}
+.hiw-mini-card{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--cream);border-radius:6px;margin-bottom:6px;border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.hiw-mini-card:last-child{margin-bottom:0}
+.hiw-mini-card:hover{border-color:var(--amber-mid);transform:translateX(2px)}
+.hiw-mini-card-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.hiw-mini-card-name{font-size:11px;font-weight:500;color:var(--ink);flex:1}
+.hiw-mini-card-badge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.hiw-platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px}
+.hiw-plat{padding:9px 12px;border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;color:var(--ink);background:var(--cream);cursor:pointer;transition:all .15s}
+.hiw-plat:hover{border-color:var(--amber-mid);background:var(--amber-light)}
+.hiw-plat-icon{font-size:14px}
+.hiw-field-wrap{padding:12px;display:flex;flex-direction:column;gap:7px}
+.hiw-field-row{display:flex;align-items:center;gap:8px}
+.hiw-field-lbl{font-size:10px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.04em;width:56px;flex-shrink:0}
+.hiw-field-inp{flex:1;padding:5px 9px;border:1.5px solid var(--border);border-radius:5px;font-family:var(--font-body);font-size:11px;color:var(--ink);background:var(--white)}
+.hiw-field-inp.filled{background:var(--amber-light);border-color:var(--amber-mid);color:var(--amber);font-weight:500}
+.hiw-send-btn{margin:4px 0 0;width:100%;padding:7px;background:var(--ink);color:var(--cream);border:none;border-radius:5px;font-size:11px;font-weight:500;font-family:var(--font-body);cursor:pointer;letter-spacing:.02em}
+
+/* Template showcase */
+.showcase-band{background:var(--ink);padding:72px 40px}
+.showcase-inner{max-width:1100px;margin:0 auto}
+.showcase-inner .lp-label{color:var(--amber-mid)}
+.showcase-inner h2{color:var(--cream);margin-bottom:14px}
+.showcase-inner .lp-sub{color:rgba(250,247,242,0.55);margin-bottom:40px}
+.template-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.template-scroll::-webkit-scrollbar{display:none}
+.tcard{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:18px;flex-shrink:0;width:200px;cursor:pointer;transition:all .2s}
+.tcard:hover{background:rgba(255,255,255,0.12);border-color:var(--amber-mid);transform:translateY(-2px)}
+.tc-emoji{font-size:22px;margin-bottom:10px}
+.tc-name{font-size:13px;font-weight:500;color:var(--cream);margin-bottom:3px;line-height:1.3}
+.tc-cat{font-size:11px;color:rgba(250,247,242,0.45);margin-bottom:10px}
+.tc-fmt{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.fmt-notion{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.6)}
+.fmt-gdoc{background:rgba(66,133,244,0.2);color:#89b4fa}
+.fmt-sheets{background:rgba(30,142,62,0.2);color:#86efac}
+.fmt-canva{background:rgba(0,197,123,0.2);color:#6ee7b7}
+
+/* Testimonials */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.testi{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.testi-stars{color:var(--amber);font-size:13px;margin-bottom:10px}
+.testi-quote{font-size:13px;color:var(--ink-mid);line-height:1.7;margin-bottom:14px;font-style:italic;font-weight:300}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.testi-name{font-size:13px;font-weight:500;color:var(--ink)}
+.testi-role{font-size:11px;color:var(--ink-light)}
+
+/* Pricing */
+.pricing-grid{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.price-card{flex:1;min-width:260px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:30px}
+.price-card.featured{background:var(--ink);color:var(--cream);border-color:var(--ink);position:relative;overflow:hidden}
+.price-card.featured::before{content:'Most popular';position:absolute;top:18px;right:-28px;background:var(--amber);color:white;font-size:10px;font-weight:700;padding:4px 36px;transform:rotate(45deg);letter-spacing:.05em;text-transform:uppercase}
+.price-tier{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-light);margin-bottom:7px}
+.price-card.featured .price-tier{color:var(--amber-mid)}
+.price-amount{font-family:var(--font-display);font-size:48px;font-weight:400;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
+.price-amount sup{font-size:22px;vertical-align:super}
+.price-period{font-size:13px;color:var(--ink-light);margin-bottom:22px}
+.price-card.featured .price-period{color:rgba(250,247,242,0.45)}
+.price-features{list-style:none;margin-bottom:26px}
+.price-features li{font-size:13px;color:var(--ink-mid);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.price-card.featured .price-features li{color:rgba(250,247,242,0.7);border-color:rgba(255,255,255,0.1)}
+.price-features li::before{content:'✓';color:var(--sage);font-weight:700;font-size:11px;flex-shrink:0}
+.price-card.featured .price-features li::before{color:var(--amber-mid)}
+.btn-price{width:100%;padding:13px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:1.5px solid var(--ink);background:transparent;color:var(--ink)}
+.btn-price:hover{background:var(--ink);color:var(--cream)}
+.btn-price.featured{background:var(--amber);border-color:var(--amber);color:white}
+.btn-price.featured:hover{background:#B5551A;border-color:#B5551A}
+
+/* CTA band */
+.cta-band{background:var(--ink);padding:80px 40px;text-align:center}
+.cta-inner{max-width:540px;margin:0 auto}
+.cta-eyebrow{font-family:var(--font-display);font-size:14px;color:var(--amber-mid);font-style:italic;margin-bottom:10px}
+.cta-band h2{color:var(--cream);margin-bottom:14px}
+.cta-sub{font-size:16px;color:rgba(250,247,242,0.55);font-weight:300;margin-bottom:30px;line-height:1.7}
+
+/* Footer */
+footer{border-top:1px solid var(--border);background:var(--cream-dark);padding:32px 40px;text-align:center}
+.footer-logo{font-family:var(--font-display);font-size:17px;font-weight:400;margin-bottom:6px}
+.footer-logo span{color:var(--amber)}
+footer p{font-size:12px;color:var(--ink-light)}
+
+/* ════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════ */
+.dash-layout{display:grid;grid-template-columns:232px 1fr;min-height:calc(100vh - 62px);transition:grid-template-columns .22s ease}
+.dash-layout.sb-collapsed{grid-template-columns:52px 1fr}
+
+/* Sidebar */
+.dash-sidebar{background:var(--white);border-right:1px solid var(--border);padding:20px 0 60px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;overflow-x:hidden;transition:width .22s ease}
+.dsb-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-light);padding:0 18px;margin:20px 0 8px;white-space:nowrap;overflow:hidden;transition:all .2s}
+.dsb-section:first-child{margin-top:8px}
+.dsb-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13px;color:var(--ink-mid);cursor:pointer;border-left:3px solid transparent;transition:all .15s;white-space:nowrap}
+.dsb-item:hover{background:var(--cream);color:var(--ink)}
+.dsb-item.active{background:var(--amber-light);color:var(--amber);border-left-color:var(--amber);font-weight:500}
+.dsb-item .dsb-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.dsb-item .dsb-label{overflow:hidden;transition:opacity .15s,max-width .22s ease;max-width:180px;opacity:1}
+.dsb-count{margin-left:auto;font-size:10px;background:var(--cream-dark);color:var(--ink-light);padding:1px 7px;border-radius:20px;transition:opacity .15s}
+.dsb-item.active .dsb-count{background:rgba(200,98,26,0.15);color:var(--amber)}
+
+/* Sidebar toggle button */
+.sb-toggle{position:absolute;bottom:16px;left:0;right:0;margin:0 auto;width:28px;height:28px;border-radius:50%;background:var(--cream-dark);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-mid);z-index:10;box-shadow:var(--shadow);transition:all .2s;flex-shrink:0}
+.sb-toggle:hover{background:var(--amber-light);border-color:var(--amber-mid);color:var(--amber)}
+.sb-toggle-arrow{display:inline-block;transition:transform .22s ease}
+
+/* Collapsed sidebar state */
+.dash-layout.sb-collapsed .dsb-section{font-size:0;padding:0 8px;margin:12px 0 4px;height:1px;background:var(--border)}
+.dash-layout.sb-collapsed .dsb-item{padding:9px 0;justify-content:center;gap:0;border-left-width:0;border-bottom:2px solid transparent}
+.dash-layout.sb-collapsed .dsb-item.active{background:var(--amber-light);border-bottom-color:var(--amber)}
+.dash-layout.sb-collapsed .dsb-item .dsb-label{max-width:0;opacity:0;overflow:hidden}
+.dash-layout.sb-collapsed .dsb-count{max-width:0;opacity:0;overflow:hidden;padding:0;margin:0}
+.dash-layout.sb-collapsed .dsb-item .dsb-icon{font-size:17px;width:auto}
+.dash-layout.sb-collapsed .sb-toggle-arrow{transform:rotate(180deg)}
+
+/* Main area */
+.dash-main{background:var(--cream);min-height:calc(100vh - 62px)}
+
+/* Template panels — hidden/shown */
+.tmpl-panel{display:none;padding:32px 40px;animation:fadeIn .25s ease}
+.tmpl-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* Home panel */
+.welcome-bar{background:var(--ink);border-radius:var(--radius);padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.wb-text h3{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--cream);margin-bottom:4px}
+.wb-text p{font-size:13px;color:rgba(250,247,242,0.55)}
+.wb-stat{text-align:right}
+.wb-num{font-family:var(--font-display);font-size:36px;font-weight:400;color:var(--amber-mid);line-height:1}
+.wb-lbl{font-size:11px;color:rgba(250,247,242,0.4);margin-top:2px}
+.quick-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.qs{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 18px}
+.qs-lbl{font-size:11px;color:var(--ink-light);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.qs-val{font-family:var(--font-display);font-size:26px;font-weight:400;color:var(--ink);line-height:1}
+.qs-sub{font-size:11px;margin-top:3px}
+.qs-sub.up{color:var(--sage)}.qs-sub.warn{color:var(--amber)}.qs-sub.down{color:var(--red)}
+
+/* Template grid on home */
+.home-grid-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.hgh-title{font-size:15px;font-weight:500;color:var(--ink)}
+.hgh-all{font-size:13px;color:var(--amber);cursor:pointer;font-weight:500}
+.hgh-all:hover{text-decoration:underline}
+.template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:14px;margin-bottom:28px}
+.tg-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s}
+.tg-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--amber-mid)}
+.tg-card:hover .tg-overlay{opacity:1}
+.tg-thumb{height:96px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;overflow:hidden}
+.tg-overlay{position:absolute;inset:0;background:rgba(26,23,19,0.55);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:white;opacity:0;transition:opacity .2s}
+.tg-body{padding:12px 14px}
+.tg-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;line-height:1.3}
+.tg-desc{font-size:11px;color:var(--ink-light);margin-bottom:8px;line-height:1.4}
+.tg-meta{display:flex;align-items:center;justify-content:space-between}
+.tg-fmt{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+.fmt-n{background:#F0EEEE;color:#555}
+.fmt-g{background:var(--blue-light);color:var(--blue)}
+.fmt-s{background:#E6F4EA;color:#1e8e3e}
+.fmt-c{background:var(--sage-light);color:var(--sage)}
+.tg-new{font-size:10px;background:var(--amber-light);color:var(--amber);padding:2px 6px;border-radius:20px;font-weight:600}
+.tg-pop{font-size:10px;background:var(--sage-light);color:var(--sage);padding:2px 6px;border-radius:20px;font-weight:600}
+
+/* Activity list */
+.activity-list{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.al-item{display:flex;align-items:center;gap:13px;padding:13px 18px;border-bottom:1px solid var(--border)}
+.al-item:last-child{border-bottom:none}
+.al-icon{width:36px;height:36px;background:var(--cream);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.al-name{font-size:13px;font-weight:500;color:var(--ink)}
+.al-sub{font-size:11px;color:var(--ink-light);margin-top:1px}
+.al-time{font-size:11px;color:var(--ink-light);margin-left:auto;flex-shrink:0}
+
+/* Template viewer header */
+.tv-header{margin-bottom:24px}
+.tv-eyebrow{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.tv-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.tv-title{font-family:var(--font-display);font-size:28px;font-weight:400;letter-spacing:-.02em;color:var(--ink);line-height:1.2;margin-bottom:8px}
+.tv-title em{font-style:italic;color:var(--amber)}
+.tv-desc{font-size:14px;color:var(--ink-mid);line-height:1.7;font-weight:300;max-width:600px}
+.tv-actions{display:flex;gap:10px;margin:18px 0 24px;flex-wrap:wrap}
+.btn-use{display:flex;align-items:center;gap:7px;background:var(--ink);color:var(--cream);border:none;padding:10px 18px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-use:hover{background:var(--amber)}
+.btn-use.copied{background:var(--sage)}
+.btn-outline{display:flex;align-items:center;gap:7px;background:transparent;color:var(--ink-mid);border:1.5px solid var(--border);padding:10px 18px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;cursor:pointer;transition:all .2s}
+.btn-outline:hover{border-color:var(--ink);color:var(--ink)}
+
+/* Doc wrapper */
+.doc-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px}
+.doc-bar{background:var(--cream-dark);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:6px}
+.db-dot{width:10px;height:10px;border-radius:50%}
+.db-name{font-size:12px;color:var(--ink-mid);font-weight:500;margin-left:5px;flex:1}
+.db-fmt{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;background:var(--blue-light);color:var(--blue)}
+.doc-body{padding:48px 56px;font-family:Georgia,serif;line-height:1.85;font-size:14px;color:var(--ink)}
+.doc-body h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);margin:28px 0 9px;font-family:var(--font-body)}
+.doc-body p{margin-bottom:12px;font-size:14px;line-height:1.85}
+.doc-body ul,.doc-body ol{margin-left:20px;margin-bottom:12px}
+.doc-body li{font-size:14px;line-height:1.85;margin-bottom:4px}
+.field{display:inline;background:var(--amber-light);color:var(--amber);padding:1px 7px;border-radius:4px;font-family:var(--font-mono);font-size:12px;font-weight:500;border:1px dashed var(--amber-mid);white-space:normal;word-break:break-word;line-height:1.9}
+.field-opt{display:inline;background:var(--blue-light);color:var(--blue);padding:1px 7px;border-radius:4px;font-family:var(--font-mono);font-size:12px;font-weight:500;border:1px dashed #93C5FD;white-space:normal;word-break:break-word;line-height:1.9}
+.doc-divider{border:none;border-top:1px solid var(--border);margin:22px 0}
+.doc-thick{border:none;border-top:2px solid var(--ink);margin:28px 0}
+.doc-callout{background:var(--cream);border-left:3px solid var(--amber);padding:11px 15px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:14px 0;font-family:var(--font-body);font-size:13px;color:var(--ink-mid);line-height:1.6}
+.doc-callout strong{color:var(--amber);font-weight:600}
+.field-block{display:block;background:var(--amber-light);color:var(--amber);padding:10px 14px;border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:12px;border:1px dashed var(--amber-mid);margin:8px 0 14px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.disclaimer{background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:22px;font-family:var(--font-body);font-size:12px;color:#78350F;line-height:1.65}
+.disclaimer strong{font-weight:600}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px}
+.sig-line{border-bottom:1px solid var(--ink);height:34px;margin-bottom:5px}
+.sig-label{font-size:11px;color:var(--ink-light);font-family:var(--font-body)}
+
+/* Email card */
+.email-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
+.em-meta{padding:13px 22px;border-bottom:1px solid var(--border);background:var(--cream)}
+.em-row{display:flex;gap:8px;margin-bottom:4px;align-items:flex-start}
+.em-row:last-child{margin-bottom:0}
+.em-lbl{font-size:11px;font-weight:600;color:var(--ink-light);width:52px;flex-shrink:0;padding-top:1px;text-transform:uppercase;letter-spacing:.03em}
+.em-val{font-size:13px;color:var(--ink-mid);line-height:1.5}
+.email-body{padding:24px 24px 28px;font-size:14px;line-height:1.9;color:var(--ink)}
+.email-body p{margin-bottom:13px}
+.email-body p:last-child{margin-bottom:0}
+.email-body ul{margin:6px 0 13px 20px}
+.email-body li{font-size:14px;line-height:1.8;margin-bottom:4px}
+.email-sig{margin-top:20px;padding-top:14px;border-top:1px solid var(--border);color:var(--ink-mid);font-size:13px;line-height:1.7}
+
+/* Email nav tabs */
+.email-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.etab{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--ink-mid);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .15s}
+.etab:hover{border-color:var(--ink);color:var(--ink)}
+.etab.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.etab.e1{}.etab.e2{}.etab.e3{}.etab.e4{}
+
+/* Rate calculator */
+.calc-grid{display:grid;grid-template-columns:1fr 300px;gap:24px}
+.calc-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.cc-header{background:var(--cream-dark);padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.cc-icon{font-size:14px}
+.cc-title{font-size:13px;font-weight:600;color:var(--ink)}
+.cc-body{padding:18px}
+.cf{margin-bottom:15px}
+.cf:last-child{margin-bottom:0}
+.cf-lbl{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:flex;justify-content:space-between}
+.cf-hint{font-size:11px;font-weight:400;color:var(--ink-light)}
+.cf-inp{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--ink);background:var(--cream);transition:border-color .15s}
+.cf-inp:focus{outline:none;border-color:var(--amber);background:var(--white)}
+.cf-inp.prefix-${padding-left:26px}
+.cf-wrap{position:relative}
+.cf-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--ink-mid);pointer-events:none}
+.cf-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--ink-light);pointer-events:none}
+.cf-slider{width:100%;accent-color:var(--amber);margin-top:5px;cursor:pointer}
+.cf-slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-light);margin-top:3px}
+.cf-sel{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream);cursor:pointer}
+.cf-sel:focus{outline:none;border-color:var(--amber)}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.results-box{background:var(--ink);border-radius:var(--radius);padding:22px;position:sticky;top:80px}
+.rb-pre{font-family:var(--font-display);font-size:13px;font-weight:400;color:rgba(250,247,242,0.5);font-style:italic;margin-bottom:18px}
+.rb-main{margin-bottom:20px}
+.rb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(250,247,242,0.45);margin-bottom:4px}
+.rb-val{font-family:var(--font-display);font-size:48px;font-weight:400;color:var(--amber-mid);line-height:1;letter-spacing:-.02em}
+.rb-unit{font-size:15px;color:rgba(250,247,242,0.4)}
+.rb-note{font-size:11px;color:rgba(250,247,242,0.35);margin-top:4px}
+.rb-divider{height:1px;background:rgba(255,255,255,0.08);margin:16px 0}
+.rb-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.rb-row-lbl{font-size:12px;color:rgba(250,247,242,0.55)}
+.rb-row-val{font-size:13px;font-weight:500;color:var(--cream);font-family:var(--font-mono)}
+.rb-row-val.hi{color:var(--amber-mid)}
+.rb-insight{background:rgba(255,255,255,0.06);border-radius:var(--radius-sm);padding:12px 14px;margin-top:16px}
+.rb-insight-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--amber-mid);margin-bottom:5px}
+.rb-insight-text{font-size:12px;color:rgba(250,247,242,0.65);line-height:1.6}
+.rb-insight-text strong{color:var(--cream);font-weight:500}
+.rate-breakdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.rbg-item{background:rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:11px 13px}
+.rbg-lbl{font-size:10px;color:rgba(250,247,242,0.4);margin-bottom:3px}
+.rbg-val{font-size:17px;font-weight:500;color:var(--cream);font-family:var(--font-display)}
+
+/* Invoice builder */
+.inv-layout{display:grid;grid-template-columns:370px 1fr;gap:24px}
+.inv-panel{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.ip-head{background:var(--ink);padding:13px 18px;display:flex;align-items:center;gap:8px}
+.ip-head-title{font-size:13px;font-weight:500;color:var(--cream)}
+.ip-head-badge{font-size:10px;background:rgba(232,169,106,0.25);color:var(--amber-mid);padding:2px 8px;border-radius:20px;margin-left:auto}
+.ip-body{padding:16px}
+.ip-field{margin-bottom:12px}
+.ip-field:last-child{margin-bottom:0}
+.ip-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:4px}
+.ip-inp{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream);transition:border-color .15s}
+.ip-inp:focus{outline:none;border-color:var(--amber);background:var(--white)}
+.ip-sel{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:12px;color:var(--ink);background:var(--cream);cursor:pointer}
+.ip-sel:focus{outline:none;border-color:var(--amber)}
+.ip-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ip-divider{height:1px;background:var(--border);margin:12px 0}
+.li-hdr{display:grid;grid-template-columns:1fr 44px 68px 78px 24px;gap:5px;margin-bottom:5px}
+.li-hlbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-light);text-align:right}
+.li-hlbl:first-child{text-align:left}
+.li-row{display:grid;grid-template-columns:1fr 44px 68px 78px 24px;gap:5px;margin-bottom:5px;align-items:center}
+.li-total-cell{font-size:12px;font-weight:500;color:var(--ink);padding:6px 8px;background:var(--cream);border:1.5px solid var(--border);border-radius:6px;text-align:right;font-family:var(--font-mono)}
+.li-remove{width:22px;height:22px;border-radius:5px;border:none;background:transparent;color:var(--ink-light);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.li-remove:hover{background:var(--red-light);color:var(--red)}
+.add-li-btn{width:100%;padding:7px;border:1.5px dashed var(--border);border-radius:6px;background:transparent;color:var(--ink-light);font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s;margin-top:3px}
+.add-li-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+.totals-block{padding-top:10px}
+.tot-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px}
+.tot-lbl{color:var(--ink-mid)}
+.tot-val{color:var(--ink);font-family:var(--font-mono)}
+.tot-row.grand{border-top:1.5px solid var(--ink);margin-top:7px;padding-top:8px}
+.tot-row.grand .tot-lbl{font-weight:600;font-size:13px;color:var(--ink)}
+.tot-row.grand .tot-val{font-size:15px;font-weight:600;color:var(--amber);font-family:var(--font-mono)}
+.ip-actions{padding:13px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.ip-btn-p{flex:1;padding:8px;background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:12px;font-weight:500;cursor:pointer;transition:background .2s}
+.ip-btn-p:hover{background:var(--amber)}
+.ip-btn-g{padding:8px 12px;background:transparent;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:12px;color:var(--ink-mid);cursor:pointer;transition:all .2s}
+.ip-btn-g:hover{border-color:var(--ink);color:var(--ink)}
+/* Invoice preview */
+.inv-preview{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md)}
+.inv-paper{padding:40px 48px}
+.inv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.inv-brand-name{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--ink);margin-bottom:3px}
+.inv-brand-detail{font-size:11px;color:var(--ink-light);line-height:1.7}
+.inv-word{font-family:var(--font-display);font-size:32px;font-weight:300;color:var(--ink);letter-spacing:-.02em;font-style:italic;text-align:right}
+.inv-num{font-size:12px;color:var(--ink-light);font-family:var(--font-mono);text-align:right;margin-top:3px}
+.inv-meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.inv-meta-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-light);margin-bottom:5px}
+.inv-meta-val{font-size:13px;color:var(--ink);line-height:1.7}
+.inv-dates{display:flex;gap:24px;margin-bottom:22px}
+.inv-date-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:2px}
+.inv-date-val{font-size:13px;font-weight:500;color:var(--ink);font-family:var(--font-mono)}
+.inv-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.inv-table th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);background:var(--cream);border-bottom:1px solid var(--border)}
+.inv-table th:not(:first-child){text-align:right}
+.inv-table td{padding:10px 10px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--border);vertical-align:top}
+.inv-table td:not(:first-child){text-align:right;font-family:var(--font-mono)}
+.inv-table tr:last-child td{border-bottom:none}
+.inv-totals{display:flex;justify-content:flex-end;margin-bottom:24px}
+.inv-tot-inner{width:220px}
+.inv-tot-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
+.inv-tot-lbl{color:var(--ink-mid)}
+.inv-tot-val{font-family:var(--font-mono);color:var(--ink)}
+.inv-tot-div{height:1px;background:var(--border);margin:6px 0}
+.inv-tot-grand{display:flex;justify-content:space-between;padding:7px 0}
+.inv-tot-grand .inv-tot-lbl{font-size:14px;font-weight:600;color:var(--ink)}
+.inv-tot-grand .inv-tot-val{font-size:16px;font-weight:600;color:var(--amber);font-family:var(--font-mono)}
+.inv-footer{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:18px;border-top:1px solid var(--border)}
+.inv-footer-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:6px}
+.inv-footer-val{font-size:12px;color:var(--ink-mid);line-height:1.75}
+.late-fee-note{font-size:11px;color:var(--red);margin-top:5px}
+
+/* Pipeline */
+.pipeline-forecast{background:var(--ink);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px}
+.pf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.pf-title{font-family:var(--font-display);font-size:14px;font-weight:400;color:var(--cream);font-style:italic;margin-bottom:2px}
+.pf-sub{font-size:11px;color:rgba(250,247,242,0.4)}
+.pf-total-n{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--amber-mid);line-height:1;letter-spacing:-.02em}
+.pf-total-l{font-size:10px;color:rgba(250,247,242,0.4);margin-top:2px}
+.pf-bars{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.pfb{}.pfb-lbl{font-size:10px;color:rgba(250,247,242,0.5);margin-bottom:4px}
+.pfb-track{height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.pfb-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.pfb-val{font-size:12px;font-weight:500;color:var(--cream);font-family:var(--font-mono)}
+.pfb-prob{font-size:10px;color:rgba(250,247,242,0.35);margin-top:1px}
+.health-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.hs-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px}
+.hs-lbl{font-size:10px;color:var(--ink-light);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.hs-val{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--ink);line-height:1}
+.hs-sub{font-size:11px;margin-top:3px}
+.hs-sub.g{color:var(--sage)}.hs-sub.w{color:var(--amber)}.hs-sub.r{color:var(--red)}
+.kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kc{background:var(--cream-dark);border-radius:var(--radius);overflow:hidden}
+.kc-stripe{height:3px}
+.kc-header{padding:10px 12px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.kc-title{font-size:11px;font-weight:600;color:var(--ink)}
+.kc-cnt{font-size:10px;background:var(--white);border:1px solid var(--border);color:var(--ink-light);padding:1px 7px;border-radius:20px;font-family:var(--font-mono)}
+.kc-body{padding:8px;min-height:140px}
+.kk-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 11px;margin-bottom:7px;cursor:grab;transition:box-shadow .15s,transform .15s;position:relative}
+.kk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.kk-card:active{cursor:grabbing}
+.kk-client{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.kk-project{font-size:11px;color:var(--ink-light);margin-bottom:7px;line-height:1.35}
+.kk-foot{display:flex;justify-content:space-between;align-items:center}
+.kk-val{font-size:11px;font-weight:600;color:var(--sage);font-family:var(--font-mono)}
+.kk-date{font-size:10px;color:var(--ink-light)}
+.kk-temp{font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;position:absolute;top:8px;right:8px;text-transform:uppercase;letter-spacing:.03em}
+.temp-hot{background:var(--red-light);color:var(--red)}
+.temp-warm{background:var(--amber-light);color:var(--amber)}
+.temp-cold{background:var(--blue-light);color:var(--blue)}
+.kc-add-btn{width:100%;padding:6px;border:1.5px dashed var(--border);border-radius:7px;background:transparent;color:var(--ink-light);font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s;margin-top:2px}
+.kc-add-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+
+/* Tax tracker (compact) */
+.tax-two-col{display:grid;grid-template-columns:1fr 260px;gap:20px}
+.q-tabs{display:flex;gap:5px;margin-bottom:16px}
+.q-tab{padding:6px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:transparent;color:var(--ink-mid);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .15s}
+.q-tab:hover{border-color:var(--ink);color:var(--ink)}
+.q-tab.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.q-tab.paid{border-color:var(--sage);color:var(--sage)}
+.tax-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
+.txc-header{background:var(--cream-dark);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.txc-title{font-size:12px;font-weight:600;color:var(--ink)}
+.txc-total{margin-left:auto;font-size:13px;font-weight:600;font-family:var(--font-mono)}
+.txc-total.inc{color:var(--sage)}.txc-total.exp{color:var(--red)}
+.tx-entry-row{display:grid;grid-template-columns:1fr 120px 28px;gap:6px;padding:8px 14px;border-bottom:1px solid var(--border);align-items:center}
+.tx-entry-row:last-child{border-bottom:none}
+.tx-inp{width:100%;padding:5px 8px;border:1.5px solid var(--border);border-radius:5px;font-family:var(--font-body);font-size:12px;color:var(--ink);background:var(--cream)}
+.tx-inp:focus{outline:none;border-color:var(--amber)}
+.tx-inp.amt{font-family:var(--font-mono);text-align:right}
+.tx-rm{width:24px;height:24px;border-radius:5px;border:none;background:transparent;color:var(--ink-light);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.tx-rm:hover{background:var(--red-light);color:var(--red)}
+.tx-add-btn{width:100%;padding:8px;border:1.5px dashed var(--border);border-radius:0 0 var(--radius) var(--radius);background:transparent;color:var(--ink-light);font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s}
+.tx-add-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+.tax-summary-box{background:var(--ink);border-radius:var(--radius);padding:20px;position:sticky;top:80px}
+.tsb-title{font-family:var(--font-display);font-size:13px;font-weight:400;color:var(--cream);font-style:italic;margin-bottom:15px}
+.tsb-row{display:flex;justify-content:space-between;margin-bottom:8px}
+.tsb-lbl{font-size:12px;color:rgba(250,247,242,0.55)}
+.tsb-val{font-size:13px;font-weight:500;color:var(--cream);font-family:var(--font-mono)}
+.tsb-val.hi{color:var(--amber-mid)}
+.tsb-div{height:1px;background:rgba(255,255,255,0.1);margin:10px 0}
+.tsb-due-box{background:rgba(255,255,255,0.07);border-radius:var(--radius-sm);padding:13px;margin-top:13px}
+.tsb-due-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--amber-mid);margin-bottom:5px}
+.tsb-due-amt{font-family:var(--font-display);font-size:26px;font-weight:400;color:var(--amber-mid);line-height:1}
+.tsb-due-note{font-size:10px;color:rgba(250,247,242,0.35);margin-top:4px;line-height:1.5}
+.tax-rate-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.trb-label{font-size:12px;color:var(--ink-mid);flex:1}
+.trb-label strong{color:var(--ink);font-weight:500}
+.trb-inp{width:60px;padding:6px 9px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--ink);text-align:center;background:var(--cream)}
+.trb-inp:focus{outline:none;border-color:var(--amber)}
+.trb-pct{font-size:13px;color:var(--ink-mid)}
+
+/* Welcome packet + brief — doc style */
+.wp-cover-box{text-align:center;padding-bottom:32px;margin-bottom:32px;border-bottom:2px solid var(--ink)}
+.wp-cover-name{font-family:var(--font-display);font-size:24px;font-weight:400;color:var(--ink);margin-bottom:18px}
+.wp-cover-name span{color:var(--amber)}
+.wp-cover-pretitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-light);margin-bottom:7px;font-family:var(--font-body)}
+.wp-cover-client{font-family:var(--font-display);font-size:22px;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:3px}
+.wp-cover-project{font-size:13px;color:var(--ink-light);font-family:var(--font-body)}
+.wp-h1{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin:28px 0 9px;font-family:var(--font-body)}
+.wp-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-family:var(--font-body)}
+.wp-table th{text-align:left;padding:8px 11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);background:var(--cream);border-bottom:1px solid var(--border)}
+.wp-table td{padding:9px 11px;font-size:13px;border-bottom:1px solid var(--border);line-height:1.55}
+.wp-table tr:last-child td{border-bottom:none}
+.wp-callout{background:var(--cream);border-left:3px solid var(--amber);padding:10px 14px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:12px 0;font-family:var(--font-body);font-size:13px;color:var(--ink-mid);line-height:1.6}
+.wp-callout strong{color:var(--amber);font-weight:600}
+
+/* Brief form */
+.brief-progress-bar{background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px}
+.bpb-steps{display:flex;align-items:center;gap:0}
+.bpb-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.bpb-step::after{content:'';position:absolute;left:50%;right:-50%;top:13px;height:2px;background:var(--border);z-index:0}
+.bpb-step:last-child::after{display:none}
+.bpb-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--ink-light);z-index:1;transition:all .2s;margin-bottom:4px}
+.bpb-step.active .bpb-dot{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.bpb-step.done .bpb-dot{background:var(--sage);border-color:var(--sage);color:white}
+.bpb-step.done::after{background:var(--sage)}
+.bpb-lbl{font-size:10px;color:var(--ink-light);text-align:center}
+.bpb-step.active .bpb-lbl{color:var(--ink);font-weight:600}
+.bpb-step.done .bpb-lbl{color:var(--sage)}
+.brief-step-header{margin-bottom:18px}
+.bsh-step{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:3px}
+.bsh-title{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--ink);margin-bottom:4px}
+.bsh-desc{font-size:13px;color:var(--ink-mid);font-weight:300}
+.brief-field{margin-bottom:17px}
+.bf-lbl{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:5px;display:flex;justify-content:space-between}
+.bf-opt{font-weight:400;color:var(--ink-light);font-size:11px}
+.bf-hint{font-size:11px;color:var(--ink-light);margin-bottom:6px;font-weight:300}
+.bf-inp{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--ink);background:var(--white);transition:border-color .15s}
+.bf-inp:focus{outline:none;border-color:var(--amber)}
+.bf-ta{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--ink);background:var(--white);resize:vertical;min-height:90px;transition:border-color .15s}
+.bf-ta:focus{outline:none;border-color:var(--amber)}
+.bf-sel{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--white);cursor:pointer}
+.bf-sel:focus{outline:none;border-color:var(--amber)}
+.bf-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bf-check-group{display:flex;flex-direction:column;gap:7px}
+.bf-check{display:flex;align-items:center;gap:9px;cursor:pointer}
+.bf-check input{width:15px;height:15px;accent-color:var(--amber);cursor:pointer;flex-shrink:0}
+.bf-check span{font-size:13px;color:var(--ink-mid)}
+.brief-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--border)}
+.btn-brief-back{display:flex;align-items:center;gap:6px;background:transparent;color:var(--ink-mid);border:1.5px solid var(--border);padding:8px 16px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;cursor:pointer;transition:all .2s}
+.btn-brief-back:hover{border-color:var(--ink);color:var(--ink)}
+.btn-brief-next{display:flex;align-items:center;gap:6px;background:var(--ink);color:var(--cream);border:none;padding:8px 18px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-brief-next:hover{background:var(--amber)}
+.brief-step-count{font-size:11px;color:var(--ink-light)}
+.brief-summary-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.bss-header{background:var(--cream-dark);padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-mid)}
+.bss-body{padding:14px 16px}
+.bss-row{display:flex;gap:12px;margin-bottom:9px}
+.bss-row:last-child{margin-bottom:0}
+.bss-key{font-size:12px;font-weight:600;color:var(--ink-light);min-width:130px;flex-shrink:0}
+.bss-val{font-size:13px;color:var(--ink-mid);flex:1;line-height:1.5}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,23,19,0.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:var(--radius);width:100%;max-width:460px;box-shadow:var(--shadow-md);animation:modalIn .2s ease;overflow:hidden}
+@keyframes modalIn{from{transform:scale(0.96) translateY(6px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.modal-hd{padding:18px 22px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:15px;font-weight:500;color:var(--ink)}
+.modal-close{width:26px;height:26px;border-radius:6px;border:none;background:var(--cream);cursor:pointer;color:var(--ink-mid);font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--cream-dark)}
+.modal-bd{padding:18px 22px}
+.m-inp{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream);margin-bottom:11px;transition:border-color .15s}
+.m-inp:focus{outline:none;border-color:var(--amber);background:var(--white)}
+.m-inp:last-child{margin-bottom:0}
+.m-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:4px}
+.m-row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:11px}
+.m-sel{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream);cursor:pointer}
+.m-sel:focus{outline:none;border-color:var(--amber)}
+.modal-ft{padding:13px 22px;border-top:1px solid var(--border);display:flex;gap:9px;justify-content:flex-end}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;right:22px;z-index:2000;background:var(--ink);color:var(--cream);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;display:none;align-items:center;gap:9px;box-shadow:var(--shadow-md)}
+.toast.show{display:flex;animation:toastIn .25s ease}
+@keyframes toastIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* Terms tabs for invoice */
+.terms-tabs{display:flex;gap:6px;margin-bottom:14px}
+.tt{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--ink-mid);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .15s}
+.tt:hover{border-color:var(--ink);color:var(--ink)}
+.tt.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+@media(max-width:768px){
+  .dash-layout{grid-template-columns:1fr}
+  .dash-sidebar{display:none}
+  .hero{grid-template-columns:1fr;padding:48px 20px}
+  .hero-mockup{display:none}
+  h1{font-size:38px}
+  .features-grid{grid-template-columns:1fr}
+  .hiw-steps{grid-template-columns:1fr}
+  .hiw-steps::before{display:none}
+  .hiw-step{padding:0 0 32px!important;border-bottom:1px solid var(--border);margin-bottom:32px}
+  .hiw-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0!important}
+  .testi-grid{grid-template-columns:1fr}
+  .quick-stats{grid-template-columns:repeat(2,1fr)}
+  .top-nav{padding:0 20px}
+  .kanban{grid-template-columns:repeat(2,1fr)}
+  .calc-grid{grid-template-columns:1fr}
+  .inv-layout{grid-template-columns:1fr}
+  .tax-two-col{grid-template-columns:1fr}
+  .tmpl-panel{padding:20px}
+  .nav-links{display:none}
+  .inv-paper{padding:24px 20px}
+  .doc-body{padding:28px 22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LANDING PAGE ══ -->
+<div class="page active" id="page-landing">
+
+  <nav class="top-nav">
+    <div class="nav-logo" onclick="">Freelance<span>Kit</span></div>
+    <div class="nav-links">
+      <a onclick="scrollTo('features')">Templates</a>
+      <a onclick="scrollTo('pricing')">Pricing</a>
+      <a>Community</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-nav-ghost" onclick="showAuth('signin')">Sign in</button>
+      <button class="btn-nav-cta" onclick="showAuth('signup','pro')">Start free trial →</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div>
+      <div class="hero-badge">Now in beta · 10 templates ready</div>
+      <h1>Stop winging<br>your freelance<br><em>business.</em></h1>
+      <p class="hero-sub">Every contract, invoice, proposal, and tracker you need to run your freelance business like a pro — built by freelancers who learned the hard way.</p>
+      <div class="hero-btns">
+        <button class="btn-hero-primary" onclick="showAuth('signup','pro')">Start free trial →</button>
+        <button class="btn-hero-ghost" onclick="scrollTo('pricing')">See pricing</button>
+      </div>
+      <p class="hero-note">7-day free trial · No credit card required · Cancel anytime</p>
+    </div>
+    <div class="hero-mockup">
+      <div class="hm-bar">
+        <div class="hm-dot" style="background:#E8594A"></div>
+        <div class="hm-dot" style="background:#F4A73A;margin-left:4px"></div>
+        <div class="hm-dot" style="background:#5DC86A;margin-left:4px"></div>
+        <span class="hm-url">freelancekit.io/templates</span>
+      </div>
+      <div class="hm-body">
+        <div class="hm-row" onclick="showDash()"><div class="hm-icon" style="background:#FFF3E8">📄</div><div class="hm-info"><div class="hm-name">Client Contract — Full Protection</div><div class="hm-meta">Notion · Updated 2 days ago</div></div><span class="hm-badge badge-pop">Popular</span></div>
+        <div class="hm-row" onclick="showDash()"><div class="hm-icon" style="background:#EAF1EC">⚠️</div><div class="hm-info"><div class="hm-name">Scope Change Order</div><div class="hm-meta">Google Docs · Updated 1 week ago</div></div><span class="hm-badge badge-new">New</span></div>
+        <div class="hm-row" onclick="showDash()"><div class="hm-icon" style="background:#E8F0FE">📊</div><div class="hm-info"><div class="hm-name">Freelance Rate Calculator</div><div class="hm-meta">Interactive · Live calculator</div></div><span class="hm-badge badge-pop">Popular</span></div>
+        <div class="hm-row" onclick="showDash()"><div class="hm-icon" style="background:#F5E6D3">🧾</div><div class="hm-info"><div class="hm-name">Invoice Builder — Net 7/14/30</div><div class="hm-meta">Live preview · Net 7 / 14 / 30</div></div><span class="hm-badge badge-new">New</span></div>
+        <div class="hm-row" onclick="showDash()"><div class="hm-icon" style="background:#EDE9FE">🗂️</div><div class="hm-info"><div class="hm-name">Client Pipeline Tracker</div><div class="hm-meta">Interactive kanban · Draggable</div></div><span class="hm-badge badge-new">New</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social proof -->
+  <div class="proof-strip">
+    <div class="proof-inner">
+      <span class="proof-label">Trusted by freelancers in 24 countries</span>
+      <div class="proof-avatars">
+        <div class="proof-av" style="background:#F5E6D3;color:var(--amber)">S</div>
+        <div class="proof-av" style="background:#EAF1EC;color:var(--sage)">M</div>
+        <div class="proof-av" style="background:#E8F0FE;color:#1967d2">J</div>
+        <div class="proof-av" style="background:#FCE4EC;color:#C2185B">L</div>
+        <div class="proof-av" style="background:#F3E5F5;color:#7B1FA2">R</div>
+      </div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat"><span class="ps-num">10</span><span class="ps-lbl">Templates<br>in library</span></div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat"><span class="ps-num">$9</span><span class="ps-lbl">Per month,<br>flat pricing</span></div>
+      <div class="proof-divider"></div>
+      <div class="proof-stat"><span class="ps-num">6</span><span class="ps-lbl">New templates<br>added monthly</span></div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="lp-section" id="features">
+    <div class="lp-label">Six problems. Six fixes.</div>
+    <h2>The parts of freelancing<br>that go wrong. <em>Solved.</em></h2>
+    <p class="lp-sub">Most freelancers lose $3,000–$8,000/year to scope creep, late payments, and undercharging. These templates fix all three — and the other problems you haven't put a number on yet.</p>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#FFF3E8">📑</div>
+        <div class="feat-problem">The problem — clients change scope mid-project</div>
+        <h3>Stop eating extra work.</h3>
+        <p>A client asks for "one small change." Six of those later, you've done two weeks of unpaid work. The scope change order ends that conversation in one email.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Client contract</span>
+          <span class="feat-t-chip">Scope change order</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#EAF1EC">💰</div>
+        <div class="feat-problem">The problem — chasing unpaid invoices</div>
+        <h3>Get paid. Without the awkward call.</h3>
+        <p>70% of freelancers have been stiffed at least once. The late payment sequence recovers most of it — three escalating emails that feel professional, not desperate.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Invoice builder</span>
+          <span class="feat-t-chip">Late payment sequence</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#E8F0FE">📋</div>
+        <div class="feat-problem">The problem — clients who ignore boundaries</div>
+        <h3>Set the rules before the work starts.</h3>
+        <p>The welcome packet and project brief front-load every expectation — feedback process, communication hours, what you need from them. Clients who read it cause far fewer problems.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Welcome packet</span>
+          <span class="feat-t-chip">Project brief form</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#FCE4EC">📊</div>
+        <div class="feat-problem">The problem — charging too little and not knowing it</div>
+        <h3>Know your number. Charge it.</h3>
+        <p>The rate calculator works backwards from your actual take-home target — accounting for taxes, dry months, and admin overhead. It shows you the rate below which you're subsidising your clients.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Rate calculator</span>
+          <span class="feat-t-chip">Proposal scripts (×3)</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#EDE9FE">🗂️</div>
+        <div class="feat-problem">The problem — feast-or-famine income swings</div>
+        <h3>See the dry month coming.</h3>
+        <p>The pipeline tracker shows your weighted revenue forecast by stage. You'll know four weeks early when work is about to run out — while there's still time to fill the gap.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Pipeline tracker</span>
+          <span class="feat-t-chip">Tax tracker</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon" style="background:#E8F5E9">✉️</div>
+        <div class="feat-problem">The problem — not knowing what to say</div>
+        <h3>Copy. Paste. Send.</h3>
+        <p>Cold pitch, warm proposal, scope pushback, late payment follow-up, client off-boarding. Every professionally awkward email you'll ever need — already written, annotated, and ready to go.</p>
+        <div class="feat-templates">
+          <span class="feat-t-chip">Late payment (×4)</span>
+          <span class="feat-t-chip">Proposal scripts (×3)</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- How it works -->
+  <div class="hiw-section">
+    <div class="hiw-inner">
+      <div class="lp-label">How it works</div>
+      <h2>Three steps.<br><em>That's it.</em></h2>
+      <p class="lp-sub" style="margin-bottom:0">No onboarding call. No setup. Find what you need, copy it to your tool, fill in your details.</p>
+      <div class="hiw-steps">
+
+        <!-- Step 1 -->
+        <div class="hiw-step">
+          <div class="hiw-num">1</div>
+          <div class="hiw-step-title">Find the<br>template <em>you need.</em></div>
+          <p class="hiw-step-desc">10 templates across 6 categories. Contracts, invoices, proposals, trackers, emails, onboarding. Organised by the problem they solve.</p>
+          <div class="hiw-mini">
+            <div class="hiw-mini-bar">
+              <div class="hiw-mini-dot" style="background:#E8594A"></div>
+              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
+              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
+            </div>
+            <div class="hiw-mini-body">
+              <div class="hiw-mini-card">
+                <div class="hiw-mini-card-icon" style="background:#FFF3E8">📑</div>
+                <span class="hiw-mini-card-name">Client Contract</span>
+                <span class="hiw-mini-card-badge" style="background:var(--sage-light);color:var(--sage)">Popular</span>
+              </div>
+              <div class="hiw-mini-card" style="border-color:var(--amber-mid);background:var(--amber-light)">
+                <div class="hiw-mini-card-icon" style="background:var(--amber-light)">⚠️</div>
+                <span class="hiw-mini-card-name" style="color:var(--amber)">Scope Change Order</span>
+                <span class="hiw-mini-card-badge" style="background:var(--amber-light);color:var(--amber)">Selected</span>
+              </div>
+              <div class="hiw-mini-card">
+                <div class="hiw-mini-card-icon" style="background:#EAF1EC">🧾</div>
+                <span class="hiw-mini-card-name">Invoice Builder</span>
+                <span class="hiw-mini-card-badge" style="background:var(--blue-light);color:var(--blue)">Live</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="hiw-step">
+          <div class="hiw-num">2</div>
+          <div class="hiw-step-title">Copy it to<br>your <em>tool.</em></div>
+          <p class="hiw-step-desc">Every template works in Notion, Google Docs, Google Sheets, or Canva — whichever you already use. One click to open and duplicate.</p>
+          <div class="hiw-mini">
+            <div class="hiw-mini-bar">
+              <div class="hiw-mini-dot" style="background:#E8594A"></div>
+              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
+              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
+              <span style="font-size:10px;color:var(--ink-light);margin-left:8px">Open in…</span>
+            </div>
+            <div class="hiw-platform-grid">
+              <div class="hiw-plat"><span class="hiw-plat-icon">⬛</span>Notion</div>
+              <div class="hiw-plat" style="border-color:var(--amber-mid);background:var(--amber-light)"><span class="hiw-plat-icon">📄</span><span style="color:var(--amber)">Google Docs</span></div>
+              <div class="hiw-plat"><span class="hiw-plat-icon">📊</span>Sheets</div>
+              <div class="hiw-plat"><span class="hiw-plat-icon">🎨</span>Canva</div>
+            </div>
+            <div style="padding:0 12px 12px;font-size:11px;color:var(--ink-light)">Works wherever you already work.</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="hiw-step">
+          <div class="hiw-num">3</div>
+          <div class="hiw-step-title">Fill in your<br>details. <em>Send.</em></div>
+          <p class="hiw-step-desc">Every field that needs your info is highlighted in amber. Replace the placeholders, delete anything that doesn't apply. Done in under five minutes.</p>
+          <div class="hiw-mini">
+            <div class="hiw-mini-bar">
+              <div class="hiw-mini-dot" style="background:#E8594A"></div>
+              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
+              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
+            </div>
+            <div class="hiw-field-wrap">
+              <div class="hiw-field-row">
+                <span class="hiw-field-lbl">Your name</span>
+                <input class="hiw-field-inp filled" value="Alex Chen" readonly>
+              </div>
+              <div class="hiw-field-row">
+                <span class="hiw-field-lbl">Client</span>
+                <input class="hiw-field-inp filled" value="Acme Studio Ltd." readonly>
+              </div>
+              <div class="hiw-field-row">
+                <span class="hiw-field-lbl">Amount</span>
+                <input class="hiw-field-inp filled" value="$4,500" readonly>
+              </div>
+              <div class="hiw-field-row">
+                <span class="hiw-field-lbl">Due date</span>
+                <input class="hiw-field-inp" placeholder="[DATE]" readonly style="color:var(--amber);background:var(--amber-light);border-color:var(--amber-mid)">
+              </div>
+              <button class="hiw-send-btn" onclick="showDash()">Open in dashboard →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Template showcase -->
+  <div class="showcase-band">
+    <div class="showcase-inner">
+      <div class="lp-label">Browse templates</div>
+      <h2 style="color:var(--cream);margin-bottom:12px">10 ready-to-use templates<br>across 6 categories</h2>
+      <p class="lp-sub" style="color:rgba(250,247,242,0.5);margin-bottom:36px">Works in Notion, Google Docs, Google Sheets, and Canva.</p>
+      <div class="template-scroll">
+        <div class="tcard" onclick="showDash('contract')"><div class="tc-emoji">📄</div><div class="tc-name">Client Contract</div><div class="tc-cat">Contracts & Legal</div><span class="tc-fmt fmt-notion">Notion</span></div>
+        <div class="tcard" onclick="showDash('scope')"><div class="tc-emoji">⚠️</div><div class="tc-name">Scope Change Order</div><div class="tc-cat">Contracts & Legal</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
+        <div class="tcard" onclick="showDash('invoice')"><div class="tc-emoji">🧾</div><div class="tc-name">Invoice Builder</div><div class="tc-cat">Invoicing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
+        <div class="tcard" onclick="showDash('latepay')"><div class="tc-emoji">📬</div><div class="tc-name">Late Payment Emails</div><div class="tc-cat">Invoicing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
+        <div class="tcard" onclick="showDash('ratecalc')"><div class="tc-emoji">📊</div><div class="tc-name">Rate Calculator</div><div class="tc-cat">Proposals & Pricing</div><span class="tc-fmt fmt-sheets">Sheets</span></div>
+        <div class="tcard" onclick="showDash('proposal')"><div class="tc-emoji">✉️</div><div class="tc-name">Proposal Email Script</div><div class="tc-cat">Proposals & Pricing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
+        <div class="tcard" onclick="showDash('pipeline')"><div class="tc-emoji">🗂️</div><div class="tc-name">Pipeline Tracker</div><div class="tc-cat">Operations</div><span class="tc-fmt fmt-notion">Notion</span></div>
+        <div class="tcard" onclick="showDash('tax')"><div class="tc-emoji">🧮</div><div class="tc-name">Tax Tracker</div><div class="tc-cat">Operations</div><span class="tc-fmt fmt-sheets">Sheets</span></div>
+        <div class="tcard" onclick="showDash('welcome')"><div class="tc-emoji">🎁</div><div class="tc-name">Welcome Packet</div><div class="tc-cat">Client Onboarding</div><span class="tc-fmt fmt-c">Canva</span></div>
+        <div class="tcard" onclick="showDash('brief')"><div class="tc-emoji">📋</div><div class="tc-name">Project Brief Form</div><div class="tc-cat">Client Onboarding</div><span class="tc-fmt fmt-notion">Notion</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <section class="lp-section" id="testimonials">
+    <div class="lp-label">What members say</div>
+    <h2>Real freelancers.<br><em>Real results.</em></h2>
+    <p class="lp-sub">Not success stories. Frustration stories that got fixed.</p>
+    <div class="testi-grid">
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The scope change order alone has saved me over $2,000 this year. I used to eat the extra work. Now I send the template and 80% of clients just pay the add-on."</p><div class="testi-author"><div class="testi-av" style="background:#F5E6D3;color:var(--amber)">SK</div><div><div class="testi-name">Sofía K.</div><div class="testi-role">Brand designer, 4 yrs freelance</div></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The quarterly tax tracker keeps me from that annual panic. Worth $9/month for the peace of mind alone. I actually know what I owe before April now."</p><div class="testi-author"><div class="testi-av" style="background:#EAF1EC;color:var(--sage)">MT</div><div><div class="testi-name">Marcus T.</div><div class="testi-role">Freelance copywriter</div></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Clients now say I seem more professional than anyone else they've hired. It's just the welcome packet and brief form on day one, but it changes everything."</p><div class="testi-author"><div class="testi-av" style="background:#E8F0FE;color:#1967d2">JL</div><div><div class="testi-name">Jade L.</div><div class="testi-role">Social media manager</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="lp-section" id="pricing" style="padding-top:40px">
+    <div class="lp-label">Pricing</div>
+    <h2>One price.<br><em>No surprises.</em></h2>
+    <p class="lp-sub">We're sick of paying $40/month for tools we barely use. FreelanceKit is one flat price, forever.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Free</div>
+        <div class="price-amount"><sup>$</sup>0</div>
+        <div class="price-period">forever, no card needed</div>
+        <ul class="price-features">
+          <li>5 templates from each category</li>
+          <li>Notion + Google Docs formats</li>
+          <li>Monthly template drop</li>
+          <li>Community Discord</li>
+        </ul>
+        <button class="btn-price" onclick="showAuth('signup','free')">Get started free</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">Pro</div>
+        <div class="price-amount" style="color:var(--cream)"><sup style="color:var(--amber-mid)">$</sup>9</div>
+        <div class="price-period">per month · billed monthly</div>
+        <ul class="price-features">
+          <li>All 10 templates, every format</li>
+          <li>Notion, Google Docs, Sheets, Canva</li>
+          <li>6 new templates added monthly</li>
+          <li>Monthly live Q&A</li>
+          <li>Priority community access</li>
+          <li>Vote on upcoming templates</li>
+        </ul>
+        <button class="btn-price featured" onclick="showAuth('signup','pro')">Start 7-day free trial →</button>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Annual</div>
+        <div class="price-amount"><sup>$</sup>79</div>
+        <div class="price-period">per year · save $29</div>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>2 months free</li>
+          <li>1:1 onboarding call (30 min)</li>
+          <li>Custom template request (1/yr)</li>
+        </ul>
+        <button class="btn-price" onclick="showAuth('signup','annual')">Get annual plan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="cta-inner">
+      <div class="cta-eyebrow">Ready to stop winging it?</div>
+      <h2 style="color:var(--cream)">Your freelance business<br><em>starts running itself.</em></h2>
+      <p class="cta-sub">Join 400+ freelancers already using FreelanceKit to protect their time, get paid faster, and stop starting from scratch.</p>
+      <button class="btn-hero-primary" style="font-size:15px;padding:15px 32px" onclick="showAuth('signup','pro')">Start your free trial →</button>
+      <p style="font-size:12px;color:rgba(250,247,242,0.35);margin-top:11px">7 days free · Cancel anytime · No credit card</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">Freelance<span>Kit</span></div>
+    <p>Built by freelancers, for freelancers. · Beta v0.1</p>
+  </footer>
+
+</div><!-- /landing -->
+
+
+<!-- ══ AUTH PAGE ══ -->
+<div class="page" id="page-auth">
+  <div class="page-auth-wrap">
+
+    <nav class="auth-nav">
+      <div class="nav-logo" onclick="showLanding()" style="cursor:pointer">Freelance<span>Kit</span></div>
+      <button class="auth-back" onclick="showLanding()">← Back to home</button>
+    </nav>
+
+    <div class="auth-body">
+
+      <!-- Form column -->
+      <div class="auth-form-col">
+        <div class="auth-card">
+
+          <!-- Sign Up form -->
+          <div id="auth-signup">
+            <div class="auth-logo">Freelance<span>Kit</span></div>
+            <div class="auth-heading">Start your<br><em>free trial.</em></div>
+            <p class="auth-subhead">7 days free. No credit card. Cancel anytime.</p>
+
+            <div class="auth-tabs">
+              <button class="auth-tab active" onclick="switchAuthTab('signup')">Create account</button>
+              <button class="auth-tab" onclick="switchAuthTab('signin')">Sign in</button>
+            </div>
+
+            <button class="auth-google" onclick="showDash()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Continue with Google
+            </button>
+
+            <div class="auth-divider">
+              <div class="auth-divider-line"></div>
+              <span class="auth-divider-txt">or</span>
+              <div class="auth-divider-line"></div>
+            </div>
+
+            <div class="auth-field">
+              <div class="auth-field-lbl">Full name</div>
+              <input class="auth-input" type="text" placeholder="Your name" id="su-name">
+            </div>
+            <div class="auth-field">
+              <div class="auth-field-lbl">Email address</div>
+              <input class="auth-input" type="email" placeholder="you@example.com" id="su-email">
+            </div>
+            <div class="auth-field">
+              <div class="auth-field-lbl">Password</div>
+              <input class="auth-input" type="password" placeholder="At least 8 characters" id="su-pass">
+            </div>
+
+            <div style="margin-bottom:6px">
+              <div class="auth-field-lbl" style="margin-bottom:10px">Choose your plan</div>
+              <div class="auth-plan-grid" id="plan-grid">
+                <div class="auth-plan" id="plan-free" onclick="selectPlan('free')">
+                  <div class="auth-plan-name">Free</div>
+                  <div class="auth-plan-price">$0</div>
+                  <div class="auth-plan-note">5 templates per category</div>
+                </div>
+                <div class="auth-plan selected" id="plan-pro" onclick="selectPlan('pro')">
+                  <div class="auth-plan-badge">7 days free</div>
+                  <div class="auth-plan-name">Pro</div>
+                  <div class="auth-plan-price">$9</div>
+                  <div class="auth-plan-note">All templates · /month</div>
+                </div>
+                <div class="auth-plan" id="plan-annual" onclick="selectPlan('annual')">
+                  <div class="auth-plan-name">Annual</div>
+                  <div class="auth-plan-price">$79</div>
+                  <div class="auth-plan-note">2 months free · /year</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="auth-cta" onclick="showDash()" id="signup-cta">Start free trial →</button>
+
+            <div class="auth-switch">Already have an account? <span onclick="switchAuthTab('signin')">Sign in</span></div>
+
+            <p style="font-size:11px;color:var(--ink-light);text-align:center;margin-top:16px;line-height:1.6">By creating an account you agree to our <span style="color:var(--amber);cursor:pointer">Terms</span> and <span style="color:var(--amber);cursor:pointer">Privacy Policy</span>.</p>
+          </div>
+
+          <!-- Sign In form -->
+          <div id="auth-signin" style="display:none">
+            <div class="auth-logo">Freelance<span>Kit</span></div>
+            <div class="auth-heading">Welcome<br><em>back.</em></div>
+            <p class="auth-subhead">Sign in to your FreelanceKit account.</p>
+
+            <div class="auth-tabs">
+              <button class="auth-tab" onclick="switchAuthTab('signup')">Create account</button>
+              <button class="auth-tab active" onclick="switchAuthTab('signin')">Sign in</button>
+            </div>
+
+            <button class="auth-google" onclick="showDash()">
+              <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Continue with Google
+            </button>
+
+            <div class="auth-divider">
+              <div class="auth-divider-line"></div>
+              <span class="auth-divider-txt">or</span>
+              <div class="auth-divider-line"></div>
+            </div>
+
+            <div class="auth-field">
+              <div class="auth-field-lbl">Email address</div>
+              <input class="auth-input" type="email" placeholder="you@example.com" id="si-email">
+            </div>
+            <div class="auth-field">
+              <div class="auth-field-lbl">Password</div>
+              <input class="auth-input" type="password" placeholder="Your password" id="si-pass">
+            </div>
+            <div class="auth-forgot" onclick="showToast('Password reset coming soon')">Forgot password?</div>
+
+            <button class="auth-cta" onclick="showDash()">Sign in →</button>
+
+            <div class="auth-switch">Don't have an account? <span onclick="switchAuthTab('signup')">Start free trial</span></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="auth-panel-col">
+        <div class="ap-eyebrow">What you're getting</div>
+        <div class="ap-heading">Everything to run<br>your business <em>properly.</em></div>
+        <p class="ap-sub">10 templates. Six categories. The contracts, invoices, and trackers every freelancer needs — already written.</p>
+
+        <div class="ap-items">
+          <div class="ap-item">
+            <div class="ap-item-icon">📑</div>
+            <div>
+              <div class="ap-item-title">Stop scope creep cold</div>
+              <div class="ap-item-desc">Client contract + scope change order. One email, professionally handled.</div>
+            </div>
+          </div>
+          <div class="ap-item">
+            <div class="ap-item-icon">💰</div>
+            <div>
+              <div class="ap-item-title">Get paid. On time.</div>
+              <div class="ap-item-desc">Invoice builder + late payment sequence. Recovers most unpaid invoices without the awkward call.</div>
+            </div>
+          </div>
+          <div class="ap-item">
+            <div class="ap-item-icon">🗂️</div>
+            <div>
+              <div class="ap-item-title">See dry months before they hit</div>
+              <div class="ap-item-desc">Pipeline tracker with weighted forecast. Know 4–6 weeks early when work is running out.</div>
+            </div>
+          </div>
+          <div class="ap-item">
+            <div class="ap-item-icon">📊</div>
+            <div>
+              <div class="ap-item-title">Know your real rate</div>
+              <div class="ap-item-desc">Rate calculator that works backwards from your take-home target. No more guessing.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-avatars">
+          <div class="ap-avs">
+            <div class="ap-av" style="background:#F5E6D3;color:var(--amber)">S</div>
+            <div class="ap-av" style="background:rgba(90,122,101,0.3);color:#8AB395">M</div>
+            <div class="ap-av" style="background:rgba(25,103,210,0.2);color:#85B7EB">J</div>
+            <div class="ap-av" style="background:rgba(109,40,217,0.2);color:#A78BFA">L</div>
+            <div class="ap-av" style="background:rgba(200,98,26,0.2);color:var(--amber-mid)" style="margin-right:0">+</div>
+          </div>
+          <span class="ap-av-text">400+ freelancers already using FreelanceKit</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /auth -->
+
+
+
+
+<!-- ══ DASHBOARD ══ -->
+<div class="page" id="page-dash">
+
+  <nav class="top-nav">
+    <div class="nav-logo" onclick="showLanding()">Freelance<span>Kit</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:12px;background:var(--amber-light);color:var(--amber);padding:3px 10px;border-radius:20px;font-weight:600">Beta</span>
+      <span style="font-size:12px;color:var(--ink-light)">10 templates</span>
+    </div>
+    <div class="nav-actions">
+      <span style="font-size:13px;color:var(--ink-mid)">Alex Chen</span>
+      <div class="nav-avatar">AC</div>
+    </div>
+  </nav>
+
+  <div class="dash-layout">
+    <!-- Sidebar -->
+    <aside class="dash-sidebar" id="dash-sidebar">
+      <div class="dsb-section">Library</div>
+      <div class="dsb-item active" onclick="showPanel('home',this)" id="nav-home">
+        <span class="dsb-icon">&#127968;</span><span class="dsb-label">Home</span>
+      </div>
+
+      <div class="dsb-section">Contracts &amp; Legal</div>
+      <div class="dsb-item" onclick="showPanel('contract',this)" id="nav-contract">
+        <span class="dsb-icon">&#128196;</span><span class="dsb-label">Client Contract</span>
+        <span class="dsb-count">Full</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('scope',this)" id="nav-scope">
+        <span class="dsb-icon">&#9888;&#65039;</span><span class="dsb-label">Scope Change Order</span>
+        <span class="dsb-count">New</span>
+      </div>
+
+      <div class="dsb-section">Invoicing &amp; Payments</div>
+      <div class="dsb-item" onclick="showPanel('invoice',this)" id="nav-invoice">
+        <span class="dsb-icon">&#129534;</span><span class="dsb-label">Invoice Builder</span>
+        <span class="dsb-count">Live</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('latepay',this)" id="nav-latepay">
+        <span class="dsb-icon">&#128236;</span><span class="dsb-label">Late Payment Emails</span>
+      </div>
+
+      <div class="dsb-section">Proposals &amp; Pricing</div>
+      <div class="dsb-item" onclick="showPanel('ratecalc',this)" id="nav-ratecalc">
+        <span class="dsb-icon">&#128202;</span><span class="dsb-label">Rate Calculator</span>
+        <span class="dsb-count">Live</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('proposal',this)" id="nav-proposal">
+        <span class="dsb-icon">&#9993;&#65039;</span><span class="dsb-label">Proposal Email Script</span>
+      </div>
+
+      <div class="dsb-section">Business Operations</div>
+      <div class="dsb-item" onclick="showPanel('pipeline',this)" id="nav-pipeline">
+        <span class="dsb-icon">&#128193;&#65039;</span><span class="dsb-label">Pipeline Tracker</span>
+        <span class="dsb-count">Live</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('tax',this)" id="nav-tax">
+        <span class="dsb-icon">&#129518;</span><span class="dsb-label">Tax Tracker</span>
+        <span class="dsb-count">Live</span>
+      </div>
+
+      <div class="dsb-section">Client Onboarding</div>
+      <div class="dsb-item" onclick="showPanel('welcome',this)" id="nav-welcome">
+        <span class="dsb-icon">&#127873;</span><span class="dsb-label">Welcome Packet</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('brief',this)" id="nav-brief">
+        <span class="dsb-icon">&#128203;</span><span class="dsb-label">Project Brief Form</span>
+      </div>
+
+      <div class="dsb-section">Account</div>
+      <div class="dsb-item" onclick="showToast('Saved templates coming soon')">
+        <span class="dsb-icon">&#128278;</span><span class="dsb-label">Saved</span>
+        <span class="dsb-count">4</span>
+      </div>
+      <div class="dsb-item" onclick="showToast('Discord community coming soon')">
+        <span class="dsb-icon">&#128172;</span><span class="dsb-label">Community</span>
+      </div>
+
+      <button class="sb-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
+        <span class="sb-toggle-arrow" id="sb-arrow">&#9664;</span>
+      </button>
+    </aside>
+
+    <!-- Main panels -->
+    <main class="dash-main">
+
+      <!-- ─── HOME ─── -->
+      <div class="tmpl-panel active" id="panel-home">
+        <div class="welcome-bar">
+          <div class="wb-text">
+            <h3>Welcome back, Alex.</h3>
+            <p>3 new templates this week · Q2 tax deadline in 14 days</p>
+          </div>
+          <div class="wb-stat">
+            <div class="wb-num">9</div>
+            <div class="wb-lbl">templates used</div>
+          </div>
+        </div>
+        <div class="quick-stats">
+          <div class="qs"><div class="qs-lbl">Downloaded</div><div class="qs-val">9</div><div class="qs-sub up">↑ 3 this month</div></div>
+          <div class="qs"><div class="qs-lbl">New this month</div><div class="qs-val">3</div><div class="qs-sub up">across 3 categories</div></div>
+          <div class="qs"><div class="qs-lbl">Saved</div><div class="qs-val">4</div><div class="qs-sub" style="color:var(--ink-light)">Quick access</div></div>
+          <div class="qs"><div class="qs-lbl">Trial days left</div><div class="qs-val">4</div><div class="qs-sub warn">Upgrade to Pro</div></div>
+        </div>
+        <div class="home-grid-header"><span class="hgh-title">All templates</span><span class="hgh-all" onclick="showToast('All templates are in the sidebar →')">View all</span></div>
+        <div class="template-grid" id="home-template-grid"></div>
+        <div class="home-grid-header"><span class="hgh-title">Recently used</span></div>
+        <div class="activity-list">
+          <div class="al-item"><div class="al-icon">📄</div><div><div class="al-name">Client Contract — Full Protection</div><div class="al-sub">Opened in Notion · Contracts & Legal</div></div><span class="al-time">2h ago</span></div>
+          <div class="al-item"><div class="al-icon">⚠️</div><div><div class="al-name">Scope Change Order</div><div class="al-sub">Downloaded · Contracts & Legal</div></div><span class="al-time">Yesterday</span></div>
+          <div class="al-item"><div class="al-icon">📊</div><div><div class="al-name">Rate Calculator</div><div class="al-sub">Used · Proposals & Pricing</div></div><span class="al-time">3 days ago</span></div>
+        </div>
+      </div>
+
+      <!-- ─── CONTRACT ─── -->
+      <div class="tmpl-panel" id="panel-contract">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Contracts & Legal</span><span class="tv-tag" style="background:#F0EEEE;color:#555">Notion</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span></div>
+          <div class="tv-title">Client Contract —<br><em>Full Protection</em></div>
+          <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
+          <div class="tv-actions">
+            <button class="btn-use" onclick="copyDoc('contract-doc-body',this)">📋 Copy contract</button>
+            <button class="btn-outline" onclick="showToast('↗ Notion version coming soon')">↗ Open in Notion</button>
+            <button class="btn-outline" onclick="showToast('↗ Google Docs version coming soon')">↗ Open in Docs</button>
+          </div>
+        </div>
+        <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> This template is for general informational purposes only. It does not constitute legal advice. Laws vary by jurisdiction — consult a qualified attorney for high-value or complex engagements. FreelanceKit accepts no liability for outcomes arising from use of this template.</div>
+        <div class="doc-wrap">
+          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Contract (Full Protection).docx</span><span class="db-fmt">Google Docs</span></div>
+          <div class="doc-body" id="contract-doc-body">
+            <div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Freelance Services Agreement</div>
+            <div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · freelancekit.io</div>
+            <hr class="doc-thick">
+            <h2>1. The Parties</h2>
+            <p>This Agreement is entered into as of <span class="field">[DATE]</span> between <strong>Freelancer:</strong> <span class="field">[YOUR FULL NAME OR BUSINESS NAME]</span>, located at <span class="field">[YOUR CITY, STATE/PROVINCE, COUNTRY]</span>, and <strong>Client:</strong> <span class="field">[CLIENT FULL NAME OR COMPANY NAME]</span>, located at <span class="field">[CLIENT ADDRESS]</span>, represented by <span class="field">[CLIENT CONTACT NAME, TITLE]</span>.</p>
+            <hr class="doc-divider">
+            <h2>2. Project Scope & Deliverables</h2>
+            <p>Freelancer agrees to provide the following services:</p>
+            <span class="field-block">[DESCRIBE THE PROJECT IN SPECIFIC, MEASURABLE TERMS. E.G. "Design of 5 social media templates for Instagram (1080×1080px), delivered as editable Figma files and exported JPEGs. Includes 2 rounds of revisions."]</span>
+            <p>Deliverables:</p>
+            <span class="field-block">[LIST EACH DELIVERABLE:
+• Deliverable 1: [Description, format]
+• Deliverable 2: [Description, format]
+• Deliverable 3: [Description, format]]</span>
+            <div class="doc-callout"><strong>Scope note:</strong> Any work, deliverables, or revisions not listed above are outside scope and will require a written Scope Change Order with additional fees.</div>
+            <hr class="doc-divider">
+            <h2>3. Timeline</h2>
+            <p><strong>Start:</strong> <span class="field">[START DATE]</span> · <strong>Final delivery:</strong> <span class="field">[END DATE]</span>. Timeline assumes Client provides materials and feedback within <span class="field">[3]</span> business days of each request. Delays caused by late feedback extend the deadline accordingly.</p>
+            <hr class="doc-divider">
+            <h2>4. Fees & Payment</h2>
+            <p><strong>Total fee:</strong> <span class="field">[AMOUNT AND CURRENCY]</span></p>
+            <ul><li><span class="field">[50%]</span> deposit due on signing: <span class="field">[AMOUNT]</span></li><li><span class="field">[50%]</span> final payment due on delivery: <span class="field">[AMOUNT]</span></li></ul>
+            <p>Invoices due within <span class="field">[7]</span> days of receipt. Late balances accrue <span class="field">[1.5%]</span>/month. Work does not begin until deposit clears. Final files withheld until final payment clears.</p>
+            <hr class="doc-divider">
+            <h2>5. Revision Policy</h2>
+            <p>Includes <span class="field">[2]</span> rounds of revisions. Additional rounds billed at <span class="field">[YOUR HOURLY RATE]</span>/hr. Feedback must be submitted consolidated within <span class="field">[7]</span> days of delivery; late feedback treated as approval.</p>
+            <hr class="doc-divider">
+            <h2>6. Kill Fee</h2>
+            <ul><li>Cancelled before work begins: deposit refunded in full.</li><li>Cancelled after work begins but before 50% completion: deposit forfeited.</li><li>Cancelled after 50% completion: full fee owed.</li></ul>
+            <hr class="doc-divider">
+            <h2>7. Intellectual Property</h2>
+            <p>Upon receipt of full payment, Freelancer assigns all rights in final approved deliverables to Client. Until then, all work remains Freelancer's property. Source files, rejected concepts, and third-party assets are excluded unless explicitly listed as deliverables. Freelancer retains portfolio rights unless Client requests otherwise in writing.</p>
+            <hr class="doc-divider">
+            <h2>8. Confidentiality</h2>
+            <p>Both parties agree to keep confidential all proprietary information shared during this engagement and not to disclose it to third parties without prior written consent.</p>
+            <hr class="doc-divider">
+            <h2>9. Independent Contractor</h2>
+            <p>Freelancer is an independent contractor, not an employee. Freelancer is responsible for their own taxes, insurance, and equipment.</p>
+            <hr class="doc-divider">
+            <h2>10. Dispute Resolution</h2>
+            <p>Disputes will first be addressed in good faith within <span class="field">[14]</span> days. If unresolved, disputes will proceed to binding arbitration in <span class="field">[YOUR CITY, STATE/PROVINCE]</span> before either party pursues litigation.</p>
+            <hr class="doc-divider">
+            <h2>11. Governing Law</h2>
+            <p>This Agreement is governed by the laws of <span class="field">[YOUR STATE/PROVINCE AND COUNTRY]</span>.</p>
+            <hr class="doc-thick">
+            <h2>Signatures</h2>
+            <div class="sig-grid">
+              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Date</div></div>
+              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Title · Date</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── SCOPE CHANGE ORDER ─── -->
+      <div class="tmpl-panel" id="panel-scope">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Contracts & Legal</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span></div>
+          <div class="tv-title">Scope Change<br><em>Order</em></div>
+          <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
+          <div class="tv-actions">
+            <button class="btn-use" onclick="copyDoc('scope-doc-body',this)">📋 Copy change order</button>
+            <button class="btn-outline" onclick="showToast('↗ Google Docs version coming soon')">↗ Open in Docs</button>
+          </div>
+        </div>
+        <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> For general use. Ensure your primary contract includes a provision allowing for written scope changes. Consult a local attorney for complex arrangements.</div>
+        <div class="doc-wrap">
+          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Scope Change Order.docx</span><span class="db-fmt">Google Docs</span></div>
+          <div class="doc-body" id="scope-doc-body">
+            <div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Scope Change Order</div>
+            <div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body)">Addendum to Freelance Services Agreement · FreelanceKit Template</div>
+            <hr class="doc-thick">
+            <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-family:var(--font-body)">
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream);width:35%">Change Order #</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[#001]</span></td></tr>
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Date issued</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DATE]</span></td></tr>
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Project</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[PROJECT NAME]</span></td></tr>
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Original contract date</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[ORIGINAL AGREEMENT DATE]</span></td></tr>
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Freelancer</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[YOUR NAME]</span></td></tr>
+              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Client</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[CLIENT NAME]</span></td></tr>
+            </table>
+            <hr class="doc-divider">
+            <h2>Description of Requested Change</h2>
+            <p>Client has requested the following addition or modification to the original scope:</p>
+            <span class="field-block">[DESCRIBE THE CHANGE REQUEST SPECIFICALLY. E.G.:
+• "Client requested an additional revision round beyond the 2 included."
+• "Client requested a 6th template not in the original scope of 5."
+• "Client requested a complete concept change after the approved direction was in progress."]</span>
+            <div class="doc-callout"><strong>Original scope reference:</strong> Per Section 2 of the Agreement dated <span class="field">[DATE]</span>, agreed deliverables were: <span class="field">[PASTE RELEVANT DELIVERABLES HERE]</span>. The request above falls outside this scope.</div>
+            <hr class="doc-divider">
+            <h2>Additional Fee</h2>
+            <table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-family:var(--font-body)">
+              <tr style="background:var(--cream)"><th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border)">Item</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Hours</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Rate</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Amount</th></tr>
+              <tr><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DESCRIBE EXTRA WORK]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[X hrs]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$X/hr]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$TOTAL]</span></td></tr>
+              <tr><td colspan="3" style="padding:10px 12px;border:1px solid var(--border);font-size:13px;font-weight:600;text-align:right">Total additional fee:</td><td style="padding:10px 12px;border:1px solid var(--border);font-size:14px;font-weight:600;text-align:right;color:var(--amber);font-family:var(--font-mono)"><span class="field">[$GRAND TOTAL]</span></td></tr>
+            </table>
+            <div class="doc-callout"><strong>Important:</strong> Work on this change will not begin until this Change Order is signed. If an upfront payment is required, work begins upon receipt.</div>
+            <hr class="doc-thick">
+            <h2>Signatures</h2>
+            <div class="sig-grid">
+              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Date</div></div>
+              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Title · Date</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── INVOICE BUILDER ─── -->
+      <div class="tmpl-panel" id="panel-invoice">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Invoice Builder —<br><em>Net 7 · 14 · 30</em></div>
+          <div class="tv-desc">Fill in the panel, watch the invoice update live. Switch payment terms, add line items, set tax and discount. Copy as text or print to PDF.</div>
+        </div>
+        <div class="terms-tabs">
+          <button class="tt active" onclick="setInvTerms(7,this)">Net 7 — Due in 7 days</button>
+          <button class="tt" onclick="setInvTerms(14,this)">Net 14 — Due in 14 days</button>
+          <button class="tt" onclick="setInvTerms(30,this)">Net 30 — Due in 30 days</button>
+        </div>
+        <div class="inv-layout">
+          <div class="inv-panel">
+            <div class="ip-head"><span style="font-size:14px">⚙️</span><span class="ip-head-title">Invoice builder</span><span class="ip-head-badge">Live preview →</span></div>
+            <div class="ip-body">
+              <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="Alex Chen Design" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="alex@alexchendesign.com" oninput="updateInv()"></div>
+              <div class="ip-divider"></div>
+              <div class="ip-row2">
+                <div class="ip-field"><div class="ip-lbl">Invoice #</div><input class="ip-inp" id="i-num" value="INV-001" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Issue date</div><input class="ip-inp" type="date" id="i-issued" oninput="updateInv()"></div>
+              </div>
+              <div class="ip-field"><div class="ip-lbl">Due date</div><input class="ip-inp" type="date" id="i-due" oninput="updateInv()"></div>
+              <div class="ip-divider"></div>
+              <div class="ip-field"><div class="ip-lbl">Client name</div><input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv()"></div>
+              <div class="ip-row2">
+                <div class="ip-field"><div class="ip-lbl">Contact</div><input class="ip-inp" id="i-contact" value="Jamie Reyes" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="jamie@acmestudio.com" oninput="updateInv()"></div>
+              </div>
+              <div class="ip-field"><div class="ip-lbl">Project</div><input class="ip-inp" id="i-project" value="Brand Identity Refresh" oninput="updateInv()"></div>
+              <div class="ip-divider"></div>
+              <div class="ip-lbl" style="margin-bottom:7px">Line items</div>
+              <div class="li-hdr"><div class="li-hlbl" style="text-align:left">Description</div><div class="li-hlbl">Qty</div><div class="li-hlbl">Rate</div><div class="li-hlbl">Total</div><div></div></div>
+              <div id="li-container"></div>
+              <button class="add-li-btn" onclick="addLineItem()">+ Add line item</button>
+              <div class="ip-divider"></div>
+              <div class="ip-row2">
+                <div class="ip-field"><div class="ip-lbl">Tax %</div><input class="ip-inp" type="number" id="i-tax" value="0" min="0" max="100" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Discount %</div><input class="ip-inp" type="number" id="i-disc" value="0" min="0" max="100" oninput="updateInv()"></div>
+              </div>
+              <div class="ip-field"><div class="ip-lbl">Payment method</div>
+                <select class="ip-sel" id="i-pay" onchange="handleInvPay(this)">
+                  <option value="Bank transfer">Bank transfer</option>
+                  <option value="Stripe (credit/debit card)">Stripe</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Wise">Wise</option>
+                  <option value="Bank transfer · Stripe" selected>Bank transfer · Stripe</option>
+                  <option value="Bank transfer · Stripe · PayPal">Bank transfer · Stripe · PayPal</option>
+                  <option value="custom">Custom…</option>
+                </select>
+                <input class="ip-inp" id="i-pay-custom" placeholder="Enter method…" oninput="updateInv()" style="margin-top:6px;display:none">
+              </div>
+              <div class="ip-field"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
+              <div class="totals-block">
+                <div class="tot-row"><span class="tot-lbl">Subtotal</span><span class="tot-val" id="tot-sub">$0.00</span></div>
+                <div class="tot-row"><span class="tot-lbl">Discount</span><span class="tot-val" id="tot-disc">−$0.00</span></div>
+                <div class="tot-row"><span class="tot-lbl">Tax</span><span class="tot-val" id="tot-tax">+$0.00</span></div>
+                <div class="tot-row grand"><span class="tot-lbl">Total due</span><span class="tot-val" id="tot-total">$0.00</span></div>
+              </div>
+            </div>
+            <div class="ip-actions">
+              <button class="ip-btn-p" onclick="copyInvoice()">📋 Copy as text</button>
+              <button class="ip-btn-g" onclick="showToast('🖨️ Print / Save as PDF: Ctrl+P or Cmd+P')">Print / PDF</button>
+            </div>
+          </div>
+          <div class="inv-preview">
+            <div class="inv-paper" id="inv-paper">
+              <div class="inv-top">
+                <div><div class="inv-brand-name" id="p-yourname">Alex Chen Design</div><div class="inv-brand-detail" id="p-youremail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c8c5ccd1e9c8c5ccd1cac1ccc7cdccdac0cec787cac6c4">[email&#160;protected]</a></div></div>
+                <div><div class="inv-word">Invoice</div><div class="inv-num" id="p-invnum">INV-001</div></div>
+              </div>
+              <div class="inv-meta">
+                <div><div class="inv-meta-lbl">Bill to</div><div class="inv-meta-val"><strong id="p-client">Acme Studio Ltd.</strong><br><span id="p-contact">Jamie Reyes</span><br><span style="font-size:11px;color:var(--ink-light)" id="p-cemail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b8d2d9d5d1ddf8d9dbd5ddcbcccddcd1d796dbd7d5">[email&#160;protected]</a></span></div></div>
+                <div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val" id="p-project">Brand Identity Refresh</div></div>
+              </div>
+              <div class="inv-dates">
+                <div><div class="inv-date-lbl">Issue date</div><div class="inv-date-val" id="p-issued">—</div></div>
+                <div><div class="inv-date-lbl">Due date</div><div class="inv-date-val" id="p-due">—</div></div>
+                <div><div class="inv-date-lbl">Terms</div><div class="inv-date-val" id="p-terms">Net 7</div></div>
+                <div><div class="inv-date-lbl">Status</div><div class="inv-date-val" style="color:var(--amber)">Unpaid</div></div>
+              </div>
+              <table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody id="p-lineitems"><tr><td>Brand strategy</td><td>1</td><td>$1,200.00</td><td>$1,200.00</td></tr><tr><td>Logo design (3 concepts)</td><td>1</td><td>$1,800.00</td><td>$1,800.00</td></tr><tr><td>Brand guidelines</td><td>1</td><td>$600.00</td><td>$600.00</td></tr></tbody></table>
+              <div class="inv-totals"><div class="inv-tot-inner"><div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val" id="p-sub">$3,600.00</span></div><div class="inv-tot-row" id="p-disc-row" style="display:none"><span class="inv-tot-lbl">Discount</span><span class="inv-tot-val" id="p-disc-val">—</span></div><div class="inv-tot-row" id="p-tax-row" style="display:none"><span class="inv-tot-lbl">Tax</span><span class="inv-tot-val" id="p-tax-val">—</span></div><div class="inv-tot-div"></div><div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val" id="p-total">$3,600.00</span></div></div></div>
+              <div class="inv-footer">
+                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val"><strong>Accepted:</strong> <span id="p-pay">Bank transfer · Stripe</span><div class="late-fee-note">Late fee of 1.5%/month applies after due date.</div></div></div>
+                <div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val" id="p-notes">Thank you for your business.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── LATE PAYMENT EMAILS ─── -->
+      <div class="tmpl-panel" id="panel-latepay">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
+          <div class="tv-title">Late Payment<br><em>Email Sequence</em></div>
+          <div class="tv-desc">3 escalating emails + 1 final handoff. Navigate between them using the tabs below. Each has a tone guide, subject line options, and annotations explaining the psychology.</div>
+        </div>
+        <div class="email-tabs">
+          <button class="etab active" onclick="showEmail('lp1',this)">Email 1 · Day 7 — Gentle nudge</button>
+          <button class="etab" onclick="showEmail('lp2',this)">Email 2 · Day 14 — Firm follow-up</button>
+          <button class="etab" onclick="showEmail('lp3',this)">Email 3 · Day 30 — Final notice</button>
+          <button class="etab" onclick="showEmail('lp4',this)">Bonus · Day 45+ — The handoff</button>
+        </div>
+        <div id="email-lp1">
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp1-body',this)">📋 Copy email</button></div>
+          <div style="background:var(--sage-light);border:1px solid #C5DCC9;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#3A5942"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 7:</strong>Warm and professional. Assume it was an oversight — because it probably was. No guilt trips.</div>
+          <div style="margin-bottom:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:10px">Subject line options</div>
+            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono);margin-bottom:5px">Quick follow-up — Invoice #<span class="field">[NUMBER]</span></div>
+            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono);margin-bottom:5px">Friendly reminder: Invoice #<span class="field">[NUMBER]</span> due <span class="field">[DATE]</span></div>
+            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono)">Following up on <span class="field">[PROJECT NAME]</span> invoice</div>
+          </div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 1 — Gentle Nudge (Day 7)</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Quick follow-up — Invoice #<span class="field">[NUMBER]</span></span></div></div>
+          <div class="email-body" id="lp1-body">
+            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
+            <p>Hope things are going well on your end.</p>
+            <p>I wanted to send a quick note — Invoice #<span class="field">[NUMBER]</span> for <span class="field">[PROJECT NAME]</span>, totalling <span class="field">[AMOUNT]</span>, was due on <span class="field">[DUE DATE]</span>. I know things get busy, so just wanted to make sure it didn't slip through the cracks.</p>
+            <p>I've re-attached it below for easy reference. Payment can be made via <span class="field">[PAYMENT METHOD / STRIPE LINK]</span>.</p>
+            <p>Let me know if you have any questions or if something's come up on your end — happy to chat.</p>
+            <p>Thanks so much,</p>
+            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span></div>
+          </div></div>
+        </div>
+        <div id="email-lp2" style="display:none">
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp2-body',this)">📋 Copy email</button></div>
+          <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#92400E"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 14:</strong>Professional and direct. State facts and consequences. No longer casual — now you're being contractual.</div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 2 — Firm Follow-Up (Day 14)</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Second notice — Invoice #<span class="field">[NUMBER]</span> now 14 days overdue</span></div></div>
+          <div class="email-body" id="lp2-body">
+            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
+            <p>I'm following up on my previous message from <span class="field">[DATE OF EMAIL 1]</span> regarding Invoice #<span class="field">[NUMBER]</span> for <span class="field">[AMOUNT]</span>, which was due on <span class="field">[DUE DATE]</span> and remains unpaid.</p>
+            <p>I'd appreciate your urgent attention on this. Please arrange payment by <span class="field">[DATE — 5 business days from today]</span>.</p>
+            <p><span class="field-opt">[OPTIONAL — include only if late fees are in your contract: Per our signed agreement, a late fee of [RATE] per month is now accruing on the outstanding balance. The current total is [UPDATED AMOUNT].]</span></p>
+            <p>If there's an issue with the invoice or something I'm not aware of, please reply so we can resolve it. If payment has already been sent, please disregard this message.</p>
+            <p>Thank you,</p>
+            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span style="font-size:11px;color:var(--ink-light)">Invoice #<span class="field">[NUMBER]</span> attached</span></div>
+          </div></div>
+        </div>
+        <div id="email-lp3" style="display:none">
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp3-body',this)">📋 Copy email</button></div>
+          <div style="background:var(--red-light);border:1px solid #FCA5A5;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#7F1D1D"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 30:</strong>Formal, factual, brief. No pleasantries. This reads like a letter from a business, not a person.</div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 3 — Final Notice (Day 30)</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Final notice — Invoice #<span class="field">[NUMBER]</span> — <span class="field">[AMOUNT]</span> outstanding</span></div></div>
+          <div class="email-body" id="lp3-body">
+            <p>Dear <span class="field">[CLIENT FULL NAME]</span>,</p>
+            <p>This is a formal final notice regarding Invoice #<span class="field">[NUMBER]</span> for <span class="field">[PROJECT NAME]</span>, totalling <span class="field">[AMOUNT + LATE FEES]</span>, now <span class="field">[X]</span> days overdue.</p>
+            <p>Despite notices sent on <span class="field">[DATE 1]</span> and <span class="field">[DATE 2]</span>, this invoice remains unpaid with no response received.</p>
+            <p>I require full payment by <span class="field">[DATE — 5 business days from now]</span>. If payment is not received, I will pursue the outstanding balance through <span class="field">[collections agency / small claims court / formal legal process]</span>, resulting in additional costs and a potential mark on your business's credit record.</p>
+            <p>To resolve this directly, contact me at <span class="field">[YOUR EMAIL]</span> or <span class="field">[YOUR PHONE]</span>.</p>
+            <p>Regards,</p>
+            <div class="email-sig"><span class="field">[YOUR FULL NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span style="font-size:11px;color:var(--ink-light)">All prior correspondence and Invoice #<span class="field">[NUMBER]</span> attached</span></div>
+          </div></div>
+        </div>
+        <div id="email-lp4" style="display:none">
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp4-body',this)">📋 Copy email</button></div>
+          <div style="background:var(--blue-light);border:1px solid #93C5FD;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1e3a5f"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 45+:</strong>Calm, almost neutral. You're not angry — you're moving on. Frame consequences around their self-interest, not your frustration.</div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Bonus Email — The Handoff (Day 45+)</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Invoice #<span class="field">[NUMBER]</span> — one last opportunity to resolve</span></div></div>
+          <div class="email-body" id="lp4-body">
+            <p>Dear <span class="field">[CLIENT FULL NAME]</span>,</p>
+            <p>I am writing to inform you that Invoice #<span class="field">[NUMBER]</span> for <span class="field">[AMOUNT + FEES]</span>, now <span class="field">[X]</span> days overdue, will be passed to <span class="field">[collections agency / my solicitor / small claims court]</span> on <span class="field">[DATE — 3 business days from now]</span> if payment or a written payment arrangement is not received before that date.</p>
+            <p>I want to be straightforward: once I hand this over, the matter is out of my hands. The cost to you will increase significantly — collections fees, legal costs, and a potential mark on your business credit record are all possible outcomes.</p>
+            <p>If you'd like to settle this directly and avoid those consequences, please contact me at <span class="field">[YOUR EMAIL]</span> or <span class="field">[YOUR PHONE]</span> before <span class="field">[DEADLINE]</span>.</p>
+            <p>Regards,</p>
+            <div class="email-sig"><span class="field">[YOUR FULL NAME]</span><br><span class="field">[YOUR BUSINESS]</span></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- ─── RATE CALCULATOR ─── -->
+      <div class="tmpl-panel" id="panel-ratecalc">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--blue-light);color:var(--blue)">Proposals & Pricing</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Freelance Rate<br><em>Calculator</em></div>
+          <div class="tv-desc">Stop guessing. Enter your target take-home income and we calculate your minimum hourly rate — accounting for taxes, business expenses, unpaid weeks, and dry-month buffer.</div>
+        </div>
+        <div class="calc-grid">
+          <div>
+            <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
+              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp prefix-$" type="number" id="rc-takehome" value="60000" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option></select></div>
+            </div></div>
+            <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
+              <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
+              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp prefix-$" type="number" id="rc-expenses" value="3600" oninput="calcRate()"></div></div>
+            </div></div>
+            <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
+              <div class="cf"><div class="cf-lbl">Weeks off per year: <strong id="rc-woff-lbl">6</strong> <span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="2" max="20" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>2 wks</span><span>20 wks</span></div></div>
+              <div class="cf"><div class="cf-lbl">Billable hours/week: <strong id="rc-hrs-lbl">25</strong> <span class="cf-hint">of 40hrs — rest is admin</span></div><input class="cf-slider" type="range" id="rc-hrs" min="10" max="38" value="25" oninput="document.getElementById('rc-hrs-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>10 hrs</span><span>38 hrs</span></div></div>
+              <div class="cf"><div class="cf-lbl">Dry-month buffer: <strong id="rc-buf-lbl">15</strong>% <span class="cf-hint">extra for slow periods</span></div><input class="cf-slider" type="range" id="rc-buf" min="0" max="40" value="15" oninput="document.getElementById('rc-buf-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0% (risky)</span><span>40% (safe)</span></div></div>
+            </div></div>
+          </div>
+          <div>
+            <div class="results-box">
+              <div class="rb-pre">Your floor rate</div>
+              <div class="rb-main"><div class="rb-lbl">Minimum hourly rate</div><div class="rb-val"><span id="rc-hourly">--</span> <span class="rb-unit" id="rc-sym">$</span></div><div class="rb-note">Below this = you're losing money</div></div>
+              <div class="rb-divider"></div>
+              <div class="rb-row"><span class="rb-row-lbl">Target take-home</span><span class="rb-row-val hi" id="rc-r-takehome">--</span></div>
+              <div class="rb-row"><span class="rb-row-lbl">Grossed up (pre-tax)</span><span class="rb-row-val" id="rc-r-gross">--</span></div>
+              <div class="rb-row"><span class="rb-row-lbl">+ Business expenses</span><span class="rb-row-val" id="rc-r-exp">--</span></div>
+              <div class="rb-row"><span class="rb-row-lbl">+ Buffer</span><span class="rb-row-val" id="rc-r-buf">--</span></div>
+              <div class="rb-divider"></div>
+              <div class="rb-row"><span class="rb-row-lbl">Total to earn</span><span class="rb-row-val hi" id="rc-r-total">--</span></div>
+              <div class="rb-row"><span class="rb-row-lbl">Billable hours/year</span><span class="rb-row-val" id="rc-r-hrs">--</span></div>
+              <div class="rate-breakdown-grid">
+                <div class="rbg-item"><div class="rbg-lbl">Half-day (4h)</div><div class="rbg-val" id="rc-halfday">--</div></div>
+                <div class="rbg-item"><div class="rbg-lbl">Full day (8h)</div><div class="rbg-val" id="rc-fullday">--</div></div>
+                <div class="rbg-item"><div class="rbg-lbl">Project week</div><div class="rbg-val" id="rc-week">--</div></div>
+              </div>
+              <div class="rb-insight"><div class="rb-insight-title">What this means</div><div class="rb-insight-text" id="rc-insight">Fill in your details to see your rate.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PROPOSAL EMAIL ─── -->
+      <div class="tmpl-panel" id="panel-proposal">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--blue-light);color:var(--blue)">Proposals & Pricing</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
+          <div class="tv-title">Proposal Email<br><em>Script</em></div>
+          <div class="tv-desc">Three complete proposal scripts for different situations. Switch between them using the tabs. Each has its own subject line bank, structural annotations, and common mistakes to avoid.</div>
+        </div>
+        <div class="email-tabs">
+          <button class="etab active" onclick="showProposal('warm',this)">🔥 Warm lead</button>
+          <button class="etab" onclick="showProposal('cold',this)">❄️ Cold outreach</button>
+          <button class="etab" onclick="showProposal('referral',this)">🤝 Referral intro</button>
+        </div>
+        <div id="prop-warm">
+          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">You've had a discovery call. This email follows that conversation and presents your approach, scope, and investment.</div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-warm-body',this)">📋 Copy email</button></div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Warm Lead</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Proposal for <span class="field">[PROJECT NAME]</span> — <span class="field">[YOUR NAME]</span></span></div></div>
+          <div class="email-body" id="prop-warm-body">
+            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
+            <p>Really enjoyed our conversation on <span class="field">[DATE]</span>. As promised, here's my proposal for <span class="field">[PROJECT NAME]</span>.</p>
+            <p><strong>What I heard you need:</strong><br><span class="field">[1–2 sentences reflecting their core problem back in their words. E.g. "You're relaunching in Q3 and need a brand identity that can grow with you — something premium without being unapproachable."]</span></p>
+            <p><strong>My approach:</strong><br><span class="field">[2–3 sentences on how you'd tackle this, specific to their situation. E.g. "I start with a 90-minute discovery session before any design work — it becomes the strategic foundation everything else is built on."]</span></p>
+            <p><strong>What's included:</strong></p>
+            <ul><li><span class="field">[Deliverable 1 — specific: what it is, format, revision rounds]</span></li><li><span class="field">[Deliverable 2]</span></li><li><span class="field">[Deliverable 3 if applicable]</span></li></ul>
+            <p><strong>Investment:</strong><br><span class="field">[AMOUNT]</span> — <span class="field">[PAYMENT STRUCTURE e.g. "50% on signing, 50% on delivery"]</span>.<br><span class="field-opt">[OPTIONAL: "I have one spot available starting [DATE] — I can hold it for you until [5–7 days]."]</span></p>
+            <p><strong>Timeline:</strong> <span class="field">[X weeks]</span>, starting <span class="field">[START DATE]</span>, final delivery by <span class="field">[END DATE]</span>.</p>
+            <p>If this looks good, the next step is a signed agreement and deposit — I can have the contract over same day. Any questions, happy to jump on a quick call.</p>
+            <p>Looking forward to working together,</p>
+            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span> · <span class="field">[YOUR WEBSITE]</span></div>
+          </div></div>
+        </div>
+        <div id="prop-cold" style="display:none">
+          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">First contact. Goal is a call, not a sale. Keep it under 150 words. Lead with a specific observation about them.</div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-cold-body',this)">📋 Copy email</button></div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Cold Outreach</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Quick thought on <span class="field">[COMPANY NAME]</span>'s <span class="field">[SPECIFIC THING YOU NOTICED]</span></span></div></div>
+          <div class="email-body" id="prop-cold-body">
+            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
+            <p><span class="field">[ONE SPECIFIC OBSERVATION — proof you've actually looked at their work. E.g. "I've been following Bloom Studio's work — the way you handled the Meridian rebrand was genuinely impressive." Never: "I hope this email finds you well."]</span></p>
+            <p>I'm a <span class="field">[SPECIFIC NICHE — e.g. "brand designer for early-stage SaaS companies" not "graphic designer"]</span>. I noticed <span class="field">[A SPECIFIC GAP OR OPPORTUNITY you see — e.g. "your website doesn't yet reflect the quality of work you're producing — I think that might be costing you leads."]</span></p>
+            <p>I've helped companies like <span class="field">[1–2 relevant clients]</span> solve exactly this. I'm not pitching a full project — I'd love a 20-minute call to understand what you're working on and see if there's a fit.</p>
+            <p>Worth a conversation?</p>
+            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[PORTFOLIO LINK]</span></div>
+          </div></div>
+        </div>
+        <div id="prop-referral" style="display:none">
+          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">Someone connected you. Lead with the referrer's name in sentence one — it's your biggest credibility signal.</div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-ref-body',this)">📋 Copy email</button></div>
+          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Referral Introduction</span></div>
+          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Introduction via <span class="field">[REFERRER NAME]</span> — <span class="field">[WHAT YOU DO]</span></span></div></div>
+          <div class="email-body" id="prop-ref-body">
+            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
+            <p><span class="field">[REFERRER NAME]</span> suggested I reach out — they mentioned you're working on <span class="field">[WHAT THE CLIENT IS TRYING TO DO, specifically]</span> and thought I might be able to help.</p>
+            <p>I'm a <span class="field">[SPECIFIC NICHE]</span>. I worked with <span class="field">[REFERRER / their company]</span> on <span class="field">[WHAT YOU DID FOR THEM]</span>, and based on what they've shared about your situation, I think there's a real fit.</p>
+            <p>I'd love to set up a 20–30 minute call to hear more about what you're building. Would <span class="field">[2 SPECIFIC TIMES e.g. "Thursday at 2pm or Friday at 11am EST"]</span> work?</p>
+            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span> · <span class="field">[YOUR WEBSITE]</span></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- ─── PIPELINE TRACKER ─── -->
+      <div class="tmpl-panel" id="panel-pipeline">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--purple-light);color:var(--purple)">Business Operations</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Client Pipeline<br><em>Tracker</em></div>
+          <div class="tv-desc">See your next 8 weeks of revenue at a glance. Drag cards between stages. The forecast updates automatically based on each stage's close probability.</div>
+        </div>
+        <div class="tv-actions"><button class="btn-use" onclick="openPipelineModal()">+ Add client</button><button class="btn-outline" onclick="showToast('↗ Notion kanban template coming soon')">↗ Open in Notion</button></div>
+        <div class="pipeline-forecast">
+          <div class="pf-top"><div><div class="pf-title">Pipeline forecast</div><div class="pf-sub">Weighted by close probability per stage</div></div><div style="text-align:right"><div class="pf-total-n" id="pf-total">$0</div><div class="pf-total-l">weighted pipeline value</div></div></div>
+          <div class="pf-bars" id="pf-bars-el"></div>
+        </div>
+        <div class="health-stats" id="pf-health"></div>
+        <div class="kanban" id="pf-kanban"></div>
+      </div>
+
+      <!-- ─── TAX TRACKER ─── -->
+      <div class="tmpl-panel" id="panel-tax">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--purple-light);color:var(--purple)">Business Operations</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Quarterly Tax<br><em>Tracker</em></div>
+          <div class="tv-desc">Log income and expenses by quarter. The estimated tax owed updates automatically. Switch quarters using the tabs — Q1 is already marked paid.</div>
+        </div>
+        <div class="tax-rate-bar"><div class="trb-label"><strong>Your estimated tax rate:</strong> Combined income + self-employment tax. Use 25–30% if unsure.</div><input class="trb-inp" type="number" id="tr-rate" value="28" min="0" max="60" oninput="recalcTax()"><span class="trb-pct">%</span></div>
+        <div class="q-tabs">
+          <button class="q-tab paid" onclick="switchTaxQ(1,this)">Q1 ✓</button>
+          <button class="q-tab active" onclick="switchTaxQ(2,this)">Q2</button>
+          <button class="q-tab" onclick="switchTaxQ(3,this)">Q3</button>
+          <button class="q-tab" onclick="switchTaxQ(4,this)">Q4</button>
+        </div>
+        <div class="tax-two-col">
+          <div id="tax-main-el"></div>
+          <div>
+            <div class="tax-summary-box">
+              <div class="tsb-title">Q<span id="tsb-q">2</span> summary</div>
+              <div class="tsb-row"><span class="tsb-lbl">Gross income</span><span class="tsb-val hi" id="tsb-inc">$0</span></div>
+              <div class="tsb-row"><span class="tsb-lbl">Deductible expenses</span><span class="tsb-val" id="tsb-exp">$0</span></div>
+              <div class="tsb-div"></div>
+              <div class="tsb-row"><span class="tsb-lbl">Taxable income</span><span class="tsb-val hi" id="tsb-taxable">$0</span></div>
+              <div class="tsb-row"><span class="tsb-lbl">Tax rate</span><span class="tsb-val" id="tsb-rate">28%</span></div>
+              <div class="tsb-due-box"><div class="tsb-due-lbl">Estimated tax due</div><div class="tsb-due-amt" id="tsb-due">$0</div><div class="tsb-due-note">Set this aside now. Pay it by the Q<span id="tsb-q2">2</span> deadline.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WELCOME PACKET ─── -->
+      <div class="tmpl-panel" id="panel-welcome">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Canva</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
+          <div class="tv-title">Client Welcome<br><em>Packet</em></div>
+          <div class="tv-desc">Send this within 24 hours of a client signing. Sets expectations, explains how you work, and immediately signals that you run a professional operation.</div>
+          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('wp-body',this)">📋 Copy as text</button><button class="btn-outline" onclick="showToast('↗ Canva branded version coming soon')">↗ Canva version</button></div>
+        </div>
+        <div class="doc-wrap">
+          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt" style="background:var(--amber-light);color:var(--amber)">PDF / Canva</span></div>
+          <div class="doc-body" id="wp-body">
+            <div class="wp-cover-box">
+              <div class="wp-cover-name">Freelance<span>Kit</span></div>
+              <div class="wp-cover-pretitle">Welcome to the project</div>
+              <div class="wp-cover-client"><span class="field">[CLIENT NAME]</span></div>
+              <div class="wp-cover-project"><span class="field">[PROJECT NAME]</span> · Starting <span class="field">[START DATE]</span></div>
+            </div>
+            <div class="wp-h1">A note before we begin</div>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:12px">Hi <span class="field">[CLIENT FIRST NAME]</span>, I'm excited to work on <span class="field">[PROJECT NAME]</span> with you. This document covers how we'll work together — from communication to delivery. Read it once, save it somewhere, and reach out if anything isn't clear.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">Your project at a glance</div>
+            <table class="wp-table">
+              <tr><th>What</th><th>Detail</th></tr>
+              <tr><td><strong>Project</strong></td><td><span class="field">[PROJECT NAME]</span></td></tr>
+              <tr><td><strong>Start date</strong></td><td><span class="field">[START DATE]</span></td></tr>
+              <tr><td><strong>Final delivery</strong></td><td><span class="field">[DELIVERY DATE]</span></td></tr>
+              <tr><td><strong>Milestones</strong></td><td><span class="field">[First draft by X, Review by Y, Final by Z]</span></td></tr>
+              <tr><td><strong>Revisions included</strong></td><td><span class="field">[NUMBER]</span> rounds</td></tr>
+              <tr><td><strong>Your contact</strong></td><td><span class="field">[YOUR NAME]</span> · <span class="field">[YOUR EMAIL]</span></td></tr>
+            </table>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">How I communicate</div>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:12px">My preferred channel is <span class="field">[EMAIL / SLACK / OTHER]</span>. You can expect a response within <span class="field">[e.g. 24 hours]</span> on business days. I work <span class="field">[YOUR HOURS, e.g. Mon–Fri, 9am–6pm EST]</span>. Messages outside these hours will be answered the following business day.</p>
+            <div class="wp-callout"><strong>Helpful tip:</strong> When sending feedback or questions, include the project name in the subject line. It helps me respond faster and keeps everything organised.</div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">How feedback works</div>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:10px">Please compile all feedback into <strong>one consolidated message</strong> — not multiple emails over several days. Feedback is most useful when it describes the outcome you want: "I want this to feel more premium" is more useful than "change this font." Please aim to return feedback within <span class="field">[e.g. 3 business days]</span>. This project includes <span class="field">[NUMBER]</span> revision rounds. Additional rounds are available at <span class="field">[YOUR HOURLY RATE]</span>/hr.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">What I need from you</div>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:8px">To get started, please send the following by <span class="field">[DATE]</span>:</p>
+            <ul style="margin-left:20px;margin-bottom:12px">
+              <li style="font-size:14px;line-height:1.85;margin-bottom:4px"><span class="field">[Asset 1 — e.g. Brand guidelines / existing logo files]</span></li>
+              <li style="font-size:14px;line-height:1.85;margin-bottom:4px"><span class="field">[Asset 2 — e.g. Copy / written content if applicable]</span></li>
+              <li style="font-size:14px;line-height:1.85;margin-bottom:4px"><span class="field">[Asset 3 — e.g. Access to relevant accounts or platforms]</span></li>
+            </ul>
+            <div class="wp-callout"><strong>Note:</strong> Work cannot begin until these materials are received. If there's a delay, please let me know so we can adjust the timeline.</div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">Payment reminders</div>
+            <ul style="margin-left:20px;margin-bottom:12px">
+              <li style="font-size:14px;line-height:1.85;margin-bottom:4px"><span class="field">[Payment 1 — e.g. 50% deposit — already received, thank you!]</span></li>
+              <li style="font-size:14px;line-height:1.85;margin-bottom:4px"><span class="field">[Payment 2 — e.g. 50% final payment due on delivery]</span></li>
+            </ul>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:12px">Invoices are due within <span class="field">[e.g. 7 days]</span> of receipt. Final files will be released after final payment clears.</p>
+            <hr style="border:none;border-top:1px solid var(--border);margin:22px 0">
+            <div class="wp-h1">One last thing</div>
+            <p style="font-size:14px;line-height:1.85;margin-bottom:12px">The best projects happen when both sides communicate early. If something isn't working — the direction, the timeline, anything — tell me early rather than late. There's almost always a solution when we have time to find it together. I'm looking forward to this.</p>
+            <p style="font-size:14px;line-height:1.85;margin-top:18px"><span class="field">[YOUR NAME]</span><br><span style="color:var(--ink-light);font-size:13px"><span class="field">[YOUR EMAIL]</span> · <span class="field">[YOUR WEBSITE]</span></span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── PROJECT BRIEF ─── -->
+      <div class="tmpl-panel" id="panel-brief">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:#F0EEEE;color:#555">Notion</span></div>
+          <div class="tv-title">Project Brief<br><em>Form</em></div>
+          <div class="tv-desc">Every question you need answered before starting any project. Send before the kickoff call — not during it. Their answers will shape the whole engagement and eliminate mid-project surprises.</div>
+        </div>
+        <div class="brief-progress-bar"><div class="bpb-steps" id="bpb-steps"></div></div>
+        <div id="brief-form-el"></div>
+      </div>
+
+    </main>
+  </div><!-- /dash-layout -->
+</div><!-- /dashboard -->
+
+<!-- Pipeline modal -->
+<div class="modal-overlay" id="pipe-modal" onclick="closePipeModal(event)">
+  <div class="modal-box">
+    <div class="modal-hd"><span class="modal-title">Add client to pipeline</span><button class="modal-close" onclick="closePipeModalBtn()">✕</button></div>
+    <div class="modal-bd">
+      <div class="m-lbl">Client / company name</div><input class="m-inp" id="pm-client" placeholder="e.g. Acme Studio">
+      <div class="m-lbl">Project</div><input class="m-inp" id="pm-project" placeholder="e.g. Brand identity redesign">
+      <div class="m-row2">
+        <div><div class="m-lbl">Value ($)</div><input class="m-inp" id="pm-value" type="number" placeholder="5000" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Stage</div><select class="m-sel" id="pm-stage"><option value="0">Lead</option><option value="1">Qualified</option><option value="2" selected>Proposal sent</option><option value="3">Negotiating</option><option value="4">Active</option></select></div>
+      </div>
+      <div class="m-row2" style="margin-top:10px">
+        <div><div class="m-lbl">Temperature</div><select class="m-sel" id="pm-temp"><option value="hot">🔥 Hot</option><option value="warm" selected>Warm</option><option value="cold">❄️ Cold</option></select></div>
+        <div><div class="m-lbl">Close date</div><input class="m-inp" id="pm-date" type="date" style="margin-bottom:0"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn-outline" onclick="closePipeModalBtn()">Cancel</button><button class="btn-use" onclick="addPipeClient()">Add to pipeline</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ═══════════════ SHARED ═══════════════
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>t.classList.remove('show'),3200)}
+function scrollTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
+function fm(n,sym='$'){return sym+Math.round(n).toLocaleString()}
+function fmD(n){return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+
+// ═══════════════ NAVIGATION ═══════════════
+function showDash(panel='home'){
+  document.getElementById('page-landing').classList.remove('active');
+  document.getElementById('page-dash').classList.add('active');
+  if(panel)showPanel(panel,document.getElementById('nav-'+panel));
+  window.scrollTo(0,0);
+}
+function showLanding(){
+  document.getElementById('page-dash').classList.remove('active');
+  document.getElementById('page-landing').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showPanel(id,el){
+  document.querySelectorAll('.tmpl-panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('panel-'+id);
+  if(panel)panel.classList.add('active');
+  document.querySelectorAll('.dsb-item').forEach(i=>i.classList.remove('active'));
+  if(el)el.classList.add('active');
+  // Also select 'home' nav if showing home
+  if(id==='home'){const hn=document.getElementById('nav-home');if(hn)hn.classList.add('active')}
+  window.scrollTo(0,0);
+  // Init interactive panels on first show
+  if(id==='invoice'&&!window._invInit){window._invInit=true;initInvoice()}
+  if(id==='pipeline'&&!window._pipeInit){window._pipeInit=true;renderPipeline()}
+  if(id==='tax'&&!window._taxInit){window._taxInit=true;renderTaxQ(2)}
+  if(id==='ratecalc')calcRate();
+  if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
+}
+
+function copyDoc(id,btn){
+  const el=document.getElementById(id);
+  navigator.clipboard.writeText(el?el.innerText:'').then(()=>{
+    const orig=btn.innerHTML;btn.innerHTML='✓ Copied!';btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied')},2000);
+  }).catch(()=>showToast('⚠️ Select and copy the text manually'));
+}
+
+// Email tab toggling
+function showEmail(id,btn){
+  ['lp1','lp2','lp3','lp4'].forEach(i=>{const el=document.getElementById('email-'+i);if(el)el.style.display=i===id?'':'none'});
+  document.querySelectorAll('#panel-latepay .etab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+function showProposal(id,btn){
+  ['warm','cold','referral'].forEach(i=>{const el=document.getElementById('prop-'+i);if(el)el.style.display=i===id?'':'none'});
+  document.querySelectorAll('#panel-proposal .etab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+
+// Home template grid
+const allTemplates=[
+  {id:'contract',emoji:'📄',name:'Client Contract',desc:'Full protection agreement',fmt:'n',badge:'pop',bg:'#FFF3E8'},
+  {id:'scope',emoji:'⚠️',name:'Scope Change Order',desc:'Handle extra-scope requests',fmt:'g',badge:'new',bg:'#FEF3C7'},
+  {id:'invoice',emoji:'🧾',name:'Invoice Builder',desc:'Live preview, Net 7/14/30',fmt:'g',badge:'pop',bg:'#EAF1EC'},
+  {id:'latepay',emoji:'📬',name:'Late Payment Emails',desc:'3-email escalating sequence',fmt:'g',badge:'',bg:'#FEE2E2'},
+  {id:'ratecalc',emoji:'📊',name:'Rate Calculator',desc:'Stop guessing your rates',fmt:'s',badge:'pop',bg:'#E8F0FE'},
+  {id:'proposal',emoji:'✉️',name:'Proposal Email Script',desc:'3 variants for any situation',fmt:'g',badge:'new',bg:'#E0F2FE'},
+  {id:'pipeline',emoji:'🗂️',name:'Pipeline Tracker',desc:'Drag-and-drop kanban board',fmt:'n',badge:'new',bg:'#EDE9FE'},
+  {id:'tax',emoji:'🧮',name:'Tax Tracker',desc:'Quarterly income & expense log',fmt:'s',badge:'',bg:'#FDF4FF'},
+  {id:'welcome',emoji:'🎁',name:'Welcome Packet',desc:'Set the tone from day one',fmt:'c',badge:'',bg:'#FFF7ED'},
+  {id:'brief',emoji:'📋',name:'Project Brief Form',desc:'5-step guided questionnaire',fmt:'n',badge:'',bg:'#F0FDF4'},
+];
+const fmtLabels={n:'Notion',g:'Google Docs',s:'Sheets',c:'Canva'};
+const fmtClass={n:'fmt-n',g:'fmt-g',s:'fmt-s',c:'fmt-c'};
+function initHomeGrid(){
+  const g=document.getElementById('home-template-grid');
+  if(!g)return;
+  g.innerHTML=allTemplates.map(t=>`
+    <div class="tg-card" onclick="showPanel('${t.id}',document.getElementById('nav-${t.id}'))">
+      <div class="tg-thumb" style="background:${t.bg}"><span style="font-size:32px">${t.emoji}</span><div class="tg-overlay">Open →</div></div>
+      <div class="tg-body">
+        <div class="tg-name">${t.name}</div>
+        <div class="tg-desc">${t.desc}</div>
+        <div class="tg-meta"><span class="tg-fmt ${fmtClass[t.fmt]}">${fmtLabels[t.fmt]}</span>${t.badge==='new'?'<span class="tg-new">New</span>':t.badge==='pop'?'<span class="tg-pop">Popular</span>':''}</div>
+      </div>
+    </div>`).join('');
+}
+initHomeGrid();
+
+// ═══════════════ INVOICE ═══════════════
+let lineItems=[{desc:'Brand strategy',qty:1,rate:1200},{desc:'Logo design (3 concepts)',qty:1,rate:1800},{desc:'Brand guidelines',qty:1,rate:600}];
+let invTerms=7;
+function initInvoice(){
+  const today=new Date(),due=new Date();due.setDate(today.getDate()+7);
+  document.getElementById('i-issued').value=today.toISOString().split('T')[0];
+  document.getElementById('i-due').value=due.toISOString().split('T')[0];
+  renderLineItems();updateInv();
+}
+function setInvTerms(d,btn){
+  invTerms=d;document.querySelectorAll('.tt').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+  const iss=document.getElementById('i-issued').value;
+  if(iss){const du=new Date(iss+' ');du.setDate(du.getDate()+d);document.getElementById('i-due').value=du.toISOString().split('T')[0]}
+  document.getElementById('p-terms').textContent='Net '+d;updateInv();
+}
+function renderLineItems(){
+  document.getElementById('li-container').innerHTML=lineItems.map((li,i)=>`
+    <div class="li-row">
+      <input class="ip-inp" style="padding:5px 8px;font-size:12px" value="${li.desc}" oninput="lineItems[${i}].desc=this.value;updateInv()" placeholder="Description">
+      <input class="ip-inp" style="padding:5px 8px;font-size:12px;text-align:right" type="number" value="${li.qty}" oninput="lineItems[${i}].qty=parseFloat(this.value)||0;updateInv()" min="0" step="0.5">
+      <input class="ip-inp" style="padding:5px 8px;font-size:12px;text-align:right" type="number" value="${li.rate}" oninput="lineItems[${i}].rate=parseFloat(this.value)||0;updateInv()" min="0" step="10">
+      <div class="li-total-cell" id="litot-${i}">${fmD(li.qty*li.rate)}</div>
+      <button class="li-remove" onclick="lineItems.splice(${i},1);renderLineItems();updateInv()">×</button>
+    </div>`).join('');
+}
+function addLineItem(){lineItems.push({desc:'',qty:1,rate:0});renderLineItems();updateInv()}
+function handleInvPay(sel){const c=document.getElementById('i-pay-custom');c.style.display=sel.value==='custom'?'':'none';updateInv()}
+function getInvPay(){const s=document.getElementById('i-pay');return s.value==='custom'?document.getElementById('i-pay-custom').value||'—':s.value}
+function updateInv(){
+  const g=id=>document.getElementById(id);
+  const fmtD=d=>d?new Date(d+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}):'—';
+  [['yourname','p-yourname'],['youremail','p-youremail'],['num','p-invnum'],['client','p-client'],['contact','p-contact'],['email','p-cemail'],['project','p-project'],['notes','p-notes']].forEach(([src,dst])=>{const e=g(dst);if(e)e.textContent=g('i-'+src)?.value||'—'});
+  g('p-issued').textContent=fmtD(g('i-issued')?.value);
+  g('p-due').textContent=fmtD(g('i-due')?.value);
+  g('p-pay').textContent=getInvPay();
+  const tb=g('p-lineitems');if(tb)tb.innerHTML=lineItems.map(li=>`<tr><td>${li.desc||'—'}</td><td>${li.qty}</td><td>${fmD(li.rate)}</td><td>${fmD(li.qty*li.rate)}</td></tr>`).join('');
+  const sub=lineItems.reduce((s,li)=>s+li.qty*li.rate,0);
+  const disc=parseFloat(g('i-disc')?.value)||0,tax=parseFloat(g('i-tax')?.value)||0;
+  const da=sub*disc/100,ta=(sub-da)*tax/100,tot=sub-da+ta;
+  g('tot-sub').textContent=fmD(sub);g('tot-disc').textContent='−'+fmD(da);g('tot-tax').textContent='+'+fmD(ta);g('tot-total').textContent=fmD(tot);
+  g('p-sub').textContent=fmD(sub);
+  const dr=g('p-disc-row'),tr=g('p-tax-row');
+  if(dr)dr.style.display=disc>0?'':'none';if(g('p-disc-val'))g('p-disc-val').textContent='−'+fmD(da)+' ('+disc+'%)';
+  if(tr)tr.style.display=tax>0?'':'none';if(g('p-tax-val'))g('p-tax-val').textContent='+'+fmD(ta)+' ('+tax+'%)';
+  g('p-total').textContent=fmD(tot);
+}
+function copyInvoice(){const el=document.getElementById('inv-paper');navigator.clipboard.writeText(el?el.innerText:'').then(()=>showToast('✓ Invoice copied — paste into Google Docs')).catch(()=>showToast('⚠️ Try selecting the text manually'))}
+
+// ═══════════════ RATE CALCULATOR ═══════════════
+function calcRate(){
+  const g=id=>document.getElementById(id);
+  const takeHome=parseFloat(g('rc-takehome')?.value)||0,taxPct=parseFloat(g('rc-tax')?.value)||0,expenses=parseFloat(g('rc-expenses')?.value)||0;
+  const woff=parseFloat(g('rc-woff')?.value)||0,hrs=parseFloat(g('rc-hrs')?.value)||0,buf=parseFloat(g('rc-buf')?.value)||0;
+  const sym=g('rc-currency')?.value||'$';
+  const grossed=takeHome/(1-(taxPct/100));const withExp=grossed+expenses;const withBuf=withExp*(1+buf/100);
+  const weeks=52-woff,totalHrs=weeks*hrs,rate=totalHrs>0?withBuf/totalHrs:0;
+  const F=n=>sym+Math.round(n).toLocaleString();
+  if(g('rc-sym'))g('rc-sym').textContent=sym;
+  if(g('rc-hourly'))g('rc-hourly').textContent=Math.round(rate).toLocaleString();
+  if(g('rc-r-takehome'))g('rc-r-takehome').textContent=F(takeHome);
+  if(g('rc-r-gross'))g('rc-r-gross').textContent=F(grossed);
+  if(g('rc-r-exp'))g('rc-r-exp').textContent='+'+F(expenses);
+  if(g('rc-r-buf'))g('rc-r-buf').textContent='+'+F(withExp*buf/100);
+  if(g('rc-r-total'))g('rc-r-total').textContent=F(withBuf);
+  if(g('rc-r-hrs'))g('rc-r-hrs').textContent=Math.round(totalHrs).toLocaleString()+' hrs';
+  if(g('rc-halfday'))g('rc-halfday').textContent=F(rate*4);
+  if(g('rc-fullday'))g('rc-fullday').textContent=F(rate*8);
+  if(g('rc-week'))g('rc-week').textContent=F(rate*40);
+  if(g('rc-insight'))g('rc-insight').innerHTML=`To take home <strong>${F(takeHome)}/year</strong>, working <strong>${hrs} billable hrs/week</strong> over <strong>${weeks} weeks</strong>, you need to charge at least <strong>${F(rate)}/hr</strong>. Charging less means subsidising your clients.`;
+}
+
+// ═══════════════ PIPELINE ═══════════════
+const pfStages=[
+  {id:'lead',label:'Lead',prob:.15,color:'#B4B2A9',stripe:'#D3D1C7'},
+  {id:'qualified',label:'Qualified',prob:.35,color:'#1967D2',stripe:'#85B7EB'},
+  {id:'proposal',label:'Proposal',prob:.55,color:'#C8621A',stripe:'#E8A96A'},
+  {id:'negotiating',label:'Negotiating',prob:.75,color:'#5A7A65',stripe:'#8AB395'},
+  {id:'active',label:'Active',prob:.95,color:'#6D28D9',stripe:'#A78BFA'},
+];
+let pfClients=[
+  {id:1,client:'Bloom Studio',project:'Social templates',value:1800,stage:0,temp:'warm',date:'Apr 12'},
+  {id:2,client:'Meridian Co.',project:'Annual report',value:4500,stage:1,temp:'hot',date:'Apr 18'},
+  {id:3,client:'Nova Labs',project:'Website copy',value:3200,stage:2,temp:'warm',date:'Apr 25'},
+  {id:4,client:'Apex Creative',project:'Brand guidelines',value:6000,stage:2,temp:'hot',date:'Apr 30'},
+  {id:5,client:'Fieldwork Agency',project:'Email campaign',value:2400,stage:3,temp:'warm',date:'May 5'},
+  {id:6,client:'Dune & Co.',project:'Packaging design',value:5500,stage:4,temp:'hot',date:'May 10'},
+  {id:7,client:'Wren Digital',project:'UX copy',value:2800,stage:0,temp:'cold',date:'May 15'},
+];
+let pfNextId=8,pfDragId=null;
+function renderPipeline(){
+  const board=document.getElementById('pf-kanban');if(!board)return;
+  board.innerHTML=pfStages.map((s,si)=>{
+    const cards=pfClients.filter(c=>c.stage===si);
+    return `<div class="kc" data-stage="${si}" ondragover="event.preventDefault()" ondrop="pfDrop(event,${si})">
+      <div class="kc-stripe" style="background:${s.stripe}"></div>
+      <div class="kc-header"><span class="kc-title">${s.label}</span><span class="kc-cnt">${cards.length}</span></div>
+      <div class="kc-body">
+        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragId=${c.id};event.currentTarget.style.opacity='.4'" ondragend="event.currentTarget.style.opacity='1'">
+          <span class="kk-temp temp-${c.temp}">${c.temp==='hot'?'🔥 Hot':c.temp==='warm'?'Warm':'❄️ Cold'}</span>
+          <div class="kk-client">${c.client}</div>
+          <div class="kk-project">${c.project}</div>
+          <div class="kk-foot"><span class="kk-val">${fm(c.value)}</span><span class="kk-date">${c.date||''}</span></div>
+        </div>`).join('')}
+        <button class="kc-add-btn" onclick="openPipelineModal(${si})">+ Add</button>
+      </div>
+    </div>`;
+  }).join('');
+  // Forecast
+  const stageVals=pfStages.map((s,si)=>({...s,total:pfClients.filter(c=>c.stage===si).reduce((a,c)=>a+c.value,0),weighted:pfClients.filter(c=>c.stage===si).reduce((a,c)=>a+c.value*s.prob,0)}));
+  const totalW=stageVals.reduce((a,v)=>a+v.weighted,0);
+  const maxW=Math.max(...stageVals.map(v=>v.weighted),1);
+  const pft=document.getElementById('pf-total');if(pft)pft.textContent=fm(totalW);
+  const pfb=document.getElementById('pf-bars-el');if(pfb)pfb.innerHTML=stageVals.map(v=>`<div class="pfb"><div class="pfb-lbl">${v.label}</div><div class="pfb-track"><div class="pfb-fill" style="width:${Math.round(v.weighted/maxW*100)}%;background:${v.color}"></div></div><div class="pfb-val">${fm(v.weighted)}</div><div class="pfb-prob">${Math.round(v.prob*100)}% prob</div></div>`).join('');
+  // Health
+  const act=pfClients.filter(c=>c.stage===4).length,prop=pfClients.filter(c=>c.stage===2||c.stage===3).length,hot=pfClients.filter(c=>c.temp==='hot').length;
+  const pfh=document.getElementById('pf-health');if(pfh)pfh.innerHTML=`
+    <div class="hs-card"><div class="hs-lbl">Active projects</div><div class="hs-val">${act}</div><div class="hs-sub ${act>=2?'g':act===1?'w':'r'}">${act>=2?'Healthy':act===1?'Thin':'Empty'}</div></div>
+    <div class="hs-card"><div class="hs-lbl">Proposals out</div><div class="hs-val">${prop}</div><div class="hs-sub ${prop>=2?'g':'w'}">${prop>=2?'Good coverage':'Top up'}</div></div>
+    <div class="hs-card"><div class="hs-lbl">Weighted pipeline</div><div class="hs-val">${fm(totalW)}</div><div class="hs-sub g">All stages</div></div>
+    <div class="hs-card"><div class="hs-lbl">Hot leads</div><div class="hs-val">${hot}</div><div class="hs-sub ${hot>=1?'w':'r'}">${hot>=1?'Follow up now':'Need more'}</div></div>`;
+}
+function pfDrop(e,stage){e.preventDefault();const c=pfClients.find(x=>x.id===pfDragId);if(c)c.stage=stage;pfDragId=null;renderPipeline()}
+function openPipelineModal(stage=2){document.getElementById('pm-stage').value=stage;document.getElementById('pipe-modal').classList.add('open')}
+function closePipeModal(e){if(e.target.id==='pipe-modal')closePipeModalBtn()}
+function closePipeModalBtn(){document.getElementById('pipe-modal').classList.remove('open')}
+function addPipeClient(){
+  const client=document.getElementById('pm-client').value.trim();
+  if(!client){showToast('⚠️ Enter a client name');return}
+  const dr=document.getElementById('pm-date').value;
+  const dateLabel=dr?new Date(dr+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+  pfClients.push({id:pfNextId++,client,project:document.getElementById('pm-project').value,value:parseFloat(document.getElementById('pm-value').value)||0,stage:parseInt(document.getElementById('pm-stage').value),temp:document.getElementById('pm-temp').value,date:dateLabel});
+  closePipeModalBtn();['pm-client','pm-project','pm-value','pm-date'].forEach(id=>document.getElementById(id).value='');
+  renderPipeline();showToast('✓ Client added to pipeline');
+}
+
+// ═══════════════ TAX TRACKER ═══════════════
+const txCats=['Software & subscriptions','Equipment & hardware','Home office','Phone & internet','Professional development','Marketing & advertising','Contractor fees','Banking fees','Insurance','Travel & transport','Meals (50% deductible)','Legal & professional fees','Other'];
+let txData={
+  1:{income:[{desc:'Brand project — Meridian',amt:4500},{desc:'Templates — Bloom Studio',amt:1800}],expenses:[{desc:'Adobe CC',cat:'Software & subscriptions',amt:600},{desc:'Monitor',cat:'Equipment & hardware',amt:450}]},
+  2:{income:[{desc:'Apex Creative — brand guidelines',amt:6000}],expenses:[{desc:'Adobe CC',cat:'Software & subscriptions',amt:600},{desc:'Domain & hosting',cat:'Software & subscriptions',amt:120}]},
+  3:{income:[],expenses:[]},4:{income:[],expenses:[]}
+};
+let txQ=2;
+function switchTaxQ(q,btn){txQ=q;document.querySelectorAll('#panel-tax .q-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById('tsb-q').textContent=q;document.getElementById('tsb-q2').textContent=q;renderTaxQ(q)}
+function renderTaxQ(q){
+  txQ=q;const d=txData[q];
+  const totInc=d.income.reduce((s,i)=>s+i.amt,0),totExp=d.expenses.reduce((s,e)=>s+e.amt,0);
+  const el=document.getElementById('tax-main-el');if(!el)return;
+  el.innerHTML=`
+    <div class="tax-card">
+      <div class="txc-header"><span style="font-size:14px">💰</span><span class="txc-title">Income — Q${q}</span><span class="txc-total inc">${fm(totInc)}</span></div>
+      ${d.income.map((it,i)=>`<div class="tx-entry-row"><input class="tx-inp" value="${it.desc}" oninput="txData[${q}].income[${i}].desc=this.value;recalcTax()" placeholder="Client / project name"><input class="tx-inp amt" type="number" value="${it.amt}" oninput="txData[${q}].income[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].income.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
+      <button class="tx-add-btn" onclick="txData[${q}].income.push({desc:'',amt:0});renderTaxQ(${q})">+ Add income</button>
+    </div>
+    <div class="tax-card">
+      <div class="txc-header"><span style="font-size:14px">🧾</span><span class="txc-title">Expenses — Q${q}</span><span class="txc-total exp">−${fm(totExp)}</span></div>
+      ${d.expenses.map((it,i)=>`<div class="tx-entry-row" style="grid-template-columns:1fr 130px 28px"><input class="tx-inp" value="${it.desc}" oninput="txData[${q}].expenses[${i}].desc=this.value;recalcTax()" placeholder="What was it for?"><input class="tx-inp amt" type="number" value="${it.amt}" oninput="txData[${q}].expenses[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].expenses.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
+      <button class="tx-add-btn" onclick="txData[${q}].expenses.push({desc:'',cat:'Other',amt:0});renderTaxQ(${q})">+ Add expense</button>
+    </div>`;
+  recalcTax();
+}
+function recalcTax(){
+  const d=txData[txQ];
+  const inc=d.income.reduce((s,i)=>s+i.amt,0),exp=d.expenses.reduce((s,e)=>s+e.amt,0);
+  const taxable=Math.max(0,inc-exp),rate=parseFloat(document.getElementById('tr-rate')?.value)||0,due=taxable*rate/100;
+  const g=id=>document.getElementById(id);
+  if(g('tsb-inc'))g('tsb-inc').textContent=fm(inc);
+  if(g('tsb-exp'))g('tsb-exp').textContent='−'+fm(exp);
+  if(g('tsb-taxable'))g('tsb-taxable').textContent=fm(taxable);
+  if(g('tsb-rate'))g('tsb-rate').textContent=rate+'%';
+  if(g('tsb-due'))g('tsb-due').textContent=fm(due);
+}
+
+// ═══════════════ PROJECT BRIEF ═══════════════
+const briefDefs=[
+  {step:1,title:'The basics',desc:'Who\'s involved and what we\'re building.',fields:[
+    {id:'client_name',label:'Your name and company',type:'text',ph:'e.g. Jamie Reyes, Bloom Studio'},
+    {id:'project_name',label:'Project name',type:'text',ph:'e.g. Website copywriting refresh'},
+    {id:'project_type',label:'Type of project',type:'select',opts:['Brand identity','Website design','Copywriting','Social media','Video / motion','Photography','Strategy','Other']},
+    {id:'budget',label:'Budget range',opt:true,type:'select',opts:['Under $1,000','$1,000–$3,000','$3,000–$7,500','$7,500–$15,000','$15,000+','Flexible / TBD']},
+  ]},
+  {step:2,title:'Goals & success',desc:'What does winning look like?',fields:[
+    {id:'primary_goal',label:'Primary goal of this project',hint:'In one sentence.',type:'ta',ph:'e.g. Reposition our brand to attract enterprise clients.'},
+    {id:'success',label:'How will you measure success?',hint:'Concrete signals — metrics, behaviours, outcomes.',type:'ta',ph:'e.g. More inbound enquiries, shorter sales cycle.'},
+    {id:'timeline',label:'Ideal delivery date',type:'text',ph:'e.g. End of May, before Q3 launch'},
+    {id:'hard_deadline',label:'Hard deadline (if any)',opt:true,type:'text',ph:'e.g. Must be live before June 10 conference'},
+  ]},
+  {step:3,title:'Your audience',desc:'Who is this for?',fields:[
+    {id:'audience',label:'Primary audience',type:'ta',ph:'e.g. Marketing directors at B2B SaaS companies, 30–50, $50K+ tool budgets.'},
+    {id:'audience_problem',label:'What problem do you solve for them?',type:'ta',ph:'e.g. They\'re overwhelmed by fragmented reporting.'},
+    {id:'competitors',label:'2–3 closest competitors',opt:true,type:'text',ph:'e.g. Notion, Asana, Monday.com'},
+    {id:'differentiator',label:'What makes you different?',opt:true,type:'ta',ph:'e.g. We\'re the only tool built for remote-first creative agencies.'},
+  ]},
+  {step:4,title:'Brand & tone',desc:'Help me sound and feel like you.',fields:[
+    {id:'brand_words',label:'3–5 words that describe your brand',hint:'How you want to be perceived — not what you do.',type:'text',ph:'e.g. Confident, human, pragmatic, warm'},
+    {id:'tone',label:'Tone',hint:'Where does your voice sit?',type:'text',ph:'e.g. Casual and warm, not stiff or corporate'},
+    {id:'avoid',label:'What should we never sound or look like?',opt:true,type:'ta',ph:'e.g. Corporate jargon, startup clichés, anything overly salesy.'},
+    {id:'inspiration',label:'1–3 brands or examples you love',opt:true,type:'ta',ph:'e.g. linear.app for product copy, Basecamp\'s blog voice, Stripe\'s design language.'},
+  ]},
+  {step:5,title:'Logistics',desc:'Practical details that shape how we work.',fields:[
+    {id:'decision_maker',label:'Who is the final decision-maker?',type:'text',ph:'e.g. Me / Me + our CEO Sarah'},
+    {id:'approvers',label:'How many people will review / approve work?',type:'select',opts:['Just me','2–3 people','A team of 4+','Multiple stakeholders incl. leadership']},
+    {id:'assets',label:'Existing assets ready to share',hint:'Check all that apply.',type:'checks',opts:['Brand guidelines','Logo files','Copy / written content','Photography or video','Analytics data','Style preferences / moodboard','None yet']},
+    {id:'other',label:'Anything else I should know?',opt:true,type:'ta',ph:'Context, constraints, sensitivities, previous attempts — anything at all.'},
+  ]},
+];
+let bStep=0;const bAnswers={};
+function renderBrief(){renderBriefSteps();renderBriefForm()}
+function renderBriefSteps(){
+  const el=document.getElementById('bpb-steps');if(!el)return;
+  el.innerHTML=['Basics','Goals','Audience','Brand','Logistics','Summary'].map((l,i)=>`
+    <div class="bpb-step ${i===bStep?'active':i<bStep?'done':''}">
+      <div class="bpb-dot">${i<bStep?'✓':i+1}</div>
+      <div class="bpb-lbl">${l}</div>
+    </div>`).join('');
+}
+function renderBriefForm(){
+  const container=document.getElementById('brief-form-el');if(!container)return;
+  if(bStep===5){renderBriefSummary(container);return}
+  const sec=briefDefs[bStep];
+  container.innerHTML=`
+    <div class="brief-step-header"><div class="bsh-step">Step ${sec.step} of 5</div><div class="bsh-title">${sec.title}</div><div class="bsh-desc">${sec.desc}</div></div>
+    ${sec.fields.map(f=>{
+      const opt=f.opt?`<span class="bf-opt">optional</span>`:'';
+      const hint=f.hint?`<div class="bf-hint">${f.hint}</div>`:'';
+      if(f.type==='text')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<input class="bf-inp" id="bf-${f.id}" placeholder="${f.ph||''}" value="${bAnswers[f.id]||''}" oninput="bAnswers['${f.id}']=this.value"></div>`;
+      if(f.type==='ta')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<textarea class="bf-ta" id="bf-${f.id}" placeholder="${f.ph||''}" oninput="bAnswers['${f.id}']=this.value">${bAnswers[f.id]||''}</textarea></div>`;
+      if(f.type==='select')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div><select class="bf-sel" id="bf-${f.id}" onchange="bAnswers['${f.id}']=this.value"><option value="">Select…</option>${f.opts.map(o=>`<option value="${o}" ${bAnswers[f.id]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+      if(f.type==='checks'){const saved=bAnswers[f.id]||[];return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<div class="bf-check-group">${f.opts.map(o=>`<label class="bf-check"><input type="checkbox" data-bf="${f.id}" value="${o}" ${saved.includes(o)?'checked':''} onchange="saveBfCheck('${f.id}')"><span>${o}</span></label>`).join('')}</div></div>`;}
+      return '';
+    }).join('')}
+    <div class="brief-nav">
+      ${bStep>0?`<button class="btn-brief-back" onclick="bNav(-1)">← Back</button>`:`<span></span>`}
+      <span class="brief-step-count">${bStep+1} of 5</span>
+      <button class="btn-brief-next" onclick="bNav(1)">${bStep===4?'Review →':'Next →'}</button>
+    </div>`;
+}
+function saveBfCheck(id){bAnswers[id]=[...document.querySelectorAll(`input[data-bf="${id}"]:checked`)].map(el=>el.value)}
+function bNav(dir){bStep=Math.max(0,Math.min(5,bStep+dir));renderBriefSteps();renderBriefForm();window.scrollTo(0,0)}
+function renderBriefSummary(container){
+  container.innerHTML=`
+    <div class="brief-step-header"><div class="bsh-step">Complete</div><div class="bsh-title">Brief summary</div><div class="bsh-desc">Review before copying to your project notes.</div></div>
+    ${briefDefs.map(sec=>`
+      <div class="brief-summary-section">
+        <div class="bss-header">Step ${sec.step} — ${sec.title}</div>
+        <div class="bss-body">${sec.fields.map(f=>`<div class="bss-row"><span class="bss-key">${f.label}</span><span class="bss-val">${Array.isArray(bAnswers[f.id])?(bAnswers[f.id].join(', ')||'—'):(bAnswers[f.id]||'—')}</span></div>`).join('')}</div>
+      </div>`).join('')}
+    <div class="brief-nav"><button class="btn-brief-back" onclick="bNav(-1)">← Edit</button><button class="btn-use" onclick="copyBrief()">📋 Copy summary</button></div>`;
+}
+function copyBrief(){
+  const lines=[];
+  briefDefs.forEach(function(sec){
+    lines.push('\n-- '+sec.title.toUpperCase()+' --');
+    sec.fields.forEach(function(f){
+      var v=Array.isArray(bAnswers[f.id])?(bAnswers[f.id].join(', ')||'-'):(bAnswers[f.id]||'-');
+      lines.push(f.label+': '+v);
+    });
+  });
+  navigator.clipboard.writeText(lines.join('\n'))
+    .then(function(){showToast('Brief copied - paste into Notion');})
+    .catch(function(){showToast('Copy failed - try manually');});
+}
+
+
+// ═══════════════ AUTH ═══════════════
+function showAuth(mode, plan) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-auth').classList.add('active');
+  switchAuthTab(mode || 'signup');
+  if (plan) selectPlan(plan);
+  window.scrollTo(0, 0);
+}
+
+function switchAuthTab(mode) {
+  var signup = document.getElementById('auth-signup');
+  var signin = document.getElementById('auth-signin');
+  if (!signup || !signin) return;
+  if (mode === 'signup') {
+    signup.style.display = '';
+    signin.style.display = 'none';
+  } else {
+    signup.style.display = 'none';
+    signin.style.display = '';
+  }
+}
+
+function selectPlan(plan) {
+  ['free','pro','annual'].forEach(function(p) {
+    var el = document.getElementById('plan-' + p);
+    if (el) el.classList.toggle('selected', p === plan);
+  });
+  var cta = document.getElementById('signup-cta');
+  if (!cta) return;
+  if (plan === 'free') {
+    cta.textContent = 'Create free account →';
+  } else if (plan === 'annual') {
+    cta.textContent = 'Get annual plan →';
+  } else {
+    cta.textContent = 'Start free trial →';
+  }
+}
+
+
+// SIDEBAR TOGGLE
+var sidebarCollapsed = false;
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  var layout = document.querySelector('.dash-layout');
+  var arrow = document.getElementById('sb-arrow');
+  if (sidebarCollapsed) {
+    layout.classList.add('sb-collapsed');
+    if (arrow) arrow.innerHTML = '&#9654;';
+  } else {
+    layout.classList.remove('sb-collapsed');
+    if (arrow) arrow.innerHTML = '&#9664;';
+  }
+}
+
+// INIT
+calcRate();
+</script>
+</body>
+</html>
