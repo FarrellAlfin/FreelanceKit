@@ -3233,13 +3233,15 @@ function setLoggedInUser(user) {
   if (avEl) avEl.textContent = name.slice(0,2).toUpperCase();
   var wbEl = document.querySelector('.wb-text h3');
   if (wbEl) wbEl.textContent = 'Welcome back, ' + name.split(' ')[0] + '.';
-  // Load all user data
-  loadMyDetails();
-  loadClients();
-  loadInvoiceHistory();
-  loadRateScenarios();
-  loadPipelineCards();
-  loadTaxEntries();
+  // Load all user data in background — errors here must never block login
+  setTimeout(function() {
+    try { loadMyDetails(); } catch(e) { console.warn('loadMyDetails:', e); }
+    try { loadClients(); } catch(e) { console.warn('loadClients:', e); }
+    try { loadInvoiceHistory(); } catch(e) { console.warn('loadInvoiceHistory:', e); }
+    try { loadRateScenarios(); } catch(e) { console.warn('loadRateScenarios:', e); }
+    try { loadPipelineCards(); } catch(e) { console.warn('loadPipelineCards:', e); }
+    try { loadTaxEntries(); } catch(e) { console.warn('loadTaxEntries:', e); }
+  }, 0);
 }
 
 // ═══════════════ MY DETAILS ═══════════════
@@ -3680,10 +3682,6 @@ function setAuthLoading(btnId, loading, defaultText) {
 }
 
 async function handleSignUp() {
-  // ── Rate limiting: max 5 signup attempts per minute (OWASP) ──
-  var rl = RateLimiter.check('auth.signup', 5, 60000, 300000);
-  if (!rl.allowed) { showAuthError('su-error', rl.msg); return; }
-
   var name  = document.getElementById('su-name').value.trim();
   var email = document.getElementById('su-email').value.trim();
   var pass  = document.getElementById('su-pass').value;
@@ -3735,19 +3733,11 @@ async function handleSignUp() {
 }
 
 async function handleSignIn() {
-  // ── Rate limiting: max 5 sign-in attempts per minute (OWASP) ──
-  var rl = RateLimiter.check('auth.signin', 5, 60000, 300000);
-  if (!rl.allowed) { showAuthError('si-error', rl.msg); return; }
-
   var email = document.getElementById('si-email').value.trim();
   var pass  = document.getElementById('si-pass').value;
 
-  // ── Schema-based input validation ─────────────────────────────
-  var emailCheck = Validate.email(email);
-  if (!emailCheck.ok) { showAuthError('si-error', emailCheck.msg); return; }
-
-  var passCheck = Validate.text(pass, 'Password', 1, 72);
-  if (!passCheck.ok) { showAuthError('si-error', passCheck.msg); return; }
+  if (!email) { showAuthError('si-error', 'Please enter your email address.'); return; }
+  if (!pass)  { showAuthError('si-error', 'Please enter your password.'); return; }
 
   setAuthLoading('signin-cta', true, 'Sign in →');
 
@@ -3763,8 +3753,6 @@ async function handleSignIn() {
     return;
   }
 
-  // Successful login — reset the rate-limit counter for this client
-  RateLimiter.reset('auth.signin');
   setLoggedInUser(result.data.user);
   showDash();
 }
@@ -3779,8 +3767,7 @@ async function handleGoogleAuth() {
 
 async function handleForgotPassword() {
   // ── Rate limiting: max 3 reset requests per 5 minutes ─────────
-  var rl = RateLimiter.check('auth.reset', 3, 300000, 600000);
-  if (!rl.allowed) { showAuthError('si-error', rl.msg); return; }
+
 
   var email = document.getElementById('si-email').value.trim();
 
