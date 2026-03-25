@@ -773,8 +773,13 @@ footer p{font-size:12px;color:var(--ink-light)}
 .settings-save-bar{display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:22px}
 .ssb-info{font-size:13px;color:var(--ink-mid)}
 .ssb-info strong{color:var(--ink);font-weight:500}
-.btn-save-settings{background:var(--ink);color:var(--cream);border:none;padding:9px 20px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-save-settings{background:var(--ink);color:var(--cream);border:none;padding:9px 20px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s,transform .1s}
 .btn-save-settings:hover{background:var(--amber)}
+.btn-save-settings:active{transform:scale(0.97)}
+.save-status{font-size:13px;font-weight:500;padding:6px 12px;border-radius:var(--radius-sm);opacity:0;transition:opacity .25s;pointer-events:none}
+.save-status.show{opacity:1}
+.save-status.ok{color:var(--sage);background:var(--sage-light)}
+.save-status.err{color:var(--red);background:var(--red-light)}
 
 /* ── CLIENT DIRECTORY ── */
 .client-dir-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -2205,7 +2210,10 @@ var RateLimiter = (function() {
         </div>
         <div class="settings-save-bar">
           <div class="ssb-info"><strong>Auto-fill is active</strong> — these details populate every template the moment you open it.</div>
-          <button class="btn-save-settings" id="btn-save-details" onclick="saveMyDetails()">Save details</button>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="save-status" id="save-details-status"></span>
+            <button class="btn-save-settings" id="btn-save-details" onclick="saveMyDetails()">Save details</button>
+          </div>
         </div>
         <div class="settings-grid">
           <div class="settings-card">
@@ -3318,7 +3326,29 @@ function applyMyDetails(d) {
 }
 
 async function saveMyDetails() {
-  if (!_currentUser) { showToast('Sign in to save your details'); return; }
+  var btn    = document.getElementById('btn-save-details');
+  var status = document.getElementById('save-details-status');
+
+  // Helper: show inline status badge for `ms` milliseconds
+  function showStatus(msg, type, ms) {
+    if (!status) return;
+    status.textContent = msg;
+    status.className = 'save-status show ' + type;
+    clearTimeout(saveMyDetails._t);
+    saveMyDetails._t = setTimeout(function() {
+      status.className = 'save-status';
+    }, ms || 3000);
+  }
+
+  if (!_currentUser) {
+    showStatus('⚠ Sign in first', 'err', 3000);
+    showToast('Sign in to save your details');
+    return;
+  }
+
+  // Disable button while saving
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+
   var g = function(id){ var el=document.getElementById(id); return el?el.value:null; };
   var payload = {
     id: _currentUser.id,
@@ -3333,18 +3363,21 @@ async function saveMyDetails() {
     working_hours: g('my-hours'), feedback_days: parseInt(g('my-feedback'))||3,
     updated_at: new Date().toISOString()
   };
+
   var res = await _supabase.from('user_settings').upsert(payload);
-  if (res.error) { showToast('Error saving: ' + res.error.message); return; }
-  applyMyDetails(payload);
-  showToast('\u2713 Details saved and applied to all templates');
-  // Give the Save button a brief "Saved ✓" confirmation state
-  var btn = document.getElementById('btn-save-details');
-  if (btn) {
-    var orig = btn.textContent;
-    btn.textContent = '✓ Saved';
-    btn.style.background = 'var(--sage)';
-    setTimeout(function(){ btn.textContent = orig; btn.style.background = ''; }, 2000);
+
+  // Re-enable button
+  if (btn) { btn.disabled = false; btn.textContent = 'Save details'; }
+
+  if (res.error) {
+    showStatus('✕ ' + res.error.message, 'err', 4000);
+    showToast('Error saving: ' + res.error.message);
+    return;
   }
+
+  applyMyDetails(payload);
+  showStatus('✓ Details saved', 'ok', 3000);
+  showToast('\u2713 Details saved and applied to all templates');
 }
 
 // ═══════════════ CLIENT DIRECTORY ═══════════════
