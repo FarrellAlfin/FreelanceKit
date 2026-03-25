@@ -760,6 +760,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <script>
   // ─── REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE ───
   var SUPABASE_URL = 'https://xbntqbnbjqwnzhfapman.supabase.co';
@@ -1584,6 +1585,7 @@ footer p{font-size:12px;color:var(--ink-light)}
             <div class="ip-actions">
               <button class="ip-btn-p" onclick="copyInvoice()">📋 Copy as text</button>
               <button class="ip-btn-g" onclick="generateInvoiceDocx()">&#128196; Download Word doc</button>
+              <button class="ip-btn-g" onclick="downloadInvoicePdf()">&#128196; Download PDF</button>
             </div>
           </div>
           <div class="inv-preview">
@@ -2573,6 +2575,16 @@ function copyAndOpen(docId, url){
   }
 }
 function copyInvoice(){const el=document.getElementById('inv-paper');navigator.clipboard.writeText(el?el.innerText:'').then(()=>showToast('✓ Invoice copied — paste into Google Docs')).catch(()=>showToast('⚠️ Try selecting the text manually'))}
+
+function downloadInvoicePdf(){
+  if(typeof html2pdf==='undefined'){showToast('PDF library loading, try again in a moment');return;}
+  var el=document.getElementById('inv-paper');
+  if(!el){showToast('Invoice preview not found');return;}
+  var invNum=document.getElementById('inv-num')?.value||'Invoice';
+  var filename='FreelanceKit_Invoice_'+invNum.replace(/[^a-zA-Z0-9_-]/g,'_')+'.pdf';
+  var opt={margin:[10,10,10,10],filename:filename,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
+  html2pdf().set(opt).from(el).save().then(function(){showToast('✓ Invoice PDF downloaded');});
+}
 
 // ═══════════════ RATE CALCULATOR ═══════════════
 function calcRate(){
