@@ -1021,7 +1021,6 @@ var RateLimiter = (function() {
     <div class="nav-links">
       <a onclick="scrollToSection('features')">Templates</a>
       <a onclick="scrollToSection('pricing')">Pricing</a>
-      <a>Community</a>
     </div>
     <div class="nav-actions">
       <button class="btn-nav-ghost" onclick="showAuth('signin')">Sign in</button>
@@ -1243,7 +1242,7 @@ var RateLimiter = (function() {
                 <span class="hiw-field-lbl">Due date</span>
                 <input class="hiw-field-inp" placeholder="[DATE]" readonly style="color:var(--amber);background:var(--amber-light);border-color:var(--amber-mid)">
               </div>
-              <button class="hiw-send-btn" onclick="showDash()">Open in dashboard →</button>
+              <button class="hiw-send-btn" style="opacity:0.5;cursor:default" disabled>Open in dashboard →</button>
             </div>
           </div>
         </div>
