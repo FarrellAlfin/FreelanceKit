@@ -3301,6 +3301,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     }
   }
   if (event === 'SIGNED_OUT') {
+    _clearUserState();
     showLanding();
   }
   // Mark that the initial load is complete
@@ -3343,7 +3344,12 @@ function setLoggedInUser(user) {
 
 async function loadMyDetails() {
   if (!_currentUser) return;
-  var res = await _supabase.from('user_settings').select('*').eq('id', _currentUser.id).single();
+  // Capture the user ID before the async gap so we can detect if the user
+  // changed (e.g. sign-out / new sign-in) while the query was in flight.
+  var uid = _currentUser.id;
+  var res = await _supabase.from('user_settings').select('*').eq('id', uid).single();
+  // Guard: discard the result if the signed-in user changed while we waited.
+  if (!_currentUser || _currentUser.id !== uid) return;
   if (res.data) applyMyDetails(res.data);
 }
 
@@ -3412,7 +3418,9 @@ async function saveMyDetails() {
     updated_at: new Date().toISOString()
   };
 
-  var res = await _supabase.from('user_settings').upsert(payload);
+  // onConflict:'id' ensures this is always an UPDATE for the current user's row,
+  // never a blind INSERT that could create duplicate rows.
+  var res = await _supabase.from('user_settings').upsert(payload, { onConflict: 'id' });
 
   // Re-enable button
   if (btn) { btn.disabled = false; btn.textContent = 'Save details'; }
@@ -3918,7 +3926,36 @@ async function handleForgotPassword() {
   }
 }
 
+// Wipe every piece of user-specific state so a subsequent sign-in can never
+// see data that belonged to the previous session.
+function _clearUserState() {
+  _currentUser = null;
+  _userPlan = 'free';
+  _clients = [];
+
+  // Clear My Details form fields
+  ['my-name','my-business','my-email','my-website','my-address',
+   'my-rate','my-latefee','my-taxrate','my-payment','my-terms',
+   'my-channel','my-response','my-hours','my-feedback'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Clear client list UI
+  var cb = document.getElementById('client-list-body');
+  if (cb) cb.innerHTML = '';
+  var cc = document.getElementById('client-count');
+  if (cc) cc.textContent = '0 clients';
+
+  // Reset panel init flags so data reloads fresh for the next user
+  window._invInit = false;
+  window._pipeInit = false;
+  window._taxInit = false;
+  window._briefInit = false;
+}
+
 async function handleSignOut() {
+  _clearUserState();
   await _supabase.auth.signOut();
   showLanding();
 }
