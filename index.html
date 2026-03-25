@@ -3326,8 +3326,8 @@ function renderClientList() {
       '<div class="ct-cell">' + (cl.company||'—') + '</div>' +
       '<div class="ct-cell">Net ' + (cl.payment_terms||14) + '</div>' +
       '<div class="ct-actions">' +
-        '<button class="ct-btn" onclick="fillInvoiceFromClient('' + cl.id + '')">Invoice</button>' +
-        '<button class="ct-btn del" onclick="deleteClient('' + cl.id + '')">Delete</button>' +
+        '<button class="ct-btn" onclick="fillInvoiceFromClient(\'' + cl.id + '\')">Invoice</button>' +
+        '<button class="ct-btn del" onclick="deleteClient(\'' + cl.id + '\')">Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3392,7 +3392,7 @@ function showClientDd(val) {
     : _clients;
   if (!filtered.length) { dd.classList.remove('open'); return; }
   dd.innerHTML = filtered.map(function(cl){
-    return '<div class="cdd-item" onmousedown="fillInvoiceFromClient('' + cl.id + '')">' +
+    return '<div class="cdd-item" onmousedown="fillInvoiceFromClient(\'' + cl.id + '\')">'+
       '<strong>' + cl.name + '</strong>' + (cl.company ? ' — ' + cl.company : '') +
     '</div>';
   }).join('');
@@ -3472,21 +3472,22 @@ function renderInvHistory() {
   var fmtDate = function(d){ return d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—'; };
   var fmtAmt  = function(n){ return '$'+(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); };
   body.innerHTML = list.map(function(inv) {
+    var iid = escapeHTML(inv.id);
     var statusOpts = ['draft','sent','paid','overdue'].map(function(s){
       return '<option value="' + s + '"' + (inv.status===s?' selected':'') + '>' + s.charAt(0).toUpperCase()+s.slice(1) + '</option>';
     }).join('');
     return '<div class="iht-row">' +
-      '<div class="iht-cell num">' + (inv.invoice_number||'—') + '</div>' +
-      '<div class="iht-cell">' + (inv.client_name||'—') + '</div>' +
-      '<div class="iht-cell" style="font-size:12px;color:var(--ink-light)">' + (inv.project||'—') + '</div>' +
+      '<div class="iht-cell num">' + escapeHTML(inv.invoice_number||'—') + '</div>' +
+      '<div class="iht-cell">' + escapeHTML(inv.client_name||'—') + '</div>' +
+      '<div class="iht-cell" style="font-size:12px;color:var(--ink-light)">' + escapeHTML(inv.project||'—') + '</div>' +
       '<div class="iht-cell amount">' + fmtAmt(inv.total) + '</div>' +
       '<div class="iht-cell" style="font-size:12px">' + fmtDate(inv.due_date) + '</div>' +
       '<div class="iht-cell">' +
-        '<select class="inv-badge ' + inv.status + '" onchange="updateInvStatus('' + inv.id + '',this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
+        '<select class="inv-badge ' + escapeHTML(inv.status) + '" onchange="updateInvStatus(\'' + iid + '\',this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
         statusOpts + '</select>' +
       '</div>' +
-      '<div class="iht-actions"><button class="iht-btn" onclick="generateInvoiceDocxFromHistory('' + inv.id + '')">&#128196;</button>' +
-      '<button class="iht-btn" style="color:var(--red)" onclick="deleteInvoice('' + inv.id + '')">&#10005;</button></div>' +
+      '<div class="iht-actions"><button class="iht-btn" onclick="generateInvoiceDocxFromHistory(\'' + iid + '\')">&#128196;</button>' +
+      '<button class="iht-btn" style="color:var(--red)" onclick="deleteInvoice(\'' + iid + '\')">&#10005;</button></div>' +
     '</div>';
   }).join('');
 }
@@ -3569,7 +3570,7 @@ function renderScenarios() {
   grid.innerHTML = _scenarios.map(function(sc) {
     var sym = sc.currency || '$';
     return '<div class="scenario-card" onclick="loadScenario(' + JSON.stringify(sc).replace(/"/g,'&quot;') + ')">' +
-      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario('' + sc.id + '')">&#10005;</button>' +
+      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario(\'' + sc.id + '\')">✕</button>' +
       '<div class="sc-name">' + sc.name + '</div>' +
       '<div class="sc-rate">' + sym + Math.round(sc.result_hourly||0) + '/hr</div>' +
       '<div class="sc-meta">Take-home: ' + sym + Math.round(sc.take_home||0).toLocaleString() + '/yr<br>' +
