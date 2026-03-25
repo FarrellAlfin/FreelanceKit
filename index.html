@@ -427,7 +427,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .cc-body{padding:18px}
 .cf{margin-bottom:15px}
 .cf:last-child{margin-bottom:0}
-.cf-lbl{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:flex;justify-content:space-between}
+.cf-lbl{font-size:13px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;display:flex;justify-content:space-between;align-items:baseline}
 .cf-hint{font-size:11px;font-weight:400;color:var(--ink-light)}
 .cf-inp{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--ink);background:var(--cream);transition:border-color .15s}
 .cf-inp:focus{outline:none;border-color:var(--amber);background:var(--white)}
@@ -580,6 +580,11 @@ footer p{font-size:12px;color:var(--ink-light)}
 .q-tab:hover{border-color:var(--ink);color:var(--ink)}
 .q-tab.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .q-tab.paid{border-color:var(--sage);color:var(--sage)}
+.q-tab.active.paid{background:var(--sage);color:var(--cream);border-color:var(--sage)}
+.tsb-paid-row{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1)}
+.tsb-mark-paid{width:100%;padding:9px 12px;border-radius:var(--radius-sm);border:1.5px solid var(--sage);background:transparent;color:var(--sage);font-family:var(--font-body);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.03em;text-transform:uppercase}
+.tsb-mark-paid:hover,.tsb-mark-paid.is-paid{background:var(--sage);color:var(--cream)}
+.tsb-mark-paid.is-paid:hover{opacity:.85}
 .tax-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px}
 .txc-header{background:var(--cream-dark);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .txc-title{font-size:12px;font-weight:600;color:var(--ink)}
@@ -823,9 +828,10 @@ footer p{font-size:12px;color:var(--ink-light)}
 .sc-meta{font-size:11px;color:var(--ink-light);line-height:1.6}
 .sc-delete{float:right;width:22px;height:22px;border-radius:5px;border:none;background:transparent;color:var(--ink-light);cursor:pointer;font-size:14px;transition:all .15s;display:flex;align-items:center;justify-content:center}
 .sc-delete:hover{background:var(--red-light);color:var(--red)}
-.save-scenario-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;display:flex;align-items:center;gap:10px;margin-top:14px}
-.ss-label{font-size:13px;color:var(--ink-mid);flex:1}
-.ss-inp{flex:2;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream)}
+.save-scenario-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:14px}
+.ss-label{font-size:13px;color:var(--ink-mid);font-weight:500}
+.ss-row{display:flex;gap:8px;align-items:center}
+.ss-inp{flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream)}
 .ss-inp:focus{outline:none;border-color:var(--amber)}
 .btn-save-sc{padding:8px 16px;background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s;white-space:nowrap}
 .btn-save-sc:hover{background:var(--amber)}
@@ -1957,9 +1963,9 @@ var RateLimiter = (function() {
               <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="3600" oninput="calcRate()"></div></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
-              <div class="cf"><div class="cf-lbl">Weeks off per year: <strong id="rc-woff-lbl">6</strong> <span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="2" max="20" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>2 wks</span><span>20 wks</span></div></div>
-              <div class="cf"><div class="cf-lbl">Billable hours/week: <strong id="rc-hrs-lbl">25</strong> <span class="cf-hint">of 40hrs — rest is admin</span></div><input class="cf-slider" type="range" id="rc-hrs" min="10" max="38" value="25" oninput="document.getElementById('rc-hrs-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>10 hrs</span><span>38 hrs</span></div></div>
-              <div class="cf"><div class="cf-lbl">Dry-month buffer: <strong id="rc-buf-lbl">15</strong>% <span class="cf-hint">extra for slow periods</span></div><input class="cf-slider" type="range" id="rc-buf" min="0" max="40" value="15" oninput="document.getElementById('rc-buf-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0% (risky)</span><span>40% (safe)</span></div></div>
+              <div class="cf"><div class="cf-lbl"><span>Weeks off per year: <strong id="rc-woff-lbl">6</strong></span><span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="2" max="20" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>2 wks</span><span>20 wks</span></div></div>
+              <div class="cf"><div class="cf-lbl"><span>Billable hours/week: <strong id="rc-hrs-lbl">25</strong></span><span class="cf-hint">of 40hrs — rest is admin</span></div><input class="cf-slider" type="range" id="rc-hrs" min="10" max="38" value="25" oninput="document.getElementById('rc-hrs-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>10 hrs</span><span>38 hrs</span></div></div>
+              <div class="cf"><div class="cf-lbl"><span>Dry-month buffer: <strong id="rc-buf-lbl">15</strong>%</span><span class="cf-hint">extra for slow periods</span></div><input class="cf-slider" type="range" id="rc-buf" min="0" max="40" value="15" oninput="document.getElementById('rc-buf-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0% (risky)</span><span>40% (safe)</span></div></div>
             </div></div>
           </div>
           <div>
@@ -2000,8 +2006,10 @@ var RateLimiter = (function() {
           <!-- Save scenario -->
           <div class="save-scenario-bar">
             <span class="ss-label">Save this rate as a named scenario</span>
-            <input class="ss-inp" id="scenario-name" placeholder="e.g. Consulting rate, Agency rate…">
-            <button class="btn-save-sc" onclick="saveScenario()">Save scenario</button>
+            <div class="ss-row">
+              <input class="ss-inp" id="scenario-name" placeholder="e.g. Consulting rate, Agency rate…">
+              <button class="btn-save-sc" onclick="saveScenario()">Save scenario</button>
+            </div>
           </div>
           <!-- Saved scenarios -->
           <div id="scenarios-wrap" style="display:none">
@@ -2092,14 +2100,14 @@ var RateLimiter = (function() {
         <div class="tv-header">
           <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--purple-light);color:var(--purple)">Business Operations</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
           <div class="tv-title">Quarterly Tax<br><em>Tracker</em></div>
-          <div class="tv-desc">Log income and expenses by quarter. The estimated tax owed updates automatically. Switch quarters using the tabs — Q1 is already marked paid.</div>
+          <div class="tv-desc">Log income and expenses by quarter. The estimated tax owed updates automatically. Switch quarters using the tabs and mark each one paid when you've filed.</div>
         </div>
         <div class="tax-rate-bar"><div class="trb-label"><strong>Your estimated tax rate:</strong> Combined income + self-employment tax. Use 25–30% if unsure.</div><input class="trb-inp" type="number" id="tr-rate" value="28" min="0" max="60" oninput="recalcTax()"><span class="trb-pct">%</span></div>
         <div class="q-tabs">
-          <button class="q-tab paid" onclick="switchTaxQ(1,this)">Q1 ✓</button>
-          <button class="q-tab active" onclick="switchTaxQ(2,this)">Q2</button>
-          <button class="q-tab" onclick="switchTaxQ(3,this)">Q3</button>
-          <button class="q-tab" onclick="switchTaxQ(4,this)">Q4</button>
+          <button class="q-tab paid" id="q-tab-1" onclick="switchTaxQ(1,this)">Q1 ✓</button>
+          <button class="q-tab active" id="q-tab-2" onclick="switchTaxQ(2,this)">Q2</button>
+          <button class="q-tab" id="q-tab-3" onclick="switchTaxQ(3,this)">Q3</button>
+          <button class="q-tab" id="q-tab-4" onclick="switchTaxQ(4,this)">Q4</button>
         </div>
         <div class="tax-two-col">
           <div id="tax-main-el"></div>
@@ -2112,6 +2120,7 @@ var RateLimiter = (function() {
               <div class="tsb-row"><span class="tsb-lbl">Taxable income</span><span class="tsb-val hi" id="tsb-taxable">$0</span></div>
               <div class="tsb-row"><span class="tsb-lbl">Tax rate</span><span class="tsb-val" id="tsb-rate">28%</span></div>
               <div class="tsb-due-box"><div class="tsb-due-lbl">Estimated tax due</div><div class="tsb-due-amt" id="tsb-due">$0</div><div class="tsb-due-note">Set this aside now. Pay it by the Q<span id="tsb-q2">2</span> deadline.</div></div>
+              <div class="tsb-paid-row"><button class="tsb-mark-paid" id="tsb-mark-paid-btn" onclick="toggleTaxPaid()">Mark Q2 as paid</button></div>
             </div>
           </div>
         </div>
@@ -3063,7 +3072,39 @@ let txData={
   3:{income:[],expenses:[]},4:{income:[],expenses:[]}
 };
 let txQ=2;
-function switchTaxQ(q,btn){txQ=q;document.querySelectorAll('#panel-tax .q-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById('tsb-q').textContent=q;document.getElementById('tsb-q2').textContent=q;renderTaxQ(q)}
+// Tracks whether each quarter has been marked paid
+let txPaid={1:true,2:false,3:false,4:false};
+
+function updateTaxTabUI(){
+  // Sync all tab labels and classes with txPaid state
+  [1,2,3,4].forEach(function(q){
+    var tab=document.getElementById('q-tab-'+q);
+    if(!tab)return;
+    tab.classList.toggle('paid', txPaid[q]);
+    tab.textContent='Q'+q+(txPaid[q]?' ✓':'');
+  });
+}
+function syncPaidBtn(q){
+  var btn=document.getElementById('tsb-mark-paid-btn');
+  if(!btn)return;
+  var paid=txPaid[q];
+  btn.textContent=paid?'✓ Q'+q+' paid — click to unmark':'Mark Q'+q+' as paid';
+  btn.classList.toggle('is-paid',paid);
+}
+function toggleTaxPaid(){
+  txPaid[txQ]=!txPaid[txQ];
+  updateTaxTabUI();
+  syncPaidBtn(txQ);
+}
+function switchTaxQ(q,btn){
+  txQ=q;
+  document.querySelectorAll('#panel-tax .q-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tsb-q').textContent=q;
+  document.getElementById('tsb-q2').textContent=q;
+  syncPaidBtn(q);
+  renderTaxQ(q);
+}
 function renderTaxQ(q){
   txQ=q;const d=txData[q];
   const totInc=d.income.reduce((s,i)=>s+i.amt,0),totExp=d.expenses.reduce((s,e)=>s+e.amt,0);
@@ -3080,6 +3121,8 @@ function renderTaxQ(q){
       <button class="tx-add-btn" onclick="txData[${q}].expenses.push({desc:'',cat:'Other',amt:0});renderTaxQ(${q})">+ Add expense</button>
     </div>`;
   recalcTax();
+  syncPaidBtn(q);
+  updateTaxTabUI();
 }
 function recalcTax(){
   const d=txData[txQ];
