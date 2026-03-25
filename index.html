@@ -736,7 +736,7 @@ footer p{font-size:12px;color:var(--ink-light)}
   * { visibility: hidden; }
   .print-target, .print-target * { visibility: visible; }
   .print-target {
-    position: fixed;
+    position: absolute;
     top: 0; left: 0;
     width: 100%;
     background: white;
@@ -1296,38 +1296,26 @@ var RateLimiter = (function() {
         <div class="price-amount"><sup>$</sup>0</div>
         <div class="price-period">forever, no card needed</div>
         <ul class="price-features">
-          <li>5 templates from each category</li>
-          <li>Google Docs format</li>
-          <li>Monthly template drop</li>
-          <li>Community Discord</li>
+          <li>Contracts &amp; Legal (full access)</li>
+          <li>My Business tools (full access)</li>
+          <li>Client directory</li>
+          <li>Invoice history</li>
         </ul>
         <button class="btn-price" onclick="showAuth('signup','free')">Get started free</button>
       </div>
       <div class="price-card featured">
         <div class="price-tier">Pro</div>
-        <div class="price-amount" style="color:var(--cream)"><sup style="color:var(--amber-mid)">$</sup>9</div>
-        <div class="price-period">per month · billed monthly</div>
+        <div class="price-amount" style="color:var(--cream)"><sup style="color:var(--amber-mid)">$</sup>0</div>
+        <div class="price-period">free during beta · no card needed</div>
         <ul class="price-features">
-          <li>All 10 templates, every format</li>
-          <li>Google Docs, Sheets, Canva</li>
-          <li>6 new templates added monthly</li>
-          <li>Monthly live Q&A</li>
-          <li>Priority community access</li>
-          <li>Vote on upcoming templates</li>
+          <li>Everything in Free</li>
+          <li>Invoice Builder (live)</li>
+          <li>Rate Calculator</li>
+          <li>Tax Tracker</li>
+          <li>Pipeline Tracker</li>
+          <li>All templates &amp; tools</li>
         </ul>
-        <button class="btn-price featured" onclick="showAuth('signup','pro')">Start 7-day free trial →</button>
-      </div>
-      <div class="price-card">
-        <div class="price-tier">Annual</div>
-        <div class="price-amount"><sup>$</sup>79</div>
-        <div class="price-period">per year · save $29</div>
-        <ul class="price-features">
-          <li>Everything in Pro</li>
-          <li>2 months free</li>
-          <li>1:1 onboarding call (30 min)</li>
-          <li>Custom template request (1/yr)</li>
-        </ul>
-        <button class="btn-price" onclick="showAuth('signup','annual')">Get annual plan</button>
+        <button class="btn-price featured" onclick="showAuth('signup','pro')">Get Pro free →</button>
       </div>
     </div>
   </section>
@@ -1407,18 +1395,13 @@ var RateLimiter = (function() {
                 <div class="auth-plan" id="plan-free" onclick="selectPlan('free')">
                   <div class="auth-plan-name">Free</div>
                   <div class="auth-plan-price">$0</div>
-                  <div class="auth-plan-note">5 templates per category</div>
+                  <div class="auth-plan-note">Contracts &amp; My Business</div>
                 </div>
                 <div class="auth-plan selected" id="plan-pro" onclick="selectPlan('pro')">
-                  <div class="auth-plan-badge">7 days free</div>
+                  <div class="auth-plan-badge">Free in beta</div>
                   <div class="auth-plan-name">Pro</div>
-                  <div class="auth-plan-price">$9</div>
-                  <div class="auth-plan-note">All templates · /month</div>
-                </div>
-                <div class="auth-plan" id="plan-annual" onclick="selectPlan('annual')">
-                  <div class="auth-plan-name">Annual</div>
-                  <div class="auth-plan-price">$79</div>
-                  <div class="auth-plan-note">2 months free · /year</div>
+                  <div class="auth-plan-price">$0</div>
+                  <div class="auth-plan-note">Full access · during beta</div>
                 </div>
               </div>
             </div>
@@ -1538,7 +1521,7 @@ var RateLimiter = (function() {
     </div>
     <div class="nav-actions">
       <span style="font-size:13px;color:var(--ink-mid)">Alex Chen</span>
-      <div class="nav-avatar" onclick="handleSignOut()" title="Sign out" style="cursor:pointer">AC</div>
+      <div class="nav-avatar">AC</div>
     </div>
   </nav>
 
@@ -1654,7 +1637,6 @@ var RateLimiter = (function() {
           <div class="tv-title">Client Contract —<br><em>Full Protection</em></div>
           <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
           <div class="tv-actions">
-            <button class="btn-use" onclick="copyDoc('contract-doc-body',this)">📋 Copy contract</button>
             <button class="btn-outline" onclick="window.location.href='FreelanceKit_Client_Contract.docx'">&#128196; Download Word doc</button>
           </div>
         </div>
@@ -1723,7 +1705,6 @@ var RateLimiter = (function() {
           <div class="tv-title">Scope Change<br><em>Order</em></div>
           <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
           <div class="tv-actions">
-            <button class="btn-use" onclick="copyDoc('scope-doc-body',this)">📋 Copy change order</button>
             <button class="btn-outline" onclick="window.location.href='FreelanceKit_Scope_Change_Order.docx'">&#128196; Download Word doc</button>
           </div>
         </div>
@@ -2357,6 +2338,11 @@ function showLanding(){
 }
 
 function showPanel(id,el){
+  // ── Plan gating: free users can only access FREE_PANELS ──────────
+  if (_userPlan !== 'pro' && FREE_PANELS.indexOf(id) === -1) {
+    _showUpgradeOverlay();
+    return;
+  }
   document.querySelectorAll('.tmpl-panel').forEach(p=>p.classList.remove('active'));
   const panel=document.getElementById('panel-'+id);
   if(panel)panel.classList.add('active');
@@ -2371,6 +2357,61 @@ function showPanel(id,el){
   if(id==='tax'&&!window._taxInit){window._taxInit=true;renderTaxQ(2)}
   if(id==='ratecalc')calcRate();
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
+}
+
+// Show an upgrade prompt overlay for free-plan users hitting locked panels
+function _showUpgradeOverlay() {
+  var ov = document.getElementById('upgrade-overlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'upgrade-overlay';
+    ov.style.cssText = [
+      'position:fixed;top:0;left:0;right:0;bottom:0',
+      'background:rgba(250,247,242,0.96)',
+      'z-index:600',
+      'display:flex;align-items:center;justify-content:center'
+    ].join(';');
+    ov.innerHTML = [
+      '<div style="text-align:center;max-width:420px;padding:48px 32px;background:#fff;',
+        'border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,0.10);">',
+        '<div style="font-size:48px;margin-bottom:16px">🔒</div>',
+        '<h2 style="font-size:22px;font-weight:700;margin-bottom:10px;color:var(--ink)">Pro Feature</h2>',
+        '<p style="color:var(--ink-mid);font-size:14px;line-height:1.6;margin-bottom:28px">',
+          'This tool is available on the <strong>Pro plan</strong>.<br>',
+          'Upgrade to unlock all templates, the invoice builder, rate calculator, tax tracker, pipeline, and more.',
+        '</p>',
+        '<button onclick="document.getElementById(\'upgrade-overlay\').style.display=\'none\';showAuth(\'signup\',\'pro\')" ',
+          'style="background:var(--amber);color:#fff;border:none;padding:13px 32px;',
+          'border-radius:8px;font-weight:700;cursor:pointer;font-size:15px;width:100%;margin-bottom:10px">',
+          'Upgrade to Pro →',
+        '</button>',
+        '<button onclick="document.getElementById(\'upgrade-overlay\').style.display=\'none\'" ',
+          'style="background:none;border:none;color:var(--ink-mid);cursor:pointer;font-size:13px">',
+          'Go back',
+        '</button>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(ov);
+  }
+  ov.style.display = 'flex';
+}
+
+// Add/remove lock icons in the sidebar based on current plan
+function _updateSidebarLocks() {
+  document.querySelectorAll('.dsb-item[id]').forEach(function(item) {
+    var panelId = item.id.replace('nav-','');
+    var isLocked = (_userPlan !== 'pro' && FREE_PANELS.indexOf(panelId) === -1);
+    var existingLock = item.querySelector('.dsb-lock');
+    if (isLocked && !existingLock) {
+      var lock = document.createElement('span');
+      lock.className = 'dsb-lock';
+      lock.textContent = '🔒';
+      lock.style.cssText = 'font-size:11px;margin-left:auto;opacity:0.55';
+      item.appendChild(lock);
+    } else if (!isLocked && existingLock) {
+      existingLock.remove();
+    }
+  });
 }
 
 function copyDoc(id,btn){
@@ -3268,9 +3309,16 @@ _supabase.auth.onAuthStateChange(function(event, session) {
 
 // ─── CURRENT USER ───
 var _currentUser = null;
+// Plan gating: 'free' users get access to FREE_PANELS only; 'pro' users get everything
+var _userPlan = 'free';
+var FREE_PANELS = ['home','contract','scope','mydetails','clients','invhistory'];
 
 function setLoggedInUser(user) {
   _currentUser = user;
+  // Extract plan from user metadata (set during sign-up)
+  _userPlan = (user.user_metadata && user.user_metadata.plan === 'pro') ? 'pro' : 'free';
+  // Update sidebar lock indicators based on plan
+  _updateSidebarLocks();
   var name = (user.user_metadata && user.user_metadata.full_name)
     ? user.user_metadata.full_name
     : (user.email ? user.email.split('@')[0] : 'there');
@@ -3780,7 +3828,7 @@ async function handleSignUp() {
   if (!passCheck.ok) { showAuthError('su-error', passCheck.msg); return; }
 
   // Reject unexpected plan values (prevent mass-assignment)
-  var allowedPlans = ['free', 'pro', 'lifetime'];
+  var allowedPlans = ['free', 'pro'];
   if (allowedPlans.indexOf(planId) === -1) { planId = 'pro'; }
 
   var ctaText = document.getElementById('signup-cta').textContent;
@@ -3897,7 +3945,7 @@ function switchAuthTab(mode) {
 }
 
 function selectPlan(plan) {
-  ['free','pro','annual'].forEach(function(p) {
+  ['free','pro'].forEach(function(p) {
     var el = document.getElementById('plan-' + p);
     if (el) el.classList.toggle('selected', p === plan);
   });
@@ -3905,8 +3953,6 @@ function selectPlan(plan) {
   if (!cta) return;
   if (plan === 'free') {
     cta.textContent = 'Create free account →';
-  } else if (plan === 'annual') {
-    cta.textContent = 'Get annual plan →';
   } else {
     cta.textContent = 'Start free trial →';
   }
