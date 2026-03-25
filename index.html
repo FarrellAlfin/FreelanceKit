@@ -727,17 +727,16 @@ footer p{font-size:12px;color:var(--ink-light)}
   .doc-body{padding:28px 22px}
 }
 
+@media print {
+  * { visibility: hidden; }
   .print-target, .print-target * { visibility: visible; }
   .print-target {
     position: fixed;
     top: 0; left: 0;
     width: 100%;
     background: white;
-    padding: 40px 56px;
-    font-family: Georgia, serif;
-    font-size: 13px;
-    line-height: 1.85;
-    color: #1A1713;
+    box-shadow: none;
+    border: none;
   }
   /* Remove borders and shadows in print */
   .print-target .doc-bar,
@@ -749,8 +748,6 @@ footer p{font-size:12px;color:var(--ink-light)}
     background: transparent;
     border: none;
     color: #1A1713;
-    font-family: Georgia, serif;
-    font-size: 13px;
   }
   /* Invoice table */
   .print-target .inv-table th,
@@ -760,7 +757,6 @@ footer p{font-size:12px;color:var(--ink-light)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <script>
   // ─── REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE ───
   var SUPABASE_URL = 'https://xbntqbnbjqwnzhfapman.supabase.co';
@@ -1588,7 +1584,7 @@ footer p{font-size:12px;color:var(--ink-light)}
               <button class="ip-btn-g" onclick="downloadInvoicePdf()">&#128196; Download PDF</button>
             </div>
           </div>
-          <div class="inv-preview">
+          <div class="inv-preview" id="inv-preview">
             <div class="inv-paper" id="inv-paper">
               <div class="inv-top">
                 <div><div class="inv-brand-name" id="p-yourname">Alex Chen Design</div><div class="inv-brand-detail" id="p-youremail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c8c5ccd1e9c8c5ccd1cac1ccc7cdccdac0cec787cac6c4">[email&#160;protected]</a></div></div>
@@ -2577,13 +2573,14 @@ function copyAndOpen(docId, url){
 function copyInvoice(){const el=document.getElementById('inv-paper');navigator.clipboard.writeText(el?el.innerText:'').then(()=>showToast('✓ Invoice copied — paste into Google Docs')).catch(()=>showToast('⚠️ Try selecting the text manually'))}
 
 function downloadInvoicePdf(){
-  if(typeof html2pdf==='undefined'){showToast('PDF library loading, try again in a moment');return;}
-  var el=document.getElementById('inv-paper');
+  var el=document.getElementById('inv-preview');
   if(!el){showToast('Invoice preview not found');return;}
-  var invNum=document.getElementById('inv-num')?.value||'Invoice';
-  var filename='FreelanceKit_Invoice_'+invNum.replace(/[^a-zA-Z0-9_-]/g,'_')+'.pdf';
-  var opt={margin:[10,10,10,10],filename:filename,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};
-  html2pdf().set(opt).from(el).save().then(function(){showToast('✓ Invoice PDF downloaded');});
+  el.classList.add('print-target');
+  window.addEventListener('afterprint',function cleanup(){
+    el.classList.remove('print-target');
+    window.removeEventListener('afterprint',cleanup);
+  });
+  window.print();
 }
 
 // ═══════════════ RATE CALCULATOR ═══════════════
