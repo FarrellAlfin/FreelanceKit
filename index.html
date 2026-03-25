@@ -758,11 +758,140 @@ footer p{font-size:12px;color:var(--ink-light)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 <script>
-  // ─── REPLACE THESE TWO VALUES WITH YOUR OWN FROM SUPABASE ───
-  var SUPABASE_URL = 'https://xbntqbnbjqwnzhfapman.supabase.co';
-  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhibnRxYm5ianF3bnpoZmFwbWFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODgxMzAsImV4cCI6MjA4OTk2NDEzMH0.ghv8f5KsaktDp6XRhV72gVukucjskq8C_4-_PcvXIv4';
+  // ─── SUPABASE CONFIGURATION ───────────────────────────────────
+  // OWASP NOTE: The Supabase "anon" key is intentionally public — it
+  // is designed to be embedded in client-side code (see Supabase docs).
+  // It is NOT a secret; it identifies the project and carries only the
+  // "anon" role. Security is enforced via Row Level Security (RLS)
+  // policies on the Supabase dashboard, not by hiding this key.
+  //
+  // To rotate the key: Supabase Dashboard → Project Settings → API →
+  // "Rotate anon key". After rotating, update the value below and
+  // redeploy.
+  //
+  // IMPORTANT: The service_role key IS a secret — never put it here.
   // ─────────────────────────────────────────────────────────────
+  var SUPABASE_URL  = 'https://xbntqbnbjqwnzhfapman.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhibnRxYm5ianF3bnpoZmFwbWFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODgxMzAsImV4cCI6MjA4OTk2NDEzMH0.ghv8f5KsaktDp6XRhV72gVukucjskq8C_4-_PcvXIv4';
   var _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SECURITY UTILITIES — OWASP Best Practices
+// ═══════════════════════════════════════════════════════════════
+
+// ── HTML Escaping ──────────────────────────────────────────────
+// Always use escapeHTML() when inserting user-controlled strings
+// into innerHTML. Prevents Cross-Site Scripting (XSS).
+// OWASP Ref: https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+function escapeHTML(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#x27;');
+}
+
+// ── Input Validation ───────────────────────────────────────────
+// Schema-based helpers: type checks, length limits, format checks.
+// Each returns { ok: true } or { ok: false, msg: '...' }.
+// Unexpected/extra fields are rejected to prevent mass-assignment.
+// OWASP Ref: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+var Validate = {
+  // RFC 5322–simplified email pattern; max 254 chars per RFC 5321
+  email: function(v) {
+    if (!v || typeof v !== 'string') return { ok: false, msg: 'Email is required.' };
+    v = v.trim();
+    if (v.length > 254) return { ok: false, msg: 'Email address is too long.' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v))
+      return { ok: false, msg: 'Please enter a valid email address.' };
+    return { ok: true };
+  },
+  // Generic text field — enforces min/max length
+  text: function(v, label, min, max) {
+    if (v == null || typeof v !== 'string') return { ok: false, msg: (label || 'Field') + ' is required.' };
+    v = v.trim();
+    min = min !== undefined ? min : 0;
+    max = max !== undefined ? max : 500;
+    if (v.length < min) return { ok: false, msg: (label || 'Field') + ' must be at least ' + min + ' character(s).' };
+    if (v.length > max) return { ok: false, msg: (label || 'Field') + ' must be no longer than ' + max + ' characters.' };
+    return { ok: true };
+  },
+  // Numeric value with optional min/max bounds
+  number: function(v, label, min, max) {
+    var n = parseFloat(v);
+    if (isNaN(n)) return { ok: false, msg: (label || 'Value') + ' must be a number.' };
+    if (min !== undefined && n < min) return { ok: false, msg: (label || 'Value') + ' must be at least ' + min + '.' };
+    if (max !== undefined && n > max) return { ok: false, msg: (label || 'Value') + ' must be no more than ' + max + '.' };
+    return { ok: true };
+  },
+  // Reject objects that contain fields outside the allowed list
+  allowedFields: function(obj, allowed) {
+    var extra = Object.keys(obj).filter(function(k) { return allowed.indexOf(k) === -1; });
+    if (extra.length) return { ok: false, msg: 'Unexpected field(s): ' + extra.join(', ') };
+    return { ok: true };
+  }
+};
+
+// ── Client-Side Rate Limiter ───────────────────────────────────
+// Tracks attempts per named action key. Returns a 429-style error
+// when the threshold is breached, with a timed lockout.
+//
+// OWASP Ref: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
+//
+// NOTE: Client-side limiting is a UX safeguard only — it cannot
+// stop a determined attacker. Enforce hard limits server-side.
+// Supabase Auth has built-in rate limiting; configure it at:
+// Supabase Dashboard → Authentication → Rate Limits.
+var RateLimiter = (function() {
+  // Store: { key: { attempts: [timestamps], lockedUntil: ms } }
+  var _store = {};
+
+  /**
+   * @param {string} key         - Action identifier, e.g. 'auth.signup'
+   * @param {number} maxAttempts - Max allowed attempts in the window (default 5)
+   * @param {number} windowMs    - Rolling window in ms (default 60 000 = 1 min)
+   * @param {number} lockoutMs   - Lockout duration after breach (default 300 000 = 5 min)
+   * @returns {{ allowed: boolean, msg?: string }}
+   */
+  function check(key, maxAttempts, windowMs, lockoutMs) {
+    maxAttempts = maxAttempts !== undefined ? maxAttempts : 5;
+    windowMs    = windowMs    !== undefined ? windowMs    : 60000;
+    lockoutMs   = lockoutMs   !== undefined ? lockoutMs   : 300000;
+
+    var now = Date.now();
+    if (!_store[key]) _store[key] = { attempts: [], lockedUntil: 0 };
+    var entry = _store[key];
+
+    // Locked out?
+    if (entry.lockedUntil > now) {
+      var secsLeft = Math.ceil((entry.lockedUntil - now) / 1000);
+      return { allowed: false, msg: 'Too many attempts. Please try again in ' + secsLeft + ' seconds.' };
+    }
+
+    // Purge timestamps outside the rolling window
+    entry.attempts = entry.attempts.filter(function(t) { return now - t < windowMs; });
+
+    // Record this attempt before checking
+    entry.attempts.push(now);
+
+    if (entry.attempts.length > maxAttempts) {
+      entry.lockedUntil = now + lockoutMs;
+      entry.attempts = [];
+      var minsLeft = Math.round(lockoutMs / 60000);
+      return { allowed: false, msg: 'Too many attempts. Please try again in ' + minsLeft + ' minute(s).' };
+    }
+
+    return { allowed: true };
+  }
+
+  // Reset a key (e.g. on successful auth)
+  function reset(key) { delete _store[key]; }
+
+  return { check: check, reset: reset };
+})();
 </script>
 </head>
 <body>
@@ -2046,9 +2175,11 @@ function setInvTerms(d,btn){
   document.getElementById('p-terms').textContent='Net '+d;updateInv();
 }
 function renderLineItems(){
+  // SECURITY: escapeHTML() prevents attribute injection — a description
+  // containing `"` would otherwise break out of the value="..." attribute.
   document.getElementById('li-container').innerHTML=lineItems.map((li,i)=>`
     <div class="li-row">
-      <input class="ip-inp" style="padding:5px 8px;font-size:12px" value="${li.desc}"
+      <input class="ip-inp" style="padding:5px 8px;font-size:12px" value="${escapeHTML(li.desc)}"
              oninput="lineItems[${i}].desc=this.value"
              onchange="updateInv()"
              placeholder="Description">
@@ -2078,7 +2209,9 @@ function updateInv(){
   g('p-issued').textContent=fmtD(g('i-issued')?.value);
   g('p-due').textContent=fmtD(g('i-due')?.value);
   g('p-pay').textContent=getInvPay();
-  const tb=g('p-lineitems');if(tb)tb.innerHTML=lineItems.map(li=>`<tr><td>${li.desc||'—'}</td><td>${li.qty}</td><td>${fmD(li.rate)}</td><td>${fmD(li.qty*li.rate)}</td></tr>`).join('');
+  // SECURITY: escapeHTML() prevents XSS when user-supplied line-item
+  // descriptions are rendered into the invoice preview via innerHTML.
+  const tb=g('p-lineitems');if(tb)tb.innerHTML=lineItems.map(li=>`<tr><td>${escapeHTML(li.desc)||'—'}</td><td>${escapeHTML(String(li.qty))}</td><td>${fmD(li.rate)}</td><td>${fmD(li.qty*li.rate)}</td></tr>`).join('');
   const sub=lineItems.reduce((s,li)=>s+li.qty*li.rate,0);
   const disc=parseFloat(g('i-disc')?.value)||0,tax=parseFloat(g('i-tax')?.value)||0;
   const da=sub*disc/100,ta=(sub-da)*tax/100,tot=sub-da+ta;
@@ -2686,12 +2819,12 @@ function renderTaxQ(q){
   el.innerHTML=`
     <div class="tax-card">
       <div class="txc-header"><span style="font-size:14px">💰</span><span class="txc-title">Income — Q${q}</span><span class="txc-total inc">${fm(totInc)}</span></div>
-      ${d.income.map((it,i)=>`<div class="tx-entry-row"><input class="tx-inp" value="${it.desc}" oninput="txData[${q}].income[${i}].desc=this.value;recalcTax()" placeholder="Client / project name"><input class="tx-inp amt" type="number" value="${it.amt}" oninput="txData[${q}].income[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].income.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
+      ${d.income.map((it,i)=>`<div class="tx-entry-row"><input class="tx-inp" value="${escapeHTML(it.desc)}" oninput="txData[${q}].income[${i}].desc=this.value;recalcTax()" placeholder="Client / project name"><input class="tx-inp amt" type="number" value="${escapeHTML(String(it.amt))}" oninput="txData[${q}].income[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].income.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
       <button class="tx-add-btn" onclick="txData[${q}].income.push({desc:'',amt:0});renderTaxQ(${q})">+ Add income</button>
     </div>
     <div class="tax-card">
       <div class="txc-header"><span style="font-size:14px">🧾</span><span class="txc-title">Expenses — Q${q}</span><span class="txc-total exp">−${fm(totExp)}</span></div>
-      ${d.expenses.map((it,i)=>`<div class="tx-entry-row" style="grid-template-columns:1fr 130px 28px"><input class="tx-inp" value="${it.desc}" oninput="txData[${q}].expenses[${i}].desc=this.value;recalcTax()" placeholder="What was it for?"><input class="tx-inp amt" type="number" value="${it.amt}" oninput="txData[${q}].expenses[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].expenses.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
+      ${d.expenses.map((it,i)=>`<div class="tx-entry-row" style="grid-template-columns:1fr 130px 28px"><input class="tx-inp" value="${escapeHTML(it.desc)}" oninput="txData[${q}].expenses[${i}].desc=this.value;recalcTax()" placeholder="What was it for?"><input class="tx-inp amt" type="number" value="${escapeHTML(String(it.amt))}" oninput="txData[${q}].expenses[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].expenses.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
       <button class="tx-add-btn" onclick="txData[${q}].expenses.push({desc:'',cat:'Other',amt:0});renderTaxQ(${q})">+ Add expense</button>
     </div>`;
   recalcTax();
@@ -2760,8 +2893,10 @@ function renderBriefForm(){
     ${sec.fields.map(f=>{
       const opt=f.opt?`<span class="bf-opt">optional</span>`:'';
       const hint=f.hint?`<div class="bf-hint">${f.hint}</div>`:'';
-      if(f.type==='text')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<input class="bf-inp" id="bf-${f.id}" placeholder="${f.ph||''}" value="${bAnswers[f.id]||''}" oninput="bAnswers['${f.id}']=this.value"></div>`;
-      if(f.type==='ta')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<textarea class="bf-ta" id="bf-${f.id}" placeholder="${f.ph||''}" oninput="bAnswers['${f.id}']=this.value">${bAnswers[f.id]||''}</textarea></div>`;
+      // SECURITY: escapeHTML() on bAnswers values prevents attribute injection
+      // if a previously saved answer contains quote characters.
+      if(f.type==='text')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<input class="bf-inp" id="bf-${f.id}" placeholder="${f.ph||''}" value="${escapeHTML(bAnswers[f.id]||'')}" oninput="bAnswers['${f.id}']=this.value"></div>`;
+      if(f.type==='ta')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<textarea class="bf-ta" id="bf-${f.id}" placeholder="${f.ph||''}" oninput="bAnswers['${f.id}']=this.value">${escapeHTML(bAnswers[f.id]||'')}</textarea></div>`;
       if(f.type==='select')return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div><select class="bf-sel" id="bf-${f.id}" onchange="bAnswers['${f.id}']=this.value"><option value="">Select…</option>${f.opts.map(o=>`<option value="${o}" ${bAnswers[f.id]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
       if(f.type==='checks'){const saved=bAnswers[f.id]||[];return `<div class="brief-field"><div class="bf-lbl">${f.label} ${opt}</div>${hint}<div class="bf-check-group">${f.opts.map(o=>`<label class="bf-check"><input type="checkbox" data-bf="${f.id}" value="${o}" ${saved.includes(o)?'checked':''} onchange="saveBfCheck('${f.id}')"><span>${o}</span></label>`).join('')}</div></div>`;}
       return '';
@@ -2861,15 +2996,30 @@ function setAuthLoading(btnId, loading, defaultText) {
 }
 
 async function handleSignUp() {
-  var name = document.getElementById('su-name').value.trim();
+  // ── Rate limiting: max 5 signup attempts per minute (OWASP) ──
+  var rl = RateLimiter.check('auth.signup', 5, 60000, 300000);
+  if (!rl.allowed) { showAuthError('su-error', rl.msg); return; }
+
+  var name  = document.getElementById('su-name').value.trim();
   var email = document.getElementById('su-email').value.trim();
-  var pass = document.getElementById('su-pass').value;
-  var plan = document.querySelector('.auth-plan.selected');
+  var pass  = document.getElementById('su-pass').value;
+  var plan  = document.querySelector('.auth-plan.selected');
   var planId = plan ? plan.id.replace('plan-','') : 'pro';
 
-  if (!name) { showAuthError('su-error', 'Please enter your name.'); return; }
-  if (!email) { showAuthError('su-error', 'Please enter your email address.'); return; }
-  if (pass.length < 8) { showAuthError('su-error', 'Password must be at least 8 characters.'); return; }
+  // ── Schema-based input validation ─────────────────────────────
+  var nameCheck = Validate.text(name, 'Name', 1, 100);
+  if (!nameCheck.ok) { showAuthError('su-error', nameCheck.msg); return; }
+
+  var emailCheck = Validate.email(email);
+  if (!emailCheck.ok) { showAuthError('su-error', emailCheck.msg); return; }
+
+  // Password: min 8, max 72 chars (bcrypt limit)
+  var passCheck = Validate.text(pass, 'Password', 8, 72);
+  if (!passCheck.ok) { showAuthError('su-error', passCheck.msg); return; }
+
+  // Reject unexpected plan values (prevent mass-assignment)
+  var allowedPlans = ['free', 'pro', 'lifetime'];
+  if (allowedPlans.indexOf(planId) === -1) { planId = 'pro'; }
 
   var ctaText = document.getElementById('signup-cta').textContent;
   setAuthLoading('signup-cta', true, ctaText);
@@ -2901,11 +3051,19 @@ async function handleSignUp() {
 }
 
 async function handleSignIn() {
-  var email = document.getElementById('si-email').value.trim();
-  var pass = document.getElementById('si-pass').value;
+  // ── Rate limiting: max 5 sign-in attempts per minute (OWASP) ──
+  var rl = RateLimiter.check('auth.signin', 5, 60000, 300000);
+  if (!rl.allowed) { showAuthError('si-error', rl.msg); return; }
 
-  if (!email) { showAuthError('si-error', 'Please enter your email address.'); return; }
-  if (!pass) { showAuthError('si-error', 'Please enter your password.'); return; }
+  var email = document.getElementById('si-email').value.trim();
+  var pass  = document.getElementById('si-pass').value;
+
+  // ── Schema-based input validation ─────────────────────────────
+  var emailCheck = Validate.email(email);
+  if (!emailCheck.ok) { showAuthError('si-error', emailCheck.msg); return; }
+
+  var passCheck = Validate.text(pass, 'Password', 1, 72);
+  if (!passCheck.ok) { showAuthError('si-error', passCheck.msg); return; }
 
   setAuthLoading('signin-cta', true, 'Sign in →');
 
@@ -2921,6 +3079,8 @@ async function handleSignIn() {
     return;
   }
 
+  // Successful login — reset the rate-limit counter for this client
+  RateLimiter.reset('auth.signin');
   setLoggedInUser(result.data.user);
   showDash();
 }
@@ -2934,9 +3094,16 @@ async function handleGoogleAuth() {
 }
 
 async function handleForgotPassword() {
+  // ── Rate limiting: max 3 reset requests per 5 minutes ─────────
+  var rl = RateLimiter.check('auth.reset', 3, 300000, 600000);
+  if (!rl.allowed) { showAuthError('si-error', rl.msg); return; }
+
   var email = document.getElementById('si-email').value.trim();
-  if (!email) {
-    showAuthError('si-error', 'Enter your email address above first.');
+
+  // ── Email format validation before sending to API ─────────────
+  var emailCheck = Validate.email(email);
+  if (!emailCheck.ok) {
+    showAuthError('si-error', emailCheck.msg || 'Enter your email address above first.');
     return;
   }
   var result = await _supabase.auth.resetPasswordForEmail(email, {
