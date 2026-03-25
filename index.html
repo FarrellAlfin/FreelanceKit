@@ -754,6 +754,112 @@ footer p{font-size:12px;color:var(--ink-light)}
   .print-target .inv-table td { border-bottom: 0.5px solid #E2DAD0; }
   @page { margin: 20mm; size: A4; }
 }
+
+/* ── MY DETAILS / SETTINGS ── */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.settings-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sc-header{background:var(--cream-dark);padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.sc-title{font-size:13px;font-weight:600;color:var(--ink)}
+.sc-body{padding:18px;display:flex;flex-direction:column;gap:12px}
+.sf{display:flex;flex-direction:column;gap:5px}
+.sf label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light)}
+.sf input,.sf select,.sf textarea{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream);transition:border-color .15s}
+.sf input:focus,.sf select:focus,.sf textarea:focus{outline:none;border-color:var(--amber);background:var(--white)}
+.settings-save-bar{display:flex;align-items:center;justify-content:space-between;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;margin-bottom:22px}
+.ssb-info{font-size:13px;color:var(--ink-mid)}
+.ssb-info strong{color:var(--ink);font-weight:500}
+.btn-save-settings{background:var(--ink);color:var(--cream);border:none;padding:9px 20px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s}
+.btn-save-settings:hover{background:var(--amber)}
+
+/* ── CLIENT DIRECTORY ── */
+.client-dir-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.client-table{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.ct-head{display:grid;grid-template-columns:1fr 1fr 1fr 80px 80px;gap:0;background:var(--cream-dark);border-bottom:1px solid var(--border)}
+.ct-head-cell{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);padding:10px 14px}
+.ct-row{display:grid;grid-template-columns:1fr 1fr 1fr 80px 80px;gap:0;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.ct-row:last-child{border-bottom:none}
+.ct-row:hover{background:var(--cream)}
+.ct-cell{padding:11px 14px;font-size:13px;color:var(--ink-mid)}
+.ct-cell.name{font-weight:500;color:var(--ink)}
+.ct-cell.email{font-size:12px;color:var(--ink-light)}
+.ct-actions{display:flex;gap:6px;padding:8px 14px}
+.ct-btn{padding:4px 10px;border-radius:5px;border:1.5px solid var(--border);background:transparent;font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s;color:var(--ink-mid)}
+.ct-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+.ct-btn.del:hover{border-color:var(--red);color:var(--red);background:var(--red-light)}
+.client-empty{text-align:center;padding:40px;color:var(--ink-light);font-size:14px}
+
+/* ── INVOICE HISTORY ── */
+.inv-hist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.inv-status-filter{display:flex;gap:6px}
+.isf-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:transparent;font-family:var(--font-body);font-size:12px;color:var(--ink-mid);cursor:pointer;transition:all .15s}
+.isf-btn:hover{border-color:var(--ink);color:var(--ink)}
+.isf-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.inv-hist-table{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.iht-head{display:grid;grid-template-columns:100px 1fr 1fr 90px 90px 100px;background:var(--cream-dark);border-bottom:1px solid var(--border)}
+.iht-hc{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);padding:10px 14px}
+.iht-row{display:grid;grid-template-columns:100px 1fr 1fr 90px 90px 100px;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.iht-row:last-child{border-bottom:none}
+.iht-row:hover{background:var(--cream)}
+.iht-cell{padding:11px 14px;font-size:13px;color:var(--ink-mid)}
+.iht-cell.num{font-weight:600;color:var(--ink);font-family:var(--font-mono);font-size:12px}
+.iht-cell.amount{font-weight:500;color:var(--ink);font-family:var(--font-mono)}
+.inv-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+.inv-badge.draft{background:var(--cream-dark);color:var(--ink-light)}
+.inv-badge.sent{background:var(--blue-light);color:var(--blue)}
+.inv-badge.paid{background:var(--sage-light);color:var(--sage)}
+.inv-badge.overdue{background:var(--red-light);color:var(--red)}
+.iht-actions{display:flex;gap:5px;padding:8px 14px}
+.iht-btn{padding:3px 9px;border-radius:5px;border:1.5px solid var(--border);background:transparent;font-family:var(--font-body);font-size:10px;cursor:pointer;transition:all .15s;color:var(--ink-mid)}
+.iht-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+.inv-hist-empty{text-align:center;padding:48px;color:var(--ink-light);font-size:14px}
+
+/* ── RATE SCENARIOS ── */
+.scenarios-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:24px}
+.scenario-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:all .2s;cursor:pointer}
+.scenario-card:hover{box-shadow:var(--shadow-md);border-color:var(--amber-mid);transform:translateY(-2px)}
+.scenario-card.active-sc{border-color:var(--amber);background:var(--amber-light)}
+.sc-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
+.sc-rate{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--amber);line-height:1;margin-bottom:8px;letter-spacing:-.02em}
+.sc-meta{font-size:11px;color:var(--ink-light);line-height:1.6}
+.sc-delete{float:right;width:22px;height:22px;border-radius:5px;border:none;background:transparent;color:var(--ink-light);cursor:pointer;font-size:14px;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.sc-delete:hover{background:var(--red-light);color:var(--red)}
+.save-scenario-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;display:flex;align-items:center;gap:10px;margin-top:14px}
+.ss-label{font-size:13px;color:var(--ink-mid);flex:1}
+.ss-inp{flex:2;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--cream)}
+.ss-inp:focus{outline:none;border-color:var(--amber)}
+.btn-save-sc{padding:8px 16px;background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s;white-space:nowrap}
+.btn-save-sc:hover{background:var(--amber)}
+
+/* ── CLIENT DROPDOWN in invoice ── */
+.client-dropdown{position:relative}
+.client-dd-list{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1.5px solid var(--amber);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);z-index:50;max-height:180px;overflow-y:auto;display:none}
+.client-dd-list.open{display:block}
+.cdd-item{padding:8px 11px;font-size:13px;color:var(--ink-mid);cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+.cdd-item:last-child{border-bottom:none}
+.cdd-item:hover{background:var(--amber-light);color:var(--amber)}
+
+/* ── INCOME GOAL BAR ── */
+.goal-bar-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:18px}
+.goal-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.goal-bar-title{font-size:13px;font-weight:500;color:var(--ink)}
+.goal-bar-nums{font-size:13px;color:var(--ink-mid);font-family:var(--font-mono)}
+.goal-track{height:10px;background:var(--cream-dark);border-radius:5px;overflow:hidden;margin-bottom:8px}
+.goal-fill{height:100%;background:var(--amber);border-radius:5px;transition:width .6s ease}
+.goal-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-light)}
+.goal-inp-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.goal-inp-lbl{font-size:12px;color:var(--ink-mid)}
+.goal-inp{width:120px;padding:6px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:13px;color:var(--ink);background:var(--cream)}
+.goal-inp:focus{outline:none;border-color:var(--amber)}
+
+@media(max-width:768px){
+  .settings-grid{grid-template-columns:1fr}
+  .ct-head,.ct-row{grid-template-columns:1fr 1fr 60px}
+  .ct-head-cell:nth-child(3),.ct-cell:nth-child(3),
+  .ct-head-cell:nth-child(4),.ct-actions{display:none}
+  .iht-head,.iht-row{grid-template-columns:90px 1fr 80px 80px}
+  .iht-hc:nth-child(3),.iht-cell:nth-child(3),
+  .iht-hc:nth-child(6),.iht-actions{display:none}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
@@ -1480,13 +1586,19 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#128203;</span><span class="dsb-label">Project Brief Form</span>
       </div>
 
-      <div class="dsb-section">Account</div>
-      <div class="dsb-item" onclick="showToast('Saved templates coming soon')">
-        <span class="dsb-icon">&#128278;</span><span class="dsb-label">Saved</span>
-        <span class="dsb-count">4</span>
+      <div class="dsb-section">My Business</div>
+      <div class="dsb-item" onclick="showPanel('mydetails',this)" id="nav-mydetails">
+        <span class="dsb-icon">&#9881;&#65039;</span><span class="dsb-label">My Details</span>
       </div>
-      <div class="dsb-item" onclick="showToast('Discord community coming soon')">
-        <span class="dsb-icon">&#128172;</span><span class="dsb-label">Community</span>
+      <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
+        <span class="dsb-icon">&#128101;</span><span class="dsb-label">Client Directory</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('invhistory',this)" id="nav-invhistory">
+        <span class="dsb-icon">&#128196;</span><span class="dsb-label">Invoice History</span>
+      </div>
+      <div class="dsb-section">Account</div>
+      <div class="dsb-item" onclick="handleSignOut()">
+        <span class="dsb-icon">&#128682;</span><span class="dsb-label">Sign out</span>
       </div>
 
       <button class="sb-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
@@ -1671,7 +1783,13 @@ var RateLimiter = (function() {
               </div>
               <div class="ip-field"><div class="ip-lbl">Due date</div><input class="ip-inp" type="date" id="i-due" oninput="updateInv()"></div>
               <div class="ip-divider"></div>
-              <div class="ip-field"><div class="ip-lbl">Client name</div><input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv()"></div>
+              <div class="ip-field">
+              <div class="ip-lbl">Client name</div>
+              <div class="client-dropdown">
+                <input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
+                <div class="client-dd-list" id="client-dd"></div>
+              </div>
+            </div>
               <div class="ip-row2">
                 <div class="ip-field"><div class="ip-lbl">Contact</div><input class="ip-inp" id="i-contact" value="Jamie Reyes" oninput="updateInv()"></div>
                 <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="jamie@acmestudio.com" oninput="updateInv()"></div>
@@ -1708,7 +1826,8 @@ var RateLimiter = (function() {
               </div>
             </div>
             <div class="ip-actions">
-              <button class="ip-btn-p" onclick="copyInvoice()">📋 Copy as text</button>
+              <button class="ip-btn-p" onclick="saveInvoiceToHistory()">&#128190; Save invoice</button>
+              <button class="ip-btn-p" onclick="copyInvoice()" style="background:var(--ink-mid)">📋 Copy</button>
               <button class="ip-btn-g" onclick="generateInvoiceDocx()">&#128196; Download Word doc</button>
               <button class="ip-btn-g" onclick="downloadInvoicePdf()">&#128196; Download PDF</button>
             </div>
@@ -1863,6 +1982,33 @@ var RateLimiter = (function() {
               <div class="rb-insight"><div class="rb-insight-title">What this means</div><div class="rb-insight-text" id="rc-insight">Fill in your details to see your rate.</div></div>
             </div>
           </div>
+          <!-- Income goal tracker -->
+          <div class="goal-bar-wrap" id="goal-bar-wrap">
+            <div class="goal-bar-header">
+              <span class="goal-bar-title">Annual income goal</span>
+              <span class="goal-bar-nums" id="goal-nums">$0 / $0</span>
+            </div>
+            <div class="goal-track"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
+            <div class="goal-labels"><span id="goal-ytd">$0 earned this year</span><span id="goal-target-lbl">Goal: $0</span></div>
+            <div class="goal-inp-row">
+              <span class="goal-inp-lbl">Annual income goal:</span>
+              <input class="goal-inp" type="number" id="goal-target" value="100000" oninput="updateGoalBar()" placeholder="100000">
+              <span class="goal-inp-lbl">Earned so far:</span>
+              <input class="goal-inp" type="number" id="goal-earned" value="0" oninput="updateGoalBar()" placeholder="0">
+            </div>
+          </div>
+          <!-- Save scenario -->
+          <div class="save-scenario-bar">
+            <span class="ss-label">Save this rate as a named scenario</span>
+            <input class="ss-inp" id="scenario-name" placeholder="e.g. Consulting rate, Agency rate…">
+            <button class="btn-save-sc" onclick="saveScenario()">Save scenario</button>
+          </div>
+          <!-- Saved scenarios -->
+          <div id="scenarios-wrap" style="display:none">
+            <div class="home-grid-header" style="margin-bottom:14px"><span class="hgh-title">Saved scenarios</span></div>
+            <div class="scenarios-grid" id="scenarios-grid"></div>
+          </div>
+        </div>
         </div>
       </div>
 
@@ -2042,6 +2188,111 @@ var RateLimiter = (function() {
         </div>
         <div class="brief-progress-bar"><div class="bpb-steps" id="bpb-steps"></div></div>
         <div id="brief-form-el"></div>
+      </div>
+
+
+      <!-- ─── MY DETAILS ─── -->
+      <div class="tmpl-panel" id="panel-mydetails">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">My Business</span></div>
+          <div class="tv-title">My <em>Details</em></div>
+          <div class="tv-desc">Save your business details once. They'll pre-fill every contract, invoice, and template automatically.</div>
+        </div>
+        <div class="settings-save-bar">
+          <div class="ssb-info"><strong>Auto-fill is active</strong> — these details populate every template the moment you open it.</div>
+          <button class="btn-save-settings" onclick="saveMyDetails()">Save details</button>
+        </div>
+        <div class="settings-grid">
+          <div class="settings-card">
+            <div class="sc-header"><span>&#128100;</span><span class="sc-title">Personal & Business</span></div>
+            <div class="sc-body">
+              <div class="sf"><label>Full name</label><input id="my-name" placeholder="Your full name"></div>
+              <div class="sf"><label>Business name</label><input id="my-business" placeholder="Your business or trading name"></div>
+              <div class="sf"><label>Email address</label><input id="my-email" type="email" placeholder="hello@yourbusiness.com"></div>
+              <div class="sf"><label>Website</label><input id="my-website" placeholder="https://yourbusiness.com"></div>
+              <div class="sf"><label>Address / City, Country</label><input id="my-address" placeholder="City, State, Country"></div>
+            </div>
+          </div>
+          <div class="settings-card">
+            <div class="sc-header"><span>&#128176;</span><span class="sc-title">Rates & Payment</span></div>
+            <div class="sc-body">
+              <div class="sf"><label>Default hourly rate ($)</label><input id="my-rate" type="number" placeholder="150" min="0"></div>
+              <div class="sf"><label>Late fee per month (%)</label><input id="my-latefee" type="number" placeholder="1.5" min="0" step="0.5"></div>
+              <div class="sf"><label>Default tax rate (%)</label><input id="my-taxrate" type="number" placeholder="28" min="0"></div>
+              <div class="sf"><label>Accepted payment methods</label><input id="my-payment" placeholder="e.g. Bank transfer, Stripe, Wise"></div>
+              <div class="sf"><label>Default payment terms (days)</label>
+                <select id="my-terms">
+                  <option value="7">Net 7</option>
+                  <option value="14">Net 14</option>
+                  <option value="30">Net 30</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="settings-card" style="grid-column:1/-1">
+            <div class="sc-header"><span>&#128338;</span><span class="sc-title">Default working hours</span></div>
+            <div class="sc-body" style="flex-direction:row;flex-wrap:wrap;gap:14px">
+              <div class="sf" style="flex:1;min-width:180px"><label>Communication channel</label><input id="my-channel" placeholder="e.g. Email, Slack"></div>
+              <div class="sf" style="flex:1;min-width:180px"><label>Response time</label><input id="my-response" placeholder="e.g. within 24 hours"></div>
+              <div class="sf" style="flex:1;min-width:180px"><label>Working hours</label><input id="my-hours" placeholder="e.g. Mon–Fri, 9am–6pm EST"></div>
+              <div class="sf" style="flex:1;min-width:180px"><label>Feedback turnaround (days)</label><input id="my-feedback" type="number" placeholder="3" min="1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CLIENT DIRECTORY ─── -->
+      <div class="tmpl-panel" id="panel-clients">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">My Business</span></div>
+          <div class="tv-title">Client <em>Directory</em></div>
+          <div class="tv-desc">Your client contacts in one place. Select a client in the Invoice Builder or Pipeline Tracker to auto-fill their details.</div>
+        </div>
+        <div class="client-dir-header">
+          <span style="font-size:13px;color:var(--ink-mid)" id="client-count">0 clients</span>
+          <button class="btn-use" onclick="openClientModal()">+ Add client</button>
+        </div>
+        <div class="client-table">
+          <div class="ct-head">
+            <div class="ct-head-cell">Name</div>
+            <div class="ct-head-cell">Email</div>
+            <div class="ct-head-cell">Company</div>
+            <div class="ct-head-cell">Terms</div>
+            <div class="ct-head-cell"></div>
+          </div>
+          <div id="client-list-body"><div class="client-empty">No clients yet. Add your first client above.</div></div>
+        </div>
+      </div>
+
+      <!-- ─── INVOICE HISTORY ─── -->
+      <div class="tmpl-panel" id="panel-invhistory">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing</span></div>
+          <div class="tv-title">Invoice <em>History</em></div>
+          <div class="tv-desc">Every invoice you've saved, with live status tracking. Update status as invoices are sent, viewed, and paid.</div>
+        </div>
+        <div class="inv-hist-header">
+          <div class="inv-status-filter">
+            <button class="isf-btn active" onclick="filterInvHistory('all',this)">All</button>
+            <button class="isf-btn" onclick="filterInvHistory('draft',this)">Draft</button>
+            <button class="isf-btn" onclick="filterInvHistory('sent',this)">Sent</button>
+            <button class="isf-btn" onclick="filterInvHistory('paid',this)">Paid</button>
+            <button class="isf-btn" onclick="filterInvHistory('overdue',this)">Overdue</button>
+          </div>
+          <button class="btn-use" onclick="showPanel('invoice',document.getElementById('nav-invoice'))">+ New invoice</button>
+        </div>
+        <div class="inv-hist-table">
+          <div class="iht-head">
+            <div class="iht-hc">Invoice #</div>
+            <div class="iht-hc">Client</div>
+            <div class="iht-hc">Project</div>
+            <div class="iht-hc">Total</div>
+            <div class="iht-hc">Due</div>
+            <div class="iht-hc">Status</div>
+            <div class="iht-hc"></div>
+          </div>
+          <div id="inv-history-body"><div class="inv-hist-empty">No invoices saved yet. Build one in the Invoice Builder and click Save.</div></div>
+        </div>
       </div>
 
     </main>
@@ -2789,7 +3040,7 @@ function renderPipeline(){
     <div class="hs-card"><div class="hs-lbl">Weighted pipeline</div><div class="hs-val">${fm(totalW)}</div><div class="hs-sub g">All stages</div></div>
     <div class="hs-card"><div class="hs-lbl">Hot leads</div><div class="hs-val">${hot}</div><div class="hs-sub ${hot>=1?'w':'r'}">${hot>=1?'Follow up now':'Need more'}</div></div>`;
 }
-function pfDrop(e,stage){e.preventDefault();const c=pfClients.find(x=>x.id===pfDragId);if(c)c.stage=stage;pfDragId=null;renderPipeline()}
+function pfDrop(e,stage){e.preventDefault();const c=pfClients.find(x=>x.id===pfDragId);if(c){c.stage=stage;savePipelineCard(c);}pfDragId=null;renderPipeline();}
 function openPipelineModal(stage=2){document.getElementById('pm-stage').value=stage;document.getElementById('pipe-modal').classList.add('open')}
 function closePipeModal(e){if(e.target.id==='pipe-modal')closePipeModalBtn()}
 function closePipeModalBtn(){document.getElementById('pipe-modal').classList.remove('open')}
@@ -2798,9 +3049,11 @@ function addPipeClient(){
   if(!client){showToast('⚠️ Enter a client name');return}
   const dr=document.getElementById('pm-date').value;
   const dateLabel=dr?new Date(dr+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
-  pfClients.push({id:pfNextId++,client,project:document.getElementById('pm-project').value,value:parseFloat(document.getElementById('pm-value').value)||0,stage:parseInt(document.getElementById('pm-stage').value),temp:document.getElementById('pm-temp').value,date:dateLabel});
+  var newCard = {id:pfNextId++,client,project:document.getElementById('pm-project').value,value:parseFloat(document.getElementById('pm-value').value)||0,stage:parseInt(document.getElementById('pm-stage').value),temp:document.getElementById('pm-temp').value,date:dateLabel};
+  pfClients.push(newCard);
+  savePipelineCard(newCard);
   closePipeModalBtn();['pm-client','pm-project','pm-value','pm-date'].forEach(id=>document.getElementById(id).value='');
-  renderPipeline();showToast('✓ Client added to pipeline');
+  renderPipeline();showToast('\u2713 Client added to pipeline');
 }
 
 // ═══════════════ TAX TRACKER ═══════════════
@@ -2966,19 +3219,450 @@ _supabase.auth.onAuthStateChange(function(event, session) {
   window._authInitDone = true;
 });
 
+// ─── CURRENT USER ───
+var _currentUser = null;
+
 function setLoggedInUser(user) {
+  _currentUser = user;
   var name = (user.user_metadata && user.user_metadata.full_name)
     ? user.user_metadata.full_name
     : (user.email ? user.email.split('@')[0] : 'there');
-  // Update dashboard nav name and avatar
   var nameEl = document.querySelector('#page-dash .nav-actions span');
   if (nameEl) nameEl.textContent = name;
   var avEl = document.querySelector('#page-dash .nav-avatar');
   if (avEl) avEl.textContent = name.slice(0,2).toUpperCase();
-  // Update dashboard welcome message
   var wbEl = document.querySelector('.wb-text h3');
   if (wbEl) wbEl.textContent = 'Welcome back, ' + name.split(' ')[0] + '.';
+  // Load all user data
+  loadMyDetails();
+  loadClients();
+  loadInvoiceHistory();
+  loadRateScenarios();
+  loadPipelineCards();
+  loadTaxEntries();
 }
+
+// ═══════════════ MY DETAILS ═══════════════
+
+async function loadMyDetails() {
+  if (!_currentUser) return;
+  var res = await _supabase.from('user_settings').select('*').eq('id', _currentUser.id).single();
+  if (res.data) applyMyDetails(res.data);
+}
+
+function applyMyDetails(d) {
+  var set = function(id, val) { var el=document.getElementById(id); if(el&&val!=null) el.value=val; };
+  set('my-name', d.full_name); set('my-business', d.business_name);
+  set('my-email', d.email); set('my-website', d.website);
+  set('my-address', d.address); set('my-rate', d.hourly_rate);
+  set('my-latefee', d.late_fee_pct); set('my-taxrate', d.tax_rate);
+  set('my-payment', d.payment_methods); set('my-terms', d.payment_terms || 14);
+  set('my-channel', d.comms_channel); set('my-response', d.response_time);
+  set('my-hours', d.working_hours); set('my-feedback', d.feedback_days);
+  // Pre-fill invoice builder with user details
+  var yn = document.getElementById('i-yourname');
+  var ye = document.getElementById('i-youremail');
+  if (yn && !yn.dataset.userEdited) yn.value = d.business_name || d.full_name || yn.value;
+  if (ye && !ye.dataset.userEdited) ye.value = d.email || ye.value;
+  if (d.tax_rate) { var t=document.getElementById('i-tax'); if(t&&!t.dataset.userEdited) t.value=d.tax_rate; }
+  if (d.payment_methods) { var pm=document.getElementById('i-pay'); if(pm) pm.value=d.payment_methods; }
+  if (d.payment_terms) {
+    var trm=document.getElementById('my-terms-val'); if(trm) trm.value=d.payment_terms;
+    if(typeof setInvTerms==='function') setInvTerms(d.payment_terms, null);
+  }
+  if (typeof updateInv==='function') updateInv();
+  // Pre-fill rate calculator
+  if (d.hourly_rate) { var hr=document.getElementById('rc-takehome'); }
+  if (d.tax_rate) { var rt=document.getElementById('rc-tax'); if(rt) rt.value=d.tax_rate; if(typeof calcRate==='function') calcRate(); }
+}
+
+async function saveMyDetails() {
+  if (!_currentUser) { showToast('Sign in to save your details'); return; }
+  var g = function(id){ var el=document.getElementById(id); return el?el.value:null; };
+  var payload = {
+    id: _currentUser.id,
+    full_name: g('my-name'), business_name: g('my-business'),
+    email: g('my-email'), website: g('my-website'), address: g('my-address'),
+    hourly_rate: parseFloat(g('my-rate'))||null,
+    late_fee_pct: parseFloat(g('my-latefee'))||1.5,
+    tax_rate: parseFloat(g('my-taxrate'))||28,
+    payment_methods: g('my-payment'),
+    payment_terms: parseInt(g('my-terms'))||14,
+    comms_channel: g('my-channel'), response_time: g('my-response'),
+    working_hours: g('my-hours'), feedback_days: parseInt(g('my-feedback'))||3,
+    updated_at: new Date().toISOString()
+  };
+  var res = await _supabase.from('user_settings').upsert(payload);
+  if (res.error) { showToast('Error saving: ' + res.error.message); return; }
+  applyMyDetails(payload);
+  showToast('\u2713 Details saved and applied to all templates');
+}
+
+// ═══════════════ CLIENT DIRECTORY ═══════════════
+
+var _clients = [];
+
+async function loadClients() {
+  if (!_currentUser) return;
+  var res = await _supabase.from('clients').select('*').eq('user_id', _currentUser.id).order('name');
+  if (res.data) { _clients = res.data; renderClientList(); }
+}
+
+function renderClientList() {
+  var body = document.getElementById('client-list-body');
+  var count = document.getElementById('client-count');
+  if (count) count.textContent = _clients.length + ' client' + (_clients.length !== 1 ? 's' : '');
+  if (!body) return;
+  if (!_clients.length) {
+    body.innerHTML = '<div class="client-empty">No clients yet. Add your first client above.</div>';
+    return;
+  }
+  body.innerHTML = _clients.map(function(cl) {
+    return '<div class="ct-row">' +
+      '<div class="ct-cell name">' + (cl.name||'') + '</div>' +
+      '<div class="ct-cell email">' + (cl.email||'—') + '</div>' +
+      '<div class="ct-cell">' + (cl.company||'—') + '</div>' +
+      '<div class="ct-cell">Net ' + (cl.payment_terms||14) + '</div>' +
+      '<div class="ct-actions">' +
+        '<button class="ct-btn" onclick="fillInvoiceFromClient('' + cl.id + '')">Invoice</button>' +
+        '<button class="ct-btn del" onclick="deleteClient('' + cl.id + '')">Delete</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function openClientModal() { document.getElementById('client-modal').classList.add('open'); }
+function closeClientModal() {
+  document.getElementById('client-modal').classList.remove('open');
+  ['cm-name','cm-company','cm-email','cm-contact','cm-notes'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+}
+
+async function addClient() {
+  if (!_currentUser) { showToast('Sign in to add clients'); return; }
+  var name = document.getElementById('cm-name').value.trim();
+  if (!name) { showToast('Please enter a client name'); return; }
+  var payload = {
+    user_id: _currentUser.id,
+    name: name,
+    company: document.getElementById('cm-company').value.trim(),
+    email: document.getElementById('cm-email').value.trim(),
+    contact_person: document.getElementById('cm-contact').value.trim(),
+    payment_terms: parseInt(document.getElementById('cm-terms').value)||14,
+    notes: document.getElementById('cm-notes').value.trim()
+  };
+  var res = await _supabase.from('clients').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _clients.push(res.data);
+  _clients.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  renderClientList();
+  closeClientModal();
+  showToast('\u2713 Client added');
+}
+
+async function deleteClient(id) {
+  if (!confirm('Remove this client?')) return;
+  await _supabase.from('clients').delete().eq('id', id).eq('user_id', _currentUser.id);
+  _clients = _clients.filter(function(cl){ return cl.id !== id; });
+  renderClientList();
+}
+
+function fillInvoiceFromClient(id) {
+  var cl = _clients.find(function(c){ return c.id === id; });
+  if (!cl) return;
+  var set = function(elId, val){ var el=document.getElementById(elId); if(el) el.value=val||''; };
+  set('i-client', cl.name);
+  set('i-contact', cl.contact_person||cl.name);
+  set('i-email', cl.email);
+  if (cl.payment_terms && typeof setInvTerms==='function') setInvTerms(cl.payment_terms, null);
+  if (typeof updateInv==='function') updateInv();
+  showPanel('invoice', document.getElementById('nav-invoice'));
+  showToast('\u2713 Invoice pre-filled from client directory');
+}
+
+// Client dropdown in invoice builder
+function showClientDd(val) {
+  var dd = document.getElementById('client-dd');
+  if (!dd || !_clients.length) return;
+  var filtered = val
+    ? _clients.filter(function(cl){ return cl.name.toLowerCase().includes(val.toLowerCase()); })
+    : _clients;
+  if (!filtered.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = filtered.map(function(cl){
+    return '<div class="cdd-item" onmousedown="fillInvoiceFromClient('' + cl.id + '')">' +
+      '<strong>' + cl.name + '</strong>' + (cl.company ? ' — ' + cl.company : '') +
+    '</div>';
+  }).join('');
+  dd.classList.add('open');
+}
+function hideClientDd() {
+  var dd = document.getElementById('client-dd');
+  if (dd) dd.classList.remove('open');
+}
+
+// ═══════════════ INVOICE HISTORY ═══════════════
+
+var _invoices = [];
+var _invFilter = 'all';
+
+async function loadInvoiceHistory() {
+  if (!_currentUser) return;
+  var res = await _supabase.from('invoices').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: false });
+  if (res.data) { _invoices = res.data; renderInvHistory(); }
+}
+
+async function saveInvoiceToHistory() {
+  if (!_currentUser) { showToast('Sign in to save invoices'); return; }
+  var g = function(id){ var el=document.getElementById(id); return el?el.value||'':''; };
+  var sub = lineItems.reduce(function(s,li){ return s+li.qty*li.rate; }, 0);
+  var disc = parseFloat(g('i-disc'))||0;
+  var tax  = parseFloat(g('i-tax'))||0;
+  var da   = sub*disc/100;
+  var ta   = (sub-da)*tax/100;
+  var total = sub-da+ta;
+  var payload = {
+    user_id: _currentUser.id,
+    invoice_number: g('i-num'), client_name: g('i-client'), client_email: g('i-email'),
+    project: g('i-project'), line_items: lineItems,
+    subtotal: sub, tax_pct: tax, discount_pct: disc, total: total,
+    payment_method: getInvPay(), notes: g('i-notes'),
+    issue_date: g('i-issued'), due_date: g('i-due'), terms: invTerms,
+    status: 'draft', updated_at: new Date().toISOString()
+  };
+  var res = await _supabase.from('invoices').insert(payload).select().single();
+  if (res.error) { showToast('Error saving: ' + res.error.message); return; }
+  _invoices.unshift(res.data);
+  renderInvHistory();
+  showToast('\u2713 Invoice saved to history');
+}
+
+async function updateInvStatus(id, status) {
+  await _supabase.from('invoices').update({ status: status, updated_at: new Date().toISOString() })
+    .eq('id', id).eq('user_id', _currentUser.id);
+  var inv = _invoices.find(function(i){ return i.id === id; });
+  if (inv) inv.status = status;
+  renderInvHistory();
+}
+
+async function deleteInvoice(id) {
+  if (!confirm('Delete this invoice?')) return;
+  await _supabase.from('invoices').delete().eq('id', id).eq('user_id', _currentUser.id);
+  _invoices = _invoices.filter(function(i){ return i.id !== id; });
+  renderInvHistory();
+}
+
+function filterInvHistory(filter, btn) {
+  _invFilter = filter;
+  document.querySelectorAll('.isf-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  renderInvHistory();
+}
+
+function renderInvHistory() {
+  var body = document.getElementById('inv-history-body');
+  if (!body) return;
+  var list = _invFilter === 'all' ? _invoices : _invoices.filter(function(i){ return i.status === _invFilter; });
+  if (!list.length) {
+    body.innerHTML = '<div class="inv-hist-empty">' + (_invFilter === 'all' ? 'No invoices saved yet.' : 'No ' + _invFilter + ' invoices.') + '</div>';
+    return;
+  }
+  var fmtDate = function(d){ return d ? new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}) : '—'; };
+  var fmtAmt  = function(n){ return '$'+(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); };
+  body.innerHTML = list.map(function(inv) {
+    var statusOpts = ['draft','sent','paid','overdue'].map(function(s){
+      return '<option value="' + s + '"' + (inv.status===s?' selected':'') + '>' + s.charAt(0).toUpperCase()+s.slice(1) + '</option>';
+    }).join('');
+    return '<div class="iht-row">' +
+      '<div class="iht-cell num">' + (inv.invoice_number||'—') + '</div>' +
+      '<div class="iht-cell">' + (inv.client_name||'—') + '</div>' +
+      '<div class="iht-cell" style="font-size:12px;color:var(--ink-light)">' + (inv.project||'—') + '</div>' +
+      '<div class="iht-cell amount">' + fmtAmt(inv.total) + '</div>' +
+      '<div class="iht-cell" style="font-size:12px">' + fmtDate(inv.due_date) + '</div>' +
+      '<div class="iht-cell">' +
+        '<select class="inv-badge ' + inv.status + '" onchange="updateInvStatus('' + inv.id + '',this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
+        statusOpts + '</select>' +
+      '</div>' +
+      '<div class="iht-actions"><button class="iht-btn" onclick="generateInvoiceDocxFromHistory('' + inv.id + '')">&#128196;</button>' +
+      '<button class="iht-btn" style="color:var(--red)" onclick="deleteInvoice('' + inv.id + '')">&#10005;</button></div>' +
+    '</div>';
+  }).join('');
+}
+
+// Generate docx from saved invoice record
+async function generateInvoiceDocxFromHistory(id) {
+  var inv = _invoices.find(function(i){ return i.id === id; });
+  if (!inv) return;
+  // Temp set line items and form values, generate, then restore
+  var origItems = lineItems.slice();
+  lineItems = inv.line_items || [];
+  var set = function(eid, val){ var el=document.getElementById(eid); if(el) el.value=val||''; };
+  set('i-yourname', inv.freelancer_name || ''); set('i-num', inv.invoice_number);
+  set('i-client', inv.client_name); set('i-email', inv.client_email);
+  set('i-project', inv.project); set('i-notes', inv.notes);
+  set('i-issued', inv.issue_date); set('i-due', inv.due_date);
+  set('i-tax', inv.tax_pct); set('i-disc', inv.discount_pct);
+  invTerms = inv.terms || 7;
+  await generateInvoiceDocx();
+  lineItems = origItems;
+}
+
+// ═══════════════ RATE SCENARIOS ═══════════════
+
+var _scenarios = [];
+var _annualGoal = 100000;
+
+async function loadRateScenarios() {
+  if (!_currentUser) return;
+  var res = await _supabase.from('rate_scenarios').select('*').eq('user_id', _currentUser.id).order('created_at');
+  if (res.data) { _scenarios = res.data; renderScenarios(); }
+}
+
+async function saveScenario() {
+  if (!_currentUser) { showToast('Sign in to save scenarios'); return; }
+  var name = document.getElementById('scenario-name').value.trim();
+  if (!name) { showToast('Give this scenario a name first'); return; }
+  var g = function(id){ var el=document.getElementById(id); return el?parseFloat(el.value)||0:0; };
+  var payload = {
+    user_id: _currentUser.id, name: name,
+    take_home: g('rc-takehome'), tax_rate: g('rc-tax'),
+    expenses: g('rc-expenses'), weeks_off: g('rc-woff'),
+    billable_hrs: g('rc-hrs'), buffer_pct: g('rc-buf'),
+    currency: document.getElementById('rc-currency').value||'$',
+    result_hourly: parseFloat((document.getElementById('rc-hourly')||{}).textContent)||0
+  };
+  var res = await _supabase.from('rate_scenarios').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _scenarios.push(res.data);
+  document.getElementById('scenario-name').value = '';
+  renderScenarios();
+  showToast('\u2713 Scenario saved');
+}
+
+function loadScenario(sc) {
+  var set = function(id, val){ var el=document.getElementById(id); if(el){ el.value=val; el.dispatchEvent(new Event('input')); } };
+  set('rc-takehome', sc.take_home); set('rc-tax', sc.tax_rate);
+  set('rc-expenses', sc.expenses); set('rc-currency', sc.currency||'$');
+  var woffEl = document.getElementById('rc-woff');
+  if (woffEl) { woffEl.value=sc.weeks_off; document.getElementById('rc-woff-lbl').textContent=sc.weeks_off; }
+  var hrsEl = document.getElementById('rc-hrs');
+  if (hrsEl) { hrsEl.value=sc.billable_hrs; document.getElementById('rc-hrs-lbl').textContent=sc.billable_hrs; }
+  var bufEl = document.getElementById('rc-buf');
+  if (bufEl) { bufEl.value=sc.buffer_pct; document.getElementById('rc-buf-lbl').textContent=sc.buffer_pct; }
+  if (typeof calcRate==='function') calcRate();
+  showToast('Loaded: ' + sc.name);
+}
+
+async function deleteScenario(id) {
+  await _supabase.from('rate_scenarios').delete().eq('id', id).eq('user_id', _currentUser.id);
+  _scenarios = _scenarios.filter(function(s){ return s.id !== id; });
+  renderScenarios();
+}
+
+function renderScenarios() {
+  var wrap = document.getElementById('scenarios-wrap');
+  var grid = document.getElementById('scenarios-grid');
+  if (!wrap || !grid) return;
+  wrap.style.display = _scenarios.length ? '' : 'none';
+  grid.innerHTML = _scenarios.map(function(sc) {
+    var sym = sc.currency || '$';
+    return '<div class="scenario-card" onclick="loadScenario(' + JSON.stringify(sc).replace(/"/g,'&quot;') + ')">' +
+      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario('' + sc.id + '')">&#10005;</button>' +
+      '<div class="sc-name">' + sc.name + '</div>' +
+      '<div class="sc-rate">' + sym + Math.round(sc.result_hourly||0) + '/hr</div>' +
+      '<div class="sc-meta">Take-home: ' + sym + Math.round(sc.take_home||0).toLocaleString() + '/yr<br>' +
+        (sc.billable_hrs||0) + ' billable hrs/wk · ' + (sc.weeks_off||0) + ' wks off</div>' +
+    '</div>';
+  }).join('');
+}
+
+// Income goal bar
+function updateGoalBar() {
+  var goal   = parseFloat((document.getElementById('goal-target')||{}).value)||0;
+  var earned = parseFloat((document.getElementById('goal-earned')||{}).value)||0;
+  var pct    = goal > 0 ? Math.min(100, Math.round(earned/goal*100)) : 0;
+  var fill   = document.getElementById('goal-fill');
+  var nums   = document.getElementById('goal-nums');
+  var ytd    = document.getElementById('goal-ytd');
+  var tLbl   = document.getElementById('goal-target-lbl');
+  var fmt    = function(n){ return '$'+Math.round(n).toLocaleString(); };
+  if (fill) fill.style.width = pct + '%';
+  if (fill) fill.style.background = pct >= 100 ? 'var(--sage)' : 'var(--amber)';
+  if (nums) nums.textContent = fmt(earned) + ' / ' + fmt(goal) + ' (' + pct + '%)';
+  if (ytd) ytd.textContent = fmt(earned) + ' earned this year';
+  if (tLbl) tLbl.textContent = 'Goal: ' + fmt(goal);
+}
+
+// ═══════════════ PIPELINE — SUPABASE PERSISTENCE ═══════════════
+
+async function loadPipelineCards() {
+  if (!_currentUser) return;
+  var res = await _supabase.from('pipeline_cards').select('*').eq('user_id', _currentUser.id).order('created_at');
+  if (res.data && res.data.length) {
+    pfClients = res.data.map(function(r) {
+      return { id: r.id, client: r.client_name, project: r.project||'', value: r.value||0, stage: r.stage||0, temp: r.temp||'warm', date: r.close_date||'' };
+    });
+    if (typeof renderPipeline==='function') renderPipeline();
+  }
+}
+
+async function savePipelineCard(card) {
+  if (!_currentUser) return;
+  var payload = {
+    user_id: _currentUser.id, client_name: card.client, project: card.project,
+    value: card.value, stage: card.stage, temp: card.temp, close_date: card.date
+  };
+  if (typeof card.id === 'string' && card.id.includes('-')) {
+    // UUID — already saved, update stage only
+    await _supabase.from('pipeline_cards').update({ stage: card.stage }).eq('id', card.id).eq('user_id', _currentUser.id);
+  } else {
+    var res = await _supabase.from('pipeline_cards').insert(payload).select().single();
+    if (res.data) card.id = res.data.id;
+  }
+}
+
+async function deletePipelineCard(id) {
+  if (!_currentUser || !(typeof id==='string' && id.includes('-'))) return;
+  await _supabase.from('pipeline_cards').delete().eq('id', id).eq('user_id', _currentUser.id);
+}
+
+// ═══════════════ TAX TRACKER — SUPABASE PERSISTENCE ═══════════════
+
+async function loadTaxEntries() {
+  if (!_currentUser) return;
+  var year = new Date().getFullYear();
+  var res = await _supabase.from('tax_entries').select('*').eq('user_id', _currentUser.id).eq('year', year);
+  if (!res.data || !res.data.length) return;
+  // Reset txData and repopulate
+  txData = { 1:{income:[],expenses:[]}, 2:{income:[],expenses:[]}, 3:{income:[],expenses:[]}, 4:{income:[],expenses:[]} };
+  res.data.forEach(function(row) {
+    var q = row.quarter;
+    if (!txData[q]) return;
+    var entry = { id: row.id, desc: row.description, amt: row.amount||0 };
+    if (row.type === 'income') txData[q].income.push(entry);
+    else { entry.cat = row.category||'Other'; txData[q].expenses.push(entry); }
+  });
+  if (typeof renderTaxQ==='function') renderTaxQ(txQ||2);
+}
+
+async function saveTaxEntry(type, q, entry) {
+  if (!_currentUser) return;
+  var year = new Date().getFullYear();
+  if (entry.id && typeof entry.id === 'string' && entry.id.includes('-')) {
+    await _supabase.from('tax_entries').update({ description: entry.desc, amount: entry.amt, category: entry.cat||null })
+      .eq('id', entry.id).eq('user_id', _currentUser.id);
+  } else {
+    var payload = { user_id: _currentUser.id, year: year, quarter: q, type: type, description: entry.desc, amount: entry.amt, category: entry.cat||null };
+    var res = await _supabase.from('tax_entries').insert(payload).select().single();
+    if (res.data) entry.id = res.data.id;
+  }
+}
+
+async function deleteTaxEntry(id) {
+  if (!_currentUser || !(typeof id==='string'&&id.includes('-'))) return;
+  await _supabase.from('tax_entries').delete().eq('id', id).eq('user_id', _currentUser.id);
+}
+
 
 function showAuthError(formId, msg) {
   var el = document.getElementById(formId);
@@ -3179,6 +3863,35 @@ function toggleSidebar() {
 
 // INIT
 calcRate();
+updateGoalBar();
 </script>
+
+<!-- Client directory modal -->
+<div class="modal-overlay" id="client-modal" onclick="if(event.target===this)closeClientModal()">
+  <div class="modal-box">
+    <div class="modal-hd"><span class="modal-title">Add client</span><button class="modal-close" onclick="closeClientModal()">&#10005;</button></div>
+    <div class="modal-bd">
+      <div class="m-lbl">Name</div><input class="m-inp" id="cm-name" placeholder="Client's full name">
+      <div class="m-lbl">Company</div><input class="m-inp" id="cm-company" placeholder="Company or business name">
+      <div class="m-lbl">Email</div><input class="m-inp" id="cm-email" type="email" placeholder="client@company.com">
+      <div class="m-lbl">Contact person</div><input class="m-inp" id="cm-contact" placeholder="e.g. Jamie Reyes">
+      <div class="m-row2">
+        <div><div class="m-lbl">Payment terms</div>
+          <select class="m-sel" id="cm-terms">
+            <option value="7">Net 7</option>
+            <option value="14" selected>Net 14</option>
+            <option value="30">Net 30</option>
+          </select>
+        </div>
+        <div><div class="m-lbl">Notes</div><input class="m-inp" id="cm-notes" placeholder="Optional notes" style="margin-bottom:0"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-outline" onclick="closeClientModal()">Cancel</button>
+      <button class="btn-use" onclick="addClient()">Add client</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
