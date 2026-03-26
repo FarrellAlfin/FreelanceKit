@@ -280,7 +280,8 @@ footer p{font-size:12px;color:var(--ink-light)}
 .dash-layout.sb-collapsed{grid-template-columns:52px 1fr}
 
 /* Sidebar */
-.dash-sidebar{background:var(--white);border-right:1px solid var(--border);padding:20px 0 60px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;overflow-x:hidden;transition:width .22s ease}
+.dash-sidebar{background:var(--white);border-right:1px solid var(--border);padding:0;position:sticky;top:62px;height:calc(100vh - 62px);overflow:hidden;transition:width .22s ease;display:flex;flex-direction:column}
+.dsb-scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 0 8px}
 .dsb-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-light);padding:0 18px;margin:20px 0 8px;white-space:nowrap;overflow:hidden;transition:all .2s}
 .dsb-section:first-child{margin-top:8px}
 .dsb-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13px;color:var(--ink-mid);cursor:pointer;border-left:3px solid transparent;transition:all .15s;white-space:nowrap}
@@ -292,7 +293,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .dsb-item.active .dsb-count{background:rgba(200,98,26,0.15);color:var(--amber)}
 
 /* Sidebar toggle button */
-.sb-toggle{position:absolute;bottom:16px;left:0;right:0;margin:0 auto;width:28px;height:28px;border-radius:50%;background:var(--cream-dark);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-mid);z-index:10;box-shadow:var(--shadow);transition:all .2s;flex-shrink:0}
+.sb-toggle{flex-shrink:0;margin:0 auto 12px;width:28px;height:28px;border-radius:50%;background:var(--cream-dark);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-mid);z-index:10;box-shadow:var(--shadow);transition:all .2s}
 .sb-toggle:hover{background:var(--amber-light);border-color:var(--amber-mid);color:var(--amber)}
 .sb-toggle-arrow{display:inline-block;transition:transform .22s ease}
 
@@ -552,7 +553,8 @@ footer p{font-size:12px;color:var(--ink-light)}
 .hs-sub{font-size:11px;margin-top:3px}
 .hs-sub.g{color:var(--sage)}.hs-sub.w{color:var(--amber)}.hs-sub.r{color:var(--red)}
 .kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
-.kc{background:var(--cream-dark);border-radius:var(--radius);overflow:hidden}
+.kc{background:var(--cream-dark);border-radius:var(--radius);overflow:hidden;transition:box-shadow .15s,background .15s}
+.kc.drag-over{background:var(--amber-light);box-shadow:0 0 0 2px var(--amber-mid)}
 .kc-stripe{height:3px}
 .kc-header{padding:10px 12px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .kc-title{font-size:11px;font-weight:600;color:var(--ink)}
@@ -923,6 +925,8 @@ footer p{font-size:12px;color:var(--ink-light)}
 .pt-row-date{font-size:11px;color:var(--ink-light);flex-shrink:0}
 .pt-row-del{background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:14px;padding:0 2px;flex-shrink:0}
 .pt-row-del:hover{color:#E8594A}
+.pt-row-edit{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--ink-mid);font-size:11px;padding:2px 7px;flex-shrink:0}
+.pt-row-edit:hover{border-color:var(--amber);color:var(--amber)}
 /* Billing phases */
 .pt-bill-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-bill-name{font-size:13px;color:var(--ink)}
@@ -1603,6 +1607,7 @@ var RateLimiter = (function() {
   <div class="dash-layout">
     <!-- Sidebar -->
     <aside class="dash-sidebar" id="dash-sidebar">
+      <div class="dsb-scroll-area">
       <div class="dsb-section">Library</div>
       <div class="dsb-item active" onclick="showPanel('home',this)" id="nav-home">
         <span class="dsb-icon">&#127968;</span><span class="dsb-label">Home</span>
@@ -1667,6 +1672,7 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#128682;</span><span class="dsb-label">Sign out</span>
       </div>
 
+      </div><!-- end dsb-scroll-area -->
       <button class="sb-toggle" onclick="toggleSidebar()" title="Collapse sidebar">
         <span class="sb-toggle-arrow" id="sb-arrow">&#9664;</span>
       </button>
@@ -1830,10 +1836,13 @@ var RateLimiter = (function() {
               <!-- Logo upload -->
               <div class="ip-field">
                 <div class="ip-lbl">Brand logo <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional · shows top-left)</span></div>
-                <label class="logo-upload-btn" for="i-logo-input">
-                  <span id="logo-upload-label">📎 Upload logo</span>
-                  <input type="file" id="i-logo-input" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
-                </label>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <label class="logo-upload-btn" for="i-logo-input">
+                    <span id="logo-upload-label">📎 Upload logo</span>
+                    <input type="file" id="i-logo-input" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+                  </label>
+                  <button id="logo-delete-btn" onclick="deleteLogo()" style="display:none;padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--ink-mid);font-size:12px;cursor:pointer;" title="Remove logo">✕ Remove</button>
+                </div>
               </div>
               <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="Alex Chen Design" oninput="updateInv()"></div>
               <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="alex@alexchendesign.com" oninput="updateInv()"></div>
@@ -1926,7 +1935,7 @@ var RateLimiter = (function() {
               <div id="i-pay-custom" class="pay-detail-block" style="display:none">
                 <div class="ip-field"><input class="ip-inp" id="i-pay-custom-text" placeholder="Enter payment details…" oninput="updateInv()"></div>
               </div>
-              <div class="ip-field"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
+              <div class="ip-field" style="margin-top:14px"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
               <div class="totals-block">
                 <div class="tot-row"><span class="tot-lbl">Subtotal</span><span class="tot-val" id="tot-sub">$0.00</span></div>
                 <div class="tot-row"><span class="tot-lbl">Discount</span><span class="tot-val" id="tot-disc">−$0.00</span></div>
@@ -2107,7 +2116,6 @@ var RateLimiter = (function() {
           </div>
           <!-- Milestones tab -->
           <div class="pt-tab-content" id="pt-tab-milestones" style="display:none">
-            <div id="pt-gantt" style="margin-bottom:16px"></div>
             <div class="pt-sec-hdr">Milestones <button class="pt-add-btn" onclick="openPtModal('add-milestone')">+ Add</button></div>
             <div id="pt-milestones-list"></div>
           </div>
@@ -2587,8 +2595,21 @@ function handleLogoUpload(input) {
     window._invLogoUrl = e.target.result;
     var img = document.getElementById('p-logo');
     if (img) { img.src = e.target.result; img.style.display = ''; }
+    var delBtn = document.getElementById('logo-delete-btn');
+    if (delBtn) delBtn.style.display = '';
   };
   reader.readAsDataURL(file);
+}
+function deleteLogo() {
+  window._invLogoUrl = null;
+  var img = document.getElementById('p-logo');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  var label = document.getElementById('logo-upload-label');
+  if (label) label.textContent = '📎 Upload logo';
+  var input = document.getElementById('i-logo-input');
+  if (input) input.value = '';
+  var delBtn = document.getElementById('logo-delete-btn');
+  if (delBtn) delBtn.style.display = 'none';
 }
 
 // Payment method switcher — shows the matching detail block
@@ -3202,11 +3223,11 @@ function renderPipeline(){
   const board=document.getElementById('pf-kanban');if(!board)return;
   board.innerHTML=pfStages.map((s,si)=>{
     const cards=pfClients.filter(c=>c.stage===si);
-    return `<div class="kc" data-stage="${si}" ondragover="event.preventDefault()" ondrop="pfDrop(event,${si})">
+    return `<div class="kc" data-stage="${si}" ondragover="event.preventDefault();pfDragOver(event,this)" ondragleave="pfDragLeave(event,this)" ondrop="pfDrop(event,${si},this)">
       <div class="kc-stripe" style="background:${s.stripe}"></div>
       <div class="kc-header"><span class="kc-title">${s.label}</span><span class="kc-cnt">${cards.length}</span></div>
       <div class="kc-body">
-        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragId=${c.id};event.currentTarget.style.opacity='.4'" ondragend="event.currentTarget.style.opacity='1'">
+        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragStart(event,${c.id})" ondragend="pfDragEnd(event)">
           <span class="kk-temp temp-${c.temp}">${c.temp==='hot'?'🔥 Hot':c.temp==='warm'?'Warm':'❄️ Cold'}</span>
           <div class="kk-client">${c.client}</div>
           <div class="kk-project">${c.project}</div>
@@ -3230,7 +3251,11 @@ function renderPipeline(){
     <div class="hs-card"><div class="hs-lbl">Weighted pipeline</div><div class="hs-val">${fm(totalW)}</div><div class="hs-sub g">All stages</div></div>
     <div class="hs-card"><div class="hs-lbl">Hot leads</div><div class="hs-val">${hot}</div><div class="hs-sub ${hot>=1?'w':'r'}">${hot>=1?'Follow up now':'Need more'}</div></div>`;
 }
-function pfDrop(e,stage){e.preventDefault();const c=pfClients.find(x=>x.id===pfDragId);if(c){c.stage=stage;savePipelineCard(c);}pfDragId=null;renderPipeline();}
+function pfDragStart(e,id){pfDragId=id;e.currentTarget.style.opacity='.4';e.currentTarget.style.transform='scale(1.02)';e.dataTransfer.effectAllowed='move';}
+function pfDragEnd(e){e.currentTarget.style.opacity='1';e.currentTarget.style.transform='';}
+function pfDragOver(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';col.classList.add('drag-over');}
+function pfDragLeave(e,col){if(!col.contains(e.relatedTarget))col.classList.remove('drag-over');}
+function pfDrop(e,stage,col){e.preventDefault();if(col)col.classList.remove('drag-over');const c=pfClients.find(x=>x.id===pfDragId);if(c){c.stage=stage;savePipelineCard(c);}pfDragId=null;renderPipeline();}
 function openPipelineModal(stage=2){document.getElementById('pm-stage').value=stage;document.getElementById('pipe-modal').classList.add('open')}
 function closePipeModal(e){if(e.target.id==='pipe-modal')closePipeModalBtn()}
 function closePipeModalBtn(){document.getElementById('pipe-modal').classList.remove('open')}
@@ -4095,6 +4120,12 @@ function _clearUserState() {
   var logoImg = document.getElementById('p-logo');
   if (logoImg) { logoImg.src = ''; logoImg.style.display = 'none'; }
   window._invLogoUrl = null;
+  var logoLabel = document.getElementById('logo-upload-label');
+  if (logoLabel) logoLabel.textContent = '📎 Upload logo';
+  var logoDelBtn = document.getElementById('logo-delete-btn');
+  if (logoDelBtn) logoDelBtn.style.display = 'none';
+  var logoInput = document.getElementById('i-logo-input');
+  if (logoInput) logoInput.value = '';
 
   // Clear client list UI
   var cb = document.getElementById('client-list-body');
@@ -4297,32 +4328,88 @@ function renderPtMilestones() {
   var ms = window._ptMilestones || [];
   var el = document.getElementById('pt-milestones-list');
   if (!el) return;
-  // Gantt
+  if (!ms.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No milestones yet. Click "+ Add" to create one.</div>'; return; }
+
   var proj = _ptProjects.find(function(p){ return p.id === _ptCurrentId; });
-  var ganttEl = document.getElementById('pt-gantt');
-  if (ganttEl && proj && proj.start_date && proj.end_date) {
-    var start = new Date(proj.start_date), end = new Date(proj.end_date);
-    var range = end - start || 1;
-    ganttEl.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-light);margin-bottom:8px">Timeline</div>' +
-      ms.map(function(m) {
-        var mDate = m.due_date ? new Date(m.due_date) : end;
-        var pct = Math.min(100, Math.max(0, ((mDate - start) / range) * 100));
-        return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
-          '<div style="width:130px;font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escapeHTML(m.title) + '">' + escapeHTML(m.title) + '</div>' +
-          '<div style="flex:1;height:14px;background:var(--cream-dark);border-radius:4px;position:relative;min-width:150px">' +
-          '<div style="position:absolute;left:0;top:0;height:100%;width:' + pct + '%;background:' + (m.completed ? 'var(--sage)' : 'var(--amber)') + ';border-radius:4px;min-width:' + (pct > 0 ? '4px' : '0') + '"></div>' +
-          '</div><div style="font-size:11px;color:var(--ink-light);flex-shrink:0">' + (m.due_date ? m.due_date.slice(0,10) : '—') + '</div></div>';
-      }).join('');
-  } else if (ganttEl) { ganttEl.innerHTML = ''; }
-  if (!ms.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No milestones yet.</div>'; return; }
-  el.innerHTML = ms.map(function(m, i) {
-    return '<div class="pt-row">' +
-      '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')">&#10003;</div>' +
-      '<span class="pt-row-name' + (m.completed ? ' done' : '') + '">' + escapeHTML(m.title) + '</span>' +
-      (m.due_date ? '<span class="pt-row-date">' + m.due_date.slice(0,10) + '</span>' : '') +
-      '<button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
-      '</div>';
+  // Determine overall date range from project or milestones
+  var allDates = ms.map(function(m){ return m.due_date || m.start_date; }).filter(Boolean);
+  if (proj && proj.start_date) allDates.push(proj.start_date);
+  if (proj && proj.end_date) allDates.push(proj.end_date);
+  allDates = allDates.map(function(d){ return d.slice(0,10); }).sort();
+  if (!allDates.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">Add dates to milestones to view the Gantt chart.</div>'; return; }
+
+  var rangeStart = new Date(allDates[0] + 'T00:00:00');
+  var rangeEnd   = new Date(allDates[allDates.length - 1] + 'T00:00:00');
+  // Expand to full months
+  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
+  rangeEnd   = new Date(rangeEnd.getFullYear(),   rangeEnd.getMonth() + 1, 0);
+
+  // Build month columns
+  var months = [];
+  var cur = new Date(rangeStart);
+  while (cur <= rangeEnd) {
+    months.push(new Date(cur));
+    cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1);
+  }
+  var totalDays = (rangeEnd - rangeStart) / 86400000 + 1;
+
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var nameColW = '160px';
+
+  // Build header
+  var headerCells = months.map(function(m) {
+    var mStart = new Date(m.getFullYear(), m.getMonth(), 1);
+    var mEnd   = new Date(m.getFullYear(), m.getMonth() + 1, 0);
+    var mDays  = (Math.min(mEnd, rangeEnd) - Math.max(mStart, rangeStart)) / 86400000 + 1;
+    var pct = (mDays / totalDays * 100).toFixed(2);
+    return '<th style="width:' + pct + '%;font-size:11px;font-weight:600;color:var(--ink-light);padding:6px 4px;text-align:center;border-left:1px solid var(--border)">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
+
+  // Build rows
+  var rows = ms.map(function(m, i) {
+    var msStart = m.start_date ? new Date(m.start_date + 'T00:00:00') : (m.due_date ? new Date(m.due_date + 'T00:00:00') : null);
+    var msEnd   = m.due_date   ? new Date(m.due_date   + 'T00:00:00') : msStart;
+    if (!msStart) {
+      return '<tr>' +
+        '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+        '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
+        '<span style="' + (m.completed ? 'text-decoration:line-through;color:var(--ink-light)' : '') + '">' + escapeHTML(m.title) + '</span>' +
+        '</div></td>' +
+        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set · <button class="pt-row-edit" onclick="openPtEditMilestone(' + i + ')">Edit</button> <button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button></td>' +
+        '</tr>';
+    }
+    if (msStart > msEnd) msEnd = msStart;
+    var barStartOffset = Math.max(0, (msStart - rangeStart) / 86400000);
+    var barDays = (msEnd - msStart) / 86400000 + 1;
+    var leftPct = (barStartOffset / totalDays * 100).toFixed(2);
+    var widthPct = Math.min(100 - parseFloat(leftPct), (barDays / totalDays * 100)).toFixed(2);
+    var barColor = m.completed ? 'var(--sage)' : 'var(--amber)';
+    var barLabel = m.due_date ? m.due_date.slice(5,10) : '';
+    return '<tr>' +
+      '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+      '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
+      '<span style="' + (m.completed ? 'text-decoration:line-through;color:var(--ink-light)' : '') + '">' + escapeHTML(m.title) + '</span>' +
+      '</div></td>' +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 6px;position:relative">' +
+      '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="openPtEditMilestone(' + i + ')">' +
+      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
+      '<span style="font-size:11px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
+      '</div></div>' +
+      '<button class="pt-row-del" style="position:absolute;right:4px;top:50%;transform:translateY(-50%)" onclick="event.stopPropagation();deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
+      '</td>' +
+      '</tr>';
+  }).join('');
+
+  el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+    '<colgroup><col style="width:' + nameColW + '"></colgroup>' +
+    '<thead><tr>' +
+    '<th style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light)">Milestone</th>' +
+    headerCells +
+    '</tr></thead>' +
+    '<tbody>' + rows + '</tbody>' +
+    '</table></div>';
 }
 
 function renderPtTasks() {
@@ -4330,12 +4417,11 @@ function renderPtTasks() {
   var el = document.getElementById('pt-tasks-list');
   if (!el) return;
   if (!ts.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No tasks yet.</div>'; return; }
-  var statusDot = {todo:'#D1D5DB',in_progress:'var(--amber)',done:'var(--sage)'};
   el.innerHTML = ts.map(function(t, i) {
-    var dot = statusDot[t.status] || '#D1D5DB';
+    var done = t.status === 'done';
     return '<div class="pt-row">' +
-      '<div style="width:14px;height:14px;border-radius:50%;background:' + dot + ';flex-shrink:0"></div>' +
-      '<span class="pt-row-name' + (t.status === 'done' ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
+      '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + i + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
+      '<span class="pt-row-name' + (done ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
       (t.assignee ? '<span class="pt-row-badge">' + escapeHTML(t.assignee) + '</span>' : '') +
       (t.due_date ? '<span class="pt-row-date">' + t.due_date.slice(0,10) + '</span>' : '') +
       '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + i + ')">&#215;</button>' +
@@ -4350,7 +4436,7 @@ function renderPtBilling() {
   if (!el) return;
   var total = bs.reduce(function(s, b){ return s + (parseFloat(b.amount) || 0); }, 0);
   var paid = bs.filter(function(b){ return b.status === 'paid'; }).reduce(function(s, b){ return s + (parseFloat(b.amount) || 0); }, 0);
-  if (totEl) totEl.innerHTML = 'Total: <strong>$' + total.toLocaleString() + '</strong> &nbsp;·&nbsp; Paid: <strong style="color:var(--sage)">$' + paid.toLocaleString() + '</strong> &nbsp;·&nbsp; Outstanding: <strong style="color:var(--amber)">$' + (total - paid).toLocaleString() + '</strong>';
+  if (totEl) totEl.innerHTML = 'Total: <strong>$' + total.toLocaleString() + '</strong> &nbsp;·&nbsp; Outstanding: <strong style="color:var(--amber)">$' + (total - paid).toLocaleString() + '</strong>';
   if (!bs.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No billing phases yet.</div>'; return; }
   var statusClass = {pending:'pt-bs-pending',invoiced:'pt-bs-invoiced',paid:'pt-bs-paid'};
   el.innerHTML = bs.map(function(b, i) {
@@ -4358,6 +4444,7 @@ function renderPtBilling() {
       '<span class="pt-bill-name">' + escapeHTML(b.phase_name) + (b.billing_type === 'per_phase' ? ' <span style="font-size:10px;color:var(--ink-light)">(per phase)</span>' : '') + '</span>' +
       '<span class="pt-bill-amt">$' + (parseFloat(b.amount) || 0).toLocaleString() + '</span>' +
       '<span class="pt-bill-status ' + (statusClass[b.status] || 'pt-bs-pending') + '" onclick="cyclePtBillingStatus(' + i + ')">' + (b.status || 'pending') + '</span>' +
+      '<button class="pt-row-edit" onclick="openPtEditBilling(' + i + ')">Edit</button>' +
       '<button class="pt-row-del" onclick="deletePtItem(\'billing\',' + i + ')">&#215;</button>' +
       '</div>';
   }).join('');
@@ -4370,7 +4457,10 @@ function renderPtMeetings() {
   if (!me.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No meeting notes yet.</div>'; return; }
   el.innerHTML = me.map(function(m, i) {
     return '<div class="pt-note-item">' +
+      '<div style="display:flex;gap:6px;float:right;margin-left:8px">' +
+      '<button class="pt-row-edit" onclick="openPtEditMeeting(' + i + ')">Edit</button>' +
       '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">&#215; Delete</button>' +
+      '</div>' +
       '<div class="pt-note-date">' + (m.meeting_date ? m.meeting_date.slice(0,10) : '—') + (m.attendees ? ' · ' + escapeHTML(m.attendees) : '') + '</div>' +
       '<div class="pt-note-text">' + escapeHTML(m.notes || '') + '</div>' +
       (m.action_items ? '<div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--ink-mid)">Action items:</div><div class="pt-note-text" style="font-size:12px">' + escapeHTML(m.action_items) + '</div>' : '') +
@@ -4422,7 +4512,10 @@ function openPtModal(mode) {
   } else if (mode === 'add-milestone') {
     html = '<div class="pt-modal-title">Add milestone</div>' +
       '<div class="pt-field"><label>Milestone name *</label><input class="pt-inp" id="ptm-ms-title" placeholder="e.g. First draft delivered"></div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Start date</label><input class="pt-inp" type="date" id="ptm-ms-start"></div>' +
       '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-ms-date"></div>' +
+      '</div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMilestone()">Add milestone</button></div>';
   } else if (mode === 'add-task') {
     html = '<div class="pt-modal-title">Add task</div>' +
@@ -4514,7 +4607,9 @@ async function savePtMilestone() {
   if (!_currentUser || !_ptCurrentId) return;
   var title = document.getElementById('ptm-ms-title')&&document.getElementById('ptm-ms-title').value.trim();
   if (!title) { showToast('Milestone name required'); return; }
+  var startEl = document.getElementById('ptm-ms-start');
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, title: title,
+    start_date: startEl && startEl.value || null,
     due_date: document.getElementById('ptm-ms-date')&&document.getElementById('ptm-ms-date').value || null, completed: false };
   var res = await _supabase.from('project_milestones').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
@@ -4580,12 +4675,124 @@ async function savePtTime() {
 
 // ─── ACTIONS ───
 
+function openPtEditMilestone(i) {
+  var ms = window._ptMilestones; if (!ms || !ms[i]) return;
+  _ptEditIdx = i;
+  var m = ms[i];
+  _ptModalMode = 'edit-milestone';
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  body.innerHTML = '<div class="pt-modal-title">Edit milestone</div>' +
+    '<div class="pt-field"><label>Milestone name *</label><input class="pt-inp" id="ptm-ms-title" value="' + escapeHTML(m.title || '') + '"></div>' +
+    '<div class="pt-grid2">' +
+    '<div class="pt-field"><label>Start date</label><input class="pt-inp" type="date" id="ptm-ms-start" value="' + (m.start_date ? m.start_date.slice(0,10) : '') + '"></div>' +
+    '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-ms-date" value="' + (m.due_date ? m.due_date.slice(0,10) : '') + '"></div>' +
+    '</div>' +
+    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtMilestone()">Save changes</button></div>';
+  overlay.classList.add('open');
+}
+
+async function updatePtMilestone() {
+  if (!_currentUser) return;
+  var ms = window._ptMilestones; if (!ms || _ptEditIdx === null || !ms[_ptEditIdx]) return;
+  var titleEl = document.getElementById('ptm-ms-title');
+  var title = titleEl ? titleEl.value.trim() : '';
+  if (!title) { showToast('Milestone name required'); return; }
+  var startEl = document.getElementById('ptm-ms-start');
+  var dueEl = document.getElementById('ptm-ms-date');
+  var payload = { title: title, start_date: startEl && startEl.value || null, due_date: dueEl && dueEl.value || null };
+  var res = await _supabase.from('project_milestones').update(payload).eq('id', ms[_ptEditIdx].id).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  ms[_ptEditIdx] = Object.assign(ms[_ptEditIdx], res.data);
+  ms.sort(function(a,b){ return (a.due_date||'') < (b.due_date||'') ? -1 : 1; });
+  _ptEditIdx = null;
+  closePtModal(); renderPtMilestones(); showToast('\u2713 Milestone updated');
+}
+
 async function togglePtMilestone(i) {
   if (!_currentUser) return;
   var ms = window._ptMilestones; if (!ms || !ms[i]) return;
   ms[i].completed = !ms[i].completed;
   await _supabase.from('project_milestones').update({completed: ms[i].completed}).eq('id', ms[i].id).eq('user_id', _currentUser.id);
   renderPtMilestones();
+}
+
+async function togglePtTask(i) {
+  if (!_currentUser) return;
+  var ts = window._ptTasks; if (!ts || !ts[i]) return;
+  ts[i].status = ts[i].status === 'done' ? 'todo' : 'done';
+  await _supabase.from('project_tasks').update({status: ts[i].status}).eq('id', ts[i].id).eq('user_id', _currentUser.id);
+  renderPtTasks();
+}
+
+var _ptEditIdx = null; // index of item being edited
+
+function openPtEditBilling(i) {
+  var bs = window._ptBilling; if (!bs || !bs[i]) return;
+  _ptEditIdx = i;
+  var b = bs[i];
+  _ptModalMode = 'edit-billing';
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  var statusClass = {pending:'pt-bs-pending',invoiced:'pt-bs-invoiced',paid:'pt-bs-paid'};
+  body.innerHTML = '<div class="pt-modal-title">Edit billing phase</div>' +
+    '<div class="pt-field"><label>Phase name *</label><input class="pt-inp" id="ptm-bill-name" value="' + escapeHTML(b.phase_name || '') + '"></div>' +
+    '<div class="pt-grid2">' +
+    '<div class="pt-field"><label>Amount ($) *</label><input class="pt-inp" type="number" id="ptm-bill-amount" value="' + (b.amount || '') + '"></div>' +
+    '<div class="pt-field"><label>Type</label><select class="pt-sel" id="ptm-bill-type"><option value="one_time"' + (b.billing_type==='one_time'?' selected':'') + '>One-time</option><option value="per_phase"' + (b.billing_type==='per_phase'?' selected':'') + '>Per phase</option></select></div>' +
+    '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-bill-status"><option value="pending"' + (b.status==='pending'?' selected':'') + '>Pending</option><option value="invoiced"' + (b.status==='invoiced'?' selected':'') + '>Invoiced</option><option value="paid"' + (b.status==='paid'?' selected':'') + '>Paid</option></select></div>' +
+    '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-bill-date" value="' + (b.due_date ? b.due_date.slice(0,10) : '') + '"></div>' +
+    '</div>' +
+    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtBilling()">Save changes</button></div>';
+  overlay.classList.add('open');
+}
+
+async function updatePtBilling() {
+  if (!_currentUser) return;
+  var bs = window._ptBilling; if (!bs || _ptEditIdx === null || !bs[_ptEditIdx]) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var name = g('ptm-bill-name'); if (!name) { showToast('Phase name required'); return; }
+  var amount = parseFloat(g('ptm-bill-amount')); if (!amount) { showToast('Amount required'); return; }
+  var payload = { phase_name: name, amount: amount, billing_type: g('ptm-bill-type'), status: g('ptm-bill-status'), due_date: g('ptm-bill-date') || null };
+  var res = await _supabase.from('project_billing').update(payload).eq('id', bs[_ptEditIdx].id).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  bs[_ptEditIdx] = res.data;
+  _ptEditIdx = null;
+  closePtModal(); renderPtBilling(); showToast('\u2713 Billing updated');
+}
+
+function openPtEditMeeting(i) {
+  var me = window._ptMeetings; if (!me || !me[i]) return;
+  _ptEditIdx = i;
+  var m = me[i];
+  _ptModalMode = 'edit-meeting';
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  body.innerHTML = '<div class="pt-modal-title">Edit meeting note</div>' +
+    '<div class="pt-grid2">' +
+    '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-meet-date" value="' + (m.meeting_date ? m.meeting_date.slice(0,10) : '') + '"></div>' +
+    '<div class="pt-field"><label>Attendees</label><input class="pt-inp" id="ptm-meet-attendees" value="' + escapeHTML(m.attendees || '') + '"></div>' +
+    '</div>' +
+    '<div class="pt-field"><label>Notes / summary *</label><textarea class="pt-ta" id="ptm-meet-notes" style="min-height:100px">' + escapeHTML(m.notes || '') + '</textarea></div>' +
+    '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="ptm-meet-actions" style="min-height:60px">' + escapeHTML(m.action_items || '') + '</textarea></div>' +
+    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtMeeting()">Save changes</button></div>';
+  overlay.classList.add('open');
+}
+
+async function updatePtMeeting() {
+  if (!_currentUser) return;
+  var me = window._ptMeetings; if (!me || _ptEditIdx === null || !me[_ptEditIdx]) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var notes = g('ptm-meet-notes'); if (!notes) { showToast('Notes required'); return; }
+  var payload = { meeting_date: g('ptm-meet-date') || null, attendees: g('ptm-meet-attendees'), notes: notes, action_items: g('ptm-meet-actions') };
+  var res = await _supabase.from('project_meetings').update(payload).eq('id', me[_ptEditIdx].id).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  me[_ptEditIdx] = res.data;
+  _ptEditIdx = null;
+  closePtModal(); renderPtMeetings(); showToast('\u2713 Meeting note updated');
 }
 
 async function cyclePtBillingStatus(i) {
