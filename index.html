@@ -928,14 +928,14 @@ footer p{font-size:12px;color:var(--ink-light)}
 .pt-row-edit{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--ink-mid);font-size:11px;padding:2px 7px;flex-shrink:0}
 .pt-row-edit:hover{border-color:var(--amber);color:var(--amber)}
 /* Billing phases */
-.pt-bill-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-bill-row{display:grid;grid-template-columns:1fr auto auto auto auto;align-items:center;gap:8px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-bill-name{font-size:13px;color:var(--ink)}
 .pt-bill-amt{font-size:13px;font-weight:700;color:var(--ink)}
 .pt-bill-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:20px;cursor:pointer}
 .pt-bs-pending{background:#FEF3C7;color:#92400E}
 .pt-bs-invoiced{background:#DBEAFE;color:#1E40AF}
 .pt-bs-paid{background:#D1FAE5;color:#065F46}
-.pt-bill-total{font-size:14px;font-weight:700;color:var(--amber);padding:10px 0 4px;border-top:1.5px solid var(--border);margin-top:4px}
+.pt-bill-total{font-size:14px;font-weight:700;color:var(--amber);padding:4px 0}
 /* Meeting notes */
 .pt-note-item{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
 .pt-note-date{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px}
@@ -945,7 +945,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .pt-time-row{display:grid;grid-template-columns:90px 60px 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
 .pt-time-desc{font-size:13px;color:var(--ink)}
-.pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:10px 0 4px;border-top:1.5px solid var(--border);margin-top:4px}
+.pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:4px 0}
 /* Modal */
 .pt-modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,16,10,.45);z-index:200;align-items:center;justify-content:center}
 .pt-modal-overlay.open{display:flex}
@@ -3227,7 +3227,7 @@ function renderPipeline(){
       <div class="kc-stripe" style="background:${s.stripe}"></div>
       <div class="kc-header"><span class="kc-title">${s.label}</span><span class="kc-cnt">${cards.length}</span></div>
       <div class="kc-body">
-        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragStart(event,${c.id})" ondragend="pfDragEnd(event)">
+        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragStart(event,${c.id})" ondragend="pfDragEnd(event)" ondragover="event.preventDefault();event.stopPropagation();pfDragOver(event,this.parentElement.parentElement)" ondrop="event.stopPropagation();pfDrop(event,${si},this.parentElement.parentElement)">
           <span class="kk-temp temp-${c.temp}">${c.temp==='hot'?'🔥 Hot':c.temp==='warm'?'Warm':'❄️ Cold'}</span>
           <div class="kk-client">${c.client}</div>
           <div class="kk-project">${c.project}</div>
