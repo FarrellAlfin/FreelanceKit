@@ -2415,10 +2415,11 @@ function fm(n,sym='$'){return sym+Math.round(n).toLocaleString()}
 function fmD(n){return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
 
 // ═══════════════ NAVIGATION ═══════════════
-function showDash(panel='home'){
+function showDash(panel){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-dash').classList.add('active');
-  if(panel)showPanel(panel,document.getElementById('nav-'+panel));
+  var target = panel || localStorage.getItem('fk_panel') || 'home';
+  showPanel(target, document.getElementById('nav-'+target));
   document.documentElement.scrollTop=0;
   document.body.scrollTop=0;
 }
@@ -2443,6 +2444,7 @@ function showPanel(id,el){
   // Also select 'home' nav if showing home
   if(id==='home'){const hn=document.getElementById('nav-home');if(hn)hn.classList.add('active')}
   document.documentElement.scrollTop=0;document.body.scrollTop=0;
+  localStorage.setItem('fk_panel', id);
   // Init interactive panels on first show
   if(id==='invoice'&&!window._invInit){window._invInit=true;initInvoice()}
   if(id==='pipeline'&&!window._pipeInit){window._pipeInit=true;renderPipeline()}
