@@ -871,6 +871,84 @@ footer p{font-size:12px;color:var(--ink-light)}
   .iht-hc:nth-child(3),.iht-cell:nth-child(3),
   .iht-hc:nth-child(6),.iht-actions{display:none}
 }
+/* ─── Invoice Builder extras ─── */
+.logo-upload-btn{display:inline-flex;align-items:center;gap:7px;background:var(--cream-dark);border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;color:var(--ink-mid);cursor:pointer;transition:all .2s}
+.logo-upload-btn:hover{border-color:var(--amber);color:var(--amber)}
+.pay-detail-block{margin-top:6px;padding:10px 12px;background:var(--cream-dark);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.pay-detail-block .ip-inp{margin-bottom:6px}
+.pay-detail-block .ip-inp:last-child{margin-bottom:0}
+.pay-detail-block .ip-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+/* ─── Project Tracker ─── */
+.pt-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:flex-start}
+.pt-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pt-list-title{font-size:13px;font-weight:700;color:var(--ink)}
+.pt-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.pt-card:hover,.pt-card.active{border-color:var(--amber)}
+.pt-card-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.pt-card-client{font-size:12px;color:var(--ink-light)}
+.pt-card-meta{display:flex;align-items:center;gap:8px;margin-top:6px}
+.pt-status{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:20px}
+.pt-status-planning{background:#DBEAFE;color:#1E40AF}
+.pt-status-active{background:#D1FAE5;color:#065F46}
+.pt-status-on_hold{background:#FEF3C7;color:#92400E}
+.pt-status-completed{background:#F3F4F6;color:#6B7280}
+.pt-empty{text-align:center;padding:60px 20px;color:var(--ink-light);font-size:14px}
+.pt-empty-icon{font-size:32px;margin-bottom:12px}
+.pt-detail-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.pt-back-btn{background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;color:var(--ink-mid);flex-shrink:0}
+.pt-back-btn:hover{border-color:var(--ink);color:var(--ink)}
+.pt-detail-name{font-size:17px;font-weight:700;color:var(--ink);flex:1}
+.pt-tabs{display:flex;gap:2px;border-bottom:1.5px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
+.pt-tab{background:none;border:none;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-light);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s;font-family:var(--font-body)}
+.pt-tab:hover{color:var(--ink)}
+.pt-tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.pt-field{margin-bottom:12px}
+.pt-field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:4px}
+.pt-inp,.pt-ta,.pt-sel{width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;font-family:var(--font-body);background:var(--cream);color:var(--ink)}
+.pt-ta{min-height:80px;resize:vertical}
+.pt-inp:focus,.pt-ta:focus,.pt-sel:focus{outline:none;border-color:var(--amber)}
+.pt-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pt-sec-hdr{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin:20px 0 10px;display:flex;align-items:center;justify-content:space-between}
+.pt-add-btn{background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--font-body)}
+.pt-add-btn:hover{background:var(--amber)}
+.pt-save-btn{background:var(--amber);color:var(--white);border:none;border-radius:var(--radius-sm);padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-body)}
+.pt-save-btn:hover{opacity:.85}
+/* Milestone / task rows */
+.pt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-check{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px}
+.pt-check.done{border-color:var(--sage);background:var(--sage-light);color:var(--sage)}
+.pt-row-name{flex:1;font-size:13px;color:var(--ink)}
+.pt-row-name.done{text-decoration:line-through;color:var(--ink-light)}
+.pt-row-badge{font-size:11px;color:var(--ink-light);background:var(--cream-dark);padding:2px 7px;border-radius:20px;flex-shrink:0}
+.pt-row-date{font-size:11px;color:var(--ink-light);flex-shrink:0}
+.pt-row-del{background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:14px;padding:0 2px;flex-shrink:0}
+.pt-row-del:hover{color:#E8594A}
+/* Billing phases */
+.pt-bill-row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-bill-name{font-size:13px;color:var(--ink)}
+.pt-bill-amt{font-size:13px;font-weight:700;color:var(--ink)}
+.pt-bill-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:20px;cursor:pointer}
+.pt-bs-pending{background:#FEF3C7;color:#92400E}
+.pt-bs-invoiced{background:#DBEAFE;color:#1E40AF}
+.pt-bs-paid{background:#D1FAE5;color:#065F46}
+.pt-bill-total{font-size:14px;font-weight:700;color:var(--amber);padding:10px 0 4px;border-top:1.5px solid var(--border);margin-top:4px}
+/* Meeting notes */
+.pt-note-item{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
+.pt-note-date{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px}
+.pt-note-text{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
+.pt-note-del{float:right;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:12px;margin-top:-2px}
+/* Timesheet */
+.pt-time-row{display:grid;grid-template-columns:90px 60px 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
+.pt-time-desc{font-size:13px;color:var(--ink)}
+.pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:10px 0 4px;border-top:1.5px solid var(--border);margin-top:4px}
+/* Modal */
+.pt-modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,16,10,.45);z-index:200;align-items:center;justify-content:center}
+.pt-modal-overlay.open{display:flex}
+.pt-modal{background:var(--white);border-radius:var(--radius);padding:28px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.pt-modal-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:18px}
+.pt-modal-ft{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+@media(max-width:860px){.pt-layout{grid-template-columns:1fr}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
@@ -1261,9 +1339,7 @@ var RateLimiter = (function() {
         <div class="tcard" onclick="showDash('contract')"><div class="tc-emoji">📄</div><div class="tc-name">Client Contract</div><div class="tc-cat">Contracts & Legal</div></div>
         <div class="tcard" onclick="showDash('scope')"><div class="tc-emoji">⚠️</div><div class="tc-name">Scope Change Order</div><div class="tc-cat">Contracts & Legal</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
         <div class="tcard" onclick="showDash('invoice')"><div class="tc-emoji">🧾</div><div class="tc-name">Invoice Builder</div><div class="tc-cat">Invoicing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
-        <div class="tcard" onclick="showDash('latepay')"><div class="tc-emoji">📬</div><div class="tc-name">Late Payment Emails</div><div class="tc-cat">Invoicing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
         <div class="tcard" onclick="showDash('ratecalc')"><div class="tc-emoji">📊</div><div class="tc-name">Rate Calculator</div><div class="tc-cat">Proposals & Pricing</div><span class="tc-fmt fmt-sheets">Sheets</span></div>
-        <div class="tcard" onclick="showDash('proposal')"><div class="tc-emoji">✉️</div><div class="tc-name">Proposal Email Script</div><div class="tc-cat">Proposals & Pricing</div><span class="tc-fmt fmt-gdoc">Google Docs</span></div>
         <div class="tcard" onclick="showDash('pipeline')"><div class="tc-emoji">🗂️</div><div class="tc-name">Pipeline Tracker</div><div class="tc-cat">Operations</div></div>
         <div class="tcard" onclick="showDash('tax')"><div class="tc-emoji">🧮</div><div class="tc-name">Tax Tracker</div><div class="tc-cat">Operations</div><span class="tc-fmt fmt-sheets">Sheets</span></div>
         <div class="tcard" onclick="showDash('welcome')"><div class="tc-emoji">🎁</div><div class="tc-name">Welcome Packet</div><div class="tc-cat">Client Onboarding</div><span class="tc-fmt fmt-c">Canva</span></div>
@@ -1547,20 +1623,18 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#129534;</span><span class="dsb-label">Invoice Builder</span>
         <span class="dsb-count">Live</span>
       </div>
-      <div class="dsb-item" onclick="showPanel('latepay',this)" id="nav-latepay">
-        <span class="dsb-icon">&#128236;</span><span class="dsb-label">Late Payment Emails</span>
-      </div>
 
       <div class="dsb-section">Proposals &amp; Pricing</div>
       <div class="dsb-item" onclick="showPanel('ratecalc',this)" id="nav-ratecalc">
         <span class="dsb-icon">&#128202;</span><span class="dsb-label">Rate Calculator</span>
         <span class="dsb-count">Live</span>
       </div>
-      <div class="dsb-item" onclick="showPanel('proposal',this)" id="nav-proposal">
-        <span class="dsb-icon">&#9993;&#65039;</span><span class="dsb-label">Proposal Email Script</span>
-      </div>
 
       <div class="dsb-section">Business Operations</div>
+      <div class="dsb-item" onclick="showPanel('projects',this)" id="nav-projects">
+        <span class="dsb-icon">&#128736;&#65039;</span><span class="dsb-label">Project Tracker</span>
+        <span class="dsb-count">New</span>
+      </div>
       <div class="dsb-item" onclick="showPanel('pipeline',this)" id="nav-pipeline">
         <span class="dsb-icon">&#128193;&#65039;</span><span class="dsb-label">Pipeline Tracker</span>
         <span class="dsb-count">Live</span>
@@ -1612,12 +1686,6 @@ var RateLimiter = (function() {
             <div class="wb-num">9</div>
             <div class="wb-lbl">templates used</div>
           </div>
-        </div>
-        <div class="quick-stats">
-          <div class="qs"><div class="qs-lbl">Downloaded</div><div class="qs-val">9</div><div class="qs-sub up">↑ 3 this month</div></div>
-          <div class="qs"><div class="qs-lbl">New this month</div><div class="qs-val">3</div><div class="qs-sub up">across 3 categories</div></div>
-          <div class="qs"><div class="qs-lbl">Saved</div><div class="qs-val">4</div><div class="qs-sub" style="color:var(--ink-light)">Quick access</div></div>
-          <div class="qs"><div class="qs-lbl">Trial days left</div><div class="qs-val">4</div><div class="qs-sub warn">Upgrade to Pro</div></div>
         </div>
         <div class="home-grid-header"><span class="hgh-title">All templates</span><span class="hgh-all" onclick="showToast('All templates are in the sidebar →')">View all</span></div>
         <div class="template-grid" id="home-template-grid"></div>
@@ -1751,39 +1819,48 @@ var RateLimiter = (function() {
       <!-- ─── INVOICE BUILDER ─── -->
       <div class="tmpl-panel" id="panel-invoice">
         <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
-          <div class="tv-title">Invoice Builder —<br><em>Net 7 · 14 · 30</em></div>
-          <div class="tv-desc">Fill in the panel, watch the invoice update live. Switch payment terms, add line items, set tax and discount. Download as PDF when ready.</div>
-        </div>
-        <div class="terms-tabs">
-          <button class="tt active" onclick="setInvTerms(7,this)">Net 7 — Due in 7 days</button>
-          <button class="tt" onclick="setInvTerms(14,this)">Net 14 — Due in 14 days</button>
-          <button class="tt" onclick="setInvTerms(30,this)">Net 30 — Due in 30 days</button>
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Invoice <em>Builder</em></div>
+          <div class="tv-desc">Fill in the panel, watch the invoice update live. Add line items, set tax and discount. Download as PDF when ready.</div>
         </div>
         <div class="inv-layout">
           <div class="inv-panel">
             <div class="ip-head"><span style="font-size:14px">⚙️</span><span class="ip-head-title">Invoice builder</span><span class="ip-head-badge">Live preview →</span></div>
             <div class="ip-body">
+              <!-- Logo upload -->
+              <div class="ip-field">
+                <div class="ip-lbl">Brand logo <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional · shows top-left)</span></div>
+                <label class="logo-upload-btn" for="i-logo-input">
+                  <span id="logo-upload-label">📎 Upload logo</span>
+                  <input type="file" id="i-logo-input" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+                </label>
+              </div>
               <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="Alex Chen Design" oninput="updateInv()"></div>
               <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="alex@alexchendesign.com" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Your phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-yourphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
               <div class="ip-divider"></div>
               <div class="ip-row2">
                 <div class="ip-field"><div class="ip-lbl">Invoice #</div><input class="ip-inp" id="i-num" value="INV-001" oninput="updateInv()"></div>
                 <div class="ip-field"><div class="ip-lbl">Issue date</div><input class="ip-inp" type="date" id="i-issued" oninput="updateInv()"></div>
               </div>
-              <div class="ip-field"><div class="ip-lbl">Due date</div><input class="ip-inp" type="date" id="i-due" oninput="updateInv()"></div>
+              <div class="ip-row2">
+                <div class="ip-field"><div class="ip-lbl">Due date</div><input class="ip-inp" type="date" id="i-due" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Payment terms</div><input class="ip-inp" id="i-terms-text" value="Net 30" placeholder="e.g. Net 30" oninput="updateInv()"></div>
+              </div>
               <div class="ip-divider"></div>
               <div class="ip-field">
-              <div class="ip-lbl">Client name</div>
-              <div class="client-dropdown">
-                <input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
-                <div class="client-dd-list" id="client-dd"></div>
+                <div class="ip-lbl">Client name</div>
+                <div class="client-dropdown">
+                  <input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
+                  <div class="client-dd-list" id="client-dd"></div>
+                </div>
               </div>
-            </div>
+              <div class="ip-field"><div class="ip-lbl">Contact person</div><input class="ip-inp" id="i-contact" value="Jamie Reyes" oninput="updateInv()"></div>
               <div class="ip-row2">
-                <div class="ip-field"><div class="ip-lbl">Contact</div><input class="ip-inp" id="i-contact" value="Jamie Reyes" oninput="updateInv()"></div>
                 <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="jamie@acmestudio.com" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Client phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
               </div>
+              <div class="ip-field"><div class="ip-lbl">Client address <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientaddress" placeholder="123 Street, City, Country" oninput="updateInv()"></div>
               <div class="ip-field"><div class="ip-lbl">Project</div><input class="ip-inp" id="i-project" value="Brand Identity Refresh" oninput="updateInv()"></div>
               <div class="ip-divider"></div>
               <div class="ip-lbl" style="margin-bottom:7px">Line items</div>
@@ -1795,17 +1872,59 @@ var RateLimiter = (function() {
                 <div class="ip-field"><div class="ip-lbl">Tax %</div><input class="ip-inp" type="number" id="i-tax" value="0" min="0" max="100" oninput="updateInv()"></div>
                 <div class="ip-field"><div class="ip-lbl">Discount %</div><input class="ip-inp" type="number" id="i-disc" value="0" min="0" max="100" oninput="updateInv()"></div>
               </div>
-              <div class="ip-field"><div class="ip-lbl">Payment method</div>
+              <!-- Payment section -->
+              <div class="ip-field">
+                <div class="ip-lbl">Payment method</div>
                 <select class="ip-sel" id="i-pay" onchange="handleInvPay(this)">
-                  <option value="Bank transfer">Bank transfer</option>
-                  <option value="Stripe (credit/debit card)">Stripe</option>
-                  <option value="PayPal">PayPal</option>
-                  <option value="Wise">Wise</option>
-                  <option value="Bank transfer · Stripe" selected>Bank transfer · Stripe</option>
-                  <option value="Bank transfer · Stripe · PayPal">Bank transfer · Stripe · PayPal</option>
+                  <option value="bank">Bank Transfer</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="venmo">Venmo</option>
+                  <option value="zelle">Zelle</option>
+                  <option value="cashapp">Cash App</option>
+                  <option value="stripe">Stripe</option>
+                  <option value="wise">Wise</option>
+                  <option value="wire">Wire Transfer</option>
                   <option value="custom">Custom…</option>
                 </select>
-                <input class="ip-inp" id="i-pay-custom" placeholder="Enter method…" oninput="updateInv()" style="margin-top:6px;display:none">
+              </div>
+              <!-- Payment detail fields — shown/hidden per method -->
+              <div id="i-pay-bank" class="pay-detail-block">
+                <div class="ip-lbl" style="margin-bottom:6px;font-size:11px;color:var(--ink-light)">Bank details</div>
+                <div class="ip-field"><input class="ip-inp" id="i-bank-name" placeholder="Bank name (e.g. Chase, Wells Fargo)" oninput="updateInv()"></div>
+                <div class="ip-row2">
+                  <div class="ip-field"><input class="ip-inp" id="i-bank-routing" placeholder="Routing number" oninput="updateInv()"></div>
+                  <div class="ip-field"><input class="ip-inp" id="i-bank-account" placeholder="Account number" oninput="updateInv()"></div>
+                </div>
+                <div class="ip-field"><input class="ip-inp" id="i-bank-holder" placeholder="Account holder name" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-paypal" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-paypal-email" placeholder="PayPal email address" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-venmo" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-venmo-handle" placeholder="Venmo @username or phone" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-zelle" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-zelle-contact" placeholder="Zelle email or phone number" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-cashapp" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-cashapp-tag" placeholder="Cash App $cashtag" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-stripe" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-stripe-link" placeholder="Stripe payment link (https://…)" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-wise" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-wise-email" placeholder="Wise email address" oninput="updateInv()"></div>
+              </div>
+              <div id="i-pay-wire" class="pay-detail-block" style="display:none">
+                <div class="ip-lbl" style="margin-bottom:6px;font-size:11px;color:var(--ink-light)">Wire transfer details</div>
+                <div class="ip-field"><input class="ip-inp" id="i-wire-bank" placeholder="Bank name" oninput="updateInv()"></div>
+                <div class="ip-row2">
+                  <div class="ip-field"><input class="ip-inp" id="i-wire-swift" placeholder="SWIFT/BIC code" oninput="updateInv()"></div>
+                  <div class="ip-field"><input class="ip-inp" id="i-wire-iban" placeholder="IBAN / Account number" oninput="updateInv()"></div>
+                </div>
+              </div>
+              <div id="i-pay-custom" class="pay-detail-block" style="display:none">
+                <div class="ip-field"><input class="ip-inp" id="i-pay-custom-text" placeholder="Enter payment details…" oninput="updateInv()"></div>
               </div>
               <div class="ip-field"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
               <div class="totals-block">
@@ -1823,23 +1942,39 @@ var RateLimiter = (function() {
           <div class="inv-preview" id="inv-preview">
             <div class="inv-paper" id="inv-paper">
               <div class="inv-top">
-                <div><div class="inv-brand-name" id="p-yourname">Alex Chen Design</div><div class="inv-brand-detail" id="p-youremail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a9c8c5ccd1e9c8c5ccd1cac1ccc7cdccdac0cec787cac6c4">[email&#160;protected]</a></div></div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <img id="p-logo" src="" alt="" style="display:none;max-height:48px;max-width:120px;object-fit:contain">
+                  <div>
+                    <div class="inv-brand-name" id="p-yourname">Alex Chen Design</div>
+                    <div class="inv-brand-detail" id="p-youremail">alex@alexchendesign.com</div>
+                    <div class="inv-brand-detail" id="p-yourphone" style="display:none"></div>
+                  </div>
+                </div>
                 <div><div class="inv-word">Invoice</div><div class="inv-num" id="p-invnum">INV-001</div></div>
               </div>
               <div class="inv-meta">
-                <div><div class="inv-meta-lbl">Bill to</div><div class="inv-meta-val"><strong id="p-client">Acme Studio Ltd.</strong><br><span id="p-contact">Jamie Reyes</span><br><span style="font-size:11px;color:var(--ink-light)" id="p-cemail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b8d2d9d5d1ddf8d9dbd5ddcbcccddcd1d796dbd7d5">[email&#160;protected]</a></span></div></div>
+                <div>
+                  <div class="inv-meta-lbl">Bill to</div>
+                  <div class="inv-meta-val">
+                    <strong id="p-client">Acme Studio Ltd.</strong><br>
+                    <span id="p-contact">Jamie Reyes</span><br>
+                    <span style="font-size:11px;color:var(--ink-light)" id="p-cemail">jamie@acmestudio.com</span><br>
+                    <span style="font-size:11px;color:var(--ink-light)" id="p-ccphone" style="display:none"></span>
+                    <span style="font-size:11px;color:var(--ink-light)" id="p-caddress" style="display:none"></span>
+                  </div>
+                </div>
                 <div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val" id="p-project">Brand Identity Refresh</div></div>
               </div>
               <div class="inv-dates">
                 <div><div class="inv-date-lbl">Issue date</div><div class="inv-date-val" id="p-issued">—</div></div>
                 <div><div class="inv-date-lbl">Due date</div><div class="inv-date-val" id="p-due">—</div></div>
-                <div><div class="inv-date-lbl">Terms</div><div class="inv-date-val" id="p-terms">Net 7</div></div>
+                <div><div class="inv-date-lbl">Terms</div><div class="inv-date-val" id="p-terms">Net 30</div></div>
                 <div><div class="inv-date-lbl">Status</div><div class="inv-date-val" style="color:var(--amber)">Unpaid</div></div>
               </div>
               <table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody id="p-lineitems"><tr><td>Brand strategy</td><td>1</td><td>$1,200.00</td><td>$1,200.00</td></tr><tr><td>Logo design (3 concepts)</td><td>1</td><td>$1,800.00</td><td>$1,800.00</td></tr><tr><td>Brand guidelines</td><td>1</td><td>$600.00</td><td>$600.00</td></tr></tbody></table>
               <div class="inv-totals"><div class="inv-tot-inner"><div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val" id="p-sub">$3,600.00</span></div><div class="inv-tot-row" id="p-disc-row" style="display:none"><span class="inv-tot-lbl">Discount</span><span class="inv-tot-val" id="p-disc-val">—</span></div><div class="inv-tot-row" id="p-tax-row" style="display:none"><span class="inv-tot-lbl">Tax</span><span class="inv-tot-val" id="p-tax-val">—</span></div><div class="inv-tot-div"></div><div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val" id="p-total">$3,600.00</span></div></div></div>
               <div class="inv-footer">
-                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val"><strong>Accepted:</strong> <span id="p-pay">Bank transfer · Stripe</span><div class="late-fee-note">Late fee of 1.5%/month applies after due date.</div></div></div>
+                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val" id="p-pay-details">Bank Transfer</div></div>
                 <div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val" id="p-notes">Thank you for your business.</div></div>
               </div>
             </div>
@@ -1847,85 +1982,6 @@ var RateLimiter = (function() {
         </div>
       </div>
 
-      <!-- ─── LATE PAYMENT EMAILS ─── -->
-      <div class="tmpl-panel" id="panel-latepay">
-        <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
-          <div class="tv-title">Late Payment<br><em>Email Sequence</em></div>
-          <div class="tv-desc">3 escalating emails + 1 final handoff. Navigate between them using the tabs below. Each has a tone guide, subject line options, and annotations explaining the psychology.</div>
-        </div>
-        <div class="email-tabs">
-          <button class="etab active" onclick="showEmail('lp1',this)">Email 1 · Day 7 — Gentle nudge</button>
-          <button class="etab" onclick="showEmail('lp2',this)">Email 2 · Day 14 — Firm follow-up</button>
-          <button class="etab" onclick="showEmail('lp3',this)">Email 3 · Day 30 — Final notice</button>
-          <button class="etab" onclick="showEmail('lp4',this)">Bonus · Day 45+ — The handoff</button>
-        </div>
-        <div id="email-lp1">
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp1-body',this)">📋 Copy email</button></div>
-          <div style="background:var(--sage-light);border:1px solid #C5DCC9;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#3A5942"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 7:</strong>Warm and professional. Assume it was an oversight — because it probably was. No guilt trips.</div>
-          <div style="margin-bottom:14px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:10px">Subject line options</div>
-            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono);margin-bottom:5px">Quick follow-up — Invoice #<span class="field">[NUMBER]</span></div>
-            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono);margin-bottom:5px">Friendly reminder: Invoice #<span class="field">[NUMBER]</span> due <span class="field">[DATE]</span></div>
-            <div style="font-size:13px;color:var(--ink);font-family:var(--font-mono)">Following up on <span class="field">[PROJECT NAME]</span> invoice</div>
-          </div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 1 — Gentle Nudge (Day 7)</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Quick follow-up — Invoice #<span class="field">[NUMBER]</span></span></div></div>
-          <div class="email-body" id="lp1-body">
-            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
-            <p>Hope things are going well on your end.</p>
-            <p>I wanted to send a quick note — Invoice #<span class="field">[NUMBER]</span> for <span class="field">[PROJECT NAME]</span>, totalling <span class="field">[AMOUNT]</span>, was due on <span class="field">[DUE DATE]</span>. I know things get busy, so just wanted to make sure it didn't slip through the cracks.</p>
-            <p>I've re-attached it below for easy reference. Payment can be made via <span class="field">[PAYMENT METHOD / STRIPE LINK]</span>.</p>
-            <p>Let me know if you have any questions or if something's come up on your end — happy to chat.</p>
-            <p>Thanks so much,</p>
-            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span></div>
-          </div></div>
-        </div>
-        <div id="email-lp2" style="display:none">
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp2-body',this)">📋 Copy email</button></div>
-          <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#92400E"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 14:</strong>Professional and direct. State facts and consequences. No longer casual — now you're being contractual.</div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 2 — Firm Follow-Up (Day 14)</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Second notice — Invoice #<span class="field">[NUMBER]</span> now 14 days overdue</span></div></div>
-          <div class="email-body" id="lp2-body">
-            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
-            <p>I'm following up on my previous message from <span class="field">[DATE OF EMAIL 1]</span> regarding Invoice #<span class="field">[NUMBER]</span> for <span class="field">[AMOUNT]</span>, which was due on <span class="field">[DUE DATE]</span> and remains unpaid.</p>
-            <p>I'd appreciate your urgent attention on this. Please arrange payment by <span class="field">[DATE — 5 business days from today]</span>.</p>
-            <p><span class="field-opt">[OPTIONAL — include only if late fees are in your contract: Per our signed agreement, a late fee of [RATE] per month is now accruing on the outstanding balance. The current total is [UPDATED AMOUNT].]</span></p>
-            <p>If there's an issue with the invoice or something I'm not aware of, please reply so we can resolve it. If payment has already been sent, please disregard this message.</p>
-            <p>Thank you,</p>
-            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span style="font-size:11px;color:var(--ink-light)">Invoice #<span class="field">[NUMBER]</span> attached</span></div>
-          </div></div>
-        </div>
-        <div id="email-lp3" style="display:none">
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp3-body',this)">📋 Copy email</button></div>
-          <div style="background:var(--red-light);border:1px solid #FCA5A5;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#7F1D1D"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 30:</strong>Formal, factual, brief. No pleasantries. This reads like a letter from a business, not a person.</div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Email 3 — Final Notice (Day 30)</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Final notice — Invoice #<span class="field">[NUMBER]</span> — <span class="field">[AMOUNT]</span> outstanding</span></div></div>
-          <div class="email-body" id="lp3-body">
-            <p>Dear <span class="field">[CLIENT FULL NAME]</span>,</p>
-            <p>This is a formal final notice regarding Invoice #<span class="field">[NUMBER]</span> for <span class="field">[PROJECT NAME]</span>, totalling <span class="field">[AMOUNT + LATE FEES]</span>, now <span class="field">[X]</span> days overdue.</p>
-            <p>Despite notices sent on <span class="field">[DATE 1]</span> and <span class="field">[DATE 2]</span>, this invoice remains unpaid with no response received.</p>
-            <p>I require full payment by <span class="field">[DATE — 5 business days from now]</span>. If payment is not received, I will pursue the outstanding balance through <span class="field">[collections agency / small claims court / formal legal process]</span>, resulting in additional costs and a potential mark on your business's credit record.</p>
-            <p>To resolve this directly, contact me at <span class="field">[YOUR EMAIL]</span> or <span class="field">[YOUR PHONE]</span>.</p>
-            <p>Regards,</p>
-            <div class="email-sig"><span class="field">[YOUR FULL NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span style="font-size:11px;color:var(--ink-light)">All prior correspondence and Invoice #<span class="field">[NUMBER]</span> attached</span></div>
-          </div></div>
-        </div>
-        <div id="email-lp4" style="display:none">
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('lp4-body',this)">📋 Copy email</button></div>
-          <div style="background:var(--blue-light);border:1px solid #93C5FD;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#1e3a5f"><strong style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">Tone — Day 45+:</strong>Calm, almost neutral. You're not angry — you're moving on. Frame consequences around their self-interest, not your frustration.</div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Bonus Email — The Handoff (Day 45+)</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Invoice #<span class="field">[NUMBER]</span> — one last opportunity to resolve</span></div></div>
-          <div class="email-body" id="lp4-body">
-            <p>Dear <span class="field">[CLIENT FULL NAME]</span>,</p>
-            <p>I am writing to inform you that Invoice #<span class="field">[NUMBER]</span> for <span class="field">[AMOUNT + FEES]</span>, now <span class="field">[X]</span> days overdue, will be passed to <span class="field">[collections agency / my solicitor / small claims court]</span> on <span class="field">[DATE — 3 business days from now]</span> if payment or a written payment arrangement is not received before that date.</p>
-            <p>I want to be straightforward: once I hand this over, the matter is out of my hands. The cost to you will increase significantly — collections fees, legal costs, and a potential mark on your business credit record are all possible outcomes.</p>
-            <p>If you'd like to settle this directly and avoid those consequences, please contact me at <span class="field">[YOUR EMAIL]</span> or <span class="field">[YOUR PHONE]</span> before <span class="field">[DEADLINE]</span>.</p>
-            <p>Regards,</p>
-            <div class="email-sig"><span class="field">[YOUR FULL NAME]</span><br><span class="field">[YOUR BUSINESS]</span></div>
-          </div></div>
-        </div>
-      </div>
 
       <!-- ─── RATE CALCULATOR ─── -->
       <div class="tmpl-panel" id="panel-ratecalc">
@@ -2001,64 +2057,88 @@ var RateLimiter = (function() {
         </div>
         </div>
 
-      <!-- ─── PROPOSAL EMAIL ─── -->
-      <div class="tmpl-panel" id="panel-proposal">
+
+      <!-- ─── PROJECT TRACKER ─── -->
+      <div class="tmpl-panel" id="panel-projects">
         <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--blue-light);color:var(--blue)">Proposals & Pricing</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
-          <div class="tv-title">Proposal Email<br><em>Script</em></div>
-          <div class="tv-desc">Three complete proposal scripts for different situations. Switch between them using the tabs. Each has its own subject line bank, structural annotations, and common mistakes to avoid.</div>
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--purple-light);color:var(--purple)">Business Operations</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
+          <div class="tv-title">Project <em>Tracker</em></div>
+          <div class="tv-desc">Manage every project end-to-end. Track milestones, tasks, billing phases, meeting notes, and hours — all in one place.</div>
         </div>
-        <div class="email-tabs">
-          <button class="etab active" onclick="showProposal('warm',this)">🔥 Warm lead</button>
-          <button class="etab" onclick="showProposal('cold',this)">❄️ Cold outreach</button>
-          <button class="etab" onclick="showProposal('referral',this)">🤝 Referral intro</button>
+        <!-- Project list view -->
+        <div id="pt-list-view">
+          <div class="pt-list-header">
+            <span class="pt-list-title" id="pt-project-count">0 projects</span>
+            <button class="pt-add-btn" onclick="openPtModal('new-project')">+ New project</button>
+          </div>
+          <div id="pt-projects-list"><div class="pt-empty"><div class="pt-empty-icon">🗂️</div><p>No projects yet.<br>Click <strong>+ New project</strong> to start.</p></div></div>
         </div>
-        <div id="prop-warm">
-          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">You've had a discovery call. This email follows that conversation and presents your approach, scope, and investment.</div>
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-warm-body',this)">📋 Copy email</button></div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Warm Lead</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Proposal for <span class="field">[PROJECT NAME]</span> — <span class="field">[YOUR NAME]</span></span></div></div>
-          <div class="email-body" id="prop-warm-body">
-            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
-            <p>Really enjoyed our conversation on <span class="field">[DATE]</span>. As promised, here's my proposal for <span class="field">[PROJECT NAME]</span>.</p>
-            <p><strong>What I heard you need:</strong><br><span class="field">[1–2 sentences reflecting their core problem back in their words. E.g. "You're relaunching in Q3 and need a brand identity that can grow with you — something premium without being unapproachable."]</span></p>
-            <p><strong>My approach:</strong><br><span class="field">[2–3 sentences on how you'd tackle this, specific to their situation. E.g. "I start with a 90-minute discovery session before any design work — it becomes the strategic foundation everything else is built on."]</span></p>
-            <p><strong>What's included:</strong></p>
-            <ul><li><span class="field">[Deliverable 1 — specific: what it is, format, revision rounds]</span></li><li><span class="field">[Deliverable 2]</span></li><li><span class="field">[Deliverable 3 if applicable]</span></li></ul>
-            <p><strong>Investment:</strong><br><span class="field">[AMOUNT]</span> — <span class="field">[PAYMENT STRUCTURE e.g. "50% on signing, 50% on delivery"]</span>.<br><span class="field-opt">[OPTIONAL: "I have one spot available starting [DATE] — I can hold it for you until [5–7 days]."]</span></p>
-            <p><strong>Timeline:</strong> <span class="field">[X weeks]</span>, starting <span class="field">[START DATE]</span>, final delivery by <span class="field">[END DATE]</span>.</p>
-            <p>If this looks good, the next step is a signed agreement and deposit — I can have the contract over same day. Any questions, happy to jump on a quick call.</p>
-            <p>Looking forward to working together,</p>
-            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span> · <span class="field">[YOUR WEBSITE]</span></div>
-          </div></div>
+        <!-- Project detail view (hidden until project selected) -->
+        <div id="pt-detail-view" style="display:none">
+          <div class="pt-detail-hdr">
+            <button class="pt-back-btn" onclick="ptBackToList()">← All projects</button>
+            <span class="pt-detail-name" id="pt-detail-name"></span>
+            <span class="pt-status" id="pt-detail-status-badge"></span>
+            <button class="pt-add-btn" onclick="openPtModal('edit-project')" style="margin-left:auto">Edit</button>
+            <button class="pt-row-del" onclick="deletePtProject()" title="Delete project" style="font-size:18px">🗑</button>
+          </div>
+          <div class="pt-tabs">
+            <button class="pt-tab active" onclick="showPtTab('overview',this)">Overview</button>
+            <button class="pt-tab" onclick="showPtTab('milestones',this)">Milestones</button>
+            <button class="pt-tab" onclick="showPtTab('tasks',this)">Tasks</button>
+            <button class="pt-tab" onclick="showPtTab('billing',this)">Billing</button>
+            <button class="pt-tab" onclick="showPtTab('meetings',this)">Meeting Notes</button>
+            <button class="pt-tab" onclick="showPtTab('hours',this)">Timesheet</button>
+          </div>
+          <!-- Overview tab -->
+          <div class="pt-tab-content" id="pt-tab-overview">
+            <div class="pt-grid2">
+              <div class="pt-field"><label>Client</label><div id="ptv-client" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+              <div class="pt-field"><label>Status</label><div id="ptv-status" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+              <div class="pt-field"><label>Start date</label><div id="ptv-start" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+              <div class="pt-field"><label>End date</label><div id="ptv-end" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+            </div>
+            <div class="pt-field"><label>Budget</label><div id="ptv-budget" style="font-size:16px;font-weight:700;color:var(--amber);padding:6px 0">—</div></div>
+            <div class="pt-field"><label>Description</label><div id="ptv-desc" style="font-size:13px;color:var(--ink);line-height:1.7;padding:6px 0;white-space:pre-wrap">—</div></div>
+            <div class="pt-field" id="ptv-contract-wrap" style="display:none">
+              <label>Project contract / scope notes</label>
+              <div id="ptv-contract" style="font-size:13px;color:var(--ink);line-height:1.7;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);white-space:pre-wrap"></div>
+            </div>
+          </div>
+          <!-- Milestones tab -->
+          <div class="pt-tab-content" id="pt-tab-milestones" style="display:none">
+            <div id="pt-gantt" style="margin-bottom:16px"></div>
+            <div class="pt-sec-hdr">Milestones <button class="pt-add-btn" onclick="openPtModal('add-milestone')">+ Add</button></div>
+            <div id="pt-milestones-list"></div>
+          </div>
+          <!-- Tasks tab -->
+          <div class="pt-tab-content" id="pt-tab-tasks" style="display:none">
+            <div class="pt-sec-hdr">Tasks <button class="pt-add-btn" onclick="openPtModal('add-task')">+ Add</button></div>
+            <div id="pt-tasks-list"></div>
+          </div>
+          <!-- Billing tab -->
+          <div class="pt-tab-content" id="pt-tab-billing" style="display:none">
+            <div id="pt-bill-total" class="pt-bill-total" style="margin-bottom:16px"></div>
+            <div class="pt-sec-hdr">Billing phases <button class="pt-add-btn" onclick="openPtModal('add-billing')">+ Add phase</button></div>
+            <div id="pt-billing-list"></div>
+          </div>
+          <!-- Meeting notes tab -->
+          <div class="pt-tab-content" id="pt-tab-meetings" style="display:none">
+            <div class="pt-sec-hdr">Meeting notes <button class="pt-add-btn" onclick="openPtModal('add-meeting')">+ Add note</button></div>
+            <div id="pt-meetings-list"></div>
+          </div>
+          <!-- Timesheet tab -->
+          <div class="pt-tab-content" id="pt-tab-hours" style="display:none">
+            <div id="pt-hours-total" class="pt-time-total" style="margin-bottom:16px"></div>
+            <div class="pt-sec-hdr">Time log <button class="pt-add-btn" onclick="openPtModal('add-time')">+ Log time</button></div>
+            <div id="pt-hours-list"></div>
+          </div>
         </div>
-        <div id="prop-cold" style="display:none">
-          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">First contact. Goal is a call, not a sale. Keep it under 150 words. Lead with a specific observation about them.</div>
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-cold-body',this)">📋 Copy email</button></div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Cold Outreach</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Quick thought on <span class="field">[COMPANY NAME]</span>'s <span class="field">[SPECIFIC THING YOU NOTICED]</span></span></div></div>
-          <div class="email-body" id="prop-cold-body">
-            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
-            <p><span class="field">[ONE SPECIFIC OBSERVATION — proof you've actually looked at their work. E.g. "I've been following Bloom Studio's work — the way you handled the Meridian rebrand was genuinely impressive." Never: "I hope this email finds you well."]</span></p>
-            <p>I'm a <span class="field">[SPECIFIC NICHE — e.g. "brand designer for early-stage SaaS companies" not "graphic designer"]</span>. I noticed <span class="field">[A SPECIFIC GAP OR OPPORTUNITY you see — e.g. "your website doesn't yet reflect the quality of work you're producing — I think that might be costing you leads."]</span></p>
-            <p>I've helped companies like <span class="field">[1–2 relevant clients]</span> solve exactly this. I'm not pitching a full project — I'd love a 20-minute call to understand what you're working on and see if there's a fit.</p>
-            <p>Worth a conversation?</p>
-            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[PORTFOLIO LINK]</span></div>
-          </div></div>
-        </div>
-        <div id="prop-referral" style="display:none">
-          <div style="background:var(--cream-dark);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 17px;margin-bottom:16px;font-size:12px;color:var(--ink-mid)">Someone connected you. Lead with the referrer's name in sentence one — it's your biggest credibility signal.</div>
-          <div class="tv-actions"><button class="btn-use" onclick="copyDoc('prop-ref-body',this)">📋 Copy email</button></div>
-          <div class="email-card"><div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">Proposal Email — Referral Introduction</span></div>
-          <div class="em-meta"><div class="em-row"><span class="em-lbl">To</span><span class="em-val"><span class="field">[CLIENT EMAIL]</span></span></div><div class="em-row"><span class="em-lbl">Subject</span><span class="em-val">Introduction via <span class="field">[REFERRER NAME]</span> — <span class="field">[WHAT YOU DO]</span></span></div></div>
-          <div class="email-body" id="prop-ref-body">
-            <p>Hi <span class="field">[CLIENT FIRST NAME]</span>,</p>
-            <p><span class="field">[REFERRER NAME]</span> suggested I reach out — they mentioned you're working on <span class="field">[WHAT THE CLIENT IS TRYING TO DO, specifically]</span> and thought I might be able to help.</p>
-            <p>I'm a <span class="field">[SPECIFIC NICHE]</span>. I worked with <span class="field">[REFERRER / their company]</span> on <span class="field">[WHAT YOU DID FOR THEM]</span>, and based on what they've shared about your situation, I think there's a real fit.</p>
-            <p>I'd love to set up a 20–30 minute call to hear more about what you're building. Would <span class="field">[2 SPECIFIC TIMES e.g. "Thursday at 2pm or Friday at 11am EST"]</span> work?</p>
-            <div class="email-sig"><span class="field">[YOUR NAME]</span><br><span class="field">[YOUR BUSINESS]</span><br><span class="field">[YOUR EMAIL]</span> · <span class="field">[YOUR WEBSITE]</span></div>
-          </div></div>
-        </div>
+      </div>
+
+      <!-- Project Tracker modals -->
+      <div class="pt-modal-overlay" id="pt-modal">
+        <div class="pt-modal" id="pt-modal-body"></div>
       </div>
 
       <!-- ─── PIPELINE TRACKER ─── -->
@@ -2114,7 +2194,6 @@ var RateLimiter = (function() {
           <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Canva</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
           <div class="tv-title">Client Welcome<br><em>Packet</em></div>
           <div class="tv-desc">Send this within 24 hours of a client signing. Sets expectations, explains how you work, and immediately signals that you run a professional operation.</div>
-          <div class="tv-actions"><button class="btn-outline" onclick="window.location.href='FreelanceKit_Welcome_Packet.docx'">&#128196; Download Word doc</button></div>
         </div>
         <div class="doc-wrap">
           <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt" style="background:var(--amber-light);color:var(--amber)">PDF / Canva</span></div>
@@ -2356,6 +2435,7 @@ function showPanel(id,el){
   if(id==='tax'&&!window._taxInit){window._taxInit=true;renderTaxQ(2)}
   if(id==='ratecalc')calcRate();
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
+  if(id==='projects'&&!window._ptInit){window._ptInit=true;loadProjects()}
 }
 
 // Show an upgrade prompt overlay for free-plan users hitting locked panels
@@ -2438,9 +2518,7 @@ const allTemplates=[
   {id:'contract',emoji:'📄',name:'Client Contract',desc:'Full protection agreement',fmt:'n',badge:'pop',bg:'#FFF3E8'},
   {id:'scope',emoji:'⚠️',name:'Scope Change Order',desc:'Handle extra-scope requests',fmt:'g',badge:'new',bg:'#FEF3C7'},
   {id:'invoice',emoji:'🧾',name:'Invoice Builder',desc:'Live preview, Net 7/14/30',fmt:'g',badge:'pop',bg:'#EAF1EC'},
-  {id:'latepay',emoji:'📬',name:'Late Payment Emails',desc:'3-email escalating sequence',fmt:'g',badge:'',bg:'#FEE2E2'},
   {id:'ratecalc',emoji:'📊',name:'Rate Calculator',desc:'Stop guessing your rates',fmt:'s',badge:'pop',bg:'#E8F0FE'},
-  {id:'proposal',emoji:'✉️',name:'Proposal Email Script',desc:'3 variants for any situation',fmt:'g',badge:'new',bg:'#E0F2FE'},
   {id:'pipeline',emoji:'🗂️',name:'Pipeline Tracker',desc:'Drag-and-drop kanban board',fmt:'n',badge:'new',bg:'#EDE9FE'},
   {id:'tax',emoji:'🧮',name:'Tax Tracker',desc:'Quarterly income & expense log',fmt:'s',badge:'',bg:'#FDF4FF'},
   {id:'welcome',emoji:'🎁',name:'Welcome Packet',desc:'Set the tone from day one',fmt:'c',badge:'',bg:'#FFF7ED'},
@@ -2465,18 +2543,11 @@ initHomeGrid();
 
 // ═══════════════ INVOICE ═══════════════
 let lineItems=[{desc:'Brand strategy',qty:1,rate:1200},{desc:'Logo design (3 concepts)',qty:1,rate:1800},{desc:'Brand guidelines',qty:1,rate:600}];
-let invTerms=7;
 function initInvoice(){
-  const today=new Date(),due=new Date();due.setDate(today.getDate()+7);
+  const today=new Date(),due=new Date();due.setDate(today.getDate()+30);
   document.getElementById('i-issued').value=today.toISOString().split('T')[0];
   document.getElementById('i-due').value=due.toISOString().split('T')[0];
   renderLineItems();updateInv();
-}
-function setInvTerms(d,btn){
-  invTerms=d;document.querySelectorAll('.tt').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
-  const iss=document.getElementById('i-issued').value;
-  if(iss){const du=new Date(iss+' ');du.setDate(du.getDate()+d);document.getElementById('i-due').value=du.toISOString().split('T')[0]}
-  document.getElementById('p-terms').textContent='Net '+d;updateInv();
 }
 function renderLineItems(){
   // SECURITY: escapeHTML() prevents attribute injection — a description
@@ -2504,15 +2575,81 @@ function updateLineTotal(i){
   if(el)el.textContent=fmD(lineItems[i].qty*lineItems[i].rate);
 }
 function addLineItem(){lineItems.push({desc:'',qty:1,rate:0});renderLineItems();updateInv()}
-function handleInvPay(sel){const c=document.getElementById('i-pay-custom');c.style.display=sel.value==='custom'?'':'none';updateInv()}
-function getInvPay(){const s=document.getElementById('i-pay');return s.value==='custom'?document.getElementById('i-pay-custom').value||'—':s.value}
+// Logo upload handler
+window._invLogoUrl = null;
+function handleLogoUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var label = document.getElementById('logo-upload-label');
+  if (label) label.textContent = '✓ ' + file.name;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    window._invLogoUrl = e.target.result;
+    var img = document.getElementById('p-logo');
+    if (img) { img.src = e.target.result; img.style.display = ''; }
+  };
+  reader.readAsDataURL(file);
+}
+
+// Payment method switcher — shows the matching detail block
+var _payBlocks = ['bank','paypal','venmo','zelle','cashapp','stripe','wise','wire','custom'];
+function handleInvPay(sel) {
+  _payBlocks.forEach(function(k) {
+    var el = document.getElementById('i-pay-' + k);
+    if (el) el.style.display = sel.value === k ? '' : 'none';
+  });
+  updateInv();
+}
+
+// Build the payment detail string shown in the invoice preview
+function getInvPay() {
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+  var method = (document.getElementById('i-pay')||{}).value || 'bank';
+  var labels = {bank:'Bank Transfer',paypal:'PayPal',venmo:'Venmo',zelle:'Zelle',cashapp:'Cash App',stripe:'Stripe',wise:'Wise',wire:'Wire Transfer',custom:'Custom'};
+  var label = labels[method] || method;
+  var details = [];
+  if (method === 'bank') {
+    if (g('i-bank-name')) details.push(g('i-bank-name'));
+    var routing = g('i-bank-routing'), acct = g('i-bank-account');
+    if (routing) details.push('Routing: ' + routing);
+    if (acct) details.push('Account: ' + acct);
+    if (g('i-bank-holder')) details.push(g('i-bank-holder'));
+  } else if (method === 'paypal') { if (g('i-paypal-email')) details.push(g('i-paypal-email')); }
+  else if (method === 'venmo')  { if (g('i-venmo-handle')) details.push(g('i-venmo-handle')); }
+  else if (method === 'zelle')  { if (g('i-zelle-contact')) details.push(g('i-zelle-contact')); }
+  else if (method === 'cashapp'){ if (g('i-cashapp-tag')) details.push(g('i-cashapp-tag')); }
+  else if (method === 'stripe') { if (g('i-stripe-link')) details.push(g('i-stripe-link')); }
+  else if (method === 'wise')   { if (g('i-wise-email')) details.push(g('i-wise-email')); }
+  else if (method === 'wire')   {
+    if (g('i-wire-bank')) details.push(g('i-wire-bank'));
+    if (g('i-wire-swift')) details.push('SWIFT: ' + g('i-wire-swift'));
+    if (g('i-wire-iban')) details.push('IBAN: ' + g('i-wire-iban'));
+  } else if (method === 'custom') { if (g('i-pay-custom-text')) details.push(g('i-pay-custom-text')); }
+  return label + (details.filter(Boolean).length ? ' — ' + details.filter(Boolean).join(' · ') : '');
+}
+
 function updateInv(){
   const g=id=>document.getElementById(id);
   const fmtD=d=>d?new Date(d+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}):'—';
-  [['yourname','p-yourname'],['youremail','p-youremail'],['num','p-invnum'],['client','p-client'],['contact','p-contact'],['email','p-cemail'],['project','p-project'],['notes','p-notes']].forEach(([src,dst])=>{const e=g(dst);if(e)e.textContent=g('i-'+src)?.value||'—'});
+  // Your details
+  [['yourname','p-yourname'],['num','p-invnum'],['client','p-client'],['contact','p-contact'],['email','p-cemail'],['project','p-project'],['notes','p-notes']].forEach(([src,dst])=>{const e=g(dst);if(e)e.textContent=g('i-'+src)?.value||'—'});
+  // Your email
+  const yeEl=g('p-youremail'); if(yeEl) yeEl.textContent=g('i-youremail')?.value||'';
+  // Your phone (optional)
+  const yphEl=g('p-yourphone'); const yphVal=g('i-yourphone')?.value||'';
+  if(yphEl){yphEl.textContent=yphVal;yphEl.style.display=yphVal?'':'none';}
+  // Client phone (optional)
+  const cphEl=g('p-ccphone'); const cphVal=g('i-clientphone')?.value||'';
+  if(cphEl){cphEl.textContent=cphVal;cphEl.style.display=cphVal?'':'none';}
+  // Client address (optional)
+  const cadEl=g('p-caddress'); const cadVal=g('i-clientaddress')?.value||'';
+  if(cadEl){cadEl.textContent=cadVal;cadEl.style.display=cadVal?'':'none';}
+  // Terms text
+  const termsEl=g('p-terms'); if(termsEl) termsEl.textContent=g('i-terms-text')?.value||'Net 30';
   g('p-issued').textContent=fmtD(g('i-issued')?.value);
   g('p-due').textContent=fmtD(g('i-due')?.value);
-  g('p-pay').textContent=getInvPay();
+  // Payment details
+  const ppEl=g('p-pay-details'); if(ppEl) ppEl.textContent=getInvPay();
   // SECURITY: escapeHTML() prevents XSS when user-supplied line-item
   // descriptions are rendered into the invoice preview via innerHTML.
   const tb=g('p-lineitems');if(tb)tb.innerHTML=lineItems.map(li=>`<tr><td>${escapeHTML(li.desc)||'—'}</td><td>${escapeHTML(String(li.qty))}</td><td>${fmD(li.rate)}</td><td>${fmD(li.qty*li.rate)}</td></tr>`).join('');
@@ -3293,10 +3430,16 @@ _supabase.auth.getSession().then(function(result) {
 // We only act on genuine new sign-ins (PASSWORD/OAuth) and sign-outs.
 _supabase.auth.onAuthStateChange(function(event, session) {
   if ((event === 'SIGNED_IN') && session) {
-    // Skip INITIAL_SESSION — already handled by getSession() above
-    if (window._authInitDone) {
+    var newId = session.user.id;
+    var curId = _currentUser && _currentUser.id;
+    if (window._authInitDone && newId !== curId) {
+      // Genuinely new user signed in — load data and show dashboard
       setLoggedInUser(session.user);
       showDash();
+    } else if (_currentUser && newId === curId) {
+      // Same user, token silently refreshed — just update the user object
+      // without re-rendering the whole dashboard (fixes spurious 2-min refresh)
+      _currentUser = session.user;
     }
   }
   if (event === 'SIGNED_OUT') {
@@ -3362,10 +3505,12 @@ function applyMyDetails(d) {
   set('my-channel', d.comms_channel); set('my-response', d.response_time);
   set('my-hours', d.working_hours); set('my-feedback', d.feedback_days);
   // Pre-fill invoice builder with user details
+  // Use '' fallback (not current field value) so a new user with no data
+  // never sees the previous user's data left in the field.
   var yn = document.getElementById('i-yourname');
   var ye = document.getElementById('i-youremail');
-  if (yn && !yn.dataset.userEdited) yn.value = d.business_name || d.full_name || yn.value;
-  if (ye && !ye.dataset.userEdited) ye.value = d.email || ye.value;
+  if (yn && !yn.dataset.userEdited) yn.value = d.business_name || d.full_name || '';
+  if (ye && !ye.dataset.userEdited) ye.value = d.email || '';
   if (d.tax_rate) { var t=document.getElementById('i-tax'); if(t&&!t.dataset.userEdited) t.value=d.tax_rate; }
   if (d.payment_methods) { var pm=document.getElementById('i-pay'); if(pm) pm.value=d.payment_methods; }
   if (d.payment_terms) {
@@ -3940,6 +4085,17 @@ function _clearUserState() {
     if (el) el.value = '';
   });
 
+  // Clear invoice builder user-specific fields so previous user's data
+  // cannot bleed through when a new account logs in.
+  ['i-yourname','i-youremail','i-yourphone'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.value = ''; delete el.dataset.userEdited; }
+  });
+  // Clear logo preview
+  var logoImg = document.getElementById('p-logo');
+  if (logoImg) { logoImg.src = ''; logoImg.style.display = 'none'; }
+  window._invLogoUrl = null;
+
   // Clear client list UI
   var cb = document.getElementById('client-list-body');
   if (cb) cb.innerHTML = '';
@@ -3951,6 +4107,10 @@ function _clearUserState() {
   window._pipeInit = false;
   window._taxInit = false;
   window._briefInit = false;
+  window._ptInit = false;
+  _ptProjects = []; _ptCurrentId = null;
+  window._ptMilestones = []; window._ptTasks = []; window._ptBilling = [];
+  window._ptMeetings = []; window._ptHours = [];
 }
 
 async function handleSignOut() {
@@ -4013,6 +4173,452 @@ function toggleSidebar() {
 // INIT
 calcRate();
 updateGoalBar();
+
+// ═══════════════ PROJECT TRACKER ═══════════════
+
+var _ptProjects = [];      // [{id, name, client_name, status, start_date, end_date, budget, description, contract_text}]
+var _ptCurrentId = null;   // currently selected project id
+var _ptCurrentTab = 'overview';
+var _ptModalMode = null;   // current modal mode
+
+// ─── DATA LOADING ───
+
+async function loadProjects() {
+  if (!_currentUser) return;
+  var uid = _currentUser.id;
+  var res = await _supabase.from('projects').select('*').eq('user_id', uid).order('created_at', {ascending: false});
+  if (!_currentUser || _currentUser.id !== uid) return;
+  if (res.data) { _ptProjects = res.data; renderPtList(); }
+}
+
+async function ptLoadProjectData(projectId) {
+  // Load all sub-data for the selected project in parallel
+  var uid = _currentUser && _currentUser.id;
+  if (!uid) return;
+  var [ms, ts, bs, me, hr] = await Promise.all([
+    _supabase.from('project_milestones').select('*').eq('project_id', projectId).eq('user_id', uid).order('due_date'),
+    _supabase.from('project_tasks').select('*').eq('project_id', projectId).eq('user_id', uid).order('due_date'),
+    _supabase.from('project_billing').select('*').eq('project_id', projectId).eq('user_id', uid).order('created_at'),
+    _supabase.from('project_meetings').select('*').eq('project_id', projectId).eq('user_id', uid).order('meeting_date', {ascending: false}),
+    _supabase.from('project_timesheet').select('*').eq('project_id', projectId).eq('user_id', uid).order('log_date', {ascending: false})
+  ]);
+  window._ptMilestones = ms.data || [];
+  window._ptTasks = ts.data || [];
+  window._ptBilling = bs.data || [];
+  window._ptMeetings = me.data || [];
+  window._ptHours = hr.data || [];
+  renderPtAllTabs();
+}
+
+// ─── RENDER FUNCTIONS ───
+
+function renderPtList() {
+  var list = document.getElementById('pt-projects-list');
+  var count = document.getElementById('pt-project-count');
+  if (count) count.textContent = _ptProjects.length + ' project' + (_ptProjects.length !== 1 ? 's' : '');
+  if (!_ptProjects.length) {
+    if (list) list.innerHTML = '<div class="pt-empty"><div class="pt-empty-icon">🗂️</div><p>No projects yet.<br>Click <strong>+ New project</strong> to start.</p></div>';
+    return;
+  }
+  if (list) list.innerHTML = _ptProjects.map(function(p) {
+    var statusClass = 'pt-status-' + (p.status || 'planning').replace(' ','_');
+    var statusLabel = (p.status || 'planning').replace('_',' ');
+    var dates = [p.start_date, p.end_date].filter(Boolean).map(function(d){ return d.slice(0,10); }).join(' → ');
+    return '<div class="pt-card' + (p.id === _ptCurrentId ? ' active' : '') + '" onclick="selectPtProject(\'' + p.id + '\')">' +
+      '<div class="pt-card-name">' + escapeHTML(p.name) + '</div>' +
+      (p.client_name ? '<div class="pt-card-client">' + escapeHTML(p.client_name) + '</div>' : '') +
+      '<div class="pt-card-meta"><span class="pt-status ' + statusClass + '">' + escapeHTML(statusLabel) + '</span>' +
+      (dates ? '<span style="font-size:11px;color:var(--ink-light)">' + escapeHTML(dates) + '</span>' : '') +
+      '</div></div>';
+  }).join('');
+}
+
+function selectPtProject(id) {
+  _ptCurrentId = id;
+  var proj = _ptProjects.find(function(p){ return p.id === id; });
+  if (!proj) return;
+  // Show detail view
+  document.getElementById('pt-list-view').style.display = 'none';
+  document.getElementById('pt-detail-view').style.display = '';
+  // Populate header
+  document.getElementById('pt-detail-name').textContent = proj.name;
+  var badge = document.getElementById('pt-detail-status-badge');
+  if (badge) {
+    var sc = 'pt-status pt-status-' + (proj.status || 'planning').replace(' ','_');
+    badge.className = sc;
+    badge.textContent = (proj.status || 'planning').replace('_',' ');
+  }
+  // Populate overview tab
+  var fmtDate = function(d){ return d ? new Date(d + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—'; };
+  document.getElementById('ptv-client').textContent = proj.client_name || '—';
+  document.getElementById('ptv-status').textContent = (proj.status || '—').replace('_',' ');
+  document.getElementById('ptv-start').textContent = fmtDate(proj.start_date);
+  document.getElementById('ptv-end').textContent = fmtDate(proj.end_date);
+  document.getElementById('ptv-budget').textContent = proj.budget ? '$' + Number(proj.budget).toLocaleString() : '—';
+  document.getElementById('ptv-desc').textContent = proj.description || '—';
+  var cw = document.getElementById('ptv-contract-wrap');
+  if (proj.contract_text) {
+    document.getElementById('ptv-contract').textContent = proj.contract_text;
+    if (cw) cw.style.display = '';
+  } else { if (cw) cw.style.display = 'none'; }
+  // Reset to overview tab
+  showPtTab('overview', document.querySelector('#pt-detail-view .pt-tab'));
+  // Load sub-data
+  ptLoadProjectData(id);
+  // Highlight in list
+  renderPtList();
+}
+
+function ptBackToList() {
+  _ptCurrentId = null;
+  document.getElementById('pt-list-view').style.display = '';
+  document.getElementById('pt-detail-view').style.display = 'none';
+  renderPtList();
+}
+
+function showPtTab(tab, btn) {
+  _ptCurrentTab = tab;
+  document.querySelectorAll('.pt-tab-content').forEach(function(el){ el.style.display = 'none'; });
+  var el = document.getElementById('pt-tab-' + tab);
+  if (el) el.style.display = '';
+  document.querySelectorAll('#pt-detail-view .pt-tab').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
+function renderPtAllTabs() {
+  renderPtMilestones();
+  renderPtTasks();
+  renderPtBilling();
+  renderPtMeetings();
+  renderPtHours();
+}
+
+function renderPtMilestones() {
+  var ms = window._ptMilestones || [];
+  var el = document.getElementById('pt-milestones-list');
+  if (!el) return;
+  // Gantt
+  var proj = _ptProjects.find(function(p){ return p.id === _ptCurrentId; });
+  var ganttEl = document.getElementById('pt-gantt');
+  if (ganttEl && proj && proj.start_date && proj.end_date) {
+    var start = new Date(proj.start_date), end = new Date(proj.end_date);
+    var range = end - start || 1;
+    ganttEl.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-light);margin-bottom:8px">Timeline</div>' +
+      ms.map(function(m) {
+        var mDate = m.due_date ? new Date(m.due_date) : end;
+        var pct = Math.min(100, Math.max(0, ((mDate - start) / range) * 100));
+        return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
+          '<div style="width:130px;font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escapeHTML(m.title) + '">' + escapeHTML(m.title) + '</div>' +
+          '<div style="flex:1;height:14px;background:var(--cream-dark);border-radius:4px;position:relative;min-width:150px">' +
+          '<div style="position:absolute;left:0;top:0;height:100%;width:' + pct + '%;background:' + (m.completed ? 'var(--sage)' : 'var(--amber)') + ';border-radius:4px;min-width:' + (pct > 0 ? '4px' : '0') + '"></div>' +
+          '</div><div style="font-size:11px;color:var(--ink-light);flex-shrink:0">' + (m.due_date ? m.due_date.slice(0,10) : '—') + '</div></div>';
+      }).join('');
+  } else if (ganttEl) { ganttEl.innerHTML = ''; }
+  if (!ms.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No milestones yet.</div>'; return; }
+  el.innerHTML = ms.map(function(m, i) {
+    return '<div class="pt-row">' +
+      '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')">&#10003;</div>' +
+      '<span class="pt-row-name' + (m.completed ? ' done' : '') + '">' + escapeHTML(m.title) + '</span>' +
+      (m.due_date ? '<span class="pt-row-date">' + m.due_date.slice(0,10) + '</span>' : '') +
+      '<button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
+      '</div>';
+  }).join('');
+}
+
+function renderPtTasks() {
+  var ts = window._ptTasks || [];
+  var el = document.getElementById('pt-tasks-list');
+  if (!el) return;
+  if (!ts.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No tasks yet.</div>'; return; }
+  var statusDot = {todo:'#D1D5DB',in_progress:'var(--amber)',done:'var(--sage)'};
+  el.innerHTML = ts.map(function(t, i) {
+    var dot = statusDot[t.status] || '#D1D5DB';
+    return '<div class="pt-row">' +
+      '<div style="width:14px;height:14px;border-radius:50%;background:' + dot + ';flex-shrink:0"></div>' +
+      '<span class="pt-row-name' + (t.status === 'done' ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
+      (t.assignee ? '<span class="pt-row-badge">' + escapeHTML(t.assignee) + '</span>' : '') +
+      (t.due_date ? '<span class="pt-row-date">' + t.due_date.slice(0,10) + '</span>' : '') +
+      '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + i + ')">&#215;</button>' +
+      '</div>';
+  }).join('');
+}
+
+function renderPtBilling() {
+  var bs = window._ptBilling || [];
+  var el = document.getElementById('pt-billing-list');
+  var totEl = document.getElementById('pt-bill-total');
+  if (!el) return;
+  var total = bs.reduce(function(s, b){ return s + (parseFloat(b.amount) || 0); }, 0);
+  var paid = bs.filter(function(b){ return b.status === 'paid'; }).reduce(function(s, b){ return s + (parseFloat(b.amount) || 0); }, 0);
+  if (totEl) totEl.innerHTML = 'Total: <strong>$' + total.toLocaleString() + '</strong> &nbsp;·&nbsp; Paid: <strong style="color:var(--sage)">$' + paid.toLocaleString() + '</strong> &nbsp;·&nbsp; Outstanding: <strong style="color:var(--amber)">$' + (total - paid).toLocaleString() + '</strong>';
+  if (!bs.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No billing phases yet.</div>'; return; }
+  var statusClass = {pending:'pt-bs-pending',invoiced:'pt-bs-invoiced',paid:'pt-bs-paid'};
+  el.innerHTML = bs.map(function(b, i) {
+    return '<div class="pt-bill-row">' +
+      '<span class="pt-bill-name">' + escapeHTML(b.phase_name) + (b.billing_type === 'per_phase' ? ' <span style="font-size:10px;color:var(--ink-light)">(per phase)</span>' : '') + '</span>' +
+      '<span class="pt-bill-amt">$' + (parseFloat(b.amount) || 0).toLocaleString() + '</span>' +
+      '<span class="pt-bill-status ' + (statusClass[b.status] || 'pt-bs-pending') + '" onclick="cyclePtBillingStatus(' + i + ')">' + (b.status || 'pending') + '</span>' +
+      '<button class="pt-row-del" onclick="deletePtItem(\'billing\',' + i + ')">&#215;</button>' +
+      '</div>';
+  }).join('');
+}
+
+function renderPtMeetings() {
+  var me = window._ptMeetings || [];
+  var el = document.getElementById('pt-meetings-list');
+  if (!el) return;
+  if (!me.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No meeting notes yet.</div>'; return; }
+  el.innerHTML = me.map(function(m, i) {
+    return '<div class="pt-note-item">' +
+      '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">&#215; Delete</button>' +
+      '<div class="pt-note-date">' + (m.meeting_date ? m.meeting_date.slice(0,10) : '—') + (m.attendees ? ' · ' + escapeHTML(m.attendees) : '') + '</div>' +
+      '<div class="pt-note-text">' + escapeHTML(m.notes || '') + '</div>' +
+      (m.action_items ? '<div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--ink-mid)">Action items:</div><div class="pt-note-text" style="font-size:12px">' + escapeHTML(m.action_items) + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function renderPtHours() {
+  var hr = window._ptHours || [];
+  var el = document.getElementById('pt-hours-list');
+  var totEl = document.getElementById('pt-hours-total');
+  if (!el) return;
+  var total = hr.reduce(function(s, h){ return s + (parseFloat(h.hours) || 0); }, 0);
+  if (totEl) totEl.innerHTML = 'Total logged: <strong>' + total.toFixed(1) + ' hrs</strong>';
+  if (!hr.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No time logged yet.</div>'; return; }
+  el.innerHTML = hr.map(function(h, i) {
+    return '<div class="pt-time-row">' +
+      '<span style="font-size:12px;color:var(--ink-light)">' + (h.log_date ? h.log_date.slice(0,10) : '—') + '</span>' +
+      '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
+      '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
+      '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' +
+      '</div>';
+  }).join('');
+}
+
+// ─── MODAL ───
+
+function openPtModal(mode) {
+  _ptModalMode = mode;
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  var proj = _ptCurrentId ? _ptProjects.find(function(p){ return p.id === _ptCurrentId; }) : null;
+  var html = '';
+  if (mode === 'new-project' || mode === 'edit-project') {
+    var p = mode === 'edit-project' && proj ? proj : {};
+    html = '<div class="pt-modal-title">' + (mode === 'new-project' ? 'New project' : 'Edit project') + '</div>' +
+      '<div class="pt-field"><label>Project name *</label><input class="pt-inp" id="ptm-name" value="' + escapeHTML(p.name || '') + '" placeholder="e.g. Brand Identity for Acme"></div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Client</label><input class="pt-inp" id="ptm-client" value="' + escapeHTML(p.client_name || '') + '" placeholder="Client name"></div>' +
+      '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-status"><option value="planning"' + (p.status==='planning'?' selected':'') + '>Planning</option><option value="active"' + (p.status==='active'?' selected':'') + '>Active</option><option value="on_hold"' + (p.status==='on_hold'?' selected':'') + '>On hold</option><option value="completed"' + (p.status==='completed'?' selected':'') + '>Completed</option></select></div>' +
+      '<div class="pt-field"><label>Start date</label><input class="pt-inp" type="date" id="ptm-start" value="' + (p.start_date ? p.start_date.slice(0,10) : '') + '"></div>' +
+      '<div class="pt-field"><label>End date</label><input class="pt-inp" type="date" id="ptm-end" value="' + (p.end_date ? p.end_date.slice(0,10) : '') + '"></div>' +
+      '</div>' +
+      '<div class="pt-field"><label>Budget ($)</label><input class="pt-inp" type="number" id="ptm-budget" value="' + (p.budget || '') + '" placeholder="0"></div>' +
+      '<div class="pt-field"><label>Description</label><textarea class="pt-ta" id="ptm-desc">' + escapeHTML(p.description || '') + '</textarea></div>' +
+      '<div class="pt-field"><label>Contract / scope notes</label><textarea class="pt-ta" id="ptm-contract" style="min-height:120px">' + escapeHTML(p.contract_text || '') + '</textarea></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtProject()">Save project</button></div>';
+  } else if (mode === 'add-milestone') {
+    html = '<div class="pt-modal-title">Add milestone</div>' +
+      '<div class="pt-field"><label>Milestone name *</label><input class="pt-inp" id="ptm-ms-title" placeholder="e.g. First draft delivered"></div>' +
+      '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-ms-date"></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMilestone()">Add milestone</button></div>';
+  } else if (mode === 'add-task') {
+    html = '<div class="pt-modal-title">Add task</div>' +
+      '<div class="pt-field"><label>Task *</label><input class="pt-inp" id="ptm-task-title" placeholder="e.g. Design mockups"></div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Assigned to</label><input class="pt-inp" id="ptm-task-assignee" placeholder="Name or role"></div>' +
+      '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-task-date"></div>' +
+      '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo">To do</option><option value="in_progress">In progress</option><option value="done">Done</option></select></div>' +
+      '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>' +
+      '</div>' +
+      '<div class="pt-field"><label>Notes</label><textarea class="pt-ta" id="ptm-task-notes" style="min-height:60px"></textarea></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtTask()">Add task</button></div>';
+  } else if (mode === 'add-billing') {
+    html = '<div class="pt-modal-title">Add billing phase</div>' +
+      '<div class="pt-field"><label>Phase name *</label><input class="pt-inp" id="ptm-bill-name" placeholder="e.g. 50% deposit, Final payment"></div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Amount ($) *</label><input class="pt-inp" type="number" id="ptm-bill-amount" placeholder="0"></div>' +
+      '<div class="pt-field"><label>Type</label><select class="pt-sel" id="ptm-bill-type"><option value="one_time">One-time</option><option value="per_phase">Per phase</option></select></div>' +
+      '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-bill-status"><option value="pending">Pending</option><option value="invoiced">Invoiced</option><option value="paid">Paid</option></select></div>' +
+      '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-bill-date"></div>' +
+      '</div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtBilling()">Add phase</button></div>';
+  } else if (mode === 'add-meeting') {
+    html = '<div class="pt-modal-title">Add meeting note</div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-meet-date"></div>' +
+      '<div class="pt-field"><label>Attendees</label><input class="pt-inp" id="ptm-meet-attendees" placeholder="e.g. Alex, Jamie"></div>' +
+      '</div>' +
+      '<div class="pt-field"><label>Notes / summary *</label><textarea class="pt-ta" id="ptm-meet-notes" style="min-height:100px"></textarea></div>' +
+      '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="ptm-meet-actions" style="min-height:60px" placeholder="- Item 1&#10;- Item 2"></textarea></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMeeting()">Save note</button></div>';
+  } else if (mode === 'add-time') {
+    html = '<div class="pt-modal-title">Log time</div>' +
+      '<div class="pt-grid2">' +
+      '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date"></div>' +
+      '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" placeholder="0.5" min="0.25" step="0.25"></div>' +
+      '</div>' +
+      '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" placeholder="What did you work on?"></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtTime()">Log time</button></div>';
+  }
+  body.innerHTML = html;
+  // Prefill today's date where applicable
+  var today = new Date().toISOString().split('T')[0];
+  ['ptm-ms-date','ptm-task-date','ptm-bill-date','ptm-meet-date','ptm-time-date'].forEach(function(id){
+    var el = document.getElementById(id); if (el && !el.value) el.value = today;
+  });
+  overlay.classList.add('open');
+}
+
+function closePtModal() {
+  var overlay = document.getElementById('pt-modal');
+  if (overlay) overlay.classList.remove('open');
+}
+
+// ─── SAVE HANDLERS ───
+
+async function savePtProject() {
+  if (!_currentUser) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var name = g('ptm-name'); if (!name) { showToast('Project name is required'); return; }
+  var payload = {
+    user_id: _currentUser.id, name: name,
+    client_name: g('ptm-client'), status: g('ptm-status'),
+    start_date: g('ptm-start') || null, end_date: g('ptm-end') || null,
+    budget: parseFloat(g('ptm-budget')) || null,
+    description: g('ptm-desc'), contract_text: g('ptm-contract'),
+    updated_at: new Date().toISOString()
+  };
+  var res;
+  if (_ptModalMode === 'edit-project' && _ptCurrentId) {
+    res = await _supabase.from('projects').update(payload).eq('id', _ptCurrentId).eq('user_id', _currentUser.id).select().single();
+    if (!res.error && res.data) {
+      var idx = _ptProjects.findIndex(function(p){ return p.id === _ptCurrentId; });
+      if (idx >= 0) _ptProjects[idx] = res.data;
+    }
+  } else {
+    payload.created_at = new Date().toISOString();
+    res = await _supabase.from('projects').insert(payload).select().single();
+    if (!res.error && res.data) _ptProjects.unshift(res.data);
+  }
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  closePtModal();
+  renderPtList();
+  if (_ptModalMode === 'edit-project' && _ptCurrentId) selectPtProject(_ptCurrentId);
+  showToast('\u2713 Project saved');
+}
+
+async function savePtMilestone() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var title = document.getElementById('ptm-ms-title')&&document.getElementById('ptm-ms-title').value.trim();
+  if (!title) { showToast('Milestone name required'); return; }
+  var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, title: title,
+    due_date: document.getElementById('ptm-ms-date')&&document.getElementById('ptm-ms-date').value || null, completed: false };
+  var res = await _supabase.from('project_milestones').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  window._ptMilestones = window._ptMilestones || [];
+  window._ptMilestones.push(res.data);
+  window._ptMilestones.sort(function(a,b){ return (a.due_date||'') < (b.due_date||'') ? -1 : 1; });
+  closePtModal(); renderPtMilestones(); showToast('\u2713 Milestone added');
+}
+
+async function savePtTask() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var title = document.getElementById('ptm-task-title')&&document.getElementById('ptm-task-title').value.trim();
+  if (!title) { showToast('Task title required'); return; }
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, title: title,
+    assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null,
+    status: g('ptm-task-status') || 'todo', priority: g('ptm-task-priority') || 'medium',
+    notes: g('ptm-task-notes') };
+  var res = await _supabase.from('project_tasks').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  window._ptTasks = window._ptTasks || []; window._ptTasks.push(res.data);
+  closePtModal(); renderPtTasks(); showToast('\u2713 Task added');
+}
+
+async function savePtBilling() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var name = g('ptm-bill-name'); if (!name) { showToast('Phase name required'); return; }
+  var amount = parseFloat(g('ptm-bill-amount')); if (!amount) { showToast('Amount required'); return; }
+  var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, phase_name: name,
+    amount: amount, billing_type: g('ptm-bill-type') || 'one_time',
+    status: g('ptm-bill-status') || 'pending', due_date: g('ptm-bill-date') || null };
+  var res = await _supabase.from('project_billing').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  window._ptBilling = window._ptBilling || []; window._ptBilling.push(res.data);
+  closePtModal(); renderPtBilling(); showToast('\u2713 Billing phase added');
+}
+
+async function savePtMeeting() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var notes = g('ptm-meet-notes'); if (!notes) { showToast('Notes required'); return; }
+  var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
+    meeting_date: g('ptm-meet-date') || null, attendees: g('ptm-meet-attendees'),
+    notes: notes, action_items: g('ptm-meet-actions') };
+  var res = await _supabase.from('project_meetings').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  window._ptMeetings = window._ptMeetings || []; window._ptMeetings.unshift(res.data);
+  closePtModal(); renderPtMeetings(); showToast('\u2713 Meeting note saved');
+}
+
+async function savePtTime() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
+  var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
+    log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc') };
+  var res = await _supabase.from('project_timesheet').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  window._ptHours = window._ptHours || []; window._ptHours.unshift(res.data);
+  closePtModal(); renderPtHours(); showToast('\u2713 Time logged');
+}
+
+// ─── ACTIONS ───
+
+async function togglePtMilestone(i) {
+  if (!_currentUser) return;
+  var ms = window._ptMilestones; if (!ms || !ms[i]) return;
+  ms[i].completed = !ms[i].completed;
+  await _supabase.from('project_milestones').update({completed: ms[i].completed}).eq('id', ms[i].id).eq('user_id', _currentUser.id);
+  renderPtMilestones();
+}
+
+async function cyclePtBillingStatus(i) {
+  if (!_currentUser) return;
+  var bs = window._ptBilling; if (!bs || !bs[i]) return;
+  var cycle = {pending:'invoiced', invoiced:'paid', paid:'pending'};
+  bs[i].status = cycle[bs[i].status] || 'pending';
+  await _supabase.from('project_billing').update({status: bs[i].status}).eq('id', bs[i].id).eq('user_id', _currentUser.id);
+  renderPtBilling();
+}
+
+async function deletePtItem(table, i) {
+  if (!_currentUser) return;
+  var collections = {milestones:'_ptMilestones',tasks:'_ptTasks',billing:'_ptBilling',meetings:'_ptMeetings',timesheet:'_ptHours'};
+  var dbTable = {milestones:'project_milestones',tasks:'project_tasks',billing:'project_billing',meetings:'project_meetings',timesheet:'project_timesheet'};
+  var col = window[collections[table]]; if (!col || !col[i]) return;
+  await _supabase.from(dbTable[table]).delete().eq('id', col[i].id).eq('user_id', _currentUser.id);
+  col.splice(i, 1);
+  var renders = {milestones:renderPtMilestones,tasks:renderPtTasks,billing:renderPtBilling,meetings:renderPtMeetings,timesheet:renderPtHours};
+  if (renders[table]) renders[table]();
+}
+
+async function deletePtProject() {
+  if (!_currentUser || !_ptCurrentId) return;
+  if (!confirm('Delete this project and all its data? This cannot be undone.')) return;
+  await _supabase.from('projects').delete().eq('id', _ptCurrentId).eq('user_id', _currentUser.id);
+  _ptProjects = _ptProjects.filter(function(p){ return p.id !== _ptCurrentId; });
+  ptBackToList();
+  showToast('\u2713 Project deleted');
+}
+
+// Close modal on overlay click
+document.getElementById('pt-modal') && document.getElementById('pt-modal').addEventListener('click', function(e){ if (e.target === this) closePtModal(); });
 </script>
 
 <!-- Client directory modal -->
