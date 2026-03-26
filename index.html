@@ -563,6 +563,11 @@ footer p{font-size:12px;color:var(--ink-light)}
 .kk-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 11px;margin-bottom:7px;cursor:grab;transition:box-shadow .15s,transform .15s;position:relative}
 .kk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
 .kk-card:active{cursor:grabbing}
+.kk-actions{position:absolute;top:6px;right:6px;display:none;gap:3px}
+.kk-card:hover .kk-actions{display:flex}
+.kk-act-btn{background:var(--cream-dark);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:10px;padding:2px 6px;color:var(--ink-mid);line-height:1.4}
+.kk-act-btn:hover{background:var(--amber-light);border-color:var(--amber);color:var(--amber)}
+.kk-act-del:hover{background:#FEE2E2;border-color:#FCA5A5;color:#DC2626}
 .kk-client{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}
 .kk-project{font-size:11px;color:var(--ink-light);margin-bottom:7px;line-height:1.35}
 .kk-foot{display:flex;justify-content:space-between;align-items:center}
@@ -2382,8 +2387,9 @@ var RateLimiter = (function() {
 <!-- Pipeline modal -->
 <div class="modal-overlay" id="pipe-modal" onclick="closePipeModal(event)">
   <div class="modal-box">
-    <div class="modal-hd"><span class="modal-title">Add client to pipeline</span><button class="modal-close" onclick="closePipeModalBtn()">✕</button></div>
+    <div class="modal-hd"><span class="modal-title" id="pm-modal-title">Add client to pipeline</span><button class="modal-close" onclick="closePipeModalBtn()">✕</button></div>
     <div class="modal-bd">
+      <input type="hidden" id="pm-edit-id" value="">
       <div class="m-lbl">Client / company name</div><input class="m-inp" id="pm-client" placeholder="e.g. Acme Studio">
       <div class="m-lbl">Project</div><input class="m-inp" id="pm-project" placeholder="e.g. Brand identity redesign">
       <div class="m-row2">
@@ -2395,7 +2401,7 @@ var RateLimiter = (function() {
         <div><div class="m-lbl">Close date</div><input class="m-inp" id="pm-date" type="date" style="margin-bottom:0"></div>
       </div>
     </div>
-    <div class="modal-ft"><button class="btn-outline" onclick="closePipeModalBtn()">Cancel</button><button class="btn-use" onclick="addPipeClient()">Add to pipeline</button></div>
+    <div class="modal-ft"><button class="btn-outline" onclick="closePipeModalBtn()">Cancel</button><button class="btn-use" id="pm-save-btn" onclick="savePipeModal()">Add to pipeline</button></div>
   </div>
 </div>
 
@@ -3223,15 +3229,19 @@ function renderPipeline(){
   const board=document.getElementById('pf-kanban');if(!board)return;
   board.innerHTML=pfStages.map((s,si)=>{
     const cards=pfClients.filter(c=>c.stage===si);
-    return `<div class="kc" data-stage="${si}" ondragover="event.preventDefault();pfDragOver(event,this)" ondragleave="pfDragLeave(event,this)" ondrop="pfDrop(event,${si},this)">
+    return `<div class="kc" data-stage="${si}" ondragover="pfColDragOver(event,this)" ondragleave="pfDragLeave(event,this)" ondrop="pfColDrop(event,${si},this)">
       <div class="kc-stripe" style="background:${s.stripe}"></div>
       <div class="kc-header"><span class="kc-title">${s.label}</span><span class="kc-cnt">${cards.length}</span></div>
       <div class="kc-body">
-        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" ondragstart="pfDragStart(event,${c.id})" ondragend="pfDragEnd(event)" ondragover="event.preventDefault();event.stopPropagation();pfDragOver(event,this.parentElement.parentElement)" ondrop="event.stopPropagation();pfDrop(event,${si},this.parentElement.parentElement)">
+        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" data-stage="${si}" ondragstart="pfDragStart(event)" ondragend="pfDragEnd(event)" ondragover="pfColDragOver(event,this.closest('.kc'))" ondragleave="pfDragLeave(event,this.closest('.kc'))" ondrop="pfColDrop(event,${si},this.closest('.kc'))">
+          <div class="kk-actions">
+            <button class="kk-act-btn" onclick="event.stopPropagation();openPipelineEditModal('${c.id}')" title="Edit">✎ Edit</button>
+            <button class="kk-act-btn kk-act-del" onclick="event.stopPropagation();deletePfCard('${c.id}')" title="Delete">✕</button>
+          </div>
           <span class="kk-temp temp-${c.temp}">${c.temp==='hot'?'🔥 Hot':c.temp==='warm'?'Warm':'❄️ Cold'}</span>
-          <div class="kk-client">${c.client}</div>
-          <div class="kk-project">${c.project}</div>
-          <div class="kk-foot"><span class="kk-val">${fm(c.value)}</span><span class="kk-date">${c.date||''}</span></div>
+          <div class="kk-client">${escapeHTML(c.client)}</div>
+          <div class="kk-project">${escapeHTML(c.project||'')}</div>
+          <div class="kk-foot"><span class="kk-val">${fm(c.value)}</span><span class="kk-date">${escapeHTML(c.date||'')}</span></div>
         </div>`).join('')}
         <button class="kc-add-btn" onclick="openPipelineModal(${si})">+ Add</button>
       </div>
@@ -3251,24 +3261,84 @@ function renderPipeline(){
     <div class="hs-card"><div class="hs-lbl">Weighted pipeline</div><div class="hs-val">${fm(totalW)}</div><div class="hs-sub g">All stages</div></div>
     <div class="hs-card"><div class="hs-lbl">Hot leads</div><div class="hs-val">${hot}</div><div class="hs-sub ${hot>=1?'w':'r'}">${hot>=1?'Follow up now':'Need more'}</div></div>`;
 }
-function pfDragStart(e,id){pfDragId=id;e.currentTarget.style.opacity='.4';e.currentTarget.style.transform='scale(1.02)';e.dataTransfer.effectAllowed='move';}
+// Drag handlers — read id from data attribute to avoid UUID-in-JS-expression bug
+function pfDragStart(e){
+  pfDragId = e.currentTarget.dataset.id;
+  e.currentTarget.style.opacity='.4';
+  e.currentTarget.style.transform='scale(1.02)';
+  e.dataTransfer.effectAllowed='move';
+  e.dataTransfer.setData('text/plain', pfDragId);
+}
 function pfDragEnd(e){e.currentTarget.style.opacity='1';e.currentTarget.style.transform='';}
-function pfDragOver(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';col.classList.add('drag-over');}
-function pfDragLeave(e,col){if(!col.contains(e.relatedTarget))col.classList.remove('drag-over');}
-function pfDrop(e,stage,col){e.preventDefault();if(col)col.classList.remove('drag-over');const c=pfClients.find(x=>x.id===pfDragId);if(c){c.stage=stage;savePipelineCard(c);}pfDragId=null;renderPipeline();}
-function openPipelineModal(stage=2){document.getElementById('pm-stage').value=stage;document.getElementById('pipe-modal').classList.add('open')}
+function pfColDragOver(e,col){e.preventDefault();e.dataTransfer.dropEffect='move';if(col)col.classList.add('drag-over');}
+function pfDragLeave(e,col){if(col&&!col.contains(e.relatedTarget))col.classList.remove('drag-over');}
+function pfColDrop(e,stage,col){
+  e.preventDefault();e.stopPropagation();
+  if(col)col.classList.remove('drag-over');
+  var dragId = pfDragId || e.dataTransfer.getData('text/plain');
+  var c = pfClients.find(x=>String(x.id)===String(dragId));
+  if(c && c.stage !== stage){c.stage=stage;savePipelineCard(c);}
+  pfDragId=null;renderPipeline();
+}
+function openPipelineModal(stage=2){
+  var ti=document.getElementById('pm-modal-title'),sb=document.getElementById('pm-save-btn'),ei=document.getElementById('pm-edit-id');
+  if(ti)ti.textContent='Add client to pipeline';
+  if(sb)sb.textContent='Add to pipeline';
+  if(ei)ei.value='';
+  document.getElementById('pm-stage').value=stage;
+  document.getElementById('pipe-modal').classList.add('open');
+}
+function openPipelineEditModal(id){
+  var c=pfClients.find(x=>String(x.id)===String(id));if(!c)return;
+  var ti=document.getElementById('pm-modal-title'),sb=document.getElementById('pm-save-btn'),ei=document.getElementById('pm-edit-id');
+  if(ti)ti.textContent='Edit client';
+  if(sb)sb.textContent='Save changes';
+  if(ei)ei.value=id;
+  document.getElementById('pm-client').value=c.client||'';
+  document.getElementById('pm-project').value=c.project||'';
+  document.getElementById('pm-value').value=c.value||'';
+  document.getElementById('pm-stage').value=c.stage||0;
+  document.getElementById('pm-temp').value=c.temp||'warm';
+  // Reverse date label back to YYYY-MM-DD if possible (stored as "Apr 12" so clear it)
+  document.getElementById('pm-date').value='';
+  document.getElementById('pipe-modal').classList.add('open');
+}
 function closePipeModal(e){if(e.target.id==='pipe-modal')closePipeModalBtn()}
 function closePipeModalBtn(){document.getElementById('pipe-modal').classList.remove('open')}
+function savePipeModal(){
+  var editId=document.getElementById('pm-edit-id').value;
+  if(editId){updatePfCard(editId);}else{addPipeClient();}
+}
 function addPipeClient(){
   const client=document.getElementById('pm-client').value.trim();
   if(!client){showToast('⚠️ Enter a client name');return}
   const dr=document.getElementById('pm-date').value;
   const dateLabel=dr?new Date(dr+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
-  var newCard = {id:pfNextId++,client,project:document.getElementById('pm-project').value,value:parseFloat(document.getElementById('pm-value').value)||0,stage:parseInt(document.getElementById('pm-stage').value),temp:document.getElementById('pm-temp').value,date:dateLabel};
+  var newCard={id:pfNextId++,client,project:document.getElementById('pm-project').value,value:parseFloat(document.getElementById('pm-value').value)||0,stage:parseInt(document.getElementById('pm-stage').value),temp:document.getElementById('pm-temp').value,date:dateLabel};
   pfClients.push(newCard);
   savePipelineCard(newCard);
   closePipeModalBtn();['pm-client','pm-project','pm-value','pm-date'].forEach(id=>document.getElementById(id).value='');
   renderPipeline();showToast('\u2713 Client added to pipeline');
+}
+async function updatePfCard(id){
+  const client=document.getElementById('pm-client').value.trim();
+  if(!client){showToast('⚠️ Enter a client name');return}
+  const dr=document.getElementById('pm-date').value;
+  const dateLabel=dr?new Date(dr+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+  var c=pfClients.find(x=>String(x.id)===String(id));if(!c)return;
+  c.client=client;c.project=document.getElementById('pm-project').value;
+  c.value=parseFloat(document.getElementById('pm-value').value)||0;
+  c.stage=parseInt(document.getElementById('pm-stage').value);
+  c.temp=document.getElementById('pm-temp').value;
+  if(dr)c.date=dateLabel;
+  await savePipelineCardFull(c);
+  closePipeModalBtn();renderPipeline();showToast('\u2713 Client updated');
+}
+async function deletePfCard(id){
+  if(!confirm('Delete this card?'))return;
+  pfClients=pfClients.filter(x=>String(x.id)!==String(id));
+  await deletePipelineCard(id);
+  renderPipeline();showToast('\u2713 Deleted');
 }
 
 // ═══════════════ TAX TRACKER ═══════════════
@@ -3915,16 +3985,22 @@ async function loadPipelineCards() {
 
 async function savePipelineCard(card) {
   if (!_currentUser) return;
-  var payload = {
-    user_id: _currentUser.id, client_name: card.client, project: card.project,
-    value: card.value, stage: card.stage, temp: card.temp, close_date: card.date
-  };
   if (typeof card.id === 'string' && card.id.includes('-')) {
-    // UUID — already saved, update stage only
+    // UUID — update stage only (drag-drop)
     await _supabase.from('pipeline_cards').update({ stage: card.stage }).eq('id', card.id).eq('user_id', _currentUser.id);
   } else {
+    var payload = { user_id: _currentUser.id, client_name: card.client, project: card.project,
+      value: card.value, stage: card.stage, temp: card.temp, close_date: card.date };
     var res = await _supabase.from('pipeline_cards').insert(payload).select().single();
     if (res.data) card.id = res.data.id;
+  }
+}
+async function savePipelineCardFull(card) {
+  if (!_currentUser) return;
+  var payload = { client_name: card.client, project: card.project,
+    value: card.value, stage: card.stage, temp: card.temp, close_date: card.date };
+  if (typeof card.id === 'string' && card.id.includes('-')) {
+    await _supabase.from('pipeline_cards').update(payload).eq('id', card.id).eq('user_id', _currentUser.id);
   }
 }
 
