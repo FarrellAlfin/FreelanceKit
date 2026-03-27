@@ -848,6 +848,19 @@ footer p{font-size:12px;color:var(--ink-light)}
 .btn-save-sc{padding:8px 16px;background:var(--ink);color:var(--cream);border:none;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s;white-space:nowrap}
 .btn-save-sc:hover{background:var(--amber)}
 
+/* ── HOME HERO & QUICK ACCESS ── */
+.home-hero{background:linear-gradient(135deg,var(--amber-light) 0%,#fffaf5 60%,var(--cream) 100%);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:24px}
+.home-hero-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-mid);margin-bottom:6px;font-weight:600}
+.home-hero-name{font-size:26px;font-weight:700;color:var(--ink);margin:0 0 6px;font-family:var(--font-serif)}
+.home-hero-sub{font-size:13px;color:var(--ink-mid);margin:0}
+.home-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:12px}
+.home-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.hq-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 16px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:5px}
+.hq-card:hover{border-color:var(--amber);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.hq-icon{font-size:26px;line-height:1;margin-bottom:4px}
+.hq-name{font-size:13px;font-weight:600;color:var(--ink)}
+.hq-desc{font-size:12px;color:var(--ink-light);line-height:1.4}
+@media(max-width:700px){.home-quick-grid{grid-template-columns:repeat(2,1fr)}}
 /* ── CLIENT DROPDOWN in invoice ── */
 .client-dropdown{position:relative}
 .client-dd-list{position:absolute;top:100%;left:0;right:0;background:var(--white);border:1.5px solid var(--amber);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);z-index:50;max-height:180px;overflow-y:auto;display:none}
@@ -857,6 +870,7 @@ footer p{font-size:12px;color:var(--ink-light)}
 .cdd-item:hover{background:var(--amber-light);color:var(--amber)}
 
 /* ── INCOME GOAL BAR ── */
+.goal-bar-wrap,.save-scenario-bar,#scenarios-wrap{grid-column:1/-1}
 .goal-bar-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:18px}
 .goal-bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
 .goal-bar-title{font-size:13px;font-weight:500;color:var(--ink)}
@@ -1688,24 +1702,39 @@ var RateLimiter = (function() {
 
       <!-- ─── HOME ─── -->
       <div class="tmpl-panel active" id="panel-home">
-        <div class="welcome-bar">
-          <div class="wb-text">
-            <h3>Welcome back, Alex.</h3>
-            <p>3 new templates this week · Q2 tax deadline in 14 days</p>
+        <!-- Hero -->
+        <div class="home-hero">
+          <div class="home-hero-eyebrow">Welcome back</div>
+          <h2 class="home-hero-name" id="home-user-name">—</h2>
+          <p class="home-hero-sub">Everything you need to run your freelance business, in one place.</p>
+        </div>
+        <!-- Quick access -->
+        <div class="home-section-label">Quick access</div>
+        <div class="home-quick-grid">
+          <div class="hq-card" onclick="showPanel('invoice',document.getElementById('nav-invoice'))">
+            <span class="hq-icon">🧾</span>
+            <div class="hq-name">Invoice Builder</div>
+            <div class="hq-desc">Create &amp; preview invoices instantly</div>
           </div>
-          <div class="wb-stat">
-            <div class="wb-num">9</div>
-            <div class="wb-lbl">templates used</div>
+          <div class="hq-card" onclick="showPanel('projects',document.getElementById('nav-projects'))">
+            <span class="hq-icon">🛠️</span>
+            <div class="hq-name">Project Tracker</div>
+            <div class="hq-desc">Manage projects end-to-end</div>
+          </div>
+          <div class="hq-card" onclick="showPanel('ratecalc',document.getElementById('nav-ratecalc'))">
+            <span class="hq-icon">📊</span>
+            <div class="hq-name">Rate Calculator</div>
+            <div class="hq-desc">Find your minimum hourly rate</div>
+          </div>
+          <div class="hq-card" onclick="showPanel('pipeline',document.getElementById('nav-pipeline'))">
+            <span class="hq-icon">🗂️</span>
+            <div class="hq-name">Pipeline Tracker</div>
+            <div class="hq-desc">Track leads &amp; opportunities</div>
           </div>
         </div>
-        <div class="home-grid-header"><span class="hgh-title">All templates</span><span class="hgh-all" onclick="showToast('All templates are in the sidebar →')">View all</span></div>
+        <!-- All tools -->
+        <div class="home-section-label">All tools</div>
         <div class="template-grid" id="home-template-grid"></div>
-        <div class="home-grid-header"><span class="hgh-title">Recently used</span></div>
-        <div class="activity-list">
-          <div class="al-item"><div class="al-icon">📄</div><div><div class="al-name">Client Contract — Full Protection</div><div class="al-sub">Contracts & Legal</div></div><span class="al-time">2h ago</span></div>
-          <div class="al-item"><div class="al-icon">⚠️</div><div><div class="al-name">Scope Change Order</div><div class="al-sub">Downloaded · Contracts & Legal</div></div><span class="al-time">Yesterday</span></div>
-          <div class="al-item"><div class="al-icon">📊</div><div><div class="al-name">Rate Calculator</div><div class="al-sub">Used · Proposals & Pricing</div></div><span class="al-time">3 days ago</span></div>
-        </div>
       </div>
 
       <!-- ─── CONTRACT ─── -->
@@ -2442,7 +2471,7 @@ function showPanel(id,el){
   document.querySelectorAll('.dsb-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
   // Also select 'home' nav if showing home
-  if(id==='home'){const hn=document.getElementById('nav-home');if(hn)hn.classList.add('active')}
+  if(id==='home'){const hn=document.getElementById('nav-home');if(hn)hn.classList.add('active');updateHomeHero();}
   document.documentElement.scrollTop=0;document.body.scrollTop=0;
   localStorage.setItem('fk_panel', id);
   // Init interactive panels on first show
@@ -2554,6 +2583,16 @@ function initHomeGrid(){
         <div class="tg-meta"><span class="tg-fmt ${fmtClass[t.fmt]}">${fmtLabels[t.fmt]}</span>${t.badge==='new'?'<span class="tg-new">New</span>':t.badge==='pop'?'<span class="tg-pop">Popular</span>':''}</div>
       </div>
     </div>`).join('');
+}
+function updateHomeHero(){
+  var el=document.getElementById('home-user-name');
+  if(!el)return;
+  var name='there';
+  if(_currentUser){
+    var m=_currentUser.user_metadata;
+    name=(m&&(m.full_name||m.name))||(_currentUser.email?_currentUser.email.split('@')[0]:'')||'there';
+  }
+  el.textContent=name.charAt(0).toUpperCase()+name.slice(1)+'.';
 }
 initHomeGrid();
 
@@ -4502,6 +4541,7 @@ function renderPtTasks() {
       '<span class="pt-row-name' + (done ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
       (t.assignee ? '<span class="pt-row-badge">' + escapeHTML(t.assignee) + '</span>' : '') +
       (t.due_date ? '<span class="pt-row-date">' + t.due_date.slice(0,10) + '</span>' : '') +
+      '<button class="pt-row-edit" onclick="openPtEditTask(' + i + ')">Edit</button>' +
       '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + i + ')">&#215;</button>' +
       '</div>';
   }).join('');
@@ -4595,17 +4635,19 @@ function openPtModal(mode) {
       '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-ms-date"></div>' +
       '</div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMilestone()">Add milestone</button></div>';
-  } else if (mode === 'add-task') {
-    html = '<div class="pt-modal-title">Add task</div>' +
-      '<div class="pt-field"><label>Task *</label><input class="pt-inp" id="ptm-task-title" placeholder="e.g. Design mockups"></div>' +
+  } else if (mode === 'add-task' || mode === 'edit-task') {
+    var et = (mode === 'edit-task' && window._ptEditTaskIdx !== undefined) ? (window._ptTasks[window._ptEditTaskIdx] || {}) : {};
+    var selOpt = function(val, opt) { return val === opt ? ' selected' : ''; };
+    html = '<div class="pt-modal-title">' + (mode === 'edit-task' ? 'Edit task' : 'Add task') + '</div>' +
+      '<div class="pt-field"><label>Task *</label><input class="pt-inp" id="ptm-task-title" value="' + escapeHTML(et.title || '') + '" placeholder="e.g. Design mockups"></div>' +
       '<div class="pt-grid2">' +
-      '<div class="pt-field"><label>Assigned to</label><input class="pt-inp" id="ptm-task-assignee" placeholder="Name or role"></div>' +
-      '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-task-date"></div>' +
-      '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo">To do</option><option value="in_progress">In progress</option><option value="done">Done</option></select></div>' +
-      '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></div>' +
+      '<div class="pt-field"><label>Assigned to</label><input class="pt-inp" id="ptm-task-assignee" value="' + escapeHTML(et.assignee || '') + '" placeholder="Name or role"></div>' +
+      '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-task-date" value="' + (et.due_date ? et.due_date.slice(0,10) : '') + '"></div>' +
+      '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo"' + selOpt(et.status,'todo') + '>To do</option><option value="in_progress"' + selOpt(et.status,'in_progress') + '>In progress</option><option value="done"' + selOpt(et.status,'done') + '>Done</option></select></div>' +
+      '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low"' + selOpt(et.priority,'low') + '>Low</option><option value="medium"' + (et.priority ? selOpt(et.priority,'medium') : ' selected') + '>Medium</option><option value="high"' + selOpt(et.priority,'high') + '>High</option></select></div>' +
       '</div>' +
-      '<div class="pt-field"><label>Notes</label><textarea class="pt-ta" id="ptm-task-notes" style="min-height:60px"></textarea></div>' +
-      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtTask()">Add task</button></div>';
+      '<div class="pt-field"><label>Notes</label><textarea class="pt-ta" id="ptm-task-notes" style="min-height:60px">' + escapeHTML(et.notes || '') + '</textarea></div>' +
+      '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="' + (mode === 'edit-task' ? 'updatePtTask()' : 'savePtTask()') + '">' + (mode === 'edit-task' ? 'Save changes' : 'Add task') + '</button></div>';
   } else if (mode === 'add-billing') {
     html = '<div class="pt-modal-title">Add billing phase</div>' +
       '<div class="pt-field"><label>Phase name *</label><input class="pt-inp" id="ptm-bill-name" placeholder="e.g. 50% deposit, Final payment"></div>' +
@@ -4871,6 +4913,25 @@ async function updatePtMeeting() {
   me[_ptEditIdx] = res.data;
   _ptEditIdx = null;
   closePtModal(); renderPtMeetings(); showToast('\u2713 Meeting note updated');
+}
+
+function openPtEditTask(i) {
+  var ts = window._ptTasks; if (!ts || !ts[i]) return;
+  window._ptEditTaskIdx = i;
+  openPtModal('edit-task');
+}
+
+async function updatePtTask() {
+  if (!_currentUser) return;
+  var ts = window._ptTasks; if (!ts || window._ptEditTaskIdx === null || !ts[window._ptEditTaskIdx]) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var title = g('ptm-task-title'); if (!title) { showToast('Task name required'); return; }
+  var payload = { title: title, assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null, status: g('ptm-task-status'), priority: g('ptm-task-priority'), notes: g('ptm-task-notes') };
+  var res = await _supabase.from('project_tasks').update(payload).eq('id', ts[window._ptEditTaskIdx].id).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  ts[window._ptEditTaskIdx] = res.data;
+  window._ptEditTaskIdx = null;
+  closePtModal(); renderPtTasks(); showToast('\u2713 Task updated');
 }
 
 async function cyclePtBillingStatus(i) {
