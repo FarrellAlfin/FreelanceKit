@@ -3622,14 +3622,24 @@ _supabase.auth.onAuthStateChange(function(event, session) {
 
 // ─── CURRENT USER ───
 var _currentUser = null;
+// ─── BETA MODE ───────────────────────────────────────────────────────────────
+// Set to true during beta: every signed-in user gets full pro access.
+// Flip to false when you are ready to enforce paid plan gating.
+var BETA_MODE = true;
+// ─────────────────────────────────────────────────────────────────────────────
 // Plan gating: 'free' users get access to FREE_PANELS only; 'pro' users get everything
 var _userPlan = 'free';
 var FREE_PANELS = ['home','contract','scope','mydetails','clients','invhistory'];
 
 function setLoggedInUser(user) {
   _currentUser = user;
-  // Extract plan from user metadata (set during sign-up)
-  _userPlan = (user.user_metadata && user.user_metadata.plan === 'pro') ? 'pro' : 'free';
+  // During beta, grant everyone full pro access regardless of their stored plan.
+  // When BETA_MODE is false, read from user metadata (set at sign-up).
+  if (BETA_MODE) {
+    _userPlan = 'pro';
+  } else {
+    _userPlan = (user.user_metadata && user.user_metadata.plan === 'pro') ? 'pro' : 'free';
+  }
   // Update sidebar lock indicators based on plan
   _updateSidebarLocks();
   var name = (user.user_metadata && user.user_metadata.full_name)
@@ -3641,6 +3651,8 @@ function setLoggedInUser(user) {
   if (avEl) avEl.textContent = name.slice(0,2).toUpperCase();
   var wbEl = document.querySelector('.wb-text h3');
   if (wbEl) wbEl.textContent = 'Welcome back, ' + name.split(' ')[0] + '.';
+  // Start inactivity timer now that a real user is logged in
+  _startInactivityTimer();
   // Load all user data in background — errors here must never block login
   setTimeout(function() {
     try { loadMyDetails(); } catch(e) { console.warn('loadMyDetails:', e); }
@@ -3651,6 +3663,34 @@ function setLoggedInUser(user) {
     try { loadTaxEntries(); } catch(e) { console.warn('loadTaxEntries:', e); }
   }, 0);
 }
+
+// ─── INACTIVITY AUTO-LOGOUT (30 minutes) ─────────────────────────────────────
+var _inactivityTimer = null;
+var INACTIVITY_MS = 30 * 60 * 1000; // 30 minutes
+
+function _resetInactivityTimer() {
+  if (!_currentUser) return;
+  clearTimeout(_inactivityTimer);
+  _inactivityTimer = setTimeout(function() {
+    if (!_currentUser) return;
+    showToast('You were signed out due to inactivity.');
+    _supabase.auth.signOut();
+    // onAuthStateChange SIGNED_OUT handler will call _clearUserState() + showLanding()
+  }, INACTIVITY_MS);
+}
+
+function _startInactivityTimer() {
+  ['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(function(evt) {
+    document.addEventListener(evt, _resetInactivityTimer, { passive: true });
+  });
+  _resetInactivityTimer();
+}
+
+function _stopInactivityTimer() {
+  clearTimeout(_inactivityTimer);
+  _inactivityTimer = null;
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 // ═══════════════ MY DETAILS ═══════════════
 
@@ -4249,6 +4289,7 @@ async function handleForgotPassword() {
 // Wipe every piece of user-specific state so a subsequent sign-in can never
 // see data that belonged to the previous session.
 function _clearUserState() {
+  _stopInactivityTimer();
   _currentUser = null;
   _userPlan = 'free';
   _clients = [];
