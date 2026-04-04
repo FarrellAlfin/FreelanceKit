@@ -3779,11 +3779,11 @@ function renderClientList() {
   }
   body.innerHTML = _clients.map(function(cl) {
     return '<div class="ct-row">' +
-      '<div class="ct-cell name">' + (cl.name||'') + '</div>' +
-      '<div class="ct-cell email">' + (cl.email||'—') + '</div>' +
-      '<div class="ct-cell">' + (cl.company||'—') + '</div>' +
+      '<div class="ct-cell name">' + escapeHTML(cl.name||'') + '</div>' +
+      '<div class="ct-cell email">' + escapeHTML(cl.email||'—') + '</div>' +
+      '<div class="ct-cell">' + escapeHTML(cl.company||'—') + '</div>' +
       '<div class="ct-actions">' +
-        '<button class="ct-btn del" onclick="deleteClient(\'' + cl.id + '\')">Delete</button>' +
+        '<button class="ct-btn del" data-client-id="' + escapeHTML(cl.id) + '" onclick="deleteClient(this.dataset.clientId)">Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3800,14 +3800,20 @@ function closeClientModal() {
 async function addClient() {
   if (!_currentUser) { showToast('Sign in to add clients'); return; }
   var name = document.getElementById('cm-name').value.trim();
-  if (!name) { showToast('Please enter a client name'); return; }
+  var nameCheck = Validate.text(name, 'Name', 1, 200);
+  if (!nameCheck.ok) { showToast(nameCheck.msg); return; }
+  var email = document.getElementById('cm-email').value.trim();
+  if (email) { var emailCheck = Validate.email(email); if (!emailCheck.ok) { showToast(emailCheck.msg); return; } }
+  var company = document.getElementById('cm-company').value.trim();
+  var companyCheck = Validate.text(company, 'Company', 0, 200);
+  if (!companyCheck.ok) { showToast(companyCheck.msg); return; }
   var payload = {
     user_id: _currentUser.id,
     name: name,
-    company: document.getElementById('cm-company').value.trim(),
-    email: document.getElementById('cm-email').value.trim(),
-    contact_person: document.getElementById('cm-contact').value.trim(),
-    notes: document.getElementById('cm-notes').value.trim()
+    company: company,
+    email: email,
+    contact_person: document.getElementById('cm-contact').value.trim().slice(0, 200),
+    notes: document.getElementById('cm-notes').value.trim().slice(0, 1000)
   };
   var res = await _supabase.from('clients').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
@@ -3846,8 +3852,8 @@ function showClientDd(val) {
     : _clients;
   if (!filtered.length) { dd.classList.remove('open'); return; }
   dd.innerHTML = filtered.map(function(cl){
-    return '<div class="cdd-item" onmousedown="fillInvoiceFromClient(\'' + cl.id + '\')">'+
-      '<strong>' + cl.name + '</strong>' + (cl.company ? ' — ' + cl.company : '') +
+    return '<div class="cdd-item" data-client-id="' + escapeHTML(cl.id) + '" onmousedown="fillInvoiceFromClient(this.dataset.clientId)">'+
+      '<strong>' + escapeHTML(cl.name) + '</strong>' + (cl.company ? ' — ' + escapeHTML(cl.company) : '') +
     '</div>';
   }).join('');
   dd.classList.add('open');
@@ -3871,6 +3877,13 @@ async function loadInvoiceHistory() {
 async function saveInvoiceToHistory() {
   if (!_currentUser) { showToast('Sign in to save invoices'); return; }
   var g = function(id){ var el=document.getElementById(id); return el?el.value||'':''; };
+  // Input validation
+  var clientName = g('i-client');
+  if (!clientName) { showToast('Please enter a client name'); return; }
+  var clientEmail = g('i-email');
+  if (clientEmail) { var ec = Validate.email(clientEmail); if (!ec.ok) { showToast(ec.msg); return; } }
+  if (lineItems.length > 50) { showToast('Too many line items (max 50)'); return; }
+  if (lineItems.some(function(li){ return (li.desc||'').length > 500; })) { showToast('Line item description too long (max 500 chars)'); return; }
   var sub = lineItems.reduce(function(s,li){ return s+li.qty*li.rate; }, 0);
   var disc = parseFloat(g('i-disc'))||0;
   var tax  = parseFloat(g('i-tax'))||0;
@@ -3879,8 +3892,8 @@ async function saveInvoiceToHistory() {
   var total = sub-da+ta;
   var payload = {
     user_id: _currentUser.id,
-    invoice_number: g('i-num'), client_name: g('i-client'), client_email: g('i-email'),
-    project: g('i-project'), line_items: lineItems,
+    invoice_number: g('i-num').slice(0,100), client_name: clientName.slice(0,200), client_email: clientEmail.slice(0,254),
+    project: g('i-project').slice(0,200), line_items: lineItems,
     subtotal: sub, tax_pct: tax, discount_pct: disc, total: total,
     payment_method: getInvPay(), notes: g('i-notes'),
     issue_date: g('i-issued'), due_date: g('i-due'), terms: g('i-terms-text')||'',
@@ -3937,13 +3950,13 @@ function renderInvHistory() {
       '<div class="iht-cell amount">' + fmtAmt(inv.total) + '</div>' +
       '<div class="iht-cell" style="font-size:12px">' + fmtDate(inv.due_date) + '</div>' +
       '<div class="iht-cell">' +
-        '<select class="inv-badge ' + escapeHTML(inv.status) + '" onchange="updateInvStatus(\'' + iid + '\',this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
+        '<select class="inv-badge ' + escapeHTML(inv.status) + '" data-inv-id="' + iid + '" onchange="updateInvStatus(this.dataset.invId,this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
         statusOpts + '</select>' +
       '</div>' +
       '<div class="iht-actions">' +
-      '<button class="iht-btn" onclick="editInvoiceFromHistory(\'' + iid + '\')">Edit</button>' +
-      '<button class="iht-btn" onclick="downloadInvoicePDFFromHistory(\'' + iid + '\')">PDF</button>' +
-      '<button class="iht-btn" style="color:var(--red)" onclick="deleteInvoice(\'' + iid + '\')">&#10005;</button></div>' +
+      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="editInvoiceFromHistory(this.dataset.invId)">Edit</button>' +
+      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="downloadInvoicePDFFromHistory(this.dataset.invId)">PDF</button>' +
+      '<button class="iht-btn" style="color:var(--red)" data-inv-id="' + iid + '" onclick="deleteInvoice(this.dataset.invId)">&#10005;</button></div>' +
     '</div>';
   }).join('');
 }
