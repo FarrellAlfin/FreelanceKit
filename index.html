@@ -1194,14 +1194,6 @@ var RateLimiter = (function() {
   <!-- Social proof -->
   <div class="proof-strip">
     <div class="proof-inner">
-      <span class="proof-label">Trusted by freelancers in 24 countries</span>
-      <div class="proof-avatars">
-        <div class="proof-av" style="background:#F5E6D3;color:var(--amber)">S</div>
-        <div class="proof-av" style="background:#EAF1EC;color:var(--sage)">M</div>
-        <div class="proof-av" style="background:#E8F0FE;color:#1967d2">J</div>
-        <div class="proof-av" style="background:#FCE4EC;color:#C2185B">L</div>
-        <div class="proof-av" style="background:#F3E5F5;color:#7B1FA2">R</div>
-      </div>
       <div class="proof-divider"></div>
       <div class="proof-stat"><span class="ps-num">10</span><span class="ps-lbl">Templates<br>in library</span></div>
       <div class="proof-divider"></div>
@@ -1330,21 +1322,23 @@ var RateLimiter = (function() {
         <!-- Step 2 -->
         <div class="hiw-step">
           <div class="hiw-num">2</div>
-          <div class="hiw-step-title">Copy it to<br>your <em>tool.</em></div>
-          <p class="hiw-step-desc">Every template works in Google Docs, Google Sheets, or Canva — whichever you already use. One click to open and duplicate.</p>
+          <div class="hiw-step-title">Download it<br>as a <em>PDF.</em></div>
+          <p class="hiw-step-desc">Fill in your details with the live preview updating in real time. When you're ready, download a clean, professional PDF invoice in one click.</p>
           <div class="hiw-mini">
             <div class="hiw-mini-bar">
               <div class="hiw-mini-dot" style="background:#E8594A"></div>
               <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
               <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
-              <span style="font-size:10px;color:var(--ink-light);margin-left:8px">Open in…</span>
+              <span style="font-size:10px;color:var(--ink-light);margin-left:8px">Invoice ready</span>
             </div>
-            <div class="hiw-platform-grid">
-              <div class="hiw-plat" style="border-color:var(--amber-mid);background:var(--amber-light)"><span class="hiw-plat-icon">📄</span><span style="color:var(--amber)">Google Docs</span></div>
-              <div class="hiw-plat"><span class="hiw-plat-icon">📊</span>Sheets</div>
-              <div class="hiw-plat"><span class="hiw-plat-icon">🎨</span>Canva</div>
+            <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--surface-container);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:18px">🧾</span>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:var(--on-surface)">Invoice_001.pdf</div><div style="font-size:10px;color:var(--on-surface-light)">Ready to send</div></div>
+                <div style="background:var(--tertiary-fixed);color:var(--on-tertiary-fixed);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px">Download PDF</div>
+              </div>
             </div>
-            <div style="padding:0 12px 12px;font-size:11px;color:var(--ink-light)">Works wherever you already work.</div>
+            <div style="padding:0 12px 12px;font-size:11px;color:var(--ink-light)">Clean, professional — ready to send.</div>
           </div>
         </div>
 
@@ -1404,17 +1398,6 @@ var RateLimiter = (function() {
     </div>
   </div>
 
-  <!-- Testimonials -->
-  <section class="lp-section" id="testimonials">
-    <div class="lp-label">What members say</div>
-    <h2>Real freelancers.<br><em>Real results.</em></h2>
-    <p class="lp-sub">Not success stories. Frustration stories that got fixed.</p>
-    <div class="testi-grid">
-      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The scope change order alone has saved me over $2,000 this year. I used to eat the extra work. Now I send the template and 80% of clients just pay the add-on."</p><div class="testi-author"><div class="testi-av" style="background:#F5E6D3;color:var(--amber)">SK</div><div><div class="testi-name">Sofía K.</div><div class="testi-role">Brand designer, 4 yrs freelance</div></div></div></div>
-      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The quarterly tax tracker keeps me from that annual panic. Worth $9/month for the peace of mind alone. I actually know what I owe before April now."</p><div class="testi-author"><div class="testi-av" style="background:#EAF1EC;color:var(--sage)">MT</div><div><div class="testi-name">Marcus T.</div><div class="testi-role">Freelance copywriter</div></div></div></div>
-      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Clients now say I seem more professional than anyone else they've hired. It's just the welcome packet and brief form on day one, but it changes everything."</p><div class="testi-author"><div class="testi-av" style="background:#E8F0FE;color:#1967d2">JL</div><div><div class="testi-name">Jade L.</div><div class="testi-role">Social media manager</div></div></div></div>
-    </div>
-  </section>
 
   <!-- Pricing -->
   <section class="lp-section" id="pricing" style="padding-top:40px">
@@ -1456,7 +1439,7 @@ var RateLimiter = (function() {
     <div class="cta-inner">
       <div class="cta-eyebrow">Ready to stop winging it?</div>
       <h2 style="color:var(--cream)">Your freelance business<br><em>starts running itself.</em></h2>
-      <p class="cta-sub">Join 400+ freelancers already using FreelanceKit to protect their time, get paid faster, and stop starting from scratch.</p>
+      <p class="cta-sub">Use FreelanceKit to protect your time, get paid faster, and stop starting from scratch.</p>
       <button class="btn-hero-primary" style="font-size:15px;padding:15px 32px" onclick="showAuth('signup','pro')">Start your free trial →</button>
       <p style="font-size:12px;color:rgba(250,247,242,0.35);margin-top:11px">7 days free · Cancel anytime · No credit card</p>
     </div>
@@ -3959,28 +3942,50 @@ function renderInvHistory() {
         '<select class="inv-badge ' + escapeHTML(inv.status) + '" onchange="updateInvStatus(\'' + iid + '\',this.value)" style="border:none;background:transparent;font-family:var(--font-body);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;padding:3px 6px;border-radius:20px">' +
         statusOpts + '</select>' +
       '</div>' +
-      '<div class="iht-actions"><button class="iht-btn" onclick="generateInvoiceDocxFromHistory(\'' + iid + '\')">&#128196;</button>' +
+      '<div class="iht-actions">' +
+      '<button class="iht-btn" onclick="editInvoiceFromHistory(\'' + iid + '\')">Edit</button>' +
+      '<button class="iht-btn" onclick="downloadInvoicePDFFromHistory(\'' + iid + '\')">PDF</button>' +
       '<button class="iht-btn" style="color:var(--red)" onclick="deleteInvoice(\'' + iid + '\')">&#10005;</button></div>' +
     '</div>';
   }).join('');
 }
 
-// Generate docx from saved invoice record
-async function generateInvoiceDocxFromHistory(id) {
-  var inv = _invoices.find(function(i){ return i.id === id; });
-  if (!inv) return;
-  // Temp set line items and form values, generate, then restore
-  var origItems = lineItems.slice();
-  lineItems = inv.line_items || [];
+function _loadInvFromRecord(inv) {
   var set = function(eid, val){ var el=document.getElementById(eid); if(el) el.value=val||''; };
   set('i-yourname', inv.freelancer_name || ''); set('i-num', inv.invoice_number);
   set('i-client', inv.client_name); set('i-email', inv.client_email);
   set('i-project', inv.project); set('i-notes', inv.notes);
   set('i-issued', inv.issue_date); set('i-due', inv.due_date);
   set('i-tax', inv.tax_pct); set('i-disc', inv.discount_pct);
-  invTerms = inv.terms || 7;
-  await generateInvoiceDocx();
-  lineItems = origItems;
+  set('i-terms-text', inv.terms || '');
+}
+
+function downloadInvoicePDFFromHistory(id) {
+  var inv = _invoices.find(function(i){ return i.id === id; });
+  if (!inv) return;
+  var origItems = lineItems.slice();
+  lineItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
+  _loadInvFromRecord(inv);
+  renderLineItems(); updateInv();
+  var el = document.getElementById('inv-preview');
+  if (el) el.classList.add('print-target');
+  setTimeout(function() {
+    window.print();
+    setTimeout(function() {
+      if (el) el.classList.remove('print-target');
+      lineItems = origItems;
+      renderLineItems(); updateInv();
+    }, 500);
+  }, 150);
+}
+
+function editInvoiceFromHistory(id) {
+  var inv = _invoices.find(function(i){ return i.id === id; });
+  if (!inv) return;
+  lineItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
+  _loadInvFromRecord(inv);
+  renderLineItems(); updateInv();
+  showPanel('invoice', document.getElementById('nav-invoice'));
 }
 
 // ═══════════════ RATE SCENARIOS ═══════════════
