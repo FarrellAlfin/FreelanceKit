@@ -3961,30 +3961,20 @@ function _loadInvFromRecord(inv) {
 function downloadInvoicePDFFromHistory(id) {
   var inv = _invoices.find(function(i){ return i.id === id; });
   if (!inv) return;
-  // Temporarily load data into the invoice builder to render the preview
-  var origItems = lineItems.slice();
+  // Load invoice data into the builder form
   lineItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
   _loadInvFromRecord(inv);
+  // Navigate to the invoice panel so the preview is visible and fully rendered
+  showPanel('invoice', document.getElementById('nav-invoice'));
   renderLineItems(); updateInv();
-  // Give the DOM a moment to render, then snapshot the preview HTML into a print window
   setTimeout(function() {
-    var previewEl = document.getElementById('inv-preview');
-    if (!previewEl) { lineItems = origItems; return; }
-    var css = '';
-    try {
-      css = Array.from(document.styleSheets).map(function(ss){
-        try { return Array.from(ss.cssRules).map(function(r){ return r.cssText; }).join('\n'); } catch(e){ return ''; }
-      }).join('\n');
-    } catch(e) {}
-    var win = window.open('', '_blank', 'width=900,height=700');
-    if (!win) { showToast('Allow pop-ups to download PDF'); lineItems = origItems; return; }
-    win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>' + css + 'body{margin:0;padding:24px;background:#fff}.inv-preview{box-shadow:none!important;border:none!important}</style></head><body>' + previewEl.outerHTML + '</body></html>');
-    win.document.close();
-    win.focus();
-    setTimeout(function(){ win.print(); }, 400);
-    lineItems = origItems;
-    renderLineItems(); updateInv();
-  }, 200);
+    var el = document.getElementById('inv-preview');
+    if (el) el.classList.add('print-target');
+    window.print();
+    if (el) el.classList.remove('print-target');
+    // Navigate back to invoice history after printing
+    showPanel('invhistory', document.getElementById('nav-invhistory'));
+  }, 350);
 }
 
 function editInvoiceFromHistory(id) {
