@@ -945,6 +945,8 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .todo-del{background:none;border:none;font-size:12px;color:var(--ink-light);cursor:pointer;padding:0 2px;opacity:0;transition:opacity .15s;flex-shrink:0}
 .todo-item:hover .todo-del{opacity:1}
 .hw-empty{text-align:center;color:var(--ink-light);font-size:13px;padding:18px 0}
+.todo-section-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--ink-light);text-transform:uppercase;padding:10px 0 4px;border-top:1px solid var(--border);margin-top:6px}
+.todo-proj-task .todo-text{font-size:12px}
 /* Upcoming */
 .upcoming-list{max-height:260px;overflow-y:auto}
 .upc-item{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--border)}
@@ -2373,7 +2375,6 @@ var RateLimiter = (function() {
           <div id="pt-global-gantt-wrap" style="display:none" class="pt-gantt-view">
             <div class="pt-gantt-hdr">
               <span class="pt-gantt-title">All active projects — Gantt view</span>
-              <span class="pt-gantt-today-note">🔴 Today marked in red</span>
             </div>
             <div id="pt-global-gantt"></div>
           </div>
@@ -4520,12 +4521,15 @@ function setTodoFilter(projId) {
   document.querySelectorAll('.todo-filter').forEach(function(b){ b.classList.toggle('active', b.dataset.projId === projId); });
   renderTodos();
 }
+var _homeProjectTasks = [];
+
 function renderTodos() {
   var list = document.getElementById('todo-list');
   if (!list) return;
+
+  // Personal todos
   var filtered = _todoFilter ? _todos.filter(function(t){ return t.project_id === _todoFilter; }) : _todos;
-  if (!filtered.length) { list.innerHTML = '<div class="hw-empty">Nothing here — add your first task ✓</div>'; return; }
-  list.innerHTML = filtered.map(function(t) {
+  var html = filtered.map(function(t) {
     var color = getProjectColor(t.project_id);
     var tid = t.id.replace(/['"]/g,'');
     return '<div class="todo-item">' +
@@ -4535,6 +4539,61 @@ function renderTodos() {
       '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
     '</div>';
   }).join('');
+
+  // Project tasks from tracker
+  var projTasks = _homeProjectTasks.filter(function(t){
+    return !_todoFilter || t.project_id === _todoFilter;
+  });
+  if (projTasks.length) {
+    html += '<div class="todo-section-lbl">From projects</div>';
+    var today = new Date(); today.setHours(0,0,0,0);
+    html += projTasks.map(function(t) {
+      var color = getProjectColor(t.project_id);
+      var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
+      var overdue = t.due_date && new Date(t.due_date + 'T00:00:00') < today;
+      var tid = t.id.replace(/['"]/g,'');
+      return '<div class="todo-item todo-proj-task">' +
+        '<div class="todo-dot" style="background:' + color + '"></div>' +
+        '<input type="checkbox" class="todo-check" onchange="toggleHomeProjTask(\'' + tid + '\',this.checked)">' +
+        '<div style="flex:1;min-width:0">' +
+          '<div class="todo-text">' + escapeHTML(t.title) + '</div>' +
+          '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' +
+            (proj ? escapeHTML(proj.name) : '') +
+            (t.due_date ? ' · <span style="color:' + (overdue ? '#DC2626' : 'inherit') + '">' + t.due_date.slice(5,10) + (overdue ? ' ⚠' : '') + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<button class="todo-del" style="opacity:1;font-size:11px;color:var(--ink-light)" onclick="showPanel(\'projects\')" title="Open project tracker">↗</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  if (!html) { list.innerHTML = '<div class="hw-empty">Nothing here — add your first task ✓</div>'; return; }
+  list.innerHTML = html;
+}
+
+async function loadProjectTasksForHome() {
+  _homeProjectTasks = [];
+  if (!_currentUser || !_supabase) return;
+  var res = await _supabase.from('project_tasks')
+    .select('id,title,due_date,priority,project_id,status')
+    .eq('user_id', _currentUser.id)
+    .neq('status', 'done')
+    .order('due_date', {ascending: true, nullsFirst: false});
+  if (res.error || !res.data) return;
+  _homeProjectTasks = res.data;
+  renderTodos();
+  updateTodoProjDropdowns();
+}
+
+async function toggleHomeProjTask(id, checked) {
+  var newStatus = checked ? 'done' : 'todo';
+  if (_supabase && _currentUser) {
+    await _supabase.from('project_tasks').update({status: newStatus}).eq('id', id).eq('user_id', _currentUser.id);
+  }
+  if (checked) {
+    _homeProjectTasks = _homeProjectTasks.filter(function(t){ return t.id !== id; });
+    renderTodos();
+  }
 }
 function updateTodoProjDropdowns() {
   var projects = window._ptProjects || [];
@@ -4650,6 +4709,7 @@ function initHomeDashboard() {
   loadTodos();
   updateTodoProjDropdowns();
   renderUpcoming();
+  loadProjectTasksForHome();
 }
 
 // Income goal bar
@@ -5143,7 +5203,7 @@ function renderPtMilestones() {
     var mEnd   = new Date(m.getFullYear(), m.getMonth() + 1, 0);
     var mDays  = (Math.min(mEnd, rangeEnd) - Math.max(mStart, rangeStart)) / 86400000 + 1;
     var pct = (mDays / totalDays * 100).toFixed(2);
-    return '<th style="width:' + pct + '%;font-size:11px;font-weight:600;color:var(--ink-light);padding:6px 4px;text-align:center;border-left:1px solid var(--border)">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
+    return '<th style="width:' + pct + '%;font-size:11px;font-weight:700;color:var(--ink);padding:6px 8px;text-align:left;border-left:1px solid var(--border);background:#F8F7F4">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
 
   var rows = ms.map(function(m, i) {
@@ -5188,13 +5248,12 @@ function renderPtMilestones() {
 
   el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
     '<colgroup><col style="width:' + nameColW + '"></colgroup>' +
-    '<thead><tr>' +
-    '<th style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light)">Milestone</th>' +
-    headerCells +
-    '</tr></thead>' +
+    '<thead>' +
+    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4">Milestone</th>' + headerCells + '</tr>' +
+    _buildGanttRuler(rangeStart, totalDays, months, todayPct) +
+    '</thead>' +
     '<tbody>' + rows + '</tbody>' +
-    '</table></div>' +
-    (todayPct !== null ? '<div style="font-size:11px;color:#DC2626;margin-top:6px;text-align:right">🔴 Red line = today</div>' : '');
+    '</table></div>';
 }
 
 var _ptTaskPrioFilter = 'all';
@@ -5349,6 +5408,31 @@ function toggleGlobalGantt() {
   if (!visible) renderGlobalGantt();
 }
 
+function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
+  // Date tick marks every 7 or 14 days
+  var tickInterval = totalDays > 120 ? 14 : 7;
+  var ticks = [];
+  var td = new Date(rangeStart);
+  while (td <= new Date(rangeStart.getTime() + totalDays * 86400000)) {
+    var pct = ((td - rangeStart) / 86400000 / totalDays * 100).toFixed(2);
+    ticks.push({pct: pct, d: td.getDate()});
+    td = new Date(td.getTime() + tickInterval * 86400000);
+  }
+  var tickHtml = ticks.map(function(t) {
+    return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none">' +
+      '<div style="width:1px;height:5px;background:var(--border)"></div>' +
+      '<span style="font-size:9px;color:var(--ink-light);transform:translateX(-50%);margin-top:1px;white-space:nowrap">' + t.d + '</span>' +
+      '</div>';
+  }).join('');
+  var todayMark = todayPct !== null
+    ? '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;width:2px;background:#E8594A;z-index:3"></div>' +
+      '<div style="position:absolute;left:' + todayPct + '%;top:0;font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;background:inherit;padding:0 2px;z-index:4">Today</div>'
+    : '';
+  return '<tr><th style="background:#F8F7F4"></th>' +
+    '<th colspan="' + months.length + '" style="padding:0;border-left:1px solid var(--border);border-top:1px solid var(--border);background:#F8F7F4">' +
+    '<div style="position:relative;height:22px;overflow:hidden">' + tickHtml + todayMark + '</div></th></tr>';
+}
+
 function renderGlobalGantt() {
   var el = document.getElementById('pt-global-gantt');
   if (!el) return;
@@ -5379,21 +5463,24 @@ function renderGlobalGantt() {
   var todayLine = todayPct !== null ? '<div class="gantt-today-line" style="left:' + todayPct + '%"></div>' : '';
 
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var headerCells = months.map(function(m) {
+  var monthCells = months.map(function(m) {
     var mStart = new Date(m.getFullYear(), m.getMonth(), 1);
     var mEnd   = new Date(m.getFullYear(), m.getMonth() + 1, 0);
     var mDays  = (Math.min(mEnd, rangeEnd) - Math.max(mStart, rangeStart)) / 86400000 + 1;
     var pct    = (mDays / totalDays * 100).toFixed(2);
-    return '<th style="width:' + pct + '%;font-size:11px;font-weight:600;color:var(--ink-light);padding:6px 4px;text-align:center;border-left:1px solid var(--border)">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
+    return '<th style="width:' + pct + '%;font-size:11px;font-weight:700;color:var(--ink);padding:6px 8px;text-align:left;border-left:1px solid var(--border);background:#F8F7F4">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
 
-  var rows = active.map(function(p, i) {
+  var rows = active.map(function(p) {
     var pStart = p.start_date ? new Date(p.start_date + 'T00:00:00') : null;
     var pEnd   = p.end_date   ? new Date(p.end_date   + 'T00:00:00') : pStart;
     var color  = getProjectColor ? getProjectColor(p.id) : 'var(--amber)';
+    var nameCell = '<td style="padding:10px 12px;border-top:1px solid var(--border);cursor:pointer;vertical-align:middle" onclick="selectPtProject(\'' + p.id + '\')">' +
+      '<div style="font-size:13px;font-weight:600;color:var(--ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</div>' +
+      (p.client_name ? '<div style="font-size:11px;color:var(--ink-light);margin-top:2px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHTML(p.client_name) + '</div>' : '') +
+      '</td>';
     if (!pStart) {
-      return '<tr><td style="padding:8px 10px;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border);cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' + escapeHTML(p.name) + '<br><span style="font-size:11px;font-weight:400;color:var(--ink-light)">' + escapeHTML(p.client_name || '') + '</span></td>' +
-        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set</td></tr>';
+      return '<tr>' + nameCell + '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set</td></tr>';
     }
     if (pStart > pEnd) pEnd = pStart;
     var barStart = Math.max(0, (pStart - rangeStart) / 86400000);
@@ -5402,23 +5489,23 @@ function renderGlobalGantt() {
     var widthPct = Math.min(100 - parseFloat(leftPct), (barDays / totalDays * 100)).toFixed(2);
     var startLbl = p.start_date ? p.start_date.slice(5,10) : '';
     var endLbl   = p.end_date   ? p.end_date.slice(5,10)   : '';
-    var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
-    return '<tr>' +
-      '<td style="padding:8px 10px;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border);cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
-      escapeHTML(p.name) + '<br><span style="font-size:11px;font-weight:400;color:var(--ink-light)">' + escapeHTML(p.client_name || '') + '</span></td>' +
-      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 6px;position:relative">' +
-      '<div style="position:relative;height:28px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
+    var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + ' → ' + endLbl : (endLbl || startLbl);
+    return '<tr>' + nameCell +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:5px 6px;position:relative">' +
+      '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
       todayLine +
-      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
-      '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
+      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:6px;display:flex;align-items:center;padding:0 10px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">' +
+      '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600;letter-spacing:.01em">' + barLabel + '</span>' +
       '</div></div></td></tr>';
   }).join('');
 
   el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
-    '<colgroup><col style="width:160px"></colgroup>' +
-    '<thead><tr><th style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light)">Project</th>' + headerCells + '</tr></thead>' +
-    '<tbody>' + rows + '</tbody></table></div>' +
-    (todayPct !== null ? '<div style="font-size:11px;color:#DC2626;margin-top:6px;text-align:right">🔴 Red line = today</div>' : '');
+    '<colgroup><col style="width:170px"></colgroup>' +
+    '<thead>' +
+    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4">Project</th>' + monthCells + '</tr>' +
+    _buildGanttRuler(rangeStart, totalDays, months, todayPct) +
+    '</thead>' +
+    '<tbody>' + rows + '</tbody></table></div>';
 }
 
 // ─── DOC LINKING ───
@@ -5486,7 +5573,13 @@ async function handlePtAttach(input) {
     } else {
       var path = _currentUser.id + '/' + _ptCurrentId + '/' + Date.now() + '_' + file.name;
       var res = await _supabase.storage.from('pt-attachments').upload(path, file, {upsert: true});
-      if (res.error) { showToast('Upload failed: ' + res.error.message); continue; }
+      if (res.error) {
+        var msg = res.error.message && res.error.message.toLowerCase().includes('bucket')
+          ? 'Storage not set up — create a public bucket named "pt-attachments" in Supabase Storage'
+          : 'Upload failed: ' + res.error.message;
+        showToast(msg);
+        continue;
+      }
       var pub = _supabase.storage.from('pt-attachments').getPublicUrl(path);
       var url = pub.data ? pub.data.publicUrl : '';
       _ptPendingAttachments.push({name: file.name, url: url, path: path});
