@@ -1103,6 +1103,47 @@ input[type=number]{-moz-appearance:textfield}
 .pt-modal-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:18px}
 .pt-modal-ft{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 @media(max-width:860px){.pt-layout{grid-template-columns:1fr}}
+/* ── Project Tracker extras ──────────────────────────────────────── */
+/* Global gantt */
+.pt-gantt-view{margin-top:20px}
+.pt-gantt-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pt-gantt-title{font-size:13px;font-weight:700;color:var(--ink)}
+.pt-gantt-today-note{font-size:11px;color:#E8594A;display:flex;align-items:center;gap:5px}
+.gantt-today-line{position:absolute;top:0;bottom:0;width:2px;background:#E8594A;z-index:5;pointer-events:none}
+/* Task filter bar */
+.pt-filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm)}
+.pt-filter-btn{padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:11px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);transition:all .15s}
+.pt-filter-btn:hover{border-color:var(--ink);color:var(--ink)}
+.pt-filter-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.pt-filter-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
+/* Priority badges */
+.pt-prio{font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.pt-prio-high{background:#FEE2E2;color:#DC2626}
+.pt-prio-med{background:#FEF3C7;color:#92400E}
+.pt-prio-low{background:#D1FAE5;color:#065F46}
+/* Assignee avatar */
+.pt-assignee{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--amber-light);color:var(--amber);font-size:9px;font-weight:700;flex-shrink:0;cursor:default;border:1.5px solid var(--amber)}
+/* Drag-and-drop */
+.pt-drag-handle{cursor:grab;color:var(--ink-light);font-size:14px;flex-shrink:0;opacity:.4;transition:opacity .15s;line-height:1;user-select:none}
+.pt-row:hover .pt-drag-handle{opacity:.8}
+.pt-row.pt-dragging{opacity:.35;border-style:dashed}
+.pt-row.pt-drag-over{border-top:2.5px solid var(--amber);background:var(--amber-light)}
+/* In-progress status dot */
+.pt-inprog-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0}
+/* Document links in overview */
+.pt-doc-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pt-doc-link{display:flex;align-items:center;gap:7px;padding:9px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;transition:all .15s;text-decoration:none}
+.pt-doc-link:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+/* Attachment area in task modal */
+.task-attach-wrap{border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:10px 12px;background:var(--cream);margin-top:4px}
+.task-attach-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.task-attach-item{display:flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:11px;color:var(--ink);max-width:200px}
+.task-attach-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.task-attach-del{background:none;border:none;cursor:pointer;color:var(--red);font-size:12px;flex-shrink:0;padding:0 2px}
+.task-attach-upload-row{display:flex;align-items:center;gap:8px}
+/* Sharing */
+.pt-share-chip{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pt-share-chip:last-child{border-bottom:none}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
@@ -2322,9 +2363,20 @@ var RateLimiter = (function() {
         <div id="pt-list-view">
           <div class="pt-list-header">
             <span class="pt-list-title" id="pt-project-count">0 projects</span>
-            <button class="pt-add-btn" onclick="openPtModal('new-project')">+ New project</button>
+            <div style="display:flex;gap:8px">
+              <button class="btn-outline" style="font-size:12px;padding:5px 12px" onclick="toggleGlobalGantt()">🗓 All Projects Gantt</button>
+              <button class="pt-add-btn" onclick="openPtModal('new-project')">+ New project</button>
+            </div>
           </div>
           <div id="pt-projects-list"><div class="pt-empty"><div class="pt-empty-icon">🗂️</div><p>No projects yet.<br>Click <strong>+ New project</strong> to start.</p></div></div>
+          <!-- Global gantt (hidden by default) -->
+          <div id="pt-global-gantt-wrap" style="display:none" class="pt-gantt-view">
+            <div class="pt-gantt-hdr">
+              <span class="pt-gantt-title">All active projects — Gantt view</span>
+              <span class="pt-gantt-today-note">🔴 Today marked in red</span>
+            </div>
+            <div id="pt-global-gantt"></div>
+          </div>
         </div>
         <!-- Project detail view (hidden until project selected) -->
         <div id="pt-detail-view" style="display:none">
@@ -2333,6 +2385,7 @@ var RateLimiter = (function() {
             <span class="pt-detail-name" id="pt-detail-name"></span>
             <span class="pt-status" id="pt-detail-status-badge"></span>
             <button class="pt-add-btn" onclick="openPtModal('edit-project')" style="margin-left:auto">Edit</button>
+            <button class="pt-add-btn" style="background:var(--white);color:var(--ink);border:1.5px solid var(--border)" onclick="openShareModal()">👥 Share</button>
             <button class="pt-row-del" onclick="deletePtProject()" title="Delete project" style="font-size:18px">🗑</button>
           </div>
           <div class="pt-tabs">
@@ -2357,6 +2410,17 @@ var RateLimiter = (function() {
               <label>Project contract / scope notes</label>
               <div id="ptv-contract" style="font-size:13px;color:var(--ink);line-height:1.7;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);white-space:pre-wrap"></div>
             </div>
+            <div class="pt-field">
+              <label>Linked documents</label>
+              <div class="pt-doc-links">
+                <button class="pt-doc-link" onclick="openDocForProject('contract')">📄 Client Contract</button>
+                <button class="pt-doc-link" onclick="openDocForProject('scope')">⚠️ Scope Change Order</button>
+              </div>
+            </div>
+            <div class="pt-field" id="ptv-shares-wrap" style="display:none">
+              <label>Shared with</label>
+              <div id="ptv-shares-list" style="display:flex;flex-wrap:wrap;gap:6px;padding:4px 0"></div>
+            </div>
           </div>
           <!-- Milestones tab -->
           <div class="pt-tab-content" id="pt-tab-milestones" style="display:none">
@@ -2366,6 +2430,16 @@ var RateLimiter = (function() {
           <!-- Tasks tab -->
           <div class="pt-tab-content" id="pt-tab-tasks" style="display:none">
             <div class="pt-sec-hdr">Tasks <button class="pt-add-btn" onclick="openPtModal('add-task')">+ Add</button></div>
+            <div class="pt-filter-row" id="pt-task-filter-bar" style="display:none">
+              <span style="font-size:12px;color:var(--ink-mid);font-weight:600">Priority:</span>
+              <button class="pt-filter-btn active" onclick="setPtTaskFilter('prio','all')">All</button>
+              <button class="pt-filter-btn" onclick="setPtTaskFilter('prio','high')">🔴 High</button>
+              <button class="pt-filter-btn" onclick="setPtTaskFilter('prio','medium')">🟡 Medium</button>
+              <button class="pt-filter-btn" onclick="setPtTaskFilter('prio','low')">🟢 Low</button>
+              <div class="pt-filter-sep"></div>
+              <span style="font-size:12px;color:var(--ink-mid);font-weight:600">Assignee:</span>
+              <div id="pt-assignee-filter-btns" style="display:contents"></div>
+            </div>
             <div id="pt-tasks-list"></div>
           </div>
           <!-- Billing tab -->
@@ -4998,6 +5072,8 @@ function selectPtProject(id) {
   showPtTab('overview', document.querySelector('#pt-detail-view .pt-tab'));
   // Load sub-data
   ptLoadProjectData(id);
+  // Load shares
+  if (typeof loadPtShares === 'function') loadPtShares(id);
   // Highlight in list
   renderPtList();
 }
@@ -5033,7 +5109,6 @@ function renderPtMilestones() {
   if (!ms.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No milestones yet. Click "+ Add" to create one.</div>'; return; }
 
   var proj = _ptProjects.find(function(p){ return p.id === _ptCurrentId; });
-  // Determine overall date range from project or milestones
   var allDates = ms.map(function(m){ return m.due_date || m.start_date; }).filter(Boolean);
   if (proj && proj.start_date) allDates.push(proj.start_date);
   if (proj && proj.end_date) allDates.push(proj.end_date);
@@ -5042,11 +5117,9 @@ function renderPtMilestones() {
 
   var rangeStart = new Date(allDates[0] + 'T00:00:00');
   var rangeEnd   = new Date(allDates[allDates.length - 1] + 'T00:00:00');
-  // Expand to full months
   rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
   rangeEnd   = new Date(rangeEnd.getFullYear(),   rangeEnd.getMonth() + 1, 0);
 
-  // Build month columns
   var months = [];
   var cur = new Date(rangeStart);
   while (cur <= rangeEnd) {
@@ -5055,10 +5128,16 @@ function renderPtMilestones() {
   }
   var totalDays = (rangeEnd - rangeStart) / 86400000 + 1;
 
+  // Today indicator position
+  var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+  var todayPct = (todayDate >= rangeStart && todayDate <= rangeEnd)
+    ? ((todayDate - rangeStart) / 86400000 / totalDays * 100).toFixed(2) : null;
+  var todayLine = todayPct !== null
+    ? '<div class="gantt-today-line" style="left:' + todayPct + '%"></div>' : '';
+
   var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var nameColW = '160px';
 
-  // Build header
   var headerCells = months.map(function(m) {
     var mStart = new Date(m.getFullYear(), m.getMonth(), 1);
     var mEnd   = new Date(m.getFullYear(), m.getMonth() + 1, 0);
@@ -5067,12 +5146,12 @@ function renderPtMilestones() {
     return '<th style="width:' + pct + '%;font-size:11px;font-weight:600;color:var(--ink-light);padding:6px 4px;text-align:center;border-left:1px solid var(--border)">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
 
-  // Build rows
   var rows = ms.map(function(m, i) {
     var msStart = m.start_date ? new Date(m.start_date + 'T00:00:00') : (m.due_date ? new Date(m.due_date + 'T00:00:00') : null);
     var msEnd   = m.due_date   ? new Date(m.due_date   + 'T00:00:00') : msStart;
+    var rowBg = m.completed ? 'background:#F0FDF4' : '';
     if (!msStart) {
-      return '<tr>' +
+      return '<tr style="' + rowBg + '">' +
         '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
         '<div style="display:flex;align-items:center;gap:8px">' +
         '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
@@ -5086,9 +5165,11 @@ function renderPtMilestones() {
     var barDays = (msEnd - msStart) / 86400000 + 1;
     var leftPct = (barStartOffset / totalDays * 100).toFixed(2);
     var widthPct = Math.min(100 - parseFloat(leftPct), (barDays / totalDays * 100)).toFixed(2);
-    var barColor = m.completed ? 'var(--sage)' : 'var(--amber)';
-    var barLabel = m.due_date ? m.due_date.slice(5,10) : '';
-    return '<tr>' +
+    var barColor = m.completed ? '#16A34A' : 'var(--amber)';
+    var startLbl = m.start_date ? m.start_date.slice(5,10) : '';
+    var endLbl   = m.due_date   ? m.due_date.slice(5,10)   : '';
+    var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
+    return '<tr style="' + rowBg + '">' +
       '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
       '<div style="display:flex;align-items:center;gap:8px">' +
       '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
@@ -5096,8 +5177,9 @@ function renderPtMilestones() {
       '</div></td>' +
       '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 6px;position:relative">' +
       '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="openPtEditMilestone(' + i + ')">' +
-      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
-      '<span style="font-size:11px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
+      todayLine +
+      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
+      '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
       '</div></div>' +
       '<button class="pt-row-del" style="position:absolute;right:4px;top:50%;transform:translateY(-50%)" onclick="event.stopPropagation();deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
       '</td>' +
@@ -5111,7 +5193,33 @@ function renderPtMilestones() {
     headerCells +
     '</tr></thead>' +
     '<tbody>' + rows + '</tbody>' +
-    '</table></div>';
+    '</table></div>' +
+    (todayPct !== null ? '<div style="font-size:11px;color:#DC2626;margin-top:6px;text-align:right">🔴 Red line = today</div>' : '');
+}
+
+var _ptTaskPrioFilter = 'all';
+var _ptTaskAssignFilter = 'all';
+
+function _isOverdue(dateStr, done) {
+  if (!dateStr || done) return false;
+  var d = new Date(dateStr + 'T00:00:00');
+  var now = new Date(); now.setHours(0,0,0,0);
+  return d < now;
+}
+
+function setPtTaskFilter(type, val) {
+  if (type === 'prio') _ptTaskPrioFilter = val;
+  else _ptTaskAssignFilter = val;
+  // Update active states
+  var filterBar = document.getElementById('pt-task-filter-bar');
+  if (!filterBar) return;
+  if (type === 'prio') {
+    filterBar.querySelectorAll('.pt-filter-btn').forEach(function(btn) {
+      var bv = btn.getAttribute('onclick').match(/'prio','([^']+)'/);
+      if (bv) btn.classList.toggle('active', bv[1] === val);
+    });
+  }
+  renderPtTasks();
 }
 
 function renderPtTasks() {
@@ -5119,15 +5227,57 @@ function renderPtTasks() {
   var el = document.getElementById('pt-tasks-list');
   if (!el) return;
   if (!ts.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No tasks yet.</div>'; return; }
-  el.innerHTML = ts.map(function(t, i) {
+
+  // Show / populate filter bar
+  var filterBar = document.getElementById('pt-task-filter-bar');
+  if (filterBar) {
+    filterBar.style.display = ts.length > 1 ? '' : 'none';
+    // Populate assignee buttons
+    var assignees = [];
+    ts.forEach(function(t){ if (t.assignee && assignees.indexOf(t.assignee) < 0) assignees.push(t.assignee); });
+    var assignBtns = document.getElementById('pt-assignee-filter-btns');
+    if (assignBtns) {
+      var allBtn = '<button class="pt-filter-btn' + (_ptTaskAssignFilter === 'all' ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',\'all\')">All</button>';
+      assignBtns.innerHTML = allBtn + assignees.map(function(a) {
+        return '<button class="pt-filter-btn' + (_ptTaskAssignFilter === a ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',' + JSON.stringify(a) + ')">' + escapeHTML(a) + '</button>';
+      }).join('');
+    }
+  }
+
+  // Apply filters
+  var filtered = ts.filter(function(t) {
+    var prioOk = _ptTaskPrioFilter === 'all' || (t.priority || 'medium') === _ptTaskPrioFilter;
+    var assignOk = _ptTaskAssignFilter === 'all' || t.assignee === _ptTaskAssignFilter;
+    return prioOk && assignOk;
+  });
+
+  if (!filtered.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--ink-light);font-size:13px">No tasks match the current filter.</div>'; return; }
+
+  var prioColors = { high:'#DC2626', medium:'#D97706', low:'#059669' };
+  var prioLabels = { high:'High', medium:'Medium', low:'Low' };
+
+  el.innerHTML = filtered.map(function(t, filtIdx) {
+    var realIdx = ts.indexOf(t);
     var done = t.status === 'done';
-    return '<div class="pt-row">' +
-      '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + i + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
-      '<span class="pt-row-name' + (done ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
-      (t.assignee ? '<span class="pt-row-badge">' + escapeHTML(t.assignee) + '</span>' : '') +
-      (t.due_date ? '<span class="pt-row-date">' + t.due_date.slice(0,10) + '</span>' : '') +
-      '<button class="pt-row-edit" onclick="openPtEditTask(' + i + ')">Edit</button>' +
-      '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + i + ')">&#215;</button>' +
+    var prio = t.priority || 'medium';
+    var overdue = _isOverdue(t.due_date, done);
+    var initials = t.assignee ? t.assignee.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase() : '';
+    var attachArr = [];
+    try { attachArr = JSON.parse(t.attachments || '[]'); } catch(e){}
+    return '<div class="pt-row" draggable="true" data-idx="' + realIdx + '" ' +
+      'ondragstart="ptTaskDragStart(event,' + realIdx + ')" ' +
+      'ondragover="ptTaskDragOver(event)" ' +
+      'ondragleave="ptTaskDragLeave(event)" ' +
+      'ondrop="ptTaskDrop(event,' + realIdx + ')">' +
+      '<span class="pt-drag-handle" title="Drag to reorder">⠿</span>' +
+      '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + realIdx + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
+      '<span class="pt-row-name' + (done ? ' done' : '') + '" style="flex:1">' + escapeHTML(t.title) + '</span>' +
+      '<span class="pt-prio pt-prio-' + prio + '" title="Priority: ' + prioLabels[prio] + '">' + prioLabels[prio] + '</span>' +
+      (initials ? '<span class="pt-assignee" title="' + escapeHTML(t.assignee) + '">' + initials + '</span>' : '') +
+      (t.due_date ? '<span class="pt-row-date" style="' + (overdue ? 'color:#DC2626;font-weight:600' : '') + '">' + (overdue ? '⚠ ' : '') + t.due_date.slice(0,10) + '</span>' : '') +
+      (attachArr.length ? '<span style="font-size:11px;color:var(--ink-mid)" title="' + attachArr.length + ' attachment(s)">📎' + attachArr.length + '</span>' : '') +
+      '<button class="pt-row-edit" onclick="openPtEditTask(' + realIdx + ')">Edit</button>' +
+      '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">&#215;</button>' +
       '</div>';
   }).join('');
 }
@@ -5189,6 +5339,239 @@ function renderPtHours() {
   }).join('');
 }
 
+// ─── GLOBAL GANTT ───
+
+function toggleGlobalGantt() {
+  var wrap = document.getElementById('pt-global-gantt-wrap');
+  if (!wrap) return;
+  var visible = wrap.style.display !== 'none';
+  wrap.style.display = visible ? 'none' : '';
+  if (!visible) renderGlobalGantt();
+}
+
+function renderGlobalGantt() {
+  var el = document.getElementById('pt-global-gantt');
+  if (!el) return;
+  var active = (_ptProjects || []).filter(function(p){ return p.status !== 'completed' && p.status !== 'archived'; });
+  if (!active.length) { el.innerHTML = '<div style="padding:20px;color:var(--ink-light);font-size:13px">No active projects found.</div>'; return; }
+
+  var allDates = [];
+  active.forEach(function(p){
+    if (p.start_date) allDates.push(p.start_date.slice(0,10));
+    if (p.end_date)   allDates.push(p.end_date.slice(0,10));
+  });
+  if (!allDates.length) { el.innerHTML = '<div style="padding:20px;color:var(--ink-light);font-size:13px">Add start/end dates to projects to view the global Gantt.</div>'; return; }
+  allDates.sort();
+
+  var rangeStart = new Date(allDates[0] + 'T00:00:00');
+  var rangeEnd   = new Date(allDates[allDates.length-1] + 'T00:00:00');
+  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
+  rangeEnd   = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth() + 1, 0);
+  var totalDays = (rangeEnd - rangeStart) / 86400000 + 1;
+
+  var months = [];
+  var cur = new Date(rangeStart);
+  while (cur <= rangeEnd) { months.push(new Date(cur)); cur = new Date(cur.getFullYear(), cur.getMonth() + 1, 1); }
+
+  var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+  var todayPct = (todayDate >= rangeStart && todayDate <= rangeEnd)
+    ? ((todayDate - rangeStart) / 86400000 / totalDays * 100).toFixed(2) : null;
+  var todayLine = todayPct !== null ? '<div class="gantt-today-line" style="left:' + todayPct + '%"></div>' : '';
+
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var headerCells = months.map(function(m) {
+    var mStart = new Date(m.getFullYear(), m.getMonth(), 1);
+    var mEnd   = new Date(m.getFullYear(), m.getMonth() + 1, 0);
+    var mDays  = (Math.min(mEnd, rangeEnd) - Math.max(mStart, rangeStart)) / 86400000 + 1;
+    var pct    = (mDays / totalDays * 100).toFixed(2);
+    return '<th style="width:' + pct + '%;font-size:11px;font-weight:600;color:var(--ink-light);padding:6px 4px;text-align:center;border-left:1px solid var(--border)">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
+  }).join('');
+
+  var rows = active.map(function(p, i) {
+    var pStart = p.start_date ? new Date(p.start_date + 'T00:00:00') : null;
+    var pEnd   = p.end_date   ? new Date(p.end_date   + 'T00:00:00') : pStart;
+    var color  = getProjectColor ? getProjectColor(p.id) : 'var(--amber)';
+    if (!pStart) {
+      return '<tr><td style="padding:8px 10px;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border);cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' + escapeHTML(p.name) + '<br><span style="font-size:11px;font-weight:400;color:var(--ink-light)">' + escapeHTML(p.client_name || '') + '</span></td>' +
+        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set</td></tr>';
+    }
+    if (pStart > pEnd) pEnd = pStart;
+    var barStart = Math.max(0, (pStart - rangeStart) / 86400000);
+    var barDays  = (pEnd - pStart) / 86400000 + 1;
+    var leftPct  = (barStart / totalDays * 100).toFixed(2);
+    var widthPct = Math.min(100 - parseFloat(leftPct), (barDays / totalDays * 100)).toFixed(2);
+    var startLbl = p.start_date ? p.start_date.slice(5,10) : '';
+    var endLbl   = p.end_date   ? p.end_date.slice(5,10)   : '';
+    var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
+    return '<tr>' +
+      '<td style="padding:8px 10px;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border);cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
+      escapeHTML(p.name) + '<br><span style="font-size:11px;font-weight:400;color:var(--ink-light)">' + escapeHTML(p.client_name || '') + '</span></td>' +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 6px;position:relative">' +
+      '<div style="position:relative;height:28px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
+      todayLine +
+      '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
+      '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
+      '</div></div></td></tr>';
+  }).join('');
+
+  el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+    '<colgroup><col style="width:160px"></colgroup>' +
+    '<thead><tr><th style="padding:6px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light)">Project</th>' + headerCells + '</tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div>' +
+    (todayPct !== null ? '<div style="font-size:11px;color:#DC2626;margin-top:6px;text-align:right">🔴 Red line = today</div>' : '');
+}
+
+// ─── DOC LINKING ───
+
+function openDocForProject(docId) {
+  var proj = _ptCurrentId ? _ptProjects.find(function(p){ return p.id === _ptCurrentId; }) : null;
+  showPanel(docId);
+  if (proj && typeof linkDocToProject === 'function') {
+    setTimeout(function(){ linkDocToProject(docId, proj.id); }, 100);
+  }
+}
+
+// ─── DRAG & DROP TASKS ───
+
+var _ptDragSrcIdx = null;
+
+function ptTaskDragStart(e, idx) {
+  _ptDragSrcIdx = idx;
+  e.currentTarget.classList.add('pt-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function ptTaskDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('pt-drag-over');
+}
+
+function ptTaskDragLeave(e) {
+  e.currentTarget.classList.remove('pt-drag-over');
+}
+
+async function ptTaskDrop(e, targetIdx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('pt-drag-over');
+  if (_ptDragSrcIdx === null || _ptDragSrcIdx === targetIdx) { _ptDragSrcIdx = null; return; }
+  var ts = window._ptTasks || [];
+  var moved = ts.splice(_ptDragSrcIdx, 1)[0];
+  ts.splice(targetIdx, 0, moved);
+  window._ptTasks = ts;
+  _ptDragSrcIdx = null;
+  renderPtTasks();
+  // Persist sort_order to Supabase
+  if (_currentUser && _supabase) {
+    ts.forEach(function(t, i) { t.sort_order = i; });
+    var updates = ts.map(function(t){ return _supabase.from('project_tasks').update({sort_order: t.sort_order}).eq('id', t.id); });
+    await Promise.all(updates);
+  }
+}
+
+// ─── FILE ATTACHMENTS ───
+
+var _ptPendingAttachments = [];
+
+async function handlePtAttach(input) {
+  if (!input.files || !input.files.length) return;
+  var listEl = document.getElementById('ptm-attach-list');
+  for (var i = 0; i < input.files.length; i++) {
+    var file = input.files[i];
+    if (!_supabase || !_currentUser) {
+      // Fallback: store as object URL (not persisted)
+      var url = URL.createObjectURL(file);
+      _ptPendingAttachments.push({name: file.name, url: url, size: file.size});
+      if (listEl) listEl.innerHTML += '<div class="task-attach-item">' + escapeHTML(file.name) + ' <span style="color:var(--ink-light);font-size:10px">(not saved — set up Supabase Storage)</span></div>';
+    } else {
+      var path = _currentUser.id + '/' + _ptCurrentId + '/' + Date.now() + '_' + file.name;
+      var res = await _supabase.storage.from('pt-attachments').upload(path, file, {upsert: true});
+      if (res.error) { showToast('Upload failed: ' + res.error.message); continue; }
+      var pub = _supabase.storage.from('pt-attachments').getPublicUrl(path);
+      var url = pub.data ? pub.data.publicUrl : '';
+      _ptPendingAttachments.push({name: file.name, url: url, path: path});
+      if (listEl) listEl.innerHTML += '<div class="task-attach-item"><a href="' + escapeHTML(url) + '" target="_blank">' + escapeHTML(file.name) + '</a></div>';
+    }
+  }
+  input.value = '';
+}
+
+// ─── PROJECT SHARING ───
+
+var _ptShares = [];
+
+function openShareModal() {
+  if (!_ptCurrentId) return;
+  var html = '<div class="pt-modal-title">👥 Share project</div>' +
+    '<p style="font-size:13px;color:var(--ink-mid);margin:0 0 16px">Invite a FreelanceKit user by email to collaborate on tasks, notes, and duties.</p>' +
+    '<div class="pt-field"><label>Email address</label>' +
+    '<div style="display:flex;gap:8px"><input class="pt-inp" id="ptm-share-email" placeholder="colleague@example.com" style="flex:1"><button class="pt-save-btn" style="flex-shrink:0" onclick="savePtShare()">Invite</button></div></div>' +
+    '<div id="ptm-shares-current" style="margin-top:12px"></div>' +
+    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Close</button></div>';
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  body.innerHTML = html;
+  overlay.classList.add('open');
+  _renderShareList();
+}
+
+function _renderShareList() {
+  var el = document.getElementById('ptm-shares-current');
+  if (!el) return;
+  if (!_ptShares.length) { el.innerHTML = '<div style="font-size:12px;color:var(--ink-light)">No one else has access yet.</div>'; return; }
+  el.innerHTML = '<div style="font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:6px">Current access:</div>' +
+    _ptShares.map(function(s) {
+      return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">' +
+        '<span class="pt-share-chip">' + escapeHTML(s.shared_email) + '</span>' +
+        '<button class="pt-row-del" style="margin-left:auto" onclick="removePtShare(\'' + s.id + '\')">Remove</button>' +
+        '</div>';
+    }).join('');
+}
+
+async function savePtShare() {
+  var email = (document.getElementById('ptm-share-email') || {}).value;
+  if (!email || !email.includes('@')) { showToast('Enter a valid email'); return; }
+  if (!_currentUser || !_ptCurrentId) return;
+  if (!_supabase) { showToast('Database not connected'); return; }
+  var res = await _supabase.from('project_shares').insert({
+    project_id: _ptCurrentId,
+    owner_id: _currentUser.id,
+    shared_email: email.trim().toLowerCase(),
+    created_at: new Date().toISOString()
+  }).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _ptShares.push(res.data);
+  document.getElementById('ptm-share-email').value = '';
+  _renderShareList();
+  loadPtShares(_ptCurrentId);
+  showToast('\u2713 Invite sent to ' + email);
+}
+
+async function removePtShare(shareId) {
+  if (!_supabase) return;
+  var res = await _supabase.from('project_shares').delete().eq('id', shareId);
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _ptShares = _ptShares.filter(function(s){ return s.id !== shareId; });
+  _renderShareList();
+  loadPtShares(_ptCurrentId);
+}
+
+async function loadPtShares(projectId) {
+  if (!_supabase || !_currentUser) return;
+  var res = await _supabase.from('project_shares').select('*').eq('project_id', projectId || _ptCurrentId);
+  if (res.error) return;
+  _ptShares = res.data || [];
+  var wrap = document.getElementById('ptv-shares-wrap');
+  var list = document.getElementById('ptv-shares-list');
+  if (!wrap || !list) return;
+  if (!_ptShares.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  list.innerHTML = _ptShares.map(function(s){
+    return '<span class="pt-share-chip">' + escapeHTML(s.shared_email) + '</span>';
+  }).join('');
+}
+
 // ─── MODAL ───
 
 function openPtModal(mode) {
@@ -5231,7 +5614,13 @@ function openPtModal(mode) {
       '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo"' + selOpt(et.status,'todo') + '>To do</option><option value="in_progress"' + selOpt(et.status,'in_progress') + '>In progress</option><option value="done"' + selOpt(et.status,'done') + '>Done</option></select></div>' +
       '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low"' + selOpt(et.priority,'low') + '>Low</option><option value="medium"' + (et.priority ? selOpt(et.priority,'medium') : ' selected') + '>Medium</option><option value="high"' + selOpt(et.priority,'high') + '>High</option></select></div>' +
       '</div>' +
-      '<div class="pt-field"><label>Notes</label><textarea class="pt-ta" id="ptm-task-notes" style="min-height:60px">' + escapeHTML(et.notes || '') + '</textarea></div>' +
+      '<div class="pt-field"><label>Notes</label><textarea class="pt-ta" id="ptm-task-notes" style="min-height:60px" placeholder="Notes, links, context…">' + escapeHTML(et.notes || '') + '</textarea></div>' +
+      '<div class="pt-field"><label>Attachments <span style="font-weight:400;color:var(--ink-light)">(images, PDF, Word)</span></label>' +
+      '<div class="task-attach-wrap">' +
+      '<label class="task-attach-btn"><input type="file" id="ptm-task-file" accept="image/*,.pdf,.doc,.docx" multiple onchange="handlePtAttach(this)" style="display:none">📎 Add file</label>' +
+      '<div class="task-attach-list" id="ptm-attach-list">' +
+      (function(){ var arr=[]; try{arr=JSON.parse(et.attachments||'[]');}catch(e){} return arr.map(function(a){ return '<div class="task-attach-item"><a href="' + escapeHTML(a.url) + '" target="_blank">' + escapeHTML(a.name) + '</a></div>'; }).join(''); })() +
+      '</div></div></div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="' + (mode === 'edit-task' ? 'updatePtTask()' : 'savePtTask()') + '">' + (mode === 'edit-task' ? 'Save changes' : 'Add task') + '</button></div>';
   } else if (mode === 'add-billing') {
     html = '<div class="pt-modal-title">Add billing phase</div>' +
@@ -5273,6 +5662,7 @@ function openPtModal(mode) {
 function closePtModal() {
   var overlay = document.getElementById('pt-modal');
   if (overlay) overlay.classList.remove('open');
+  _ptPendingAttachments = [];
 }
 
 // ─── SAVE HANDLERS ───
@@ -5332,7 +5722,10 @@ async function savePtTask() {
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, title: title,
     assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null,
     status: g('ptm-task-status') || 'todo', priority: g('ptm-task-priority') || 'medium',
-    notes: g('ptm-task-notes') };
+    notes: g('ptm-task-notes'),
+    attachments: JSON.stringify(_ptPendingAttachments),
+    sort_order: (window._ptTasks || []).length };
+  _ptPendingAttachments = [];
   var res = await _supabase.from('project_tasks').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   window._ptTasks = window._ptTasks || []; window._ptTasks.push(res.data);
@@ -5511,7 +5904,11 @@ async function updatePtTask() {
   var ts = window._ptTasks; if (!ts || window._ptEditTaskIdx === null || !ts[window._ptEditTaskIdx]) return;
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var title = g('ptm-task-title'); if (!title) { showToast('Task name required'); return; }
-  var payload = { title: title, assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null, status: g('ptm-task-status'), priority: g('ptm-task-priority'), notes: g('ptm-task-notes') };
+  var existAttach = [];
+  try { existAttach = JSON.parse(ts[window._ptEditTaskIdx].attachments || '[]'); } catch(e){}
+  var merged = existAttach.concat(_ptPendingAttachments);
+  _ptPendingAttachments = [];
+  var payload = { title: title, assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null, status: g('ptm-task-status'), priority: g('ptm-task-priority'), notes: g('ptm-task-notes'), attachments: JSON.stringify(merged) };
   var res = await _supabase.from('project_tasks').update(payload).eq('id', ts[window._ptEditTaskIdx].id).eq('user_id', _currentUser.id).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   ts[window._ptEditTaskIdx] = res.data;
