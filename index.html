@@ -1146,6 +1146,40 @@ input[type=number]{-moz-appearance:textfield}
 /* Sharing */
 .pt-share-chip{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
 .pt-share-chip:last-child{border-bottom:none}
+/* People involved */
+.pt-people-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center}
+.pt-person-chip{display:flex;align-items:center;gap:7px;padding:6px 10px 6px 6px;background:var(--white);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;color:var(--ink);cursor:grab;user-select:none;transition:all .15s}
+.pt-person-chip:hover{border-color:var(--amber);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.pt-person-chip.dragging{opacity:.5;cursor:grabbing}
+.pt-person-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.pt-person-add{padding:6px 12px;background:transparent;border:1.5px dashed var(--border);border-radius:20px;font-size:12px;color:var(--ink-light);cursor:pointer;font-family:var(--font-body);transition:all .15s}
+.pt-person-add:hover{border-color:var(--amber);color:var(--amber)}
+.pt-row.person-drag-over{background:#FFF8EC;border:1.5px dashed var(--amber)}
+/* Meeting notes cards */
+.mn-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;transition:all .15s;position:relative}
+.mn-card:hover{border-color:var(--amber);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.mn-card-purpose{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.mn-card-meta{font-size:12px;color:var(--ink-light);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.mn-card-actions{display:flex;gap:6px;margin-top:10px}
+/* Meeting popup overlay */
+.mn-popup{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}
+.mn-popup-inner{background:var(--white);border-radius:var(--radius);width:100%;max-width:820px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.mn-popup-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.mn-popup-title{font-size:16px;font-weight:700;color:var(--ink)}
+.mn-popup-body{flex:1;overflow-y:auto;padding:20px}
+.mn-popup-ft{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;justify-content:flex-end}
+/* Rich text toolbar */
+.rte-toolbar{display:flex;gap:2px;padding:6px 8px;border:1px solid var(--border);border-bottom:none;border-radius:var(--radius-sm) var(--radius-sm) 0 0;background:#F8F7F4;flex-wrap:wrap}
+.rte-btn{padding:3px 8px;border:1px solid transparent;border-radius:4px;background:transparent;cursor:pointer;font-size:13px;font-family:var(--font-body);color:var(--ink);transition:all .1s;line-height:1.4}
+.rte-btn:hover{background:var(--border);border-color:var(--border)}
+.rte-btn.active{background:var(--ink);color:var(--cream)}
+.rte-editor{min-height:140px;border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px;font-size:13px;font-family:var(--font-body);color:var(--ink);outline:none;line-height:1.7;overflow-y:auto}
+.rte-editor:focus{border-color:var(--ink)}
+/* Attendee input rows */
+.attendee-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.attendee-row input{flex:1;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;font-family:var(--font-body);color:var(--ink);background:var(--cream)}
+.attendee-add-btn{padding:4px 10px;border:1.5px dashed var(--border);border-radius:6px;background:transparent;font-size:12px;color:var(--ink-light);cursor:pointer;font-family:var(--font-body)}
+.attendee-add-btn:hover{border-color:var(--amber);color:var(--amber)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
@@ -1870,7 +1904,6 @@ var RateLimiter = (function() {
             </div>
             <div class="todo-add-row">
               <input class="todo-inp" id="todo-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTodo()">
-              <select class="todo-proj-sel" id="todo-proj-sel"><option value="">No project</option></select>
               <button class="todo-add-btn" onclick="addTodo()">+ Add</button>
             </div>
             <div class="todo-filter-row" id="todo-filter-row">
@@ -2412,6 +2445,12 @@ var RateLimiter = (function() {
               <div id="ptv-contract" style="font-size:13px;color:var(--ink);line-height:1.7;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);white-space:pre-wrap"></div>
             </div>
             <div class="pt-field">
+              <label>People involved</label>
+              <div class="pt-people-wrap" id="ptv-people-wrap">
+                <button class="pt-person-add" onclick="openAddPersonModal()">+ Add person</button>
+              </div>
+            </div>
+            <div class="pt-field">
               <label>Linked documents</label>
               <div class="pt-doc-links">
                 <button class="pt-doc-link" onclick="openDocForProject('contract')">📄 Client Contract</button>
@@ -2451,8 +2490,8 @@ var RateLimiter = (function() {
           </div>
           <!-- Meeting notes tab -->
           <div class="pt-tab-content" id="pt-tab-meetings" style="display:none">
-            <div class="pt-sec-hdr">Meeting notes <button class="pt-add-btn" onclick="openPtModal('add-meeting')">+ Add note</button></div>
-            <div id="pt-meetings-list"></div>
+            <div class="pt-sec-hdr">Meeting notes <button class="pt-add-btn" onclick="openMeetingEditor()">+ Add note</button></div>
+            <div id="pt-meetings-list" style="display:grid;gap:10px;margin-top:4px"></div>
           </div>
           <!-- Timesheet tab -->
           <div class="pt-tab-content" id="pt-tab-hours" style="display:none">
@@ -2466,6 +2505,58 @@ var RateLimiter = (function() {
       <!-- Project Tracker modals -->
       <div class="pt-modal-overlay" id="pt-modal">
         <div class="pt-modal" id="pt-modal-body"></div>
+      </div>
+
+      <!-- Meeting notes full-page popup -->
+      <div class="mn-popup" id="mn-popup" style="display:none" onclick="if(event.target===this)closeMeetingPopup()">
+        <div class="mn-popup-inner">
+          <div class="mn-popup-hdr">
+            <div>
+              <div class="mn-popup-title" id="mn-popup-title">Meeting Notes</div>
+              <div style="font-size:12px;color:var(--ink-light);margin-top:2px" id="mn-popup-meta"></div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="pt-add-btn" style="background:transparent;color:var(--ink);border:1.5px solid var(--border)" onclick="printMeetingNote()">⬇ PDF</button>
+              <button class="pt-add-btn" id="mn-edit-btn" onclick="toggleMeetingEdit()">✏️ Edit</button>
+              <button class="pt-back-btn" onclick="closeMeetingPopup()">✕ Close</button>
+            </div>
+          </div>
+          <div class="mn-popup-body" id="mn-popup-body"></div>
+        </div>
+      </div>
+
+      <!-- Meeting editor popup -->
+      <div class="mn-popup" id="mn-editor-popup" style="display:none" onclick="if(event.target===this)closeMeetingEditor()">
+        <div class="mn-popup-inner" style="max-width:700px">
+          <div class="mn-popup-hdr">
+            <div class="mn-popup-title" id="mn-editor-title">New Meeting Note</div>
+            <button class="pt-back-btn" onclick="closeMeetingEditor()">✕</button>
+          </div>
+          <div class="mn-popup-body" id="mn-editor-body"></div>
+          <div class="mn-popup-ft">
+            <button class="btn-outline" onclick="closeMeetingEditor()">Cancel</button>
+            <button class="pt-save-btn" onclick="saveMeetingFromEditor()">Save meeting note</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add person modal -->
+      <div class="pt-modal-overlay" id="person-modal" style="display:none" onclick="if(event.target===this)closeAddPersonModal()">
+        <div class="pt-modal" style="max-width:380px">
+          <div class="pt-modal-title">Add person to project</div>
+          <div class="pt-field"><label>Name *</label><input class="pt-inp" id="pm-name" placeholder="e.g. Alex Chen"></div>
+          <div class="pt-field"><label>Role / title</label><input class="pt-inp" id="pm-role" placeholder="e.g. Designer, Project Manager"></div>
+          <div class="pt-field"><label>Side</label>
+            <select class="pt-sel" id="pm-side">
+              <option value="freelancer">Our team (freelancer)</option>
+              <option value="client">Client side</option>
+            </select>
+          </div>
+          <div class="pt-modal-ft">
+            <button class="btn-outline" onclick="closeAddPersonModal()">Cancel</button>
+            <button class="pt-save-btn" onclick="savePersonToProject()">Add person</button>
+          </div>
+        </div>
       </div>
 
       <!-- ─── PIPELINE TRACKER ─── -->
@@ -5132,8 +5223,9 @@ function selectPtProject(id) {
   showPtTab('overview', document.querySelector('#pt-detail-view .pt-tab'));
   // Load sub-data
   ptLoadProjectData(id);
-  // Load shares
+  // Load shares + people
   if (typeof loadPtShares === 'function') loadPtShares(id);
+  renderPtPeople();
   // Highlight in list
   renderPtList();
 }
@@ -5206,19 +5298,19 @@ function renderPtMilestones() {
     return '<th style="width:' + pct + '%;font-size:11px;font-weight:700;color:var(--ink);padding:6px 8px;text-align:left;border-left:1px solid var(--border);background:#F8F7F4">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
 
+  var msSticky = 'position:sticky;left:0;z-index:10;background:var(--white);border-right:1px solid var(--border)';
   var rows = ms.map(function(m, i) {
     var msStart = m.start_date ? new Date(m.start_date + 'T00:00:00') : (m.due_date ? new Date(m.due_date + 'T00:00:00') : null);
     var msEnd   = m.due_date   ? new Date(m.due_date   + 'T00:00:00') : msStart;
     var rowBg = m.completed ? 'background:#F0FDF4' : '';
+    var nameCell = '<td style="padding:8px 10px;font-size:13px;color:var(--ink);border-top:1px solid var(--border);' + msSticky + (m.completed ? ';background:#F0FDF4' : '') + '">' +
+      '<div style="display:flex;align-items:center;gap:8px;white-space:nowrap">' +
+      '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
+      '<span style="' + (m.completed ? 'text-decoration:line-through;color:var(--ink-light)' : '') + ';max-width:120px;overflow:hidden;text-overflow:ellipsis;display:inline-block" title="' + escapeHTML(m.title) + '">' + escapeHTML(m.title) + '</span>' +
+      '</div></td>';
     if (!msStart) {
-      return '<tr style="' + rowBg + '">' +
-        '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
-        '<div style="display:flex;align-items:center;gap:8px">' +
-        '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
-        '<span style="' + (m.completed ? 'text-decoration:line-through;color:var(--ink-light)' : '') + '">' + escapeHTML(m.title) + '</span>' +
-        '</div></td>' +
-        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set · <button class="pt-row-edit" onclick="openPtEditMilestone(' + i + ')">Edit</button> <button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button></td>' +
-        '</tr>';
+      return '<tr style="' + rowBg + '">' + nameCell +
+        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set · <button class="pt-row-edit" onclick="openPtEditMilestone(' + i + ')">Edit</button> <button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button></td></tr>';
     }
     if (msStart > msEnd) msEnd = msStart;
     var barStartOffset = Math.max(0, (msStart - rangeStart) / 86400000);
@@ -5229,27 +5321,27 @@ function renderPtMilestones() {
     var startLbl = m.start_date ? m.start_date.slice(5,10) : '';
     var endLbl   = m.due_date   ? m.due_date.slice(5,10)   : '';
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
-    return '<tr style="' + rowBg + '">' +
-      '<td style="padding:8px 10px;font-size:13px;color:var(--ink);white-space:nowrap;border-top:1px solid var(--border)">' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-      '<div class="pt-check' + (m.completed ? ' done' : '') + '" onclick="togglePtMilestone(' + i + ')" style="flex-shrink:0">' + (m.completed ? '&#10003;' : '') + '</div>' +
-      '<span style="' + (m.completed ? 'text-decoration:line-through;color:var(--ink-light)' : '') + '">' + escapeHTML(m.title) + '</span>' +
-      '</div></td>' +
-      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 6px;position:relative">' +
+    return '<tr style="' + rowBg + '">' + nameCell +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 6px;position:relative">' +
       '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="openPtEditMilestone(' + i + ')">' +
       todayLine +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
       '</div></div>' +
       '<button class="pt-row-del" style="position:absolute;right:4px;top:50%;transform:translateY(-50%)" onclick="event.stopPropagation();deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
-      '</td>' +
-      '</tr>';
+      '</td></tr>';
   }).join('');
 
-  el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+  var todayBtn = todayPct !== null
+    ? '<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button onclick="ganttScrollToToday(\'ms-gantt-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button></div>'
+    : '';
+
+  el.innerHTML = todayBtn +
+    '<div style="overflow-x:auto" id="ms-gantt-scroll" data-today-pct="' + (todayPct || '') + '">' +
+    '<table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:500px">' +
     '<colgroup><col style="width:' + nameColW + '"></colgroup>' +
     '<thead>' +
-    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4">Milestone</th>' + headerCells + '</tr>' +
+    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4;' + msSticky + '">Milestone</th>' + headerCells + '</tr>' +
     _buildGanttRuler(rangeStart, totalDays, months, todayPct) +
     '</thead>' +
     '<tbody>' + rows + '</tbody>' +
@@ -5269,15 +5361,6 @@ function _isOverdue(dateStr, done) {
 function setPtTaskFilter(type, val) {
   if (type === 'prio') _ptTaskPrioFilter = val;
   else _ptTaskAssignFilter = val;
-  // Update active states
-  var filterBar = document.getElementById('pt-task-filter-bar');
-  if (!filterBar) return;
-  if (type === 'prio') {
-    filterBar.querySelectorAll('.pt-filter-btn').forEach(function(btn) {
-      var bv = btn.getAttribute('onclick').match(/'prio','([^']+)'/);
-      if (bv) btn.classList.toggle('active', bv[1] === val);
-    });
-  }
   renderPtTasks();
 }
 
@@ -5298,7 +5381,8 @@ function renderPtTasks() {
     if (assignBtns) {
       var allBtn = '<button class="pt-filter-btn' + (_ptTaskAssignFilter === 'all' ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',\'all\')">All</button>';
       assignBtns.innerHTML = allBtn + assignees.map(function(a) {
-        return '<button class="pt-filter-btn' + (_ptTaskAssignFilter === a ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',' + JSON.stringify(a) + ')">' + escapeHTML(a) + '</button>';
+        var safeA = escapeHTML(a).replace(/'/g,'&#39;');
+        return '<button class="pt-filter-btn' + (_ptTaskAssignFilter === a ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',\'' + safeA + '\')">' + escapeHTML(a) + '</button>';
       }).join('');
     }
   }
@@ -5339,6 +5423,8 @@ function renderPtTasks() {
       '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">&#215;</button>' +
       '</div>';
   }).join('');
+  // Enable drag-person-to-task after DOM update
+  setTimeout(_attachPersonDropToTasks, 0);
 }
 
 function renderPtBilling() {
@@ -5362,22 +5448,307 @@ function renderPtBilling() {
   }).join('');
 }
 
+// ─── PEOPLE INVOLVED ─────────────────────────────────────────────────────────
+var _ptPeopleColors = ['#D4A853','#2D6A4F','#1D4ED8','#7C3AED','#DC2626','#0891B2','#059669','#D97706','#DB2777','#6366F1'];
+
+function _getPeopleKey(pid) { return 'fk_people_' + (pid || _ptCurrentId); }
+
+function loadPtPeople(projectId) {
+  var pid = projectId || _ptCurrentId;
+  try { return JSON.parse(localStorage.getItem(_getPeopleKey(pid)) || '[]'); } catch(e) { return []; }
+}
+
+function savePtPeople(people, projectId) {
+  var pid = projectId || _ptCurrentId;
+  try { localStorage.setItem(_getPeopleKey(pid), JSON.stringify(people)); } catch(e){}
+}
+
+function renderPtPeople() {
+  var wrap = document.getElementById('ptv-people-wrap');
+  if (!wrap) return;
+  var people = loadPtPeople();
+  // Also pull unique assignees from tasks as "auto" members
+  var taskAssignees = (window._ptTasks || []).map(function(t){ return t.assignee; }).filter(Boolean);
+  taskAssignees.forEach(function(name) {
+    if (!people.find(function(p){ return p.name === name; })) {
+      people.push({name: name, role: '', side: 'freelancer', auto: true});
+    }
+  });
+  var chips = people.map(function(p, i) {
+    var initials = p.name.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+    var color = _ptPeopleColors[i % _ptPeopleColors.length];
+    return '<div class="pt-person-chip" draggable="true" ' +
+      'ondragstart="personDragStart(event,' + JSON.stringify(p.name).replace(/"/g,'&quot;') + ')" ' +
+      'ondragend="this.classList.remove(\'dragging\')" ' +
+      'title="' + escapeHTML(p.name) + (p.role ? ' · ' + escapeHTML(p.role) : '') + (p.side === 'client' ? ' (client)' : '') + '">' +
+      '<div class="pt-person-avatar" style="background:' + color + '">' + initials + '</div>' +
+      '<span>' + escapeHTML(p.name) + '</span>' +
+      (p.side === 'client' ? '<span style="font-size:10px;color:var(--ink-light);background:#F3F4F6;padding:1px 5px;border-radius:10px">client</span>' : '') +
+      (!p.auto ? '<span style="font-size:11px;color:var(--ink-light);cursor:pointer;padding:0 2px" onclick="removePtPerson(' + i + ')">✕</span>' : '') +
+      '</div>';
+  }).join('');
+  wrap.innerHTML = chips + '<button class="pt-person-add" onclick="openAddPersonModal()">+ Add</button>';
+}
+
+function openAddPersonModal() {
+  var el = document.getElementById('person-modal');
+  if (el) { el.style.display = 'flex'; setTimeout(function(){ document.getElementById('pm-name') && document.getElementById('pm-name').focus(); }, 50); }
+}
+function closeAddPersonModal() {
+  var el = document.getElementById('person-modal');
+  if (el) el.style.display = 'none';
+  ['pm-name','pm-role'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+}
+function savePersonToProject() {
+  var name = (document.getElementById('pm-name')||{}).value;
+  if (!name || !name.trim()) { showToast('Name is required'); return; }
+  var people = loadPtPeople();
+  if (people.find(function(p){ return p.name === name.trim(); })) { showToast('Already added'); return; }
+  people.push({ name: name.trim(), role: (document.getElementById('pm-role')||{}).value || '', side: (document.getElementById('pm-side')||{}).value || 'freelancer' });
+  savePtPeople(people);
+  closeAddPersonModal();
+  renderPtPeople();
+}
+function removePtPerson(idx) {
+  var people = loadPtPeople();
+  people.splice(idx, 1);
+  savePtPeople(people);
+  renderPtPeople();
+}
+
+// Drag person → drop on task row to assign
+function personDragStart(e, name) {
+  e.dataTransfer.setData('person-name', name);
+  e.currentTarget.classList.add('dragging');
+}
+
+// Patch task rows to accept person drops (called after renderPtTasks)
+function _attachPersonDropToTasks() {
+  document.querySelectorAll('#pt-tasks-list .pt-row').forEach(function(row) {
+    row.addEventListener('dragover', function(e) {
+      if (e.dataTransfer.types.indexOf('person-name') >= 0) {
+        e.preventDefault(); row.classList.add('person-drag-over');
+      }
+    });
+    row.addEventListener('dragleave', function() { row.classList.remove('person-drag-over'); });
+    row.addEventListener('drop', function(e) {
+      var pname = e.dataTransfer.getData('person-name');
+      if (!pname) return;
+      row.classList.remove('person-drag-over');
+      var idx = parseInt(row.getAttribute('data-idx'));
+      var ts = window._ptTasks;
+      if (!ts || isNaN(idx) || !ts[idx]) return;
+      ts[idx].assignee = pname;
+      if (_supabase && _currentUser) {
+        _supabase.from('project_tasks').update({assignee: pname}).eq('id', ts[idx].id).eq('user_id', _currentUser.id);
+      }
+      renderPtTasks();
+      showToast('✓ Assigned to ' + pname);
+    });
+  });
+}
+
+// ─── MEETING NOTES ────────────────────────────────────────────────────────────
+var _mnEditIdx = null;
+
 function renderPtMeetings() {
   var me = window._ptMeetings || [];
   var el = document.getElementById('pt-meetings-list');
   if (!el) return;
-  if (!me.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No meeting notes yet.</div>'; return; }
+  if (!me.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No meeting notes yet. Click "+ Add note" to create one.</div>'; return; }
   el.innerHTML = me.map(function(m, i) {
-    return '<div class="pt-note-item">' +
-      '<div style="display:flex;gap:6px;float:right;margin-left:8px">' +
-      '<button class="pt-row-edit" onclick="openPtEditMeeting(' + i + ')">Edit</button>' +
-      '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">&#215; Delete</button>' +
+    var purpose = m.purpose || m.notes && m.notes.slice(0,60) || 'Meeting note';
+    var dateStr = m.meeting_date ? m.meeting_date.slice(0,10) : '—';
+    var location = m.location ? '📍 ' + escapeHTML(m.location) : '';
+    return '<div class="mn-card" onclick="openMeetingPopup(' + i + ')">' +
+      '<div class="mn-card-purpose">' + escapeHTML(purpose) + '</div>' +
+      '<div class="mn-card-meta">' +
+        '<span>📅 ' + dateStr + '</span>' +
+        (location ? '<span>' + location + '</span>' : '') +
       '</div>' +
-      '<div class="pt-note-date">' + (m.meeting_date ? m.meeting_date.slice(0,10) : '—') + (m.attendees ? ' · ' + escapeHTML(m.attendees) : '') + '</div>' +
-      '<div class="pt-note-text">' + escapeHTML(m.notes || '') + '</div>' +
-      (m.action_items ? '<div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--ink-mid)">Action items:</div><div class="pt-note-text" style="font-size:12px">' + escapeHTML(m.action_items) + '</div>' : '') +
-      '</div>';
+      '<div class="mn-card-actions" onclick="event.stopPropagation()">' +
+        '<button class="pt-row-edit" onclick="openMeetingEditor(' + i + ')">Edit</button>' +
+        '<button class="pt-row-edit" onclick="openMeetingPopup(' + i + ');setTimeout(printMeetingNote,300)">⬇ PDF</button>' +
+        '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">&#215; Delete</button>' +
+      '</div>' +
+    '</div>';
   }).join('');
+}
+
+function openMeetingPopup(idx) {
+  var me = window._ptMeetings || [];
+  var m = me[idx];
+  if (!m) return;
+  _mnEditIdx = idx;
+  var proj = _ptCurrentId ? _ptProjects.find(function(p){ return p.id === _ptCurrentId; }) : null;
+  var popup = document.getElementById('mn-popup');
+  var title = document.getElementById('mn-popup-title');
+  var meta  = document.getElementById('mn-popup-meta');
+  var body  = document.getElementById('mn-popup-body');
+  if (!popup) return;
+  title.textContent = m.purpose || 'Meeting Notes';
+  meta.textContent  = (m.meeting_date ? m.meeting_date.slice(0,10) : '') + (m.location ? ' · ' + m.location : '') + (proj ? ' · ' + proj.name : '');
+
+  var clientAtts  = []; try { clientAtts  = JSON.parse(m.client_attendees  || '[]'); } catch(e){}
+  var freelAtts   = []; try { freelAtts   = JSON.parse(m.freelancer_attendees || '[]'); } catch(e){}
+
+  var attendeeHtml = '';
+  if (freelAtts.length) {
+    attendeeHtml += '<div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Our team</div>' +
+      freelAtts.map(function(a){ return '<div style="font-size:13px;padding:2px 0">• ' + escapeHTML(a.name) + (a.role ? ' <span style="color:var(--ink-light)">· ' + escapeHTML(a.role) + '</span>' : '') + (a.email ? ' <span style="color:var(--ink-light)">· ' + escapeHTML(a.email) + '</span>' : '') + '</div>'; }).join('') + '</div>';
+  }
+  if (clientAtts.length) {
+    attendeeHtml += '<div style="margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">Client team</div>' +
+      clientAtts.map(function(a){ return '<div style="font-size:13px;padding:2px 0">• ' + escapeHTML(a.name) + (a.role ? ' <span style="color:var(--ink-light)">· ' + escapeHTML(a.role) + '</span>' : '') + (a.email ? ' <span style="color:var(--ink-light)">· ' + escapeHTML(a.email) + '</span>' : '') + '</div>'; }).join('') + '</div>';
+  }
+  if (!attendeeHtml && m.attendees) {
+    attendeeHtml = '<div style="font-size:13px;margin-bottom:12px"><strong>Attendees:</strong> ' + escapeHTML(m.attendees) + '</div>';
+  }
+
+  body.innerHTML =
+    '<div id="mn-view-mode">' +
+    (proj ? '<div style="font-size:12px;color:var(--ink-light);margin-bottom:16px">' + escapeHTML(proj.name) + (m.project_number ? ' · #' + escapeHTML(m.project_number) : '') + '</div>' : '') +
+    (attendeeHtml ? '<div style="background:#F8F7F4;border-radius:8px;padding:14px;margin-bottom:16px">' + attendeeHtml + '</div>' : '') +
+    (m.notes_html
+      ? '<div style="font-size:14px;line-height:1.8;color:var(--ink)">' + m.notes_html + '</div>'
+      : (m.notes ? '<div style="font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap">' + escapeHTML(m.notes) + '</div>' : '')) +
+    (m.action_items ? '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Action items</div><div style="font-size:13px;white-space:pre-wrap;line-height:1.8">' + escapeHTML(m.action_items) + '</div></div>' : '') +
+    '</div>';
+
+  popup.style.display = 'flex';
+}
+
+function closeMeetingPopup() {
+  var el = document.getElementById('mn-popup');
+  if (el) el.style.display = 'none';
+  _mnEditIdx = null;
+}
+
+function printMeetingNote() {
+  var body = document.getElementById('mn-popup-body');
+  var title = document.getElementById('mn-popup-title');
+  var meta  = document.getElementById('mn-popup-meta');
+  if (!body) return;
+  var win = window.open('', '_blank', 'width=800,height=900');
+  win.document.write('<!DOCTYPE html><html><head><title>' + (title ? title.textContent : 'Meeting Notes') + '</title>' +
+    '<style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;color:#1a1a1a;font-size:14px;line-height:1.8}h1{font-size:22px;margin-bottom:4px}p.meta{color:#666;font-size:13px;margin-bottom:24px}hr{border:none;border-top:1px solid #ddd;margin:20px 0}@media print{body{margin:20px}}</style>' +
+    '</head><body>' +
+    '<h1>' + (title ? title.textContent : 'Meeting Notes') + '</h1>' +
+    '<p class="meta">' + (meta ? meta.textContent : '') + '</p><hr>' +
+    body.innerHTML +
+    '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 400);
+}
+
+function openMeetingEditor(idx) {
+  _mnEditIdx = (idx !== undefined) ? idx : null;
+  var me = window._ptMeetings || [];
+  var m = (_mnEditIdx !== null && me[_mnEditIdx]) ? me[_mnEditIdx] : {};
+  var proj = _ptCurrentId ? _ptProjects.find(function(p){ return p.id === _ptCurrentId; }) : null;
+
+  var clientAtts  = []; try { clientAtts  = JSON.parse(m.client_attendees  || '[]'); } catch(e){}
+  var freelAtts   = []; try { freelAtts   = JSON.parse(m.freelancer_attendees || '[]'); } catch(e){}
+  if (!freelAtts.length) freelAtts = [{name:'',role:'',email:''}];
+  if (!clientAtts.length) clientAtts = [{name:'',role:'',email:''}];
+
+  function attRows(arr, side) {
+    return arr.map(function(a, i) {
+      return '<div class="attendee-row" data-side="' + side + '" data-i="' + i + '">' +
+        '<input placeholder="Name *" value="' + escapeHTML(a.name||'') + '" data-field="name">' +
+        '<input placeholder="Role / title" value="' + escapeHTML(a.role||'') + '" data-field="role">' +
+        '<input placeholder="Email" value="' + escapeHTML(a.email||'') + '" data-field="email">' +
+        '<span style="cursor:pointer;color:var(--ink-light);padding:0 4px" onclick="this.closest(\'.attendee-row\').remove()">✕</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  var editorTitle = document.getElementById('mn-editor-title');
+  if (editorTitle) editorTitle.textContent = _mnEditIdx !== null ? 'Edit Meeting Note' : 'New Meeting Note';
+
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('mn-editor-body').innerHTML =
+    '<div class="pt-grid2">' +
+    '<div class="pt-field"><label>Purpose of meeting *</label><input class="pt-inp" id="mne-purpose" value="' + escapeHTML(m.purpose||'') + '" placeholder="e.g. Kickoff, Review, Check-in"></div>' +
+    '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="mne-date" value="' + (m.meeting_date ? m.meeting_date.slice(0,10) : today) + '"></div>' +
+    '<div class="pt-field"><label>Location</label><input class="pt-inp" id="mne-location" value="' + escapeHTML(m.location||'') + '" placeholder="e.g. Zoom, Office – Level 2"></div>' +
+    '<div class="pt-field"><label>Project #</label><input class="pt-inp" id="mne-projnum" value="' + escapeHTML(m.project_number||'') + '" placeholder="e.g. 2024-001"></div>' +
+    '</div>' +
+    '<div class="pt-field"><label>Project</label><input class="pt-inp" value="' + escapeHTML(proj ? proj.name : '') + '" disabled style="opacity:.6"></div>' +
+    '<div class="pt-field"><label>Our team attendees</label><div id="mne-freel-rows">' + attRows(freelAtts,'freelancer') + '</div>' +
+    '<button class="attendee-add-btn" style="margin-top:4px" onclick="addAttendeeRow(\'mne-freel-rows\',\'freelancer\')">+ Add person</button></div>' +
+    '<div class="pt-field"><label>Client attendees</label><div id="mne-client-rows">' + attRows(clientAtts,'client') + '</div>' +
+    '<button class="attendee-add-btn" style="margin-top:4px" onclick="addAttendeeRow(\'mne-client-rows\',\'client\')">+ Add person</button></div>' +
+    '<div class="pt-field"><label>Meeting notes</label>' +
+    '<div class="rte-toolbar">' +
+    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'bold\')" title="Bold"><b>B</b></button>' +
+    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'italic\')" title="Italic"><i>I</i></button>' +
+    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'underline\')" title="Underline"><u>U</u></button>' +
+    '<span style="width:1px;background:var(--border);margin:2px 4px;display:inline-block"></span>' +
+    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'insertUnorderedList\')" title="Bullet list">• List</button>' +
+    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'insertOrderedList\')" title="Numbered list">1. List</button>' +
+    '</div>' +
+    '<div class="rte-editor" id="mne-notes" contenteditable="true">' + (m.notes_html || escapeHTML(m.notes||'')) + '</div></div>' +
+    '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="mne-actions" style="min-height:60px" placeholder="• Item 1&#10;• Item 2">' + escapeHTML(m.action_items||'') + '</textarea></div>';
+
+  document.getElementById('mn-editor-popup').style.display = 'flex';
+}
+
+function addAttendeeRow(containerId, side) {
+  var c = document.getElementById(containerId);
+  if (!c) return;
+  var i = c.children.length;
+  var row = document.createElement('div');
+  row.className = 'attendee-row';
+  row.dataset.side = side; row.dataset.i = i;
+  row.innerHTML = '<input placeholder="Name *" data-field="name"><input placeholder="Role / title" data-field="role"><input placeholder="Email" data-field="email"><span style="cursor:pointer;color:var(--ink-light);padding:0 4px" onclick="this.closest(\'.attendee-row\').remove()">✕</span>';
+  c.appendChild(row);
+}
+
+function _collectAttendees(containerId) {
+  var rows = document.querySelectorAll('#' + containerId + ' .attendee-row');
+  var arr = [];
+  rows.forEach(function(row) {
+    var name = (row.querySelector('[data-field="name"]')||{}).value || '';
+    if (!name.trim()) return;
+    arr.push({ name: name.trim(), role: ((row.querySelector('[data-field="role"]')||{}).value||'').trim(), email: ((row.querySelector('[data-field="email"]')||{}).value||'').trim() });
+  });
+  return arr;
+}
+
+function closeMeetingEditor() {
+  document.getElementById('mn-editor-popup').style.display = 'none';
+}
+
+async function saveMeetingFromEditor() {
+  if (!_currentUser || !_ptCurrentId) return;
+  var purpose = (document.getElementById('mne-purpose')||{}).value;
+  if (!purpose || !purpose.trim()) { showToast('Purpose of meeting is required'); return; }
+  var notesEl = document.getElementById('mne-notes');
+  var payload = {
+    project_id: _ptCurrentId, user_id: _currentUser.id,
+    purpose: purpose.trim(),
+    meeting_date: (document.getElementById('mne-date')||{}).value || null,
+    location: (document.getElementById('mne-location')||{}).value || null,
+    project_number: (document.getElementById('mne-projnum')||{}).value || null,
+    notes_html: notesEl ? notesEl.innerHTML : '',
+    notes: notesEl ? notesEl.innerText : '',
+    action_items: (document.getElementById('mne-actions')||{}).value || null,
+    freelancer_attendees: JSON.stringify(_collectAttendees('mne-freel-rows')),
+    client_attendees: JSON.stringify(_collectAttendees('mne-client-rows'))
+  };
+  var res;
+  if (_mnEditIdx !== null && window._ptMeetings && window._ptMeetings[_mnEditIdx]) {
+    res = await _supabase.from('project_meetings').update(payload).eq('id', window._ptMeetings[_mnEditIdx].id).eq('user_id', _currentUser.id).select().single();
+    if (!res.error) window._ptMeetings[_mnEditIdx] = res.data;
+  } else {
+    res = await _supabase.from('project_meetings').insert(payload).select().single();
+    if (!res.error) { window._ptMeetings = window._ptMeetings || []; window._ptMeetings.unshift(res.data); }
+  }
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  closeMeetingEditor();
+  renderPtMeetings();
+  showToast('✓ Meeting note saved');
 }
 
 function renderPtHours() {
@@ -5409,28 +5780,54 @@ function toggleGlobalGantt() {
 }
 
 function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
-  // Date tick marks every 7 or 14 days
   var tickInterval = totalDays > 120 ? 14 : 7;
   var ticks = [];
   var td = new Date(rangeStart);
-  while (td <= new Date(rangeStart.getTime() + totalDays * 86400000)) {
+  var rangeEnd = new Date(rangeStart.getTime() + totalDays * 86400000);
+  while (td <= rangeEnd) {
     var pct = ((td - rangeStart) / 86400000 / totalDays * 100).toFixed(2);
     ticks.push({pct: pct, d: td.getDate()});
     td = new Date(td.getTime() + tickInterval * 86400000);
   }
+  // Check if today falls on a tick
+  var todayOnTick = todayPct !== null && ticks.some(function(t){ return Math.abs(parseFloat(t.pct) - parseFloat(todayPct)) < 0.5; });
+
   var tickHtml = ticks.map(function(t) {
+    var isToday = todayPct !== null && Math.abs(parseFloat(t.pct) - parseFloat(todayPct)) < 0.5;
+    if (isToday) {
+      // Today tick: "Today" label on top, date number below it, no red line
+      return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:2">' +
+        '<span style="font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;line-height:1.3">Today</span>' +
+        '<span style="font-size:9px;color:#E8594A;font-weight:600;transform:translateX(-50%);white-space:nowrap;line-height:1.3">' + t.d + '</span>' +
+        '</div>';
+    }
     return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none">' +
       '<div style="width:1px;height:5px;background:var(--border)"></div>' +
-      '<span style="font-size:9px;color:var(--ink-light);transform:translateX(-50%);margin-top:1px;white-space:nowrap">' + t.d + '</span>' +
+      '<span style="font-size:9px;color:var(--ink-light);transform:translateX(-50%);white-space:nowrap;line-height:1.3">' + t.d + '</span>' +
       '</div>';
   }).join('');
-  var todayMark = todayPct !== null
-    ? '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;width:2px;background:#E8594A;z-index:3"></div>' +
-      '<div style="position:absolute;left:' + todayPct + '%;top:0;font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;background:inherit;padding:0 2px;z-index:4">Today</div>'
-    : '';
-  return '<tr><th style="background:#F8F7F4"></th>' +
-    '<th colspan="' + months.length + '" style="padding:0;border-left:1px solid var(--border);border-top:1px solid var(--border);background:#F8F7F4">' +
-    '<div style="position:relative;height:22px;overflow:hidden">' + tickHtml + todayMark + '</div></th></tr>';
+
+  // If today falls between ticks, add a standalone "Today" marker
+  if (todayPct !== null && !todayOnTick) {
+    tickHtml += '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:2">' +
+      '<span style="font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;line-height:1.3">Today</span>' +
+      '<div style="width:1px;flex:1;background:#E8594A;opacity:.5"></div>' +
+      '</div>';
+  }
+
+  return '<tr>' +
+    '<th style="background:#F8F7F4;position:sticky;left:0;z-index:11;border-right:1px solid var(--border)"></th>' +
+    '<th colspan="' + months.length + '" style="padding:0;border-left:none;border-top:1px solid var(--border);background:#F8F7F4">' +
+    '<div style="position:relative;height:30px;overflow:visible">' + tickHtml + '</div></th></tr>';
+}
+
+function ganttScrollToToday(wrapperId) {
+  var wrap = document.getElementById(wrapperId);
+  if (!wrap) return;
+  var pct = parseFloat(wrap.dataset.todayPct);
+  if (isNaN(pct)) { showToast('Today is outside the date range'); return; }
+  var scrollW = wrap.scrollWidth - wrap.clientWidth;
+  wrap.scrollLeft = Math.max(0, (pct / 100) * wrap.scrollWidth - wrap.clientWidth / 2);
 }
 
 function renderGlobalGantt() {
@@ -5471,16 +5868,17 @@ function renderGlobalGantt() {
     return '<th style="width:' + pct + '%;font-size:11px;font-weight:700;color:var(--ink);padding:6px 8px;text-align:left;border-left:1px solid var(--border);background:#F8F7F4">' + MONTHS[m.getMonth()] + ' ' + m.getFullYear() + '</th>';
   }).join('');
 
+  var stickyCell = 'position:sticky;left:0;z-index:10;background:var(--white);border-right:1px solid var(--border)';
   var rows = active.map(function(p) {
     var pStart = p.start_date ? new Date(p.start_date + 'T00:00:00') : null;
     var pEnd   = p.end_date   ? new Date(p.end_date   + 'T00:00:00') : pStart;
     var color  = getProjectColor ? getProjectColor(p.id) : 'var(--amber)';
-    var nameCell = '<td style="padding:10px 12px;border-top:1px solid var(--border);cursor:pointer;vertical-align:middle" onclick="selectPtProject(\'' + p.id + '\')">' +
+    var nameCell = '<td style="padding:10px 12px;border-top:1px solid var(--border);cursor:pointer;vertical-align:middle;' + stickyCell + '" onclick="selectPtProject(\'' + p.id + '\')">' +
       '<div style="font-size:13px;font-weight:600;color:var(--ink);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</div>' +
       (p.client_name ? '<div style="font-size:11px;color:var(--ink-light);margin-top:2px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escapeHTML(p.client_name) + '</div>' : '') +
       '</td>';
     if (!pStart) {
-      return '<tr>' + nameCell + '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set</td></tr>';
+      return '<tr>' + nameCell + '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set</td></tr>';
     }
     if (pStart > pEnd) pEnd = pStart;
     var barStart = Math.max(0, (pStart - rangeStart) / 86400000);
@@ -5491,7 +5889,7 @@ function renderGlobalGantt() {
     var endLbl   = p.end_date   ? p.end_date.slice(5,10)   : '';
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + ' → ' + endLbl : (endLbl || startLbl);
     return '<tr>' + nameCell +
-      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);border-left:1px solid var(--border);padding:5px 6px;position:relative">' +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:5px 6px;position:relative">' +
       '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
       todayLine +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:6px;display:flex;align-items:center;padding:0 10px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">' +
@@ -5499,10 +5897,16 @@ function renderGlobalGantt() {
       '</div></div></td></tr>';
   }).join('');
 
-  el.innerHTML = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;table-layout:fixed">' +
+  var todayBtn = todayPct !== null
+    ? '<button onclick="ganttScrollToToday(\'gg-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button>'
+    : '';
+
+  el.innerHTML = (todayBtn ? '<div style="display:flex;justify-content:flex-end;margin-bottom:6px">' + todayBtn + '</div>' : '') +
+    '<div style="overflow-x:auto" id="gg-scroll" data-today-pct="' + (todayPct || '') + '">' +
+    '<table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:600px">' +
     '<colgroup><col style="width:170px"></colgroup>' +
     '<thead>' +
-    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4">Project</th>' + monthCells + '</tr>' +
+    '<tr><th style="padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--ink-light);background:#F8F7F4;' + stickyCell + '">Project</th>' + monthCells + '</tr>' +
     _buildGanttRuler(rangeStart, totalDays, months, todayPct) +
     '</thead>' +
     '<tbody>' + rows + '</tbody></table></div>';
