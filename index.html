@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FreelanceKit — Run your freelance business like a pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -535,11 +535,11 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .ip-btn-g:hover{border-color:var(--ink);color:var(--ink)}
 /* Invoice preview */
 .inv-preview{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md)}
-.inv-paper{padding:40px 48px}
+.inv-paper{padding:40px 48px;--inv-font:'Manrope',sans-serif;--inv-accent:#D4A853}
 .inv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
-.inv-brand-name{font-family:var(--font-display);font-size:20px;font-weight:400;color:var(--ink);margin-bottom:3px}
+.inv-brand-name{font-family:var(--inv-font,var(--font-display));font-size:20px;font-weight:400;color:var(--ink);margin-bottom:3px}
 .inv-brand-detail{font-size:11px;color:var(--ink-light);line-height:1.7}
-.inv-word{font-family:var(--font-display);font-size:32px;font-weight:300;color:var(--ink);letter-spacing:-.02em;font-style:italic;text-align:right}
+.inv-word{font-family:var(--inv-font,var(--font-display));font-size:32px;font-weight:300;color:var(--ink);letter-spacing:-.02em;font-style:italic;text-align:right}
 .inv-num{font-size:12px;color:var(--ink-light);font-family:var(--font-mono);text-align:right;margin-top:3px}
 .inv-meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border)}
 .inv-meta-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-light);margin-bottom:5px}
@@ -561,11 +561,35 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .inv-tot-div{height:1px;background:var(--border);margin:6px 0}
 .inv-tot-grand{display:flex;justify-content:space-between;padding:7px 0}
 .inv-tot-grand .inv-tot-lbl{font-size:14px;font-weight:600;color:var(--ink)}
-.inv-tot-grand .inv-tot-val{font-size:16px;font-weight:600;color:var(--amber);font-family:var(--font-mono)}
+.inv-tot-grand .inv-tot-val{font-size:16px;font-weight:600;color:var(--inv-accent,var(--amber));font-family:var(--font-mono)}
 .inv-footer{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:18px;border-top:1px solid var(--border)}
 .inv-footer-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:6px}
 .inv-footer-val{font-size:12px;color:var(--ink-mid);line-height:1.75}
 .late-fee-note{font-size:11px;color:var(--red);margin-top:5px}
+/* Invoice customise */
+.inv-cust{border:1px solid var(--border);border-radius:var(--radius-sm);margin-top:14px;margin-bottom:4px;overflow:hidden}
+.inv-cust-hdr{padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--ink);background:var(--cream);user-select:none;gap:6px}
+.inv-cust-hdr-icon{font-size:13px}
+.inv-cust-arrow{font-size:9px;color:var(--ink-light);margin-left:auto}
+.inv-cust-body{padding:14px;display:none;border-top:1px solid var(--border)}
+.inv-cust-body.open{display:block}
+.inv-cust-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:8px}
+.inv-font-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:14px}
+.inv-font-opt{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 10px;cursor:pointer;transition:all .15s;background:var(--white);text-align:left}
+.inv-font-opt:hover{border-color:var(--ink-mid)}
+.inv-font-opt.active{border-color:var(--ink);background:var(--ink)}
+.inv-font-opt.active .inv-font-name{color:var(--cream)}
+.inv-font-opt.active .inv-font-preview{color:rgba(250,247,242,0.55)}
+.inv-font-name{font-size:12px;font-weight:600;color:var(--ink);line-height:1;margin-bottom:3px}
+.inv-font-preview{font-size:10px;color:var(--ink-light);font-style:italic}
+.inv-color-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inv-swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:transform .15s,border-color .15s;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.15)}
+.inv-swatch:hover{transform:scale(1.12)}
+.inv-swatch.active{border-color:var(--ink)!important;transform:scale(1.18)}
+.inv-color-custom{position:relative;width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;transition:border-color .15s}
+.inv-color-custom:hover{border-color:var(--ink-mid)}
+.inv-color-custom input[type=color]{position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;cursor:pointer;opacity:0}
+.inv-color-custom-icon{font-size:11px;color:var(--ink-light);pointer-events:none}
 
 /* Pipeline */
 .pipeline-forecast{background:var(--ink);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px}
@@ -1974,6 +1998,52 @@ var RateLimiter = (function() {
                 <div class="ip-field"><input class="ip-inp" id="i-pay-custom-text" placeholder="Enter payment details…" oninput="updateInv()"></div>
               </div>
               <div class="ip-field" style="margin-top:14px"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
+              <!-- Invoice customise -->
+              <div class="inv-cust">
+                <div class="inv-cust-hdr" onclick="toggleInvCust()">
+                  <span class="inv-cust-hdr-icon">🎨</span>
+                  <span>Customize style</span>
+                  <span class="inv-cust-arrow" id="inv-cust-arrow">▼</span>
+                </div>
+                <div class="inv-cust-body" id="inv-cust-body">
+                  <div class="inv-cust-lbl">Font</div>
+                  <div class="inv-font-grid">
+                    <button class="inv-font-opt active" data-font-id="manrope" onclick="selectInvFont('manrope')">
+                      <div class="inv-font-name" style="font-family:'Manrope',sans-serif">Manrope</div>
+                      <div class="inv-font-preview" style="font-family:'Manrope',sans-serif">Modern &amp; clean</div>
+                    </button>
+                    <button class="inv-font-opt" data-font-id="inter" onclick="selectInvFont('inter')">
+                      <div class="inv-font-name" style="font-family:'Inter',sans-serif">Inter</div>
+                      <div class="inv-font-preview" style="font-family:'Inter',sans-serif">Minimal &amp; precise</div>
+                    </button>
+                    <button class="inv-font-opt" data-font-id="playfair" onclick="selectInvFont('playfair')">
+                      <div class="inv-font-name" style="font-family:'Playfair Display',serif">Playfair</div>
+                      <div class="inv-font-preview" style="font-family:'Playfair Display',serif;font-style:italic">Elegant &amp; editorial</div>
+                    </button>
+                    <button class="inv-font-opt" data-font-id="dm-sans" onclick="selectInvFont('dm-sans')">
+                      <div class="inv-font-name" style="font-family:'DM Sans',sans-serif">DM Sans</div>
+                      <div class="inv-font-preview" style="font-family:'DM Sans',sans-serif">Friendly &amp; rounded</div>
+                    </button>
+                    <button class="inv-font-opt" data-font-id="lato" onclick="selectInvFont('lato')">
+                      <div class="inv-font-name" style="font-family:'Lato',sans-serif">Lato</div>
+                      <div class="inv-font-preview" style="font-family:'Lato',sans-serif">Warm &amp; readable</div>
+                    </button>
+                  </div>
+                  <div class="inv-cust-lbl">Accent color</div>
+                  <div class="inv-color-row">
+                    <div class="inv-swatch active" style="background:#D4A853" data-color="#D4A853" title="Amber" onclick="selectInvAccent('#D4A853',this)"></div>
+                    <div class="inv-swatch" style="background:#2D6A4F" data-color="#2D6A4F" title="Forest" onclick="selectInvAccent('#2D6A4F',this)"></div>
+                    <div class="inv-swatch" style="background:#1D4ED8" data-color="#1D4ED8" title="Cobalt" onclick="selectInvAccent('#1D4ED8',this)"></div>
+                    <div class="inv-swatch" style="background:#7C3AED" data-color="#7C3AED" title="Violet" onclick="selectInvAccent('#7C3AED',this)"></div>
+                    <div class="inv-swatch" style="background:#DC2626" data-color="#DC2626" title="Crimson" onclick="selectInvAccent('#DC2626',this)"></div>
+                    <div class="inv-swatch" style="background:#0F172A" data-color="#0F172A" title="Ink" onclick="selectInvAccent('#0F172A',this)"></div>
+                    <div class="inv-color-custom" title="Custom color">
+                      <span class="inv-color-custom-icon">+</span>
+                      <input type="color" id="inv-accent-custom" value="#D4A853" oninput="selectInvAccentCustom(this.value)">
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="totals-block">
                 <div class="tot-row"><span class="tot-lbl">Subtotal</span><span class="tot-val" id="tot-sub">$0.00</span></div>
                 <div class="tot-row"><span class="tot-lbl">Discount</span><span class="tot-val" id="tot-disc">−$0.00</span></div>
@@ -2600,6 +2670,7 @@ function initInvoice(){
   document.getElementById('i-issued').value=today.toISOString().split('T')[0];
   document.getElementById('i-due').value=due.toISOString().split('T')[0];
   renderLineItems();updateInv();
+  initInvoiceStyle();
 }
 function renderLineItems(){
   // SECURITY: escapeHTML() prevents attribute injection — a description
@@ -2627,6 +2698,77 @@ function updateLineTotal(i){
   if(el)el.textContent=fmD(lineItems[i].qty*lineItems[i].rate);
 }
 function addLineItem(){lineItems.push({desc:'',qty:1,rate:0});renderLineItems();updateInv()}
+// Invoice style customisation
+var _invFontId = 'manrope';
+var _invAccent = '#D4A853';
+var _invFontMap = {
+  'manrope':  "'Manrope', sans-serif",
+  'inter':    "'Inter', sans-serif",
+  'playfair': "'Playfair Display', serif",
+  'dm-sans':  "'DM Sans', sans-serif",
+  'lato':     "'Lato', sans-serif"
+};
+function toggleInvCust() {
+  var body = document.getElementById('inv-cust-body');
+  var arrow = document.getElementById('inv-cust-arrow');
+  if (!body) return;
+  body.classList.toggle('open');
+  if (arrow) arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+}
+function applyInvoiceStyle(fontVal, accent) {
+  var paper = document.getElementById('inv-paper');
+  if (!paper) return;
+  paper.style.setProperty('--inv-font', fontVal);
+  paper.style.setProperty('--inv-accent', accent);
+}
+function selectInvFont(fontId) {
+  _invFontId = fontId;
+  var fontVal = _invFontMap[fontId] || _invFontMap['manrope'];
+  applyInvoiceStyle(fontVal, _invAccent);
+  document.querySelectorAll('.inv-font-opt').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.fontId === fontId);
+  });
+  try { localStorage.setItem('fk_inv_font_id', fontId); } catch(e) {}
+}
+function selectInvAccent(color, el) {
+  _invAccent = color;
+  var fontVal = _invFontMap[_invFontId] || _invFontMap['manrope'];
+  applyInvoiceStyle(fontVal, color);
+  document.querySelectorAll('.inv-swatch').forEach(function(s) { s.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  try { localStorage.setItem('fk_inv_accent', color); } catch(e) {}
+}
+function selectInvAccentCustom(color) {
+  _invAccent = color;
+  var fontVal = _invFontMap[_invFontId] || _invFontMap['manrope'];
+  applyInvoiceStyle(fontVal, color);
+  document.querySelectorAll('.inv-swatch').forEach(function(s) { s.classList.remove('active'); });
+  try { localStorage.setItem('fk_inv_accent', color); } catch(e) {}
+}
+function initInvoiceStyle() {
+  try {
+    var savedFont = localStorage.getItem('fk_inv_font_id');
+    var savedAccent = localStorage.getItem('fk_inv_accent');
+    if (savedFont && _invFontMap[savedFont]) {
+      _invFontId = savedFont;
+      document.querySelectorAll('.inv-font-opt').forEach(function(el) {
+        el.classList.toggle('active', el.dataset.fontId === savedFont);
+      });
+    }
+    if (savedAccent) {
+      _invAccent = savedAccent;
+      var customInput = document.getElementById('inv-accent-custom');
+      if (customInput) customInput.value = savedAccent;
+      var matched = false;
+      document.querySelectorAll('.inv-swatch').forEach(function(s) {
+        var match = s.dataset.color === savedAccent;
+        s.classList.toggle('active', match);
+        if (match) matched = true;
+      });
+    }
+    applyInvoiceStyle(_invFontMap[_invFontId] || _invFontMap['manrope'], _invAccent);
+  } catch(e) {}
+}
 // Logo upload handler
 window._invLogoUrl = null;
 function handleLogoUpload(input) {
@@ -3589,7 +3731,8 @@ var _currentUser = null;
 var BETA_MODE = true;
 // ─────────────────────────────────────────────────────────────────────────────
 // Plan gating: 'free' users get access to FREE_PANELS only; 'pro' users get everything
-var _userPlan = 'free';
+// In BETA_MODE everyone gets pro — including unauthenticated visitors
+var _userPlan = BETA_MODE ? 'pro' : 'free';
 var FREE_PANELS = ['home','contract','scope','mydetails','clients','invhistory'];
 
 function setLoggedInUser(user) {
