@@ -2264,6 +2264,12 @@ var RateLimiter = (function() {
               </div>
             </div>
             <div class="ip-actions">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+                <label style="font-size:12px;color:var(--ink-mid);white-space:nowrap">Save to project:</label>
+                <select id="inv-proj-link" style="flex:1;min-width:140px;font-family:var(--font-body);font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;background:var(--white);color:var(--ink)">
+                  <option value="">— none —</option>
+                </select>
+              </div>
               <button class="ip-btn-p" onclick="saveInvoiceToHistory()">&#128190; Save invoice</button>
               <button class="ip-btn-g" onclick="downloadInvoicePdf()">&#128196; Download PDF</button>
             </div>
@@ -2439,6 +2445,15 @@ var RateLimiter = (function() {
               <div class="pt-field"><label>Start date</label><div id="ptv-start" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
               <div class="pt-field"><label>End date</label><div id="ptv-end" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
             </div>
+            <div id="ptv-client-card" style="display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px">
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:8px">Client contact</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px">
+                <div id="ptv-cl-email" style="font-size:13px;color:var(--ink)"></div>
+                <div id="ptv-cl-phone" style="font-size:13px;color:var(--ink)"></div>
+                <div id="ptv-cl-company" style="font-size:12px;color:var(--ink-mid)"></div>
+                <div id="ptv-cl-address" style="font-size:12px;color:var(--ink-mid)"></div>
+              </div>
+            </div>
             <div class="pt-field"><label>Budget</label><div id="ptv-budget" style="font-size:16px;font-weight:700;color:var(--amber);padding:6px 0">—</div></div>
             <div class="pt-field"><label>Description</label><div id="ptv-desc" style="font-size:13px;color:var(--ink);line-height:1.7;padding:6px 0;white-space:pre-wrap">—</div></div>
             <div class="pt-field" id="ptv-contract-wrap" style="display:none">
@@ -2486,7 +2501,10 @@ var RateLimiter = (function() {
           <!-- Billing tab -->
           <div class="pt-tab-content" id="pt-tab-billing" style="display:none">
             <div id="pt-bill-total" class="pt-bill-total" style="margin-bottom:16px"></div>
-            <div class="pt-sec-hdr">Billing phases <button class="pt-add-btn" onclick="openPtModal('add-billing')">+ Add phase</button></div>
+            <div class="pt-sec-hdr">Billing phases
+              <button class="pt-add-btn" onclick="openPtModal('add-billing')">+ Add phase</button>
+              <button class="pt-add-btn" style="background:var(--white);color:var(--ink);border:1.5px solid var(--border)" onclick="createInvoiceFromProject()">&#129534; Create Invoice</button>
+            </div>
             <div id="pt-billing-list"></div>
           </div>
           <!-- Meeting notes tab -->
@@ -2868,6 +2886,7 @@ function showPanel(id,el){
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
   if(id==='projects'&&!window._ptInit){window._ptInit=true;loadProjects()}
   if(id==='clients'&&!window._ptInit){window._ptInit=true;loadProjects()}
+  if(id==='invoice'){ if(typeof populateInvProjSelect==='function') populateInvProjSelect(); }
   if(id==='timesheet'){ if(typeof loadGlobalTimesheet==='function') loadGlobalTimesheet(); }
   if(id==='home'){ if(typeof initHomeDashboard==='function') initHomeDashboard(); }
   if(id==='contract'||id==='scope'){ if(typeof populateDocProjSelects==='function') populateDocProjSelects(); }
@@ -4377,28 +4396,36 @@ function _populateClientLinkDropdown() {
 async function addClientProjectLink() {
   var sel = document.getElementById('clm-proj-sel');
   var projId = sel && sel.value;
-  if (!projId || !_clmClientName) return;
+  if (!projId || !_clmClientName) { showToast('Select a project first'); return; }
   var proj = (_ptProjects || []).find(function(p){ return p.id === projId; });
   if (!proj) return;
-  var res = await _supabase.from('projects').update({ client_name: _clmClientName }).eq('id', projId).eq('user_id', _currentUser.id).select().single();
-  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  // Update local state immediately so UI responds instantly
   proj.client_name = _clmClientName;
   _renderClientLinkList();
   _populateClientLinkDropdown();
   renderClientList();
   showToast('\u2713 Project linked');
+  // Persist to Supabase in background
+  if (_currentUser && _supabase) {
+    var res = await _supabase.from('projects').update({ client_name: _clmClientName, updated_at: new Date().toISOString() }).eq('id', projId).eq('user_id', _currentUser.id);
+    if (res.error) showToast('Saved locally — sync error: ' + res.error.message);
+  }
 }
 
 async function removeClientProjectLink(projId) {
   var proj = (_ptProjects || []).find(function(p){ return p.id === projId; });
   if (!proj) return;
-  var res = await _supabase.from('projects').update({ client_name: null }).eq('id', projId).eq('user_id', _currentUser.id).select().single();
-  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  // Update local state immediately
   proj.client_name = null;
   _renderClientLinkList();
   _populateClientLinkDropdown();
   renderClientList();
   showToast('\u2713 Project unlinked');
+  // Persist to Supabase in background
+  if (_currentUser && _supabase) {
+    var res = await _supabase.from('projects').update({ client_name: null, updated_at: new Date().toISOString() }).eq('id', projId).eq('user_id', _currentUser.id);
+    if (res.error) showToast('Saved locally — sync error: ' + res.error.message);
+  }
 }
 
 function fillInvoiceFromClient(id) {
@@ -4479,6 +4506,24 @@ async function saveInvoiceToHistory() {
   if (res.error) { showToast('Error saving: ' + res.error.message); return; }
   _invoices.unshift(res.data);
   renderInvHistory();
+  // Also add billing entry to linked project
+  var projSel = document.getElementById('inv-proj-link');
+  var linkedProjId = projSel && projSel.value;
+  if (linkedProjId && _currentUser) {
+    var billingEntry = {
+      project_id: linkedProjId, user_id: _currentUser.id,
+      phase_name: 'Invoice ' + (payload.invoice_number || ''),
+      amount: total, billing_type: 'one_time',
+      status: 'invoiced', due_date: payload.due_date || null
+    };
+    var br = await _supabase.from('project_billing').insert(billingEntry).select().single();
+    if (!br.error) {
+      window._ptBilling = window._ptBilling || [];
+      if (_ptCurrentId === linkedProjId) { window._ptBilling.push(br.data); renderPtBilling(); }
+      showToast('\u2713 Invoice saved + billing entry added to project');
+      return;
+    }
+  }
   showToast('\u2713 Invoice saved to history');
 }
 
@@ -4752,20 +4797,23 @@ function renderTodos() {
   var list = document.getElementById('todo-list');
   if (!list) return;
 
-  // Personal todos
   var filtered = _todoFilter ? _todos.filter(function(t){ return t.project_id === _todoFilter; }) : _todos;
-  var html = filtered.map(function(t) {
+  var active = filtered.filter(function(t){ return !t.done; });
+  var done   = filtered.filter(function(t){ return t.done; });
+
+  // Active personal todos
+  var html = active.map(function(t) {
     var color = getProjectColor(t.project_id);
     var tid = t.id.replace(/['"]/g,'');
     return '<div class="todo-item">' +
       '<div class="todo-dot" style="background:' + color + '"></div>' +
-      '<input type="checkbox" class="todo-check"' + (t.done ? ' checked' : '') + ' onchange="toggleTodo(\'' + tid + '\')">' +
-      '<span class="todo-text' + (t.done ? ' done' : '') + '">' + escapeHTML(t.text) + '</span>' +
+      '<input type="checkbox" class="todo-check" onchange="toggleTodo(\'' + tid + '\')">' +
+      '<span class="todo-text">' + escapeHTML(t.text) + '</span>' +
       '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
     '</div>';
   }).join('');
 
-  // Project tasks from tracker
+  // Project tasks from tracker (active only)
   var projTasks = _homeProjectTasks.filter(function(t){
     return !_todoFilter || t.project_id === _todoFilter;
   });
@@ -4792,8 +4840,32 @@ function renderTodos() {
     }).join('');
   }
 
+  // Recently completed personal todos
+  if (done.length) {
+    html += '<div class="todo-section-lbl" style="margin-top:16px;display:flex;align-items:center;justify-content:space-between">' +
+      '<span>Recently completed</span>' +
+      '<button onclick="clearDoneTodos()" style="font-size:10px;color:var(--ink-light);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body)">Clear all</button>' +
+    '</div>';
+    html += done.map(function(t) {
+      var color = getProjectColor(t.project_id);
+      var tid = t.id.replace(/['"]/g,'');
+      return '<div class="todo-item" style="opacity:.55">' +
+        '<div class="todo-dot" style="background:' + color + '"></div>' +
+        '<input type="checkbox" class="todo-check" checked onchange="toggleTodo(\'' + tid + '\')">' +
+        '<span class="todo-text done">' + escapeHTML(t.text) + '</span>' +
+        '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
+      '</div>';
+    }).join('');
+  }
+
   if (!html) { list.innerHTML = '<div class="hw-empty">Nothing here — add your first task ✓</div>'; return; }
   list.innerHTML = html;
+}
+
+function clearDoneTodos() {
+  _todos = _todos.filter(function(t){ return !t.done; });
+  _saveTodos();
+  renderTodos();
 }
 
 async function loadProjectTasksForHome() {
@@ -4906,6 +4978,16 @@ function populateDocProjSelects() {
     var el = document.getElementById(id);
     if (el) el.innerHTML = opts;
   });
+  populateInvProjSelect();
+}
+
+function populateInvProjSelect() {
+  var sel = document.getElementById('inv-proj-link');
+  if (!sel) return;
+  var projects = window._ptProjects || [];
+  var current = sel.value;
+  sel.innerHTML = '<option value="">— none —</option>' +
+    projects.map(function(p){ return '<option value="' + escapeHTML(p.id) + '"' + (p.id === current ? ' selected' : '') + '>' + escapeHTML(p.name) + '</option>'; }).join('');
 }
 function linkDocToProject(docId, projectId) {
   if (!projectId) return;
@@ -5353,6 +5435,19 @@ function selectPtProject(id) {
     document.getElementById('ptv-contract').textContent = proj.contract_text;
     if (cw) cw.style.display = '';
   } else { if (cw) cw.style.display = 'none'; }
+  // Show linked client details
+  var clientCard = document.getElementById('ptv-client-card');
+  var cl = proj.client_name ? (_clients || []).find(function(c){ return c.name === proj.client_name; }) : null;
+  if (cl && clientCard) {
+    var setText = function(id, val){ var e=document.getElementById(id); if(e) e.textContent = val||''; };
+    setText('ptv-cl-email', cl.email ? '✉ ' + cl.email : '');
+    setText('ptv-cl-phone', cl.phone ? '📞 ' + cl.phone : '');
+    setText('ptv-cl-company', cl.company || '');
+    setText('ptv-cl-address', cl.address || '');
+    clientCard.style.display = '';
+  } else if (clientCard) {
+    clientCard.style.display = 'none';
+  }
   // Reset to overview tab
   showPtTab('overview', document.querySelector('#pt-detail-view .pt-tab'));
   // Load sub-data
@@ -5586,6 +5681,30 @@ function renderPtBilling() {
       '<button class="pt-row-del" onclick="deletePtItem(\'billing\',' + i + ')">&#215;</button>' +
       '</div>';
   }).join('');
+}
+
+function createInvoiceFromProject() {
+  var proj = _ptCurrentId ? (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; }) : null;
+  if (!proj) return;
+  showPanel('invoice', document.getElementById('nav-invoice'));
+  setTimeout(function() {
+    var set = function(id, val){ var el=document.getElementById(id); if(el && val) el.value=val; };
+    set('i-client', proj.client_name);
+    set('i-project', proj.name);
+    // Pre-select this project in the "save to project" dropdown
+    var sel = document.getElementById('inv-proj-link');
+    if (sel) sel.value = proj.id;
+    // Look up client details if available
+    var cl = (_clients || []).find(function(c){ return c.name === proj.client_name; });
+    if (cl) {
+      set('i-contact', cl.contact_person || cl.name);
+      set('i-email', cl.email);
+      set('i-clientphone', cl.phone);
+      set('i-clientaddress', cl.address);
+    }
+    if (typeof updateInv === 'function') updateInv();
+    showToast('\u2713 Invoice pre-filled from project');
+  }, 150);
 }
 
 // ─── PEOPLE INVOLVED ─────────────────────────────────────────────────────────
