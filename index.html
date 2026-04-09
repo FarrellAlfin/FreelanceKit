@@ -1834,17 +1834,7 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#9201;</span><span class="dsb-label">Timesheet</span>
       </div>
 
-      <div class="dsb-section">Contracts &amp; Legal</div>
-      <div class="dsb-item" onclick="showPanel('contract',this)" id="nav-contract">
-        <span class="dsb-icon">&#128196;</span><span class="dsb-label">Client Contract</span>
-        <span class="dsb-count">Full</span>
-      </div>
-      <div class="dsb-item" onclick="showPanel('scope',this)" id="nav-scope">
-        <span class="dsb-icon">&#9888;&#65039;</span><span class="dsb-label">Scope Change Order</span>
-        <span class="dsb-count">New</span>
-      </div>
-
-      <div class="dsb-section">Invoicing &amp; Payments</div>
+<div class="dsb-section">Invoicing &amp; Payments</div>
       <div class="dsb-item" onclick="showPanel('invoice',this)" id="nav-invoice">
         <span class="dsb-icon">&#129534;</span><span class="dsb-label">Invoice Builder</span>
         <span class="dsb-count">Live</span>
@@ -2438,6 +2428,8 @@ var RateLimiter = (function() {
             <button class="pt-tab" onclick="showPtTab('billing',this)">Billing</button>
             <button class="pt-tab" onclick="showPtTab('meetings',this)">Meeting Notes</button>
             <button class="pt-tab" onclick="showPtTab('hours',this)">Timesheet</button>
+            <button class="pt-tab" onclick="showPtTab('contract',this)">Contract</button>
+            <button class="pt-tab" onclick="showPtTab('scope',this)">Scope Change</button>
           </div>
           <!-- Overview tab -->
           <div class="pt-tab-content" id="pt-tab-overview">
@@ -2508,6 +2500,10 @@ var RateLimiter = (function() {
             <div class="pt-sec-hdr">Time log <button class="pt-add-btn" onclick="openPtModal('add-time')">+ Log time</button></div>
             <div id="pt-hours-list"></div>
           </div>
+          <!-- Contract tab (rendered by JS) -->
+          <div class="pt-tab-content" id="pt-tab-contract" style="display:none"></div>
+          <!-- Scope Change tab (rendered by JS) -->
+          <div class="pt-tab-content" id="pt-tab-scope" style="display:none"></div>
         </div>
       </div>
 
@@ -2871,6 +2867,7 @@ function showPanel(id,el){
   if(id==='ratecalc')calcRate();
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
   if(id==='projects'&&!window._ptInit){window._ptInit=true;loadProjects()}
+  if(id==='clients'&&!window._ptInit){window._ptInit=true;loadProjects()}
   if(id==='timesheet'){ if(typeof loadGlobalTimesheet==='function') loadGlobalTimesheet(); }
   if(id==='home'){ if(typeof initHomeDashboard==='function') initHomeDashboard(); }
   if(id==='contract'||id==='scope'){ if(typeof populateDocProjSelects==='function') populateDocProjSelects(); }
@@ -4275,13 +4272,15 @@ function renderClientList() {
     var linkedProjs = (_ptProjects || []).filter(function(p){ return p.client_name === cl.name; });
     var projHtml = linkedProjs.length
       ? linkedProjs.map(function(p){ return '<span class="ct-proj-chip" onclick="openPtProjectFromPipeline(\'' + p.id + '\')" title="Open project">' + escapeHTML(p.name) + '</span>'; }).join('')
-      : '<span style="color:var(--ink-light);font-size:12px">—</span>';
+      : '<span style="color:var(--ink-light);font-size:12px">None</span>';
     return '<div class="ct-row">' +
       '<div class="ct-cell name">' + escapeHTML(cl.name||'') + '</div>' +
       '<div class="ct-cell email">' + escapeHTML(cl.email||'—') + '</div>' +
       '<div class="ct-cell">' + escapeHTML(cl.phone||'—') + '</div>' +
       '<div class="ct-cell">' + escapeHTML(cl.company||'—') + '</div>' +
-      '<div class="ct-cell">' + projHtml + '</div>' +
+      '<div class="ct-cell" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">' + projHtml +
+        '<button class="ct-btn" data-client-id="' + escapeHTML(cl.id) + '" data-client-name="' + escapeHTML(cl.name||'') + '" onclick="openClientLinkModal(this.dataset.clientId, this.dataset.clientName)" style="font-size:10px;padding:2px 7px;margin-left:4px" title="Link / unlink projects">🔗</button>' +
+      '</div>' +
       '<div class="ct-actions">' +
         '<button class="ct-btn del" data-client-id="' + escapeHTML(cl.id) + '" onclick="deleteClient(this.dataset.clientId)">Delete</button>' +
       '</div>' +
@@ -4331,6 +4330,75 @@ async function deleteClient(id) {
   await _supabase.from('clients').delete().eq('id', id).eq('user_id', _currentUser.id);
   _clients = _clients.filter(function(cl){ return cl.id !== id; });
   renderClientList();
+}
+
+var _clmClientId = null;
+var _clmClientName = null;
+
+function openClientLinkModal(clientId, clientName) {
+  _clmClientId = clientId;
+  _clmClientName = clientName;
+  var nameEl = document.getElementById('clm-client-name');
+  if (nameEl) nameEl.textContent = clientName;
+  _renderClientLinkList();
+  _populateClientLinkDropdown();
+  document.getElementById('client-link-modal').classList.add('open');
+}
+
+function closeClientLinkModal() {
+  document.getElementById('client-link-modal').classList.remove('open');
+  _clmClientId = null; _clmClientName = null;
+}
+
+function _renderClientLinkList() {
+  var list = document.getElementById('clm-linked-list');
+  if (!list) return;
+  var linked = (_ptProjects || []).filter(function(p){ return p.client_name === _clmClientName; });
+  if (!linked.length) {
+    list.innerHTML = '<span style="font-size:13px;color:var(--ink-light)">No projects linked yet.</span>';
+    return;
+  }
+  list.innerHTML = linked.map(function(p) {
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;margin-bottom:6px">' +
+      '<span style="font-size:13px;color:var(--ink)">' + escapeHTML(p.name) + '</span>' +
+      '<button class="ct-btn del" data-proj-id="' + escapeHTML(p.id) + '" onclick="removeClientProjectLink(this.dataset.projId)" style="font-size:11px">Unlink</button>' +
+    '</div>';
+  }).join('');
+}
+
+function _populateClientLinkDropdown() {
+  var sel = document.getElementById('clm-proj-sel');
+  if (!sel) return;
+  var unlinked = (_ptProjects || []).filter(function(p){ return p.client_name !== _clmClientName; });
+  sel.innerHTML = '<option value="">— select a project —</option>' +
+    unlinked.map(function(p){ return '<option value="' + escapeHTML(p.id) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
+}
+
+async function addClientProjectLink() {
+  var sel = document.getElementById('clm-proj-sel');
+  var projId = sel && sel.value;
+  if (!projId || !_clmClientName) return;
+  var proj = (_ptProjects || []).find(function(p){ return p.id === projId; });
+  if (!proj) return;
+  var res = await _supabase.from('projects').update({ client_name: _clmClientName }).eq('id', projId).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  proj.client_name = _clmClientName;
+  _renderClientLinkList();
+  _populateClientLinkDropdown();
+  renderClientList();
+  showToast('\u2713 Project linked');
+}
+
+async function removeClientProjectLink(projId) {
+  var proj = (_ptProjects || []).find(function(p){ return p.id === projId; });
+  if (!proj) return;
+  var res = await _supabase.from('projects').update({ client_name: null }).eq('id', projId).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  proj.client_name = null;
+  _renderClientLinkList();
+  _populateClientLinkDropdown();
+  renderClientList();
+  showToast('\u2713 Project unlinked');
 }
 
 function fillInvoiceFromClient(id) {
@@ -5310,6 +5378,9 @@ function showPtTab(tab, btn) {
   if (el) el.style.display = '';
   document.querySelectorAll('#pt-detail-view .pt-tab').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
+  // Render doc tabs on first open, then auto-link to current project
+  if (tab === 'contract') renderPtDocTab('contract');
+  if (tab === 'scope') renderPtDocTab('scope');
 }
 
 function renderPtAllTabs() {
@@ -5333,10 +5404,14 @@ function renderPtMilestones() {
   allDates = allDates.map(function(d){ return d.slice(0,10); }).sort();
   if (!allDates.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">Add dates to milestones to view the Gantt chart.</div>'; return; }
 
+  var todayForRange = new Date(); todayForRange.setHours(0,0,0,0);
+  allDates.push(todayForRange.toISOString().slice(0,10));
+  allDates.sort();
   var rangeStart = new Date(allDates[0] + 'T00:00:00');
   var rangeEnd   = new Date(allDates[allDates.length - 1] + 'T00:00:00');
-  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
-  rangeEnd   = new Date(rangeEnd.getFullYear(),   rangeEnd.getMonth() + 1, 0);
+  // Pad ±1 month so users can slide before/after
+  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth() - 1, 1);
+  rangeEnd   = new Date(rangeEnd.getFullYear(),   rangeEnd.getMonth() + 2, 0);
 
   var months = [];
   var cur = new Date(rangeStart);
@@ -5388,9 +5463,9 @@ function renderPtMilestones() {
     var endLbl   = m.due_date   ? m.due_date.slice(5,10)   : '';
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
     return '<tr style="' + rowBg + '">' + nameCell +
-      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 6px;position:relative">' +
-      '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer" onclick="openPtEditMilestone(' + i + ')">' +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 0;position:relative">' +
       todayLine +
+      '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer;overflow:hidden" onclick="openPtEditMilestone(' + i + ')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
       '</div></div>' +
@@ -5398,9 +5473,7 @@ function renderPtMilestones() {
       '</td></tr>';
   }).join('');
 
-  var todayBtn = todayPct !== null
-    ? '<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button onclick="ganttScrollToToday(\'ms-gantt-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button></div>'
-    : '';
+  var todayBtn = '<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button onclick="ganttScrollToToday(\'ms-gantt-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button></div>';
 
   el.innerHTML = todayBtn +
     '<div style="overflow-x:auto" id="ms-gantt-scroll" data-today-pct="' + (todayPct || '') + '">' +
@@ -5412,6 +5485,7 @@ function renderPtMilestones() {
     '</thead>' +
     '<tbody>' + rows + '</tbody>' +
     '</table></div>';
+  setTimeout(function(){ ganttScrollToToday('ms-gantt-scroll'); }, 50);
 }
 
 var _ptTaskPrioFilter = 'all';
@@ -5980,12 +6054,15 @@ function renderGlobalGantt() {
     if (p.end_date)   allDates.push(p.end_date.slice(0,10));
   });
   if (!allDates.length) { el.innerHTML = '<div style="padding:20px;color:var(--ink-light);font-size:13px">Add start/end dates to projects to view the global Gantt.</div>'; return; }
+  var todayStr = new Date().toISOString().slice(0,10);
+  allDates.push(todayStr);
   allDates.sort();
 
   var rangeStart = new Date(allDates[0] + 'T00:00:00');
   var rangeEnd   = new Date(allDates[allDates.length-1] + 'T00:00:00');
-  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), 1);
-  rangeEnd   = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth() + 1, 0);
+  // Pad ±1 month so users can slide before/after
+  rangeStart = new Date(rangeStart.getFullYear(), rangeStart.getMonth() - 1, 1);
+  rangeEnd   = new Date(rangeEnd.getFullYear(), rangeEnd.getMonth() + 2, 0);
   var totalDays = (rangeEnd - rangeStart) / 86400000 + 1;
 
   var months = [];
@@ -6027,19 +6104,17 @@ function renderGlobalGantt() {
     var endLbl   = p.end_date   ? p.end_date.slice(5,10)   : '';
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + ' → ' + endLbl : (endLbl || startLbl);
     return '<tr>' + nameCell +
-      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:5px 6px;position:relative">' +
-      '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
+      '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:5px 0;position:relative">' +
       todayLine +
+      '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:6px;display:flex;align-items:center;padding:0 10px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600;letter-spacing:.01em">' + barLabel + '</span>' +
       '</div></div></td></tr>';
   }).join('');
 
-  var todayBtn = todayPct !== null
-    ? '<button onclick="ganttScrollToToday(\'gg-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button>'
-    : '';
+  var todayBtn = '<button onclick="ganttScrollToToday(\'gg-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button>';
 
-  el.innerHTML = (todayBtn ? '<div style="display:flex;justify-content:flex-end;margin-bottom:6px">' + todayBtn + '</div>' : '') +
+  el.innerHTML = '<div style="display:flex;justify-content:flex-end;margin-bottom:6px">' + todayBtn + '</div>' +
     '<div style="overflow-x:auto" id="gg-scroll" data-today-pct="' + (todayPct || '') + '">' +
     '<table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:600px">' +
     '<colgroup><col style="width:170px"></colgroup>' +
@@ -6048,6 +6123,7 @@ function renderGlobalGantt() {
     _buildGanttRuler(rangeStart, totalDays, months, todayPct) +
     '</thead>' +
     '<tbody>' + rows + '</tbody></table></div>';
+  setTimeout(function(){ ganttScrollToToday('gg-scroll'); }, 50);
 }
 
 // ─── DOC LINKING ───
@@ -6058,6 +6134,140 @@ function openDocForProject(docId) {
   if (proj && typeof linkDocToProject === 'function') {
     setTimeout(function(){ linkDocToProject(docId, proj.id); }, 100);
   }
+}
+
+// ─── PROJECT DOC TABS (CONTRACT / SCOPE) ───
+
+var _ptDocEditMode = {};
+
+function renderPtDocTab(type) {
+  var el = document.getElementById('pt-tab-' + type);
+  if (!el) return;
+  var prefix = 'pt-' + type;
+  var isContract = type === 'contract';
+  var title = isContract ? 'Client Contract' : 'Scope Change Order';
+  var downloadFile = isContract ? 'FreelanceKit_Client_Contract.docx' : 'FreelanceKit_Scope_Change_Order.docx';
+  var docBody = isContract ? _ptContractDocHTML() : _ptScopeDocHTML();
+  el.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">' +
+      '<div style="font-size:13px;font-weight:600;color:var(--ink)">' + title + '</div>' +
+      '<div style="display:flex;gap:8px;align-items:center">' +
+        '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">✏️ Edit fields</button>' +
+        '<span class="doc-edit-hint">Click highlighted fields to edit</span>' +
+        '<button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="window.location.href=\'' + downloadFile + '\'">&#128196; Download .docx</button>' +
+        '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128438; PDF / Print</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="doc-wrap" style="max-height:70vh;overflow-y:auto">' +
+      '<div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div>' +
+      '<span class="db-name">FreelanceKit — ' + title + '.docx</span><span class="db-fmt">Editable</span></div>' +
+      '<div class="doc-body" id="' + prefix + '-doc-body">' + docBody + '</div>' +
+    '</div>';
+  // Auto-fill from current project
+  if (_ptCurrentId) {
+    var p = (_ptProjects || []).find(function(x){ return x.id === _ptCurrentId; });
+    if (p) _ptAutoFillDoc(prefix, p);
+  }
+}
+
+function ptToggleDocEdit(prefix) {
+  _ptDocEditMode[prefix] = !_ptDocEditMode[prefix];
+  var toggle = document.getElementById(prefix + '-edit-toggle');
+  var body = document.getElementById(prefix + '-doc-body');
+  if (!body) return;
+  var on = _ptDocEditMode[prefix];
+  body.querySelectorAll('.field, .field-block').forEach(function(el) {
+    el.contentEditable = on ? 'true' : 'false';
+  });
+  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : '✏️ Edit fields'; }
+}
+
+function _ptAutoFillDoc(prefix, p) {
+  if (!_ptDocEditMode[prefix]) ptToggleDocEdit(prefix);
+  var body = document.getElementById(prefix + '-doc-body');
+  if (!body) return;
+  body.querySelectorAll('.field').forEach(function(f) {
+    var text = f.textContent;
+    if (/CLIENT FULL NAME|CLIENT NAME/.test(text) && p.client_name) f.textContent = p.client_name;
+    if (/PROJECT NAME/.test(text) && p.name) f.textContent = p.name;
+    if (/START DATE/.test(text) && p.start_date) f.textContent = p.start_date;
+    if (/END DATE/.test(text) && p.end_date) f.textContent = p.end_date;
+    if (/ORIGINAL AGREEMENT DATE/.test(text) && p.start_date) f.textContent = p.start_date;
+  });
+  // Turn off editing mode after fill
+  ptToggleDocEdit(prefix);
+}
+
+function ptPrintDoc(prefix) {
+  var body = document.getElementById(prefix + '-doc-body');
+  if (!body) return;
+  var win = window.open('', '_blank', 'width=800,height=900');
+  win.document.write('<html><head><title>FreelanceKit Document</title><style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;font-size:13px;line-height:1.7;color:#1a1a1a}h2{font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin:20px 0 8px}p,ul{margin:0 0 10px}ul{padding-left:20px}hr{border:none;border-top:1px solid #ccc;margin:16px 0}table{width:100%;border-collapse:collapse;margin-bottom:12px}td,th{border:1px solid #ccc;padding:8px 10px;font-size:12px}.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px}.sig-line{border-bottom:1px solid #999;margin:30px 0 4px}</style></head><body>' + body.innerHTML + '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 400);
+}
+
+function _ptContractDocHTML() {
+  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Freelance Services Agreement</div>' +
+    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · freelancekit.io</div>' +
+    '<hr class="doc-thick"><h2>1. The Parties</h2>' +
+    '<p>This Agreement is entered into as of <span class="field">[DATE]</span> between <strong>Freelancer:</strong> <span class="field">[YOUR FULL NAME OR BUSINESS NAME]</span>, located at <span class="field">[YOUR CITY, STATE/PROVINCE, COUNTRY]</span>, and <strong>Client:</strong> <span class="field">[CLIENT FULL NAME OR COMPANY NAME]</span>, located at <span class="field">[CLIENT ADDRESS]</span>, represented by <span class="field">[CLIENT CONTACT NAME, TITLE]</span>.</p>' +
+    '<hr class="doc-divider"><h2>2. Project Scope &amp; Deliverables</h2>' +
+    '<p>Freelancer agrees to provide the following services:</p>' +
+    '<span class="field-block">[DESCRIBE THE PROJECT IN SPECIFIC, MEASURABLE TERMS.]</span>' +
+    '<p>Deliverables:</p><span class="field-block">[LIST EACH DELIVERABLE]</span>' +
+    '<div class="doc-callout"><strong>Scope note:</strong> Any work, deliverables, or revisions not listed above are outside scope and will require a written Scope Change Order with additional fees.</div>' +
+    '<hr class="doc-divider"><h2>3. Timeline</h2>' +
+    '<p><strong>Start:</strong> <span class="field">[START DATE]</span> · <strong>Final delivery:</strong> <span class="field">[END DATE]</span>. Timeline assumes Client provides materials and feedback within <span class="field">[3]</span> business days of each request.</p>' +
+    '<hr class="doc-divider"><h2>4. Fees &amp; Payment</h2>' +
+    '<p><strong>Total fee:</strong> <span class="field">[AMOUNT AND CURRENCY]</span></p>' +
+    '<ul><li><span class="field">[50%]</span> deposit due on signing: <span class="field">[AMOUNT]</span></li><li><span class="field">[50%]</span> final payment due on delivery: <span class="field">[AMOUNT]</span></li></ul>' +
+    '<p>Invoices due within <span class="field">[7]</span> days of receipt. Late balances accrue <span class="field">[1.5%]</span>/month. Work does not begin until deposit clears. Final files withheld until final payment clears.</p>' +
+    '<hr class="doc-divider"><h2>5. Revision Policy</h2>' +
+    '<p>Includes <span class="field">[2]</span> rounds of revisions. Additional rounds billed at <span class="field">[YOUR HOURLY RATE]</span>/hr. Feedback must be submitted consolidated within <span class="field">[7]</span> days of delivery; late feedback treated as approval.</p>' +
+    '<hr class="doc-divider"><h2>6. Kill Fee</h2>' +
+    '<ul><li>Cancelled before work begins: deposit refunded in full.</li><li>Cancelled after work begins but before 50% completion: deposit forfeited.</li><li>Cancelled after 50% completion: full fee owed.</li></ul>' +
+    '<hr class="doc-divider"><h2>7. Intellectual Property</h2>' +
+    '<p>Upon receipt of full payment, Freelancer assigns all rights in final approved deliverables to Client. Until then, all work remains Freelancer\'s property. Freelancer retains portfolio rights unless Client requests otherwise in writing.</p>' +
+    '<hr class="doc-divider"><h2>8. Confidentiality</h2>' +
+    '<p>Both parties agree to keep confidential all proprietary information shared during this engagement.</p>' +
+    '<hr class="doc-divider"><h2>9. Independent Contractor</h2>' +
+    '<p>Freelancer is an independent contractor, not an employee. Freelancer is responsible for their own taxes, insurance, and equipment.</p>' +
+    '<hr class="doc-divider"><h2>10. Dispute Resolution</h2>' +
+    '<p>Disputes will first be addressed in good faith within <span class="field">[14]</span> days. If unresolved, disputes will proceed to binding arbitration in <span class="field">[YOUR CITY, STATE/PROVINCE]</span>.</p>' +
+    '<hr class="doc-divider"><h2>11. Governing Law</h2>' +
+    '<p>This Agreement is governed by the laws of <span class="field">[YOUR STATE/PROVINCE AND COUNTRY]</span>.</p>' +
+    '<hr class="doc-thick"><h2>Signatures</h2>' +
+    '<div class="sig-grid"><div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Date</div></div>' +
+    '<div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Title · Date</div></div></div>';
+}
+
+function _ptScopeDocHTML() {
+  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Scope Change Order</div>' +
+    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body)">Addendum to Freelance Services Agreement · FreelanceKit Template</div>' +
+    '<hr class="doc-thick">' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-family:var(--font-body)">' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream);width:35%">Change Order #</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[#001]</span></td></tr>' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Date issued</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DATE]</span></td></tr>' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Project</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[PROJECT NAME]</span></td></tr>' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Original contract date</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[ORIGINAL AGREEMENT DATE]</span></td></tr>' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Freelancer</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[YOUR NAME]</span></td></tr>' +
+    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Client</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[CLIENT NAME]</span></td></tr>' +
+    '</table>' +
+    '<hr class="doc-divider"><h2>Description of Requested Change</h2>' +
+    '<p>Client has requested the following addition or modification to the original scope:</p>' +
+    '<span class="field-block">[DESCRIBE THE CHANGE REQUEST SPECIFICALLY]</span>' +
+    '<div class="doc-callout"><strong>Original scope reference:</strong> Per Section 2 of the Agreement dated <span class="field">[DATE]</span>, agreed deliverables were: <span class="field">[PASTE RELEVANT DELIVERABLES HERE]</span>. The request above falls outside this scope.</div>' +
+    '<hr class="doc-divider"><h2>Additional Fee</h2>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-family:var(--font-body)">' +
+    '<tr style="background:var(--cream)"><th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border)">Item</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Hours</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Rate</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Amount</th></tr>' +
+    '<tr><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DESCRIBE EXTRA WORK]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[X hrs]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$X/hr]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$TOTAL]</span></td></tr>' +
+    '<tr><td colspan="3" style="padding:10px 12px;border:1px solid var(--border);font-size:13px;font-weight:600;text-align:right">Total additional fee:</td><td style="padding:10px 12px;border:1px solid var(--border);font-size:14px;font-weight:600;text-align:right;color:var(--amber);font-family:var(--font-mono)"><span class="field">[$GRAND TOTAL]</span></td></tr>' +
+    '</table>' +
+    '<div class="doc-callout"><strong>Important:</strong> Work on this change will not begin until this Change Order is signed.</div>' +
+    '<hr class="doc-thick"><h2>Signatures</h2>' +
+    '<div class="sig-grid"><div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Date</div></div>' +
+    '<div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Title · Date</div></div></div>';
 }
 
 // ─── DRAG & DROP TASKS ───
@@ -6589,6 +6799,26 @@ async function deletePtProject() {
 // Close modal on overlay click
 document.getElementById('pt-modal') && document.getElementById('pt-modal').addEventListener('click', function(e){ if (e.target === this) closePtModal(); });
 </script>
+
+<!-- Client → Project link modal -->
+<div class="modal-overlay" id="client-link-modal" onclick="if(event.target===this)closeClientLinkModal()">
+  <div class="modal-box" style="max-width:460px">
+    <div class="modal-hd">
+      <span class="modal-title">Link projects to <span id="clm-client-name"></span></span>
+      <button class="modal-close" onclick="closeClientLinkModal()">&#10005;</button>
+    </div>
+    <div class="modal-bd">
+      <div style="font-size:12px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Currently linked</div>
+      <div id="clm-linked-list" style="margin-bottom:16px;min-height:28px"></div>
+      <div style="font-size:12px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Add a project</div>
+      <div style="display:flex;gap:8px">
+        <select class="m-sel" id="clm-proj-sel" style="flex:1;margin-bottom:0"><option value="">— select a project —</option></select>
+        <button class="btn-use" style="white-space:nowrap" onclick="addClientProjectLink()">Link</button>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn-outline" onclick="closeClientLinkModal()">Done</button></div>
+  </div>
+</div>
 
 <!-- Client contacts modal -->
 <div class="modal-overlay" id="client-modal" onclick="if(event.target===this)closeClientModal()">
