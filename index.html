@@ -1905,6 +1905,11 @@ var RateLimiter = (function() {
               <input class="todo-inp" id="todo-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTodo()">
               <button class="todo-add-btn" onclick="addTodo()">+ Add</button>
             </div>
+            <div style="margin-bottom:8px">
+              <select id="todo-proj-sel" style="width:100%;font-size:12px;color:var(--ink-mid);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;font-family:var(--font-body);cursor:pointer">
+                <option value="">No project (personal task)</option>
+              </select>
+            </div>
             <div class="todo-filter-row" id="todo-filter-row">
               <button class="todo-filter active" data-proj-id="" onclick="setTodoFilter('')">All</button>
             </div>
@@ -2712,7 +2717,11 @@ var RateLimiter = (function() {
           <div class="settings-card">
             <div class="sc-header"><span>&#128100;</span><span class="sc-title">Personal & Business</span></div>
             <div class="sc-body">
-              <div class="sf"><label>Full name</label><input id="my-name" placeholder="Your full name"></div>
+              <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px">
+                <div class="sf"><label>First name</label><input id="my-firstname" placeholder="First name"></div>
+                <div class="sf"><label>Middle <span style="font-weight:400;font-size:11px;color:var(--ink-light)">(optional)</span></label><input id="my-middlename" placeholder=""></div>
+                <div class="sf"><label>Last name</label><input id="my-lastname" placeholder="Last name"></div>
+              </div>
               <div class="sf"><label>Business name</label><input id="my-business" placeholder="Your business or trading name"></div>
               <div class="sf"><label>Email address</label><input id="my-email" type="email" placeholder="hello@yourbusiness.com"></div>
               <div class="sf"><label>Website</label><input id="my-website" placeholder="https://yourbusiness.com"></div>
@@ -4183,7 +4192,12 @@ async function loadMyDetails() {
 
 function applyMyDetails(d) {
   var set = function(id, val) { var el=document.getElementById(id); if(el&&val!=null) el.value=val; };
-  set('my-name', d.full_name); set('my-business', d.business_name);
+  // Split full_name into first/middle/last
+  var nameParts = (d.full_name || '').trim().split(/\s+/).filter(Boolean);
+  set('my-firstname', nameParts[0] || '');
+  set('my-lastname', nameParts.length > 1 ? nameParts[nameParts.length - 1] : '');
+  set('my-middlename', nameParts.length > 2 ? nameParts.slice(1, -1).join(' ') : '');
+  set('my-business', d.business_name);
   set('my-email', d.email); set('my-website', d.website);
   set('my-address', d.address); set('my-rate', d.hourly_rate);
   set('my-latefee', d.late_fee_pct); set('my-taxrate', d.tax_rate);
@@ -4232,7 +4246,7 @@ async function saveMyDetails() {
   var g = function(id){ var el=document.getElementById(id); return el?el.value:null; };
   var payload = {
     id: _currentUser.id,
-    full_name: g('my-name'), business_name: g('my-business'),
+    full_name: [g('my-firstname'), g('my-middlename'), g('my-lastname')].filter(Boolean).join(' '), business_name: g('my-business'),
     email: g('my-email'), website: g('my-website'), address: g('my-address'),
     hourly_rate: parseFloat(g('my-rate'))||null,
     late_fee_pct: parseFloat(g('my-latefee'))||1.5,
@@ -4785,6 +4799,7 @@ function setTodoFilter(projId) {
   renderTodos();
 }
 var _homeProjectTasks = [];
+var _homeProjectTasksDone = [];
 
 function renderTodos() {
   var list = document.getElementById('todo-list');
@@ -4833,8 +4848,11 @@ function renderTodos() {
     }).join('');
   }
 
-  // Recently completed personal todos
-  if (done.length) {
+  // Recently completed (personal todos + project tasks)
+  var doneProjTasks = (_homeProjectTasksDone || []).filter(function(t){
+    return !_todoFilter || t.project_id === _todoFilter;
+  });
+  if (done.length || doneProjTasks.length) {
     html += '<div class="todo-section-lbl" style="margin-top:16px;display:flex;align-items:center;justify-content:space-between">' +
       '<span>Recently completed</span>' +
       '<button onclick="clearDoneTodos()" style="font-size:10px;color:var(--ink-light);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body)">Clear all</button>' +
@@ -4849,6 +4867,19 @@ function renderTodos() {
         '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
       '</div>';
     }).join('');
+    html += doneProjTasks.map(function(t) {
+      var color = getProjectColor(t.project_id);
+      var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
+      var tid = t.id.replace(/['"]/g,'');
+      return '<div class="todo-item todo-proj-task" style="opacity:.55">' +
+        '<div class="todo-dot" style="background:' + color + '"></div>' +
+        '<input type="checkbox" class="todo-check" checked onchange="toggleHomeProjTask(\'' + tid + '\',this.checked)">' +
+        '<div style="flex:1;min-width:0">' +
+          '<div class="todo-text done">' + escapeHTML(t.title) + '</div>' +
+          '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' + (proj ? escapeHTML(proj.name) : '') + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
   }
 
   if (!html) { list.innerHTML = '<div class="hw-empty">Nothing here — add your first task ✓</div>'; return; }
@@ -4857,6 +4888,7 @@ function renderTodos() {
 
 function clearDoneTodos() {
   _todos = _todos.filter(function(t){ return !t.done; });
+  _homeProjectTasksDone = [];
   _saveTodos();
   renderTodos();
 }
@@ -4881,9 +4913,19 @@ async function toggleHomeProjTask(id, checked) {
     await _supabase.from('project_tasks').update({status: newStatus}).eq('id', id).eq('user_id', _currentUser.id);
   }
   if (checked) {
-    _homeProjectTasks = _homeProjectTasks.filter(function(t){ return t.id !== id; });
-    renderTodos();
+    var task = _homeProjectTasks.find(function(t){ return t.id === id; });
+    if (task) {
+      _homeProjectTasks = _homeProjectTasks.filter(function(t){ return t.id !== id; });
+      _homeProjectTasksDone.unshift(task);
+    }
+  } else {
+    var task = _homeProjectTasksDone.find(function(t){ return t.id === id; });
+    if (task) {
+      _homeProjectTasksDone = _homeProjectTasksDone.filter(function(t){ return t.id !== id; });
+      _homeProjectTasks.push(task);
+    }
   }
+  renderTodos();
 }
 function updateTodoProjDropdowns() {
   var projects = window._ptProjects || [];
@@ -5239,7 +5281,7 @@ function _clearUserState() {
   _clients = [];
 
   // Clear My Details form fields
-  ['my-name','my-business','my-email','my-website','my-address',
+  ['my-firstname','my-middlename','my-lastname','my-business','my-email','my-website','my-address',
    'my-rate','my-latefee','my-taxrate','my-payment',
    'my-channel','my-response','my-hours','my-feedback'].forEach(function(id) {
     var el = document.getElementById(id);
@@ -5367,7 +5409,7 @@ async function ptLoadProjectData(projectId) {
     _supabase.from('project_tasks').select('*').eq('project_id', projectId).eq('user_id', uid).order('due_date'),
     _supabase.from('project_billing').select('*').eq('project_id', projectId).eq('user_id', uid).order('created_at'),
     _supabase.from('project_meetings').select('*').eq('project_id', projectId).eq('user_id', uid).order('meeting_date', {ascending: false}),
-    _supabase.from('project_timesheet').select('*').eq('project_id', projectId).eq('user_id', uid).order('log_date', {ascending: false})
+    _supabase.from('project_timesheet').select('*').eq('project_id', projectId).order('log_date', {ascending: false})
   ]);
   window._ptMilestones = ms.data || [];
   window._ptTasks = ts.data || [];
@@ -5704,6 +5746,13 @@ var _ptPeopleColors = ['#D4A853','#2D6A4F','#1D4ED8','#7C3AED','#DC2626','#0891B
 
 function _getPeopleKey(pid) { return 'fk_people_' + (pid || _ptCurrentId); }
 
+function getMyFullName() {
+  var first = (document.getElementById('my-firstname') || {}).value || '';
+  var middle = (document.getElementById('my-middlename') || {}).value || '';
+  var last = (document.getElementById('my-lastname') || {}).value || '';
+  return [first, middle, last].filter(Boolean).join(' ') || '';
+}
+
 function loadPtPeople(projectId) {
   var pid = projectId || _ptCurrentId;
   try { return JSON.parse(localStorage.getItem(_getPeopleKey(pid)) || '[]'); } catch(e) { return []; }
@@ -6010,14 +6059,16 @@ function renderPtHours() {
   var total = hr.reduce(function(s, h){ return s + (parseFloat(h.hours) || 0); }, 0);
   if (totEl) totEl.innerHTML = 'Total logged: <strong>' + total.toFixed(1) + ' hrs</strong>';
   if (!hr.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No time logged yet.</div>'; return; }
+  var uid = _currentUser && _currentUser.id;
   el.innerHTML = hr.map(function(h, i) {
+    var isOwn = !h.user_id || h.user_id === uid;
     return '<div class="pt-time-row">' +
       '<span style="font-size:12px;color:var(--ink-light)">' + (h.log_date ? h.log_date.slice(0,10) : '—') + '</span>' +
       '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
       '<span>' + (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') + '</span>' +
       '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
-      '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit entry">&#9998;</button>' +
-      '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' +
+      (isOwn ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit entry">&#9998;</button>' : '<span></span>') +
+      (isOwn ? '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' : '<span></span>') +
       '</div>';
   }).join('');
 }
@@ -6584,7 +6635,7 @@ function openPtModal(mode) {
     html = '<div class="pt-modal-title">' + (mode === 'edit-task' ? 'Edit task' : 'Add task') + '</div>' +
       '<div class="pt-field"><label>Task *</label><input class="pt-inp" id="ptm-task-title" value="' + escapeHTML(et.title || '') + '" placeholder="e.g. Design mockups"></div>' +
       '<div class="pt-grid2">' +
-      '<div class="pt-field"><label>Assigned to</label><input class="pt-inp" id="ptm-task-assignee" value="' + escapeHTML(et.assignee || '') + '" placeholder="Name or role"></div>' +
+      (function(){ var ppl = loadPtPeople(_ptCurrentId); var opts = '<option value="">— unassigned —</option>' + ppl.map(function(p){ return '<option value="' + escapeHTML(p.name) + '"' + (et.assignee === p.name ? ' selected' : '') + '>' + escapeHTML(p.name) + '</option>'; }).join(''); return '<div class="pt-field"><label>Assigned to</label><select class="pt-sel" id="ptm-task-assignee">' + opts + '</select></div>'; })() +
       '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-task-date" value="' + (et.due_date ? et.due_date.slice(0,10) : '') + '"></div>' +
       '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo"' + selOpt(et.status,'todo') + '>To do</option><option value="in_progress"' + selOpt(et.status,'in_progress') + '>In progress</option><option value="done"' + selOpt(et.status,'done') + '>Done</option></select></div>' +
       '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low"' + selOpt(et.priority,'low') + '>Low</option><option value="medium"' + (et.priority ? selOpt(et.priority,'medium') : ' selected') + '>Medium</option><option value="high"' + selOpt(et.priority,'high') + '>High</option></select></div>' +
@@ -6608,25 +6659,29 @@ function openPtModal(mode) {
       '</div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtBilling()">Add phase</button></div>';
   } else if (mode === 'add-meeting') {
+    var meetPeople = loadPtPeople(_ptCurrentId);
+    var meetPeopleOpts = meetPeople.length
+      ? meetPeople.map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('')
+      : '';
     html = '<div class="pt-modal-title">Add meeting note</div>' +
       '<div class="pt-grid2">' +
       '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-meet-date"></div>' +
-      '<div class="pt-field"><label>Attendees</label><input class="pt-inp" id="ptm-meet-attendees" placeholder="e.g. Alex, Jamie"></div>' +
+      '<div class="pt-field"><label>Our team attendees</label>' +
+        (meetPeople.length
+          ? '<select class="pt-sel" id="ptm-meet-attendees" multiple style="min-height:72px" title="Hold Ctrl/Cmd to select multiple"><option disabled style="font-size:11px;color:var(--ink-light)">Hold Ctrl/Cmd for multiple</option>' + meetPeopleOpts + '</select>'
+          : '<input class="pt-inp" id="ptm-meet-attendees" placeholder="Add people to this project first">') +
+      '</div>' +
       '</div>' +
       '<div class="pt-field"><label>Notes / summary *</label><textarea class="pt-ta" id="ptm-meet-notes" style="min-height:100px"></textarea></div>' +
       '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="ptm-meet-actions" style="min-height:60px" placeholder="- Item 1&#10;- Item 2"></textarea></div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMeeting()">Save note</button></div>';
   } else if (mode === 'add-time') {
-    var peopleOpts = (JSON.parse(localStorage.getItem(_getPeopleKey(_ptCurrentId)) || '[]')).map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
-    var myName = (document.getElementById('my-name') || {}).value || '';
+    var myName = getMyFullName() || (_currentUser && _currentUser.email ? _currentUser.email.split('@')[0] : '');
     html = '<div class="pt-modal-title">Log time</div>' +
+      '<div style="font-size:12px;color:var(--ink-mid);margin-bottom:12px">Logging as: <strong>' + escapeHTML(myName || 'You') + '</strong></div>' +
       '<div class="pt-grid2">' +
       '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date"></div>' +
       '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" placeholder="0.5" min="0.25" step="0.25"></div>' +
-      '</div>' +
-      '<div class="pt-field"><label>Person responsible</label>' +
-        '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-list" placeholder="Who did this work?" value="' + escapeHTML(myName) + '">' +
-        '<datalist id="ptm-time-person-list">' + peopleOpts + '</datalist>' +
       '</div>' +
       '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" placeholder="What did you work on?"></div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtTime()">Log time</button></div>';
@@ -6670,7 +6725,14 @@ async function savePtProject() {
   } else {
     payload.created_at = new Date().toISOString();
     res = await _supabase.from('projects').insert(payload).select().single();
-    if (!res.error && res.data) _ptProjects.unshift(res.data);
+    if (!res.error && res.data) {
+      _ptProjects.unshift(res.data);
+      // Auto-add the current user as a person on the new project
+      var myFullName = getMyFullName() || (_currentUser.email ? _currentUser.email.split('@')[0] : '');
+      if (myFullName) {
+        savePtPeople([{ name: myFullName, role: 'Freelancer', side: 'freelancer' }], res.data.id);
+      }
+    }
   }
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   closePtModal();
@@ -6731,8 +6793,16 @@ async function savePtMeeting() {
   if (!_currentUser || !_ptCurrentId) return;
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var notes = g('ptm-meet-notes'); if (!notes) { showToast('Notes required'); return; }
+  // Handle multi-select or plain input for attendees
+  var attendeesEl = document.getElementById('ptm-meet-attendees');
+  var attendees = '';
+  if (attendeesEl && attendeesEl.tagName === 'SELECT') {
+    attendees = Array.from(attendeesEl.selectedOptions).map(function(o){ return o.value; }).filter(Boolean).join(', ');
+  } else if (attendeesEl) {
+    attendees = attendeesEl.value.trim();
+  }
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
-    meeting_date: g('ptm-meet-date') || null, attendees: g('ptm-meet-attendees'),
+    meeting_date: g('ptm-meet-date') || null, attendees: attendees,
     notes: notes, action_items: g('ptm-meet-actions') };
   var res = await _supabase.from('project_meetings').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
@@ -6744,9 +6814,10 @@ async function savePtTime() {
   if (!_currentUser || !_ptCurrentId) return;
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
+  var myName = getMyFullName() || (_currentUser.email ? _currentUser.email.split('@')[0] : null);
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
     log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc'),
-    person_name: g('ptm-time-person') || null };
+    person_name: myName || null };
   var res = await _supabase.from('project_timesheet').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   window._ptHours = window._ptHours || []; window._ptHours.unshift(res.data);
@@ -6755,20 +6826,20 @@ async function savePtTime() {
 
 function openPtEditTime(i) {
   var hr = window._ptHours; if (!hr || !hr[i]) return;
+  // Only allow editing own entries
+  if (_currentUser && hr[i].user_id && hr[i].user_id !== _currentUser.id) {
+    showToast('You can only edit your own time entries'); return;
+  }
   _ptEditIdx = i;
   var h = hr[i];
   var overlay = document.getElementById('pt-modal');
   var body = document.getElementById('pt-modal-body');
   if (!overlay || !body) return;
-  var peopleOpts = (JSON.parse(localStorage.getItem(_getPeopleKey(_ptCurrentId)) || '[]')).map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
   body.innerHTML = '<div class="pt-modal-title">Edit time entry</div>' +
+    '<div style="font-size:12px;color:var(--ink-mid);margin-bottom:12px">Logged by: <strong>' + escapeHTML(h.person_name || 'You') + '</strong></div>' +
     '<div class="pt-grid2">' +
     '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date" value="' + (h.log_date ? h.log_date.slice(0,10) : '') + '"></div>' +
     '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" min="0.25" step="0.25" value="' + (h.hours || '') + '"></div>' +
-    '</div>' +
-    '<div class="pt-field"><label>Person responsible</label>' +
-      '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-edit-list" value="' + escapeHTML(h.person_name || '') + '">' +
-      '<datalist id="ptm-time-person-edit-list">' + peopleOpts + '</datalist>' +
     '</div>' +
     '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" value="' + escapeHTML(h.description || '') + '"></div>' +
     '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtTime()">Save changes</button></div>';
@@ -6780,7 +6851,7 @@ async function updatePtTime() {
   var hr = window._ptHours; if (!hr || _ptEditIdx === null || !hr[_ptEditIdx]) return;
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
-  var payload = { log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc'), person_name: g('ptm-time-person') || null };
+  var payload = { log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc') };
   var res = await _supabase.from('project_timesheet').update(payload).eq('id', hr[_ptEditIdx].id).eq('user_id', _currentUser.id).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   hr[_ptEditIdx] = res.data;
