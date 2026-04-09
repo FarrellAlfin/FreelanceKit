@@ -636,6 +636,10 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .temp-cold{background:var(--blue-light);color:var(--blue)}
 .kc-add-btn{width:100%;padding:6px;border:1.5px dashed var(--border);border-radius:7px;background:transparent;color:var(--ink-light);font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s;margin-top:2px}
 .kc-add-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
+.kk-pt-btn{display:block;width:100%;margin-top:8px;padding:5px 8px;font-size:11px;font-weight:600;font-family:var(--font-body);border-radius:6px;border:1.5px solid #6D28D9;color:#6D28D9;background:transparent;cursor:pointer;transition:all .15s;text-align:center}
+.kk-pt-btn:hover{background:#6D28D9;color:#fff}
+.kk-pt-btn-create{border-color:var(--sage);color:var(--sage)}
+.kk-pt-btn-create:hover{background:var(--sage);color:#fff}
 
 /* Tax tracker (compact) */
 .tax-two-col{display:grid;grid-template-columns:1fr 260px;gap:20px}
@@ -848,9 +852,9 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 /* ── CLIENT DIRECTORY ── */
 .client-dir-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .client-table{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.ct-head{display:grid;grid-template-columns:1fr 1fr 1fr 80px 80px;gap:0;background:var(--cream-dark);border-bottom:1px solid var(--border)}
+.ct-head{display:grid;grid-template-columns:1fr 1fr 120px 1fr 1fr 80px;gap:0;background:var(--cream-dark);border-bottom:1px solid var(--border)}
 .ct-head-cell{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);padding:10px 14px}
-.ct-row{display:grid;grid-template-columns:1fr 1fr 1fr 80px 80px;gap:0;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.ct-row{display:grid;grid-template-columns:1fr 1fr 120px 1fr 1fr 80px;gap:0;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
 .ct-row:last-child{border-bottom:none}
 .ct-row:hover{background:var(--cream)}
 .ct-cell{padding:11px 14px;font-size:13px;color:var(--ink-mid)}
@@ -860,6 +864,8 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .ct-btn{padding:4px 10px;border-radius:5px;border:1.5px solid var(--border);background:transparent;font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .15s;color:var(--ink-mid)}
 .ct-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-light)}
 .ct-btn.del:hover{border-color:var(--red);color:var(--red);background:var(--red-light)}
+.ct-proj-chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--sage-light);color:var(--sage);cursor:pointer;margin:2px 2px 2px 0;transition:opacity .15s}
+.ct-proj-chip:hover{opacity:.75}
 .client-empty{text-align:center;padding:40px;color:var(--ink-light);font-size:14px}
 
 /* ── INVOICE HISTORY ── */
@@ -1824,6 +1830,9 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#129518;</span><span class="dsb-label">Tax Tracker</span>
         <span class="dsb-count">Live</span>
       </div>
+      <div class="dsb-item" onclick="showPanel('timesheet',this)" id="nav-timesheet">
+        <span class="dsb-icon">&#9201;</span><span class="dsb-label">Timesheet</span>
+      </div>
 
       <div class="dsb-section">Contracts &amp; Legal</div>
       <div class="dsb-item" onclick="showPanel('contract',this)" id="nav-contract">
@@ -1860,7 +1869,7 @@ var RateLimiter = (function() {
         <span class="dsb-icon">&#9881;&#65039;</span><span class="dsb-label">My Details</span>
       </div>
       <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
-        <span class="dsb-icon">&#128101;</span><span class="dsb-label">Client Directory</span>
+        <span class="dsb-icon">&#128101;</span><span class="dsb-label">Client Contacts</span>
       </div>
       <div class="dsb-item" onclick="showPanel('invhistory',this)" id="nav-invhistory">
         <span class="dsb-icon">&#128196;</span><span class="dsb-label">Invoice History</span>
@@ -2728,8 +2737,8 @@ var RateLimiter = (function() {
       <div class="tmpl-panel" id="panel-clients">
         <div class="tv-header">
           <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">My Business</span></div>
-          <div class="tv-title">Client <em>Directory</em></div>
-          <div class="tv-desc">Your client contacts in one place. Select a client in the Invoice Builder or Pipeline Tracker to auto-fill their details.</div>
+          <div class="tv-title">Client <em>Contacts</em></div>
+          <div class="tv-desc">Your client contacts in one place. See linked projects, add phone and address details, and auto-fill invoices or pipeline cards.</div>
         </div>
         <div class="client-dir-header">
           <span style="font-size:13px;color:var(--ink-mid)" id="client-count">0 clients</span>
@@ -2739,12 +2748,24 @@ var RateLimiter = (function() {
           <div class="ct-head">
             <div class="ct-head-cell">Name</div>
             <div class="ct-head-cell">Email</div>
+            <div class="ct-head-cell">Phone</div>
             <div class="ct-head-cell">Company</div>
-            <div class="ct-head-cell">Terms</div>
+            <div class="ct-head-cell">Projects</div>
             <div class="ct-head-cell"></div>
           </div>
           <div id="client-list-body"><div class="client-empty">No clients yet. Add your first client above.</div></div>
         </div>
+      </div>
+
+      <!-- ─── GLOBAL TIMESHEET ─── -->
+      <div class="tmpl-panel" id="panel-timesheet">
+        <div class="tv-header">
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Business Operations</span></div>
+          <div class="tv-title">Time<em>sheet</em></div>
+          <div class="tv-desc">Hours logged across all your projects. See total time per project and drill into individual entries.</div>
+        </div>
+        <div id="gts-summary" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px"></div>
+        <div id="gts-body"><div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">Loading timesheet data…</div></div>
       </div>
 
       <!-- ─── INVOICE HISTORY ─── -->
@@ -2850,6 +2871,7 @@ function showPanel(id,el){
   if(id==='ratecalc')calcRate();
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
   if(id==='projects'&&!window._ptInit){window._ptInit=true;loadProjects()}
+  if(id==='timesheet'){ if(typeof loadGlobalTimesheet==='function') loadGlobalTimesheet(); }
   if(id==='home'){ if(typeof initHomeDashboard==='function') initHomeDashboard(); }
   if(id==='contract'||id==='scope'){ if(typeof populateDocProjSelects==='function') populateDocProjSelects(); }
   if(typeof _trackRecentPanel==='function') _trackRecentPanel(id);
@@ -3718,14 +3740,20 @@ function renderPipeline(){
       <div class="kc-stripe" style="background:${s.stripe}"></div>
       <div class="kc-header"><span class="kc-title">${s.label}</span><span class="kc-cnt">${cards.length}</span></div>
       <div class="kc-body">
-        ${cards.map(c=>`<div class="kk-card" draggable="true" data-id="${c.id}" data-stage="${si}" ondragstart="pfDragStart(event)" ondragend="pfDragEnd(event)" ondragover="pfColDragOver(event,this.closest('.kc'))" ondragleave="pfDragLeave(event,this.closest('.kc'))" ondrop="pfColDrop(event,${si},this.closest('.kc'))">
+        ${cards.map(c=>{
+          const linked = si===4 && window._ptProjects && window._ptProjects.find(p=>p.client_name===c.client||p.name===c.project);
+          const ptBtn = si===4 ? (linked
+            ? `<button class="kk-pt-btn" onclick="event.stopPropagation();openPtProjectFromPipeline('${linked.id}')">Open in Tracker →</button>`
+            : `<button class="kk-pt-btn kk-pt-btn-create" onclick="event.stopPropagation();createProjectFromPipeline('${c.id}')">+ Create Project</button>`) : '';
+          return `<div class="kk-card" draggable="true" data-id="${c.id}" data-stage="${si}" ondragstart="pfDragStart(event)" ondragend="pfDragEnd(event)" ondragover="pfColDragOver(event,this.closest('.kc'))" ondragleave="pfDragLeave(event,this.closest('.kc'))" ondrop="pfColDrop(event,${si},this.closest('.kc'))">
           <button class="kk-cb kk-cb-edit" onclick="event.stopPropagation();openPipelineEditModal('${c.id}')" title="Edit">✏</button>
           <button class="kk-cb kk-cb-del" onclick="event.stopPropagation();deletePfCard('${c.id}')" title="Delete">✕</button>
           <span class="kk-temp temp-${c.temp}">${c.temp==='hot'?'🔥 Hot':c.temp==='warm'?'Warm':'❄️ Cold'}</span>
           <div class="kk-client">${escapeHTML(c.client)}</div>
           <div class="kk-project">${escapeHTML(c.project||'')}</div>
           <div class="kk-foot"><span class="kk-val">${fm(c.value)}</span><span class="kk-date">${escapeHTML(c.date||'')}</span></div>
-        </div>`).join('')}
+          ${ptBtn}
+        </div>`;}).join('')}
         <button class="kc-add-btn" onclick="openPipelineModal(${si})">+ Add</button>
       </div>
     </div>`;
@@ -3822,6 +3850,36 @@ async function deletePfCard(id){
   pfClients=pfClients.filter(x=>String(x.id)!==String(id));
   await deletePipelineCard(id);
   renderPipeline();showToast('\u2713 Deleted');
+}
+
+async function createProjectFromPipeline(cardId) {
+  var c = pfClients.find(function(x){ return String(x.id) === String(cardId); });
+  if (!c) return;
+  if (!_currentUser) { showToast('Sign in to create projects'); return; }
+  var payload = {
+    user_id: _currentUser.id,
+    name: c.project || c.client,
+    client_name: c.client,
+    status: 'active',
+    budget: c.value || null,
+    updated_at: new Date().toISOString()
+  };
+  var res = await _supabase.from('projects').insert(payload).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _ptProjects = _ptProjects || [];
+  _ptProjects.unshift(res.data);
+  window._ptInit = true;
+  showToast('\u2713 Project created — opening tracker…');
+  renderPipeline();
+  setTimeout(function(){
+    showPanel('projects', document.getElementById('nav-projects'));
+    setTimeout(function(){ selectPtProject(res.data.id); }, 300);
+  }, 400);
+}
+
+function openPtProjectFromPipeline(projectId) {
+  showPanel('projects', document.getElementById('nav-projects'));
+  setTimeout(function(){ selectPtProject(projectId); }, 300);
 }
 
 // ═══════════════ TAX TRACKER ═══════════════
@@ -4214,10 +4272,16 @@ function renderClientList() {
     return;
   }
   body.innerHTML = _clients.map(function(cl) {
+    var linkedProjs = (_ptProjects || []).filter(function(p){ return p.client_name === cl.name; });
+    var projHtml = linkedProjs.length
+      ? linkedProjs.map(function(p){ return '<span class="ct-proj-chip" onclick="openPtProjectFromPipeline(\'' + p.id + '\')" title="Open project">' + escapeHTML(p.name) + '</span>'; }).join('')
+      : '<span style="color:var(--ink-light);font-size:12px">—</span>';
     return '<div class="ct-row">' +
       '<div class="ct-cell name">' + escapeHTML(cl.name||'') + '</div>' +
       '<div class="ct-cell email">' + escapeHTML(cl.email||'—') + '</div>' +
+      '<div class="ct-cell">' + escapeHTML(cl.phone||'—') + '</div>' +
       '<div class="ct-cell">' + escapeHTML(cl.company||'—') + '</div>' +
+      '<div class="ct-cell">' + projHtml + '</div>' +
       '<div class="ct-actions">' +
         '<button class="ct-btn del" data-client-id="' + escapeHTML(cl.id) + '" onclick="deleteClient(this.dataset.clientId)">Delete</button>' +
       '</div>' +
@@ -4228,7 +4292,7 @@ function renderClientList() {
 function openClientModal() { document.getElementById('client-modal').classList.add('open'); }
 function closeClientModal() {
   document.getElementById('client-modal').classList.remove('open');
-  ['cm-name','cm-company','cm-email','cm-contact','cm-notes'].forEach(function(id){
+  ['cm-name','cm-company','cm-email','cm-phone','cm-address','cm-contact','cm-notes'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.value='';
   });
 }
@@ -4248,6 +4312,8 @@ async function addClient() {
     name: name,
     company: company,
     email: email,
+    phone: document.getElementById('cm-phone').value.trim().slice(0, 50) || null,
+    address: document.getElementById('cm-address').value.trim().slice(0, 300) || null,
     contact_person: document.getElementById('cm-contact').value.trim().slice(0, 200),
     notes: document.getElementById('cm-notes').value.trim().slice(0, 1000)
   };
@@ -4550,8 +4616,8 @@ function getProjectColor(projectId) {
 }
 
 // ─── RECENTLY VISITED ─────────────────────────────────────────────────────────
-var _PANEL_ICONS = { contract:'📄', scope:'⚠️', invoice:'🧾', ratecalc:'📊', projects:'🛠️', pipeline:'🗂️', tax:'🦆', welcome:'🎁', brief:'📋', mydetails:'⚙️', clients:'👥', invhistory:'📁' };
-var _PANEL_NAMES = { contract:'Client Contract', scope:'Scope Change Order', invoice:'Invoice Builder', ratecalc:'Rate Calculator', projects:'Project Tracker', pipeline:'Pipeline Tracker', tax:'Tax Tracker', welcome:'Welcome Packet', brief:'Project Brief', mydetails:'My Details', clients:'Client Directory', invhistory:'Invoice History' };
+var _PANEL_ICONS = { contract:'📄', scope:'⚠️', invoice:'🧾', ratecalc:'📊', projects:'🛠️', pipeline:'🗂️', tax:'🦆', timesheet:'⏱', welcome:'🎁', brief:'📋', mydetails:'⚙️', clients:'👥', invhistory:'📁' };
+var _PANEL_NAMES = { contract:'Client Contract', scope:'Scope Change Order', invoice:'Invoice Builder', ratecalc:'Rate Calculator', projects:'Project Tracker', pipeline:'Pipeline Tracker', tax:'Tax Tracker', timesheet:'Timesheet', welcome:'Welcome Packet', brief:'Project Brief', mydetails:'My Details', clients:'Client Contacts', invhistory:'Invoice History' };
 function _trackRecentPanel(id) {
   if (!id || id === 'home') return;
   try {
@@ -5146,7 +5212,7 @@ async function loadProjects() {
   var uid = _currentUser.id;
   var res = await _supabase.from('projects').select('*').eq('user_id', uid).order('created_at', {ascending: false});
   if (!_currentUser || _currentUser.id !== uid) return;
-  if (res.data) { _ptProjects = res.data; renderPtList(); if(typeof updateTodoProjDropdowns==='function') updateTodoProjDropdowns(); if(typeof populateDocProjSelects==='function') populateDocProjSelects(); if(typeof renderUpcoming==='function') renderUpcoming(); }
+  if (res.data) { _ptProjects = res.data; renderPtList(); if(typeof updateTodoProjDropdowns==='function') updateTodoProjDropdowns(); if(typeof populateDocProjSelects==='function') populateDocProjSelects(); if(typeof renderUpcoming==='function') renderUpcoming(); if(typeof renderClientList==='function') renderClientList(); }
 }
 
 async function ptLoadProjectData(projectId) {
@@ -5763,9 +5829,81 @@ function renderPtHours() {
     return '<div class="pt-time-row">' +
       '<span style="font-size:12px;color:var(--ink-light)">' + (h.log_date ? h.log_date.slice(0,10) : '—') + '</span>' +
       '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
+      (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') +
       '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
       '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' +
       '</div>';
+  }).join('');
+}
+
+// ─── GLOBAL TIMESHEET ───
+
+async function loadGlobalTimesheet() {
+  var body = document.getElementById('gts-body');
+  var summary = document.getElementById('gts-summary');
+  if (!body) return;
+  if (!_currentUser) {
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">Sign in to view your timesheet.</div>';
+    return;
+  }
+  body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">Loading…</div>';
+  var res = await _supabase.from('project_timesheet').select('*, projects(name)').eq('user_id', _currentUser.id).order('log_date', {ascending: false});
+  if (res.error) { body.innerHTML = '<div style="padding:20px;color:red;font-size:13px">Error: ' + escapeHTML(res.error.message) + '</div>'; return; }
+  renderGlobalTimesheet(res.data || []);
+}
+
+function renderGlobalTimesheet(entries) {
+  var body = document.getElementById('gts-body');
+  var summaryEl = document.getElementById('gts-summary');
+  if (!body) return;
+  if (!entries.length) {
+    if (summaryEl) summaryEl.innerHTML = '';
+    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">No time logged yet. Open a project and log time from the Hours tab.</div>';
+    return;
+  }
+  // Group by project
+  var groups = {};
+  entries.forEach(function(e) {
+    var pid = e.project_id;
+    var pname = (e.projects && e.projects.name) ? e.projects.name : ('Project ' + (pid || '?'));
+    if (!groups[pid]) groups[pid] = { name: pname, entries: [], total: 0 };
+    groups[pid].entries.push(e);
+    groups[pid].total += parseFloat(e.hours) || 0;
+  });
+  var grandTotal = entries.reduce(function(s,e){ return s + (parseFloat(e.hours)||0); }, 0);
+  var projectKeys = Object.keys(groups);
+  // Colour palette for project chips
+  var palette = ['#6D28D9','#1967D2','#C8621A','#5A7A65','#B4B2A9','#C2185B','#00796B'];
+  if (summaryEl) {
+    summaryEl.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
+      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Total hours</div>' +
+      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + grandTotal.toFixed(1) + 'h</div></div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
+      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Projects tracked</div>' +
+      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + projectKeys.length + '</div></div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
+      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Entries</div>' +
+      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + entries.length + '</div></div>';
+  }
+  body.innerHTML = projectKeys.map(function(pid, pi) {
+    var g = groups[pid];
+    var color = palette[pi % palette.length];
+    var rows = g.entries.map(function(e) {
+      return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px">' +
+        '<span style="min-width:90px;color:var(--ink-light)">' + (e.log_date ? e.log_date.slice(0,10) : '—') + '</span>' +
+        '<span style="min-width:44px;font-weight:600;color:var(--ink)">' + (parseFloat(e.hours)||0).toFixed(1) + 'h</span>' +
+        (e.person_name ? '<span style="font-size:11px;color:var(--ink-mid);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:10px">' + escapeHTML(e.person_name) + '</span>' : '') +
+        '<span style="color:var(--ink-mid);flex:1">' + escapeHTML(e.description || '') + '</span>' +
+        '</div>';
+    }).join('');
+    return '<div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px">' +
+      '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-left:4px solid ' + color + ';background:var(--surface)">' +
+        '<span style="font-weight:600;font-size:14px;flex:1;color:var(--ink)">' + escapeHTML(g.name) + '</span>' +
+        '<span style="font-size:13px;color:var(--ink-mid)">' + g.entries.length + ' entr' + (g.entries.length===1?'y':'ies') + '</span>' +
+        '<span style="font-weight:700;font-size:15px;color:' + color + '">' + g.total.toFixed(1) + 'h</span>' +
+      '</div>' +
+      rows +
+    '</div>';
   }).join('');
 }
 
@@ -6139,10 +6277,15 @@ function openPtModal(mode) {
       '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="ptm-meet-actions" style="min-height:60px" placeholder="- Item 1&#10;- Item 2"></textarea></div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMeeting()">Save note</button></div>';
   } else if (mode === 'add-time') {
+    var peopleOpts = (JSON.parse(localStorage.getItem(_getPeopleKey(_ptCurrentId)) || '[]')).map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
     html = '<div class="pt-modal-title">Log time</div>' +
       '<div class="pt-grid2">' +
       '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date"></div>' +
       '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" placeholder="0.5" min="0.25" step="0.25"></div>' +
+      '</div>' +
+      '<div class="pt-field"><label>Person responsible</label>' +
+        '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-list" placeholder="Who did this work?">' +
+        '<datalist id="ptm-time-person-list">' + peopleOpts + '</datalist>' +
       '</div>' +
       '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" placeholder="What did you work on?"></div>' +
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtTime()">Log time</button></div>';
@@ -6261,7 +6404,8 @@ async function savePtTime() {
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
-    log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc') };
+    log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc'),
+    person_name: g('ptm-time-person') || null };
   var res = await _supabase.from('project_timesheet').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   window._ptHours = window._ptHours || []; window._ptHours.unshift(res.data);
@@ -6446,18 +6590,20 @@ async function deletePtProject() {
 document.getElementById('pt-modal') && document.getElementById('pt-modal').addEventListener('click', function(e){ if (e.target === this) closePtModal(); });
 </script>
 
-<!-- Client directory modal -->
+<!-- Client contacts modal -->
 <div class="modal-overlay" id="client-modal" onclick="if(event.target===this)closeClientModal()">
   <div class="modal-box">
     <div class="modal-hd"><span class="modal-title">Add client</span><button class="modal-close" onclick="closeClientModal()">&#10005;</button></div>
     <div class="modal-bd">
       <div class="m-lbl">Name</div><input class="m-inp" id="cm-name" placeholder="Client's full name">
       <div class="m-lbl">Company</div><input class="m-inp" id="cm-company" placeholder="Company or business name">
-      <div class="m-lbl">Email</div><input class="m-inp" id="cm-email" type="email" placeholder="client@company.com">
-      <div class="m-lbl">Contact person</div><input class="m-inp" id="cm-contact" placeholder="e.g. Jamie Reyes">
       <div class="m-row2">
-        <div><div class="m-lbl">Notes</div><input class="m-inp" id="cm-notes" placeholder="Optional notes" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Email</div><input class="m-inp" id="cm-email" type="email" placeholder="client@company.com" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Phone</div><input class="m-inp" id="cm-phone" type="tel" placeholder="+1 555 000 0000" style="margin-bottom:0"></div>
       </div>
+      <div class="m-lbl" style="margin-top:10px">Address</div><input class="m-inp" id="cm-address" placeholder="Street, City, Country">
+      <div class="m-lbl">Contact person</div><input class="m-inp" id="cm-contact" placeholder="e.g. Jamie Reyes">
+      <div class="m-lbl">Notes</div><input class="m-inp" id="cm-notes" placeholder="Optional notes">
     </div>
     <div class="modal-ft">
       <button class="btn-outline" onclick="closeClientModal()">Cancel</button>
