@@ -941,7 +941,7 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .todo-filter-row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
 .todo-filter{padding:2px 9px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:11px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);transition:all .15s}
 .todo-filter.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.todo-list{max-height:220px;overflow-y:auto}
+.todo-list{max-height:420px;overflow-y:auto}
 .todo-item{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border)}
 .todo-item:last-child{border-bottom:none}
 .todo-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
@@ -1100,7 +1100,7 @@ input[type=number]{-moz-appearance:textfield}
 .pt-note-text{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
 .pt-note-del{float:right;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:12px;margin-top:-2px}
 /* Timesheet */
-.pt-time-row{display:grid;grid-template-columns:90px 60px 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-time-row{display:grid;grid-template-columns:90px 60px auto 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
 .pt-time-desc{font-size:13px;color:var(--ink)}
 .pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:4px 0}
@@ -2464,13 +2464,6 @@ var RateLimiter = (function() {
               <label>People involved</label>
               <div class="pt-people-wrap" id="ptv-people-wrap">
                 <button class="pt-person-add" onclick="openAddPersonModal()">+ Add person</button>
-              </div>
-            </div>
-            <div class="pt-field">
-              <label>Linked documents</label>
-              <div class="pt-doc-links">
-                <button class="pt-doc-link" onclick="openDocForProject('contract')">📄 Client Contract</button>
-                <button class="pt-doc-link" onclick="openDocForProject('scope')">⚠️ Scope Change Order</button>
               </div>
             </div>
             <div class="pt-field" id="ptv-shares-wrap" style="display:none">
@@ -5559,7 +5552,6 @@ function renderPtMilestones() {
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
     return '<tr style="' + rowBg + '">' + nameCell +
       '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 0;position:relative">' +
-      todayLine +
       '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer;overflow:hidden" onclick="openPtEditMilestone(' + i + ')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
@@ -6022,7 +6014,7 @@ function renderPtHours() {
     return '<div class="pt-time-row">' +
       '<span style="font-size:12px;color:var(--ink-light)">' + (h.log_date ? h.log_date.slice(0,10) : '—') + '</span>' +
       '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
-      (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') +
+      '<span>' + (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') + '</span>' +
       '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
       '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' +
       '</div>';
@@ -6224,7 +6216,6 @@ function renderGlobalGantt() {
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + ' → ' + endLbl : (endLbl || startLbl);
     return '<tr>' + nameCell +
       '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:5px 0;position:relative">' +
-      todayLine +
       '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:6px;display:flex;align-items:center;padding:0 10px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600;letter-spacing:.01em">' + barLabel + '</span>' +
@@ -6266,13 +6257,17 @@ function renderPtDocTab(type) {
   var isContract = type === 'contract';
   var title = isContract ? 'Client Contract' : 'Scope Change Order';
   var downloadFile = isContract ? 'FreelanceKit_Client_Contract.docx' : 'FreelanceKit_Scope_Change_Order.docx';
-  var docBody = isContract ? _ptContractDocHTML() : _ptScopeDocHTML();
+  // Load saved content from localStorage if available for this project
+  var savedKey = _ptCurrentId ? 'fk_doc_' + type + '_' + _ptCurrentId : null;
+  var saved = savedKey ? localStorage.getItem(savedKey) : null;
+  var docBody = saved || (isContract ? _ptContractDocHTML() : _ptScopeDocHTML());
   el.innerHTML =
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">' +
-      '<div style="font-size:13px;font-weight:600;color:var(--ink)">' + title + '</div>' +
+      '<div style="font-size:13px;font-weight:600;color:var(--ink)">' + title + (saved ? ' <span style="font-size:10px;color:var(--sage);font-weight:400">● saved</span>' : '') + '</div>' +
       '<div style="display:flex;gap:8px;align-items:center">' +
         '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">✏️ Edit fields</button>' +
         '<span class="doc-edit-hint">Click highlighted fields to edit</span>' +
+        '<button class="btn-primary" style="font-size:12px;padding:5px 12px" onclick="ptSaveDoc(\'' + type + '\')">&#128190; Save</button>' +
         '<button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="window.location.href=\'' + downloadFile + '\'">&#128196; Download .docx</button>' +
         '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128438; PDF / Print</button>' +
       '</div>' +
@@ -6282,10 +6277,25 @@ function renderPtDocTab(type) {
       '<span class="db-name">FreelanceKit — ' + title + '.docx</span><span class="db-fmt">Editable</span></div>' +
       '<div class="doc-body" id="' + prefix + '-doc-body">' + docBody + '</div>' +
     '</div>';
-  // Auto-fill from current project
-  if (_ptCurrentId) {
+  // Only auto-fill if no saved version exists
+  if (!saved && _ptCurrentId) {
     var p = (_ptProjects || []).find(function(x){ return x.id === _ptCurrentId; });
     if (p) _ptAutoFillDoc(prefix, p);
+  }
+}
+
+function ptSaveDoc(type) {
+  var prefix = 'pt-' + type;
+  var body = document.getElementById(prefix + '-doc-body');
+  if (!body) return;
+  if (!_ptCurrentId) { showToast('Select a project first'); return; }
+  var savedKey = 'fk_doc_' + type + '_' + _ptCurrentId;
+  localStorage.setItem(savedKey, body.innerHTML);
+  showToast('\u2713 ' + (type === 'contract' ? 'Contract' : 'Scope') + ' saved to project');
+  // Update the title indicator without re-rendering
+  var titleEl = document.querySelector('#pt-tab-' + type + ' > div > div:first-child');
+  if (titleEl && !titleEl.querySelector('span')) {
+    titleEl.innerHTML += ' <span style="font-size:10px;color:var(--sage);font-weight:400">● saved</span>';
   }
 }
 
@@ -6798,23 +6808,30 @@ var _ptEditIdx = null; // index of item being edited
 
 function openPtEditBilling(i) {
   var bs = window._ptBilling; if (!bs || !bs[i]) return;
-  _ptEditIdx = i;
   var b = bs[i];
-  _ptModalMode = 'edit-billing';
-  var overlay = document.getElementById('pt-modal');
-  var body = document.getElementById('pt-modal-body');
-  if (!overlay || !body) return;
-  var statusClass = {pending:'pt-bs-pending',invoiced:'pt-bs-invoiced',paid:'pt-bs-paid'};
-  body.innerHTML = '<div class="pt-modal-title">Edit billing phase</div>' +
-    '<div class="pt-field"><label>Phase name *</label><input class="pt-inp" id="ptm-bill-name" value="' + escapeHTML(b.phase_name || '') + '"></div>' +
-    '<div class="pt-grid2">' +
-    '<div class="pt-field"><label>Amount ($) *</label><input class="pt-inp" type="number" id="ptm-bill-amount" value="' + (b.amount || '') + '"></div>' +
-    '<div class="pt-field"><label>Type</label><select class="pt-sel" id="ptm-bill-type"><option value="one_time"' + (b.billing_type==='one_time'?' selected':'') + '>One-time</option><option value="per_phase"' + (b.billing_type==='per_phase'?' selected':'') + '>Per phase</option></select></div>' +
-    '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-bill-status"><option value="pending"' + (b.status==='pending'?' selected':'') + '>Pending</option><option value="invoiced"' + (b.status==='invoiced'?' selected':'') + '>Invoiced</option><option value="paid"' + (b.status==='paid'?' selected':'') + '>Paid</option></select></div>' +
-    '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-bill-date" value="' + (b.due_date ? b.due_date.slice(0,10) : '') + '"></div>' +
-    '</div>' +
-    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtBilling()">Save changes</button></div>';
-  overlay.classList.add('open');
+  var proj = _ptCurrentId ? (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; }) : null;
+  // Open Invoice Builder pre-filled with billing phase data
+  showPanel('invoice', document.getElementById('nav-invoice'));
+  setTimeout(function() {
+    var set = function(id, val){ var el=document.getElementById(id); if(el && val != null) el.value = val; };
+    if (proj) {
+      set('i-client', proj.client_name);
+      set('i-project', proj.name);
+      var cl = proj.client_name ? (_clients || []).find(function(c){ return c.name === proj.client_name; }) : null;
+      if (cl) {
+        set('i-contact', cl.contact_person || cl.name);
+        set('i-email', cl.email);
+        set('i-clientphone', cl.phone);
+        set('i-clientaddress', cl.address);
+      }
+    }
+    if (b.due_date) set('i-due', b.due_date.slice(0,10));
+    // Set billing phase as a line item
+    lineItems = [{ desc: b.phase_name || 'Billing phase', qty: 1, rate: parseFloat(b.amount) || 0 }];
+    if (typeof renderLineItems === 'function') renderLineItems();
+    if (typeof updateInv === 'function') updateInv();
+    showToast('\u2713 Invoice Builder opened with billing phase');
+  }, 150);
 }
 
 async function updatePtBilling() {
