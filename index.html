@@ -1100,7 +1100,7 @@ input[type=number]{-moz-appearance:textfield}
 .pt-note-text{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
 .pt-note-del{float:right;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:12px;margin-top:-2px}
 /* Timesheet */
-.pt-time-row{display:grid;grid-template-columns:90px 60px auto 1fr auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
+.pt-time-row{display:grid;grid-template-columns:90px 60px auto 1fr auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
 .pt-time-desc{font-size:13px;color:var(--ink)}
 .pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:4px 0}
@@ -1924,22 +1924,6 @@ var RateLimiter = (function() {
           </div>
         </div>
 
-        <!-- Tips -->
-        <div class="tips-section">
-          <div class="tips-hdr" onclick="toggleTips()">
-            <div class="tips-hdr-left"><span>💡</span> Tips — getting the most out of FreelanceKit</div>
-            <span class="tips-arrow" id="tips-arrow">▼</span>
-          </div>
-          <div class="tips-body" id="tips-body">
-            <div class="tip-card"><div class="tip-icon">📄</div><div class="tip-title">Edit contracts inline</div><div class="tip-text">Open any contract or scope order and click "Edit fields" to fill in your details directly on the page — no copy-pasting needed.</div></div>
-            <div class="tip-card"><div class="tip-icon">🔗</div><div class="tip-title">Link docs to projects</div><div class="tip-text">Use the project dropdown in contracts to auto-link a document to a project. Keep everything organised in one place.</div></div>
-            <div class="tip-card"><div class="tip-icon">🧾</div><div class="tip-title">Save invoice history</div><div class="tip-text">Hit "Save invoice" after filling in your invoice. You can download it as PDF from Invoice History at any time.</div></div>
-            <div class="tip-card"><div class="tip-icon">📊</div><div class="tip-title">Save rate scenarios</div><div class="tip-text">In the Rate Calculator, save different rate scenarios (consulting, agency, retainer) and quickly load them to compare.</div></div>
-            <div class="tip-card"><div class="tip-icon">🎨</div><div class="tip-title">Customise your invoice</div><div class="tip-text">Scroll to the bottom of the Invoice Builder and expand "Customize style" to choose a font and accent colour for your invoice.</div></div>
-            <div class="tip-card"><div class="tip-icon">🗂️</div><div class="tip-title">Drag pipeline cards</div><div class="tip-text">In the Pipeline Tracker, drag client cards between columns (Lead → Proposal → Active → etc.) to track your deal flow.</div></div>
-          </div>
-        </div>
-
         <!-- Quick access -->
         <div class="home-section-label">Quick access</div>
         <div class="home-quick-grid">
@@ -1967,6 +1951,22 @@ var RateLimiter = (function() {
         <!-- All tools -->
         <div class="home-section-label">All tools</div>
         <div class="template-grid" id="home-template-grid"></div>
+
+        <!-- Tips -->
+        <div class="tips-section" style="margin-top:24px">
+          <div class="tips-hdr" onclick="toggleTips()">
+            <div class="tips-hdr-left"><span>💡</span> Tips — getting the most out of FreelanceKit</div>
+            <span class="tips-arrow" id="tips-arrow">▼</span>
+          </div>
+          <div class="tips-body" id="tips-body">
+            <div class="tip-card"><div class="tip-icon">📄</div><div class="tip-title">Edit contracts inline</div><div class="tip-text">Open any contract or scope order and click "Edit fields" to fill in your details directly on the page — no copy-pasting needed.</div></div>
+            <div class="tip-card"><div class="tip-icon">🔗</div><div class="tip-title">Link docs to projects</div><div class="tip-text">Use the project dropdown in contracts to auto-link a document to a project. Keep everything organised in one place.</div></div>
+            <div class="tip-card"><div class="tip-icon">🧾</div><div class="tip-title">Save invoice history</div><div class="tip-text">Hit "Save invoice" after filling in your invoice. You can download it as PDF from Invoice History at any time.</div></div>
+            <div class="tip-card"><div class="tip-icon">📊</div><div class="tip-title">Save rate scenarios</div><div class="tip-text">In the Rate Calculator, save different rate scenarios (consulting, agency, retainer) and quickly load them to compare.</div></div>
+            <div class="tip-card"><div class="tip-icon">🎨</div><div class="tip-title">Customise your invoice</div><div class="tip-text">Scroll to the bottom of the Invoice Builder and expand "Customize style" to choose a font and accent colour for your invoice.</div></div>
+            <div class="tip-card"><div class="tip-icon">🗂️</div><div class="tip-title">Drag pipeline cards</div><div class="tip-text">In the Pipeline Tracker, drag client cards between columns (Lead → Proposal → Active → etc.) to track your deal flow.</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- ─── CONTRACT ─── -->
@@ -6016,6 +6016,7 @@ function renderPtHours() {
       '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
       '<span>' + (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') + '</span>' +
       '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
+      '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit entry">&#9998;</button>' +
       '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' +
       '</div>';
   }).join('');
@@ -6617,13 +6618,14 @@ function openPtModal(mode) {
       '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="savePtMeeting()">Save note</button></div>';
   } else if (mode === 'add-time') {
     var peopleOpts = (JSON.parse(localStorage.getItem(_getPeopleKey(_ptCurrentId)) || '[]')).map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
+    var myName = (document.getElementById('my-name') || {}).value || '';
     html = '<div class="pt-modal-title">Log time</div>' +
       '<div class="pt-grid2">' +
       '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date"></div>' +
       '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" placeholder="0.5" min="0.25" step="0.25"></div>' +
       '</div>' +
       '<div class="pt-field"><label>Person responsible</label>' +
-        '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-list" placeholder="Who did this work?">' +
+        '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-list" placeholder="Who did this work?" value="' + escapeHTML(myName) + '">' +
         '<datalist id="ptm-time-person-list">' + peopleOpts + '</datalist>' +
       '</div>' +
       '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" placeholder="What did you work on?"></div>' +
@@ -6751,6 +6753,41 @@ async function savePtTime() {
   closePtModal(); renderPtHours(); showToast('\u2713 Time logged');
 }
 
+function openPtEditTime(i) {
+  var hr = window._ptHours; if (!hr || !hr[i]) return;
+  _ptEditIdx = i;
+  var h = hr[i];
+  var overlay = document.getElementById('pt-modal');
+  var body = document.getElementById('pt-modal-body');
+  if (!overlay || !body) return;
+  var peopleOpts = (JSON.parse(localStorage.getItem(_getPeopleKey(_ptCurrentId)) || '[]')).map(function(p){ return '<option value="' + escapeHTML(p.name) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
+  body.innerHTML = '<div class="pt-modal-title">Edit time entry</div>' +
+    '<div class="pt-grid2">' +
+    '<div class="pt-field"><label>Date</label><input class="pt-inp" type="date" id="ptm-time-date" value="' + (h.log_date ? h.log_date.slice(0,10) : '') + '"></div>' +
+    '<div class="pt-field"><label>Hours *</label><input class="pt-inp" type="number" id="ptm-time-hrs" min="0.25" step="0.25" value="' + (h.hours || '') + '"></div>' +
+    '</div>' +
+    '<div class="pt-field"><label>Person responsible</label>' +
+      '<input class="pt-inp" id="ptm-time-person" list="ptm-time-person-edit-list" value="' + escapeHTML(h.person_name || '') + '">' +
+      '<datalist id="ptm-time-person-edit-list">' + peopleOpts + '</datalist>' +
+    '</div>' +
+    '<div class="pt-field"><label>Description</label><input class="pt-inp" id="ptm-time-desc" value="' + escapeHTML(h.description || '') + '"></div>' +
+    '<div class="pt-modal-ft"><button class="btn-outline" onclick="closePtModal()">Cancel</button><button class="pt-save-btn" onclick="updatePtTime()">Save changes</button></div>';
+  overlay.classList.add('open');
+}
+
+async function updatePtTime() {
+  if (!_currentUser) return;
+  var hr = window._ptHours; if (!hr || _ptEditIdx === null || !hr[_ptEditIdx]) return;
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
+  var payload = { log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc'), person_name: g('ptm-time-person') || null };
+  var res = await _supabase.from('project_timesheet').update(payload).eq('id', hr[_ptEditIdx].id).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  hr[_ptEditIdx] = res.data;
+  _ptEditIdx = null;
+  closePtModal(); renderPtHours(); showToast('\u2713 Time entry updated');
+}
+
 // ─── ACTIONS ───
 
 function openPtEditMilestone(i) {
@@ -6810,28 +6847,49 @@ function openPtEditBilling(i) {
   var bs = window._ptBilling; if (!bs || !bs[i]) return;
   var b = bs[i];
   var proj = _ptCurrentId ? (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; }) : null;
-  // Open Invoice Builder pre-filled with billing phase data
-  showPanel('invoice', document.getElementById('nav-invoice'));
-  setTimeout(function() {
-    var set = function(id, val){ var el=document.getElementById(id); if(el && val != null) el.value = val; };
-    if (proj) {
-      set('i-client', proj.client_name);
-      set('i-project', proj.name);
-      var cl = proj.client_name ? (_clients || []).find(function(c){ return c.name === proj.client_name; }) : null;
-      if (cl) {
-        set('i-contact', cl.contact_person || cl.name);
-        set('i-email', cl.email);
-        set('i-clientphone', cl.phone);
-        set('i-clientaddress', cl.address);
+  // Try to find an existing invoice for this billing phase (match by project name + phase name in line items)
+  var existingInv = null;
+  if (proj && Array.isArray(_invoices)) {
+    existingInv = _invoices.find(function(inv) {
+      if (inv.project !== proj.name) return false;
+      return Array.isArray(inv.line_items) && inv.line_items.some(function(li) {
+        return li.desc === b.phase_name;
+      });
+    });
+  }
+  if (existingInv) {
+    // Load the existing invoice for editing
+    lineItems = (existingInv.line_items || []).map(function(li){ return Object.assign({}, li); });
+    _loadInvFromRecord(existingInv);
+    showPanel('invoice', document.getElementById('nav-invoice'));
+    setTimeout(function() {
+      if (typeof renderLineItems === 'function') renderLineItems();
+      if (typeof updateInv === 'function') updateInv();
+      showToast('\u2713 Loaded existing invoice for this billing phase');
+    }, 150);
+  } else {
+    // Pre-fill a new invoice with billing phase data
+    showPanel('invoice', document.getElementById('nav-invoice'));
+    setTimeout(function() {
+      var set = function(id, val){ var el=document.getElementById(id); if(el && val != null) el.value = val; };
+      if (proj) {
+        set('i-client', proj.client_name);
+        set('i-project', proj.name);
+        var cl = proj.client_name ? (_clients || []).find(function(c){ return c.name === proj.client_name; }) : null;
+        if (cl) {
+          set('i-contact', cl.contact_person || cl.name);
+          set('i-email', cl.email);
+          set('i-clientphone', cl.phone);
+          set('i-clientaddress', cl.address);
+        }
       }
-    }
-    if (b.due_date) set('i-due', b.due_date.slice(0,10));
-    // Set billing phase as a line item
-    lineItems = [{ desc: b.phase_name || 'Billing phase', qty: 1, rate: parseFloat(b.amount) || 0 }];
-    if (typeof renderLineItems === 'function') renderLineItems();
-    if (typeof updateInv === 'function') updateInv();
-    showToast('\u2713 Invoice Builder opened with billing phase');
-  }, 150);
+      if (b.due_date) set('i-due', b.due_date.slice(0,10));
+      lineItems = [{ desc: b.phase_name || 'Billing phase', qty: 1, rate: parseFloat(b.amount) || 0 }];
+      if (typeof renderLineItems === 'function') renderLineItems();
+      if (typeof updateInv === 'function') updateInv();
+      showToast('\u2713 Invoice Builder opened — save to link with this phase');
+    }, 150);
+  }
 }
 
 async function updatePtBilling() {
