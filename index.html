@@ -4471,7 +4471,16 @@ function hideClientDd() {
 
 var _invoices = [];
 var _invFilter = 'all';
-var _editingInvoiceId = null; // set when editing an existing invoice — causes Save to UPDATE
+var _editingInvoiceId = null;   // set when editing an existing invoice — causes Save to UPDATE
+var _editingBillingRowId = null; // set when opening invoice builder from a billing row (new invoice path)
+
+// Helpers: store/retrieve billing-row → invoice ID mapping in localStorage
+function _saveBillingInvLink(billingId, invoiceId) {
+  try { localStorage.setItem('fk_billing_inv_' + billingId, invoiceId); } catch(e){}
+}
+function _getBillingInvLink(billingId) {
+  try { return localStorage.getItem('fk_billing_inv_' + billingId) || null; } catch(e){ return null; }
+}
 
 async function loadInvoiceHistory() {
   if (!_currentUser) return;
@@ -4522,14 +4531,21 @@ async function saveInvoiceToHistory() {
   } else {
     // INSERT new invoice
     res = await _supabase.from('invoices').insert(payload).select().single();
-    if (!res.error && res.data) _invoices.unshift(res.data);
+    if (!res.error && res.data) {
+      _invoices.unshift(res.data);
+      // If this was opened from a billing row, save the permanent billing→invoice link
+      if (_editingBillingRowId) {
+        _saveBillingInvLink(_editingBillingRowId, res.data.id);
+        _editingBillingRowId = null;
+      }
+    }
   }
   if (res.error) { showToast('Error saving: ' + res.error.message); return; }
   renderInvHistory();
-  // Also add billing entry to linked project (only on new invoices)
+  // Also add billing entry to linked project (only on new invoices, not when editing from billing row)
   var projSel = document.getElementById('inv-proj-link');
   var linkedProjId = projSel && projSel.value;
-  if (linkedProjId && _currentUser && !_editingInvoiceId) {
+  if (linkedProjId && _currentUser && !_editingInvoiceId && !_editingBillingRowId) {
     var billingEntry = {
       project_id: linkedProjId, user_id: _currentUser.id,
       phase_name: 'Invoice ' + (payload.invoice_number || ''),
@@ -4538,6 +4554,8 @@ async function saveInvoiceToHistory() {
     };
     var br = await _supabase.from('project_billing').insert(billingEntry).select().single();
     if (!br.error) {
+      // Store the link so editing this billing entry always finds the right invoice
+      if (br.data) _saveBillingInvLink(br.data.id, res.data.id);
       window._ptBilling = window._ptBilling || [];
       if (_ptCurrentId === linkedProjId) { window._ptBilling.push(br.data); renderPtBilling(); }
       showToast('\u2713 Invoice saved + billing entry added to project');
@@ -6956,29 +6974,39 @@ function openPtEditBilling(i) {
   var bs = window._ptBilling; if (!bs || !bs[i]) return;
   var b = bs[i];
   var proj = _ptCurrentId ? (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; }) : null;
-  // Try to find an existing invoice for this billing phase (match by project name + phase name in line items)
-  var existingInv = null;
-  if (proj && Array.isArray(_invoices)) {
+
+  // 1. Check localStorage for a direct billing-row → invoice ID mapping (most reliable)
+  var linkedInvId = _getBillingInvLink(b.id);
+  var existingInv = linkedInvId ? (_invoices || []).find(function(inv){ return inv.id === linkedInvId; }) : null;
+
+  // 2. Fallback: match by project name + phase name in line item descriptions
+  if (!existingInv && proj && Array.isArray(_invoices)) {
     existingInv = _invoices.find(function(inv) {
       if (inv.project !== proj.name) return false;
       return Array.isArray(inv.line_items) && inv.line_items.some(function(li) {
         return li.desc === b.phase_name;
       });
     });
+    // Save the mapping so future opens are direct
+    if (existingInv) _saveBillingInvLink(b.id, existingInv.id);
   }
+
   if (existingInv) {
-    // Load the existing invoice for editing — set ID so Save does UPDATE
+    // Load the existing invoice — all line items are fully editable in the Invoice Builder
     _editingInvoiceId = existingInv.id;
+    _editingBillingRowId = null;
     lineItems = (existingInv.line_items || []).map(function(li){ return Object.assign({}, li); });
     _loadInvFromRecord(existingInv);
     showPanel('invoice', document.getElementById('nav-invoice'));
     setTimeout(function() {
       if (typeof renderLineItems === 'function') renderLineItems();
       if (typeof updateInv === 'function') updateInv();
-      showToast('\u2713 Loaded existing invoice — save to update it');
+      showToast('\u2713 Invoice loaded — edit line items and save to update');
     }, 150);
   } else {
-    // Pre-fill a new invoice with billing phase data
+    // No linked invoice yet — pre-fill a new one; line items are fully editable
+    _editingInvoiceId = null;
+    _editingBillingRowId = b.id; // remember which billing row triggered this
     showPanel('invoice', document.getElementById('nav-invoice'));
     setTimeout(function() {
       var set = function(id, val){ var el=document.getElementById(id); if(el && val != null) el.value = val; };
@@ -6994,10 +7022,11 @@ function openPtEditBilling(i) {
         }
       }
       if (b.due_date) set('i-due', b.due_date.slice(0,10));
+      // Start with the billing phase as one editable line — user can add/edit/delete more
       lineItems = [{ desc: b.phase_name || 'Billing phase', qty: 1, rate: parseFloat(b.amount) || 0 }];
       if (typeof renderLineItems === 'function') renderLineItems();
       if (typeof updateInv === 'function') updateInv();
-      showToast('\u2713 Invoice Builder opened — save to link with this phase');
+      showToast('\u2713 Invoice Builder ready — add or edit line items, then save');
     }, 150);
   }
 }
