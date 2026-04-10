@@ -2799,7 +2799,7 @@ var RateLimiter = (function() {
             <button class="isf-btn" onclick="filterInvHistory('paid',this)">Paid</button>
             <button class="isf-btn" onclick="filterInvHistory('overdue',this)">Overdue</button>
           </div>
-          <button class="btn-use" onclick="showPanel('invoice',document.getElementById('nav-invoice'))">+ New invoice</button>
+          <button class="btn-use" onclick="_editingInvoiceId=null;showPanel('invoice',document.getElementById('nav-invoice'))">+ New invoice</button>
         </div>
         <div class="inv-hist-table">
           <div class="iht-head">
@@ -4471,6 +4471,7 @@ function hideClientDd() {
 
 var _invoices = [];
 var _invFilter = 'all';
+var _editingInvoiceId = null; // set when editing an existing invoice — causes Save to UPDATE
 
 async function loadInvoiceHistory() {
   if (!_currentUser) return;
@@ -4509,14 +4510,26 @@ async function saveInvoiceToHistory() {
     client_address: g('i-clientaddress').slice(0,300),
     status: 'draft', updated_at: new Date().toISOString()
   };
-  var res = await _supabase.from('invoices').insert(payload).select().single();
+  var res;
+  if (_editingInvoiceId) {
+    // UPDATE existing invoice
+    res = await _supabase.from('invoices').update(payload).eq('id', _editingInvoiceId).eq('user_id', _currentUser.id).select().single();
+    if (!res.error && res.data) {
+      var idx = _invoices.findIndex(function(i){ return i.id === _editingInvoiceId; });
+      if (idx >= 0) _invoices[idx] = res.data; else _invoices.unshift(res.data);
+    }
+    _editingInvoiceId = null;
+  } else {
+    // INSERT new invoice
+    res = await _supabase.from('invoices').insert(payload).select().single();
+    if (!res.error && res.data) _invoices.unshift(res.data);
+  }
   if (res.error) { showToast('Error saving: ' + res.error.message); return; }
-  _invoices.unshift(res.data);
   renderInvHistory();
-  // Also add billing entry to linked project
+  // Also add billing entry to linked project (only on new invoices)
   var projSel = document.getElementById('inv-proj-link');
   var linkedProjId = projSel && projSel.value;
-  if (linkedProjId && _currentUser) {
+  if (linkedProjId && _currentUser && !_editingInvoiceId) {
     var billingEntry = {
       project_id: linkedProjId, user_id: _currentUser.id,
       phase_name: 'Invoice ' + (payload.invoice_number || ''),
@@ -4627,6 +4640,7 @@ function downloadInvoicePDFFromHistory(id) {
 function editInvoiceFromHistory(id) {
   var inv = _invoices.find(function(i){ return i.id === id; });
   if (!inv) return;
+  _editingInvoiceId = id; // track so Save does UPDATE not INSERT
   lineItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
   _loadInvFromRecord(inv);
   renderLineItems(); updateInv();
@@ -4777,8 +4791,29 @@ function addTodo() {
   if (!inp) return;
   var text = inp.value.trim();
   if (!text) return;
-  _todos.unshift({ id: Date.now() + Math.random() + '', text: text, project_id: sel ? sel.value : '', done: false, created_at: new Date().toISOString() });
+  var projId = sel ? sel.value : '';
+  _todos.unshift({ id: Date.now() + Math.random() + '', text: text, project_id: projId, done: false, created_at: new Date().toISOString() });
   _saveTodos(); inp.value = ''; renderTodos();
+  // If linked to a project, also create a project_tasks record so it appears in the project tracker
+  if (projId && _currentUser && _supabase) {
+    var taskPayload = {
+      project_id: projId, user_id: _currentUser.id,
+      title: text, status: 'todo', priority: 'medium',
+      created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+    };
+    _supabase.from('project_tasks').insert(taskPayload).select().single().then(function(res) {
+      if (!res.error && res.data) {
+        // If this project is currently open in the tracker, add the task live
+        if (_ptCurrentId === projId) {
+          window._ptTasks = window._ptTasks || [];
+          window._ptTasks.unshift(res.data);
+          if (typeof renderPtTasks === 'function') renderPtTasks();
+        }
+        // Refresh home project tasks list
+        if (typeof loadProjectTasksForHome === 'function') loadProjectTasksForHome();
+      }
+    });
+  }
 }
 function toggleTodo(id) {
   var t = _todos.find(function(x){ return x.id === id; });
@@ -4809,44 +4844,45 @@ function renderTodos() {
   var active = filtered.filter(function(t){ return !t.done; });
   var done   = filtered.filter(function(t){ return t.done; });
 
-  // Active personal todos
+  // Active personal todos + project tasks — merged into one list
+  var today = new Date(); today.setHours(0,0,0,0);
+  var projTasks = _homeProjectTasks.filter(function(t){
+    return !_todoFilter || t.project_id === _todoFilter;
+  });
+
   var html = active.map(function(t) {
     var color = getProjectColor(t.project_id);
     var tid = t.id.replace(/['"]/g,'');
+    var proj = t.project_id ? (_ptProjects || []).find(function(p){ return p.id === t.project_id; }) : null;
     return '<div class="todo-item">' +
       '<div class="todo-dot" style="background:' + color + '"></div>' +
       '<input type="checkbox" class="todo-check" onchange="toggleTodo(\'' + tid + '\')">' +
-      '<span class="todo-text">' + escapeHTML(t.text) + '</span>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="todo-text">' + escapeHTML(t.text) + '</div>' +
+        (proj ? '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' + escapeHTML(proj.name) + '</div>' : '') +
+      '</div>' +
       '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
     '</div>';
   }).join('');
 
-  // Project tasks from tracker (active only)
-  var projTasks = _homeProjectTasks.filter(function(t){
-    return !_todoFilter || t.project_id === _todoFilter;
-  });
-  if (projTasks.length) {
-    html += '<div class="todo-section-lbl">From projects</div>';
-    var today = new Date(); today.setHours(0,0,0,0);
-    html += projTasks.map(function(t) {
-      var color = getProjectColor(t.project_id);
-      var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
-      var overdue = t.due_date && new Date(t.due_date + 'T00:00:00') < today;
-      var tid = t.id.replace(/['"]/g,'');
-      return '<div class="todo-item todo-proj-task">' +
-        '<div class="todo-dot" style="background:' + color + '"></div>' +
-        '<input type="checkbox" class="todo-check" onchange="toggleHomeProjTask(\'' + tid + '\',this.checked)">' +
-        '<div style="flex:1;min-width:0">' +
-          '<div class="todo-text">' + escapeHTML(t.title) + '</div>' +
-          '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' +
-            (proj ? escapeHTML(proj.name) : '') +
-            (t.due_date ? ' · <span style="color:' + (overdue ? '#DC2626' : 'inherit') + '">' + t.due_date.slice(5,10) + (overdue ? ' ⚠' : '') + '</span>' : '') +
-          '</div>' +
+  html += projTasks.map(function(t) {
+    var color = getProjectColor(t.project_id);
+    var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
+    var overdue = t.due_date && new Date(t.due_date + 'T00:00:00') < today;
+    var tid = t.id.replace(/['"]/g,'');
+    return '<div class="todo-item todo-proj-task">' +
+      '<div class="todo-dot" style="background:' + color + '"></div>' +
+      '<input type="checkbox" class="todo-check" onchange="toggleHomeProjTask(\'' + tid + '\',this.checked)">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="todo-text">' + escapeHTML(t.title) + '</div>' +
+        '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' +
+          (proj ? escapeHTML(proj.name) : '') +
+          (t.due_date ? ' · <span style="color:' + (overdue ? '#DC2626' : 'inherit') + '">' + t.due_date.slice(5,10) + (overdue ? ' ⚠' : '') + '</span>' : '') +
         '</div>' +
-        '<button class="todo-del" style="opacity:1;font-size:11px;color:var(--ink-light)" onclick="showPanel(\'projects\')" title="Open project tracker">↗</button>' +
-      '</div>';
-    }).join('');
-  }
+      '</div>' +
+      '<button class="todo-del" style="opacity:1;font-size:11px;color:var(--ink-light)" onclick="showPanel(\'projects\')" title="Open in project tracker">↗</button>' +
+    '</div>';
+  }).join('');
 
   // Recently completed (personal todos + project tasks)
   var doneProjTasks = (_homeProjectTasksDone || []).filter(function(t){
@@ -6727,10 +6763,12 @@ async function savePtProject() {
     res = await _supabase.from('projects').insert(payload).select().single();
     if (!res.error && res.data) {
       _ptProjects.unshift(res.data);
-      // Auto-add the current user as a person on the new project
-      var myFullName = getMyFullName() || (_currentUser.email ? _currentUser.email.split('@')[0] : '');
-      if (myFullName) {
-        savePtPeople([{ name: myFullName, role: 'Freelancer', side: 'freelancer' }], res.data.id);
+      // Auto-add the current user (first + last name only) as a person on the new project
+      var myFirst = (document.getElementById('my-firstname') || {}).value || '';
+      var myLast  = (document.getElementById('my-lastname')  || {}).value || '';
+      var myName  = [myFirst, myLast].filter(Boolean).join(' ') || (_currentUser.email ? _currentUser.email.split('@')[0] : '');
+      if (myName) {
+        savePtPeople([{ name: myName, role: 'Freelancer', side: 'freelancer' }], res.data.id);
       }
     }
   }
@@ -6929,14 +6967,15 @@ function openPtEditBilling(i) {
     });
   }
   if (existingInv) {
-    // Load the existing invoice for editing
+    // Load the existing invoice for editing — set ID so Save does UPDATE
+    _editingInvoiceId = existingInv.id;
     lineItems = (existingInv.line_items || []).map(function(li){ return Object.assign({}, li); });
     _loadInvFromRecord(existingInv);
     showPanel('invoice', document.getElementById('nav-invoice'));
     setTimeout(function() {
       if (typeof renderLineItems === 'function') renderLineItems();
       if (typeof updateInv === 'function') updateInv();
-      showToast('\u2713 Loaded existing invoice for this billing phase');
+      showToast('\u2713 Loaded existing invoice — save to update it');
     }, 150);
   } else {
     // Pre-fill a new invoice with billing phase data
