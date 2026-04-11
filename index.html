@@ -776,6 +776,15 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .tt:hover{border-color:var(--ink);color:var(--ink)}
 .tt.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 
+/* ── CALENDAR SIDE-BY-SIDE ── */
+.cal-layout{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.cal-detail-panel{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:16px;min-height:320px}
+.cal-detail-empty{font-size:13px;color:var(--ink-light);padding:20px 0;text-align:center}
+.cal-event-form{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-top:12px}
+.cal-event-form .m-lbl{margin-top:8px;margin-bottom:3px}
+.cal-event-form .m-inp,.cal-event-form .m-sel{margin-bottom:0;font-size:12px}
+@media(max-width:860px){.cal-layout{grid-template-columns:1fr}.cal-detail-panel{min-height:auto}}
+
 @media(max-width:768px){
   .dash-layout{grid-template-columns:1fr}
   .dash-sidebar{display:none}
@@ -1990,16 +1999,22 @@ var RateLimiter = (function() {
 
         <!-- Interactive Calendar -->
         <div class="cal-wrap">
-          <div class="hw-title">
+          <div class="hw-title" style="margin-bottom:14px">
             <div class="cal-nav">
               <button class="cal-nav-btn" onclick="calPrevMonth()">&#8249;</button>
               <span class="cal-month-label" id="cal-month-label">—</span>
               <button class="cal-nav-btn" onclick="calNextMonth()">&#8250;</button>
             </div>
-            <button class="hw-title-action" onclick="calAddEvent()">+ Add event</button>
           </div>
-          <div class="cal-grid" id="cal-grid"></div>
-          <div class="cal-detail" id="cal-detail" style="display:none"></div>
+          <div class="cal-layout">
+            <div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+            <div class="cal-detail-panel" id="cal-detail-panel">
+              <div class="cal-detail-empty" id="cal-detail-empty">Click a day to see events</div>
+              <div id="cal-detail-content" style="display:none"></div>
+            </div>
+          </div>
         </div>
 
         <!-- Quick access -->
@@ -2481,17 +2496,20 @@ var RateLimiter = (function() {
         <div id="pt-list-view">
           <div class="pt-list-header">
             <span class="pt-list-title" id="pt-project-count">0 projects</span>
-            <div style="display:flex;gap:8px">
-              <button class="btn-outline" style="font-size:12px;padding:5px 12px" onclick="toggleGlobalGantt()">🗓 All Projects Gantt</button>
+            <div style="display:flex;gap:8px;align-items:center">
+              <select id="pt-gantt-sort" onchange="renderGlobalGantt()" style="font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:4px 8px;font-family:var(--font-body);background:var(--white);color:var(--ink);cursor:pointer">
+                <option value="created">Sort: Date added</option>
+                <option value="name">Sort: Name</option>
+                <option value="deadline">Sort: Deadline</option>
+              </select>
+              <button class="btn-outline" id="pt-list-toggle-btn" style="font-size:12px;padding:5px 12px" onclick="togglePtListView()">☰ List view</button>
               <button class="pt-add-btn" onclick="openPtModal('new-project')">+ New project</button>
             </div>
           </div>
-          <div id="pt-projects-list"><div class="pt-empty"><div class="pt-empty-icon">🗂️</div><p>No projects yet.<br>Click <strong>+ New project</strong> to start.</p></div></div>
-          <!-- Global gantt (hidden by default) -->
-          <div id="pt-global-gantt-wrap" style="display:none" class="pt-gantt-view">
-            <div class="pt-gantt-hdr">
-              <span class="pt-gantt-title">All active projects — Gantt view</span>
-            </div>
+          <!-- Project list (hidden by default, gantt is default) -->
+          <div id="pt-projects-list" style="display:none"><div class="pt-empty"><div class="pt-empty-icon">🗂️</div><p>No projects yet.<br>Click <strong>+ New project</strong> to start.</p></div></div>
+          <!-- Global gantt (shown by default) -->
+          <div id="pt-global-gantt-wrap" class="pt-gantt-view">
             <div id="pt-global-gantt"></div>
           </div>
         </div>
@@ -5076,51 +5094,62 @@ function foeiRenderPreview() {
   var el = document.getElementById('foei-preview');
   if (!el) return;
   var g = function(id){ var e=document.getElementById(id); return e ? e.value.trim() : ''; };
-  var myName = (function(){ var fn=document.getElementById('my-firstname'); var ln=document.getElementById('my-lastname'); return ([fn&&fn.value,ln&&ln.value].filter(Boolean).join(' '))||'Your Business'; })();
-  var myEmail = (document.getElementById('my-email')||{}).value || '';
-  var num = g('foei-num') || 'INV-XXX';
-  var client = g('foei-client') || '—';
-  var contact = g('foei-contact');
-  var email = g('foei-email');
-  var project = g('foei-project');
-  var issue = g('foei-issue');
-  var due = g('foei-due');
-  var sub = _foEditItems.reduce(function(s,li){ return s+((parseFloat(li.qty)||0)*(parseFloat(li.rate)||0)); }, 0);
-  var disc = parseFloat(g('foei-disc')) || 0;
-  var tax  = parseFloat(g('foei-tax'))  || 0;
-  var total = sub * (1 - disc/100) * (1 + tax/100);
-  el.innerHTML = '<div class="foei-paper">' +
-    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #eee">' +
-    '<div><div style="font-size:14px;font-weight:700">' + escapeHTML(myName) + '</div>' +
-    (myEmail ? '<div style="font-size:10px;color:#888;margin-top:2px">' + escapeHTML(myEmail) + '</div>' : '') + '</div>' +
-    '<div style="text-align:right"><div style="font-size:18px;font-weight:800;letter-spacing:-.02em;color:#222">Invoice</div>' +
-    '<div style="font-size:12px;color:#666;margin-top:2px">' + escapeHTML(num) + '</div></div>' +
+  var myFirst  = (document.getElementById('my-firstname')||{}).value||'';
+  var myLast   = (document.getElementById('my-lastname') ||{}).value||'';
+  var myName   = [myFirst,myLast].filter(Boolean).join(' ') || 'Your Business';
+  var myEmail  = (document.getElementById('my-email')||{}).value||'';
+  var num      = g('foei-num')    || 'INV-XXX';
+  var status   = g('foei-status') || 'draft';
+  var issue    = g('foei-issue');
+  var due      = g('foei-due');
+  var client   = g('foei-client') || '—';
+  var contact  = g('foei-contact');
+  var email    = g('foei-email');
+  var project  = g('foei-project');
+  var notes    = g('foei-notes');
+  var disc     = parseFloat(g('foei-disc')) || 0;
+  var tax      = parseFloat(g('foei-tax'))  || 0;
+  var sub      = _foEditItems.reduce(function(s,li){ return s+((parseFloat(li.qty)||0)*(parseFloat(li.rate)||0)); },0);
+  var afterDisc = sub * (1 - disc/100);
+  var taxAmt   = afterDisc * tax/100;
+  var total    = afterDisc + taxAmt;
+  var statusColor = status==='paid'?'var(--sage)':status==='overdue'?'var(--red)':'var(--amber)';
+  var statusLabel = status.charAt(0).toUpperCase()+status.slice(1);
+
+  el.className = 'inv-paper';
+  el.innerHTML =
+    '<div class="inv-top">' +
+      '<div><div class="inv-brand-name">'+escapeHTML(myName)+'</div>' +
+      (myEmail?'<div class="inv-brand-detail">'+escapeHTML(myEmail)+'</div>':'')+
+      '</div>' +
+      '<div><div class="inv-word">Invoice</div><div class="inv-num">'+escapeHTML(num)+'</div></div>' +
     '</div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">' +
-    '<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-bottom:4px">Bill to</div>' +
-    '<div style="font-size:12px;font-weight:600">' + escapeHTML(client) + '</div>' +
-    (contact ? '<div style="font-size:11px;color:#666">' + escapeHTML(contact) + '</div>' : '') +
-    (email ? '<div style="font-size:11px;color:#888">' + escapeHTML(email) + '</div>' : '') + '</div>' +
-    '<div style="text-align:right">' +
-    (project ? '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#aaa;margin-bottom:4px">Project</div><div style="font-size:12px">' + escapeHTML(project) + '</div>' : '') +
-    (issue ? '<div style="font-size:10px;color:#888;margin-top:6px">Issued: ' + issue + '</div>' : '') +
-    (due ? '<div style="font-size:10px;color:#888">Due: ' + due + '</div>' : '') + '</div>' +
+    '<div class="inv-meta">' +
+      '<div><div class="inv-meta-lbl">Bill to</div><div class="inv-meta-val"><strong>'+escapeHTML(client)+'</strong>' +
+      (contact?'<br>'+escapeHTML(contact):'')+
+      (email?'<br><span style="font-size:11px;color:var(--ink-light)">'+escapeHTML(email)+'</span>':'')+
+      '</div></div>' +
+      (project?'<div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val">'+escapeHTML(project)+'</div></div>':'<div></div>')+
     '</div>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:12px">' +
-    '<tr style="border-bottom:1.5px solid #eee"><th style="text-align:left;padding:4px 0;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#aaa">Description</th><th style="text-align:center;padding:4px 4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#aaa">Qty</th><th style="text-align:right;padding:4px 0;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#aaa">Rate</th><th style="text-align:right;padding:4px 0;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#aaa">Amt</th></tr>' +
+    '<div class="inv-dates">' +
+      (issue?'<div><div class="inv-date-lbl">Issue date</div><div class="inv-date-val">'+escapeHTML(issue)+'</div></div>':'')+
+      (due?'<div><div class="inv-date-lbl">Due date</div><div class="inv-date-val">'+escapeHTML(due)+'</div></div>':'')+
+      '<div><div class="inv-date-lbl">Status</div><div class="inv-date-val" style="color:'+statusColor+'">'+escapeHTML(statusLabel)+'</div></div>'+
+    '</div>' +
+    '<table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody>'+
     (_foEditItems.length ? _foEditItems.map(function(li){
-      var amt = (parseFloat(li.qty)||0)*(parseFloat(li.rate)||0);
-      return '<tr style="border-bottom:1px solid #f5f5f5"><td style="padding:5px 0;font-size:11px">' + escapeHTML(li.desc||'—') + '</td><td style="text-align:center;padding:5px 4px;font-size:11px;color:#666">' + (li.qty||1) + '</td><td style="text-align:right;padding:5px 0;font-size:11px;color:#666">' + fmD(parseFloat(li.rate)||0) + '</td><td style="text-align:right;padding:5px 0;font-size:11px;font-weight:600">' + fmD(amt) + '</td></tr>';
-    }).join('') : '<tr><td colspan="4" style="padding:10px 0;font-size:11px;color:#aaa">No line items</td></tr>') +
-    '</table>' +
-    '<div style="border-top:1px solid #eee;padding-top:8px">' +
-    '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;color:#666"><span>Subtotal</span><span>' + fmD(sub) + '</span></div>' +
-    (disc > 0 ? '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;color:#666"><span>Discount (' + disc + '%)</span><span>\u2212' + fmD(sub*disc/100) + '</span></div>' : '') +
-    (tax > 0 ? '<div style="display:flex;justify-content:space-between;font-size:11px;padding:2px 0;color:#666"><span>Tax (' + tax + '%)</span><span>+' + fmD(sub*(1-disc/100)*tax/100) + '</span></div>' : '') +
-    '<div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;padding:8px 0;border-top:2px solid #222;margin-top:4px"><span>Total due</span><span>' + fmD(total) + '</span></div>' +
-    '</div>' +
-    (g('foei-notes') ? '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#888">' + escapeHTML(g('foei-notes')) + '</div>' : '') +
-    '</div>';
+      var amt=(parseFloat(li.qty)||0)*(parseFloat(li.rate)||0);
+      return '<tr><td>'+escapeHTML(li.desc||'—')+'</td><td>'+escapeHTML(String(li.qty||1))+'</td><td>'+fmD(parseFloat(li.rate)||0)+'</td><td>'+fmD(amt)+'</td></tr>';
+    }).join('') : '<tr><td colspan="4" style="color:var(--ink-light)">No line items</td></tr>') +
+    '</tbody></table>' +
+    '<div class="inv-totals"><div class="inv-tot-inner">'+
+      '<div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val">'+fmD(sub)+'</span></div>'+
+      (disc>0?'<div class="inv-tot-row"><span class="inv-tot-lbl">Discount ('+disc+'%)</span><span class="inv-tot-val">\u2212'+fmD(sub*disc/100)+'</span></div>':'')+
+      (tax>0?'<div class="inv-tot-row"><span class="inv-tot-lbl">Tax ('+tax+'%)</span><span class="inv-tot-val">+'+fmD(taxAmt)+'</span></div>':'')+
+      '<div class="inv-tot-div"></div>'+
+      '<div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val">'+fmD(total)+'</span></div>'+
+    '</div></div>' +
+    (notes?'<div class="inv-footer"><div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val">'+escapeHTML(notes)+'</div></div></div>':'');
 }
 function foeiDownloadPdf() {
   var prev = document.getElementById('foei-preview');
@@ -5490,7 +5519,7 @@ async function toggleHomeProjTask(id, checked) {
   renderTodos();
 }
 function updateTodoProjDropdowns() {
-  var projects = window._ptProjects || [];
+  var projects = (window._ptProjects || []).filter(function(p){ return p.status !== 'completed' && p.status !== 'archived'; });
   // Filter row
   var row = document.getElementById('todo-filter-row');
   if (row) {
@@ -5516,23 +5545,32 @@ function renderUpcoming() {
   if (!list) return;
   var items = [];
   var today = new Date(); today.setHours(0,0,0,0);
-  // Invoice due dates
+  // Invoice due dates (within 14 days)
   (_invoices || []).forEach(function(inv) {
-    if (!inv.due_date) return;
+    if (!inv.due_date || inv.status === 'paid') return;
     var d = new Date(inv.due_date); d.setHours(0,0,0,0);
     var daysLeft = Math.round((d - today) / 86400000);
-    if (daysLeft <= 30) items.push({ title: 'Invoice #' + (inv.invoice_number||''), sub: inv.client_name||'', daysLeft: daysLeft, color: '#D4A853' });
+    if (daysLeft >= -3 && daysLeft <= 14) items.push({ title: 'Invoice #' + (inv.invoice_number||''), sub: inv.client_name||'', daysLeft: daysLeft, color: '#D4A853' });
   });
-  // Project end dates
+  // Project end dates (within 14 days)
   (window._ptProjects || []).forEach(function(p, i) {
     if (!p.end_date || p.status === 'completed') return;
     var d = new Date(p.end_date); d.setHours(0,0,0,0);
     var daysLeft = Math.round((d - today) / 86400000);
-    if (daysLeft <= 30) items.push({ title: p.name, sub: p.client_name||'', daysLeft: daysLeft, color: PROJECT_COLORS[i % PROJECT_COLORS.length] });
+    if (daysLeft >= -3 && daysLeft <= 14) items.push({ title: p.name, sub: p.client_name||'', daysLeft: daysLeft, color: PROJECT_COLORS[i % PROJECT_COLORS.length] });
   });
+  // Todo items with due dates (within 14 days)
+  try {
+    JSON.parse(localStorage.getItem('fk_todos') || '[]').forEach(function(t) {
+      if (!t.dueDate || t.done) return;
+      var d = new Date(t.dueDate); d.setHours(0,0,0,0);
+      var daysLeft = Math.round((d - today) / 86400000);
+      if (daysLeft >= -3 && daysLeft <= 14) items.push({ title: t.text, sub: 'Task', daysLeft: daysLeft, color: 'var(--sage)' });
+    });
+  } catch(e){}
   items.sort(function(a,b){ return a.daysLeft - b.daysLeft; });
-  items = items.slice(0, 8);
-  if (!items.length) { list.innerHTML = '<div class="hw-empty">No deadlines in the next 30 days 🎉</div>'; return; }
+  items = items.slice(0, 10);
+  if (!items.length) { list.innerHTML = '<div class="hw-empty">Nothing due in the next 2 weeks</div>'; return; }
   list.innerHTML = items.map(function(item) {
     var dateStr = item.daysLeft < 0 ? 'Overdue' : item.daysLeft === 0 ? 'Today' : item.daysLeft === 1 ? 'Tomorrow' : 'In ' + item.daysLeft + 'd';
     var cls = item.daysLeft < 0 ? 'upc-overdue' : item.daysLeft <= 3 ? 'upc-soon' : '';
@@ -5651,51 +5689,95 @@ function renderCalendar() {
   }
   grid.innerHTML = html;
 }
-function calPrevMonth() { _calMonth--; if(_calMonth<0){_calMonth=11;_calYear--;} document.getElementById('cal-detail').style.display='none'; renderCalendar(); }
-function calNextMonth() { _calMonth++; if(_calMonth>11){_calMonth=0;_calYear++;} document.getElementById('cal-detail').style.display='none'; renderCalendar(); }
+function calPrevMonth() { _calMonth--; if(_calMonth<0){_calMonth=11;_calYear--;} _calSelectedDay=null; var e=document.getElementById('cal-detail-empty'); var c=document.getElementById('cal-detail-content'); if(e)e.style.display=''; if(c)c.style.display='none'; renderCalendar(); }
+function calNextMonth() { _calMonth++; if(_calMonth>11){_calMonth=0;_calYear++;} _calSelectedDay=null; var e=document.getElementById('cal-detail-empty'); var c=document.getElementById('cal-detail-content'); if(e)e.style.display=''; if(c)c.style.display='none'; renderCalendar(); }
+var _calSelectedDay = null;
+
 function calShowDay(ds) {
-  var detail = document.getElementById('cal-detail');
-  if (!detail) return;
   document.querySelectorAll('.cal-day').forEach(function(el){ el.classList.remove('cal-selected'); });
   var dayEl = document.querySelector('.cal-day[data-date="'+ds+'"]');
   if (dayEl) dayEl.classList.add('cal-selected');
+  _calSelectedDay = ds;
+  var emptyEl   = document.getElementById('cal-detail-empty');
+  var contentEl = document.getElementById('cal-detail-content');
+  if (!contentEl) return;
   var its = [];
   try { JSON.parse(localStorage.getItem('fk_todos')||'[]').forEach(function(t){ if(t.dueDate&&t.dueDate.slice(0,10)===ds&&!t.done) its.push({type:'todo',label:t.text}); }); } catch(e){}
-  (_ptMilestones||[]).forEach(function(m){ if(m.due_date&&m.due_date.slice(0,10)===ds) its.push({type:'milestone',label:m.title}); });
+  (window._ptMilestones||[]).forEach(function(m){ if(m.due_date&&m.due_date.slice(0,10)===ds) its.push({type:'milestone',label:m.title}); });
   (window._ptTasks||[]).forEach(function(t){ if(t.due_date&&t.due_date.slice(0,10)===ds) its.push({type:'todo',label:t.title}); });
-  _calEvents.filter(function(e){ return e.date===ds; }).forEach(function(e){ its.push({type:'event',label:e.title,id:e.id}); });
+  _calEvents.filter(function(e){ return e.date===ds; }).forEach(function(e){ its.push({type:'event',label:e.title,id:e.id,location:e.location,duration:e.duration,alert:e.alert}); });
   var d = new Date(ds+'T12:00:00');
   var dlbl = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  detail.style.display = 'block';
-  detail.innerHTML = '<div class="cal-detail-header"><div class="cal-detail-date">'+dlbl+'</div>'+
-    '<button class="hw-title-action" onclick="calAddEvent(\''+ds+'\')">+ Add event</button></div>'+
+  if (emptyEl) emptyEl.style.display = 'none';
+  contentEl.style.display = '';
+  contentEl.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
+      '<div style="font-size:13px;font-weight:700;color:var(--ink)">'+escapeHTML(dlbl)+'</div>'+
+      '<button class="hw-title-action" onclick="calShowAddForm(\''+ds+'\')">+ Add event</button>'+
+    '</div>'+
     (its.length ? its.map(function(it){
-      return '<div class="cal-detail-item"><span class="cal-dot '+it.type+'"></span>'+
-        '<span style="flex:1;color:var(--ink)">'+escapeHTML(it.label)+'</span>'+
-        (it.id?'<button onclick="calDeleteEvent('+it.id+')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:16px;line-height:1;padding:0">\u00d7</button>':'')+
+      return '<div class="cal-detail-item">'+
+        '<span class="cal-dot '+it.type+'"></span>'+
+        '<div style="flex:1;min-width:0">'+
+          '<div style="font-size:12px;color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHTML(it.label)+'</div>'+
+          (it.location?'<div style="font-size:11px;color:var(--ink-light)">\uD83D\uDCCD '+escapeHTML(it.location)+'</div>':'')+
+          (it.duration?'<div style="font-size:11px;color:var(--ink-light)">\u23F1 '+escapeHTML(it.duration)+'</div>':'')+
+          (it.alert?'<div style="font-size:11px;color:var(--ink-light)">\uD83D\uDD14 '+escapeHTML(it.alert)+'</div>':'')+
+        '</div>'+
+        (it.id?'<button onclick="calDeleteEvent('+it.id+')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;flex-shrink:0">\u00d7</button>':'')+
         '</div>';
-    }).join('') : '<div style="font-size:12px;color:var(--ink-light);padding:4px 0">No events — click + Add event to schedule something.</div>');
+    }).join('') : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">No events scheduled</div>') +
+    '<div id="cal-add-form-wrap"></div>';
 }
 function calAddEvent(dateStr) {
-  var title = prompt('Event title:');
-  if (!title) return;
-  var date = dateStr;
-  if (!date) {
-    date = prompt('Date (YYYY-MM-DD):', new Date().toISOString().slice(0,10));
-    if (!date) return;
-  }
-  _calEvents.push({ id: Date.now(), date: date, title: title });
+  calShowAddForm(dateStr || new Date().toISOString().slice(0,10));
+}
+
+function calShowAddForm(ds) {
+  if (ds && ds !== _calSelectedDay) calShowDay(ds);
+  var wrap = document.getElementById('cal-add-form-wrap');
+  if (!wrap) return;
+  wrap.innerHTML =
+    '<div class="cal-event-form">'+
+      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:10px">New Event</div>'+
+      '<div class="m-lbl" style="margin-top:0">Title *</div><input class="m-inp" id="cal-ev-title" placeholder="e.g. Client call" style="margin-bottom:0">'+
+      '<div class="m-lbl">Location</div><input class="m-inp" id="cal-ev-location" placeholder="e.g. Zoom / 123 Street" style="margin-bottom:0">'+
+      '<div class="m-lbl">Duration</div><input class="m-inp" id="cal-ev-duration" placeholder="e.g. 1 hour, 30 mins" style="margin-bottom:0">'+
+      '<div class="m-lbl">Alert</div>'+
+      '<select class="m-sel" id="cal-ev-alert">'+
+        '<option value="">No alert</option>'+
+        '<option value="At time of event">At time of event</option>'+
+        '<option value="5 min before">5 min before</option>'+
+        '<option value="15 min before">15 min before</option>'+
+        '<option value="30 min before">30 min before</option>'+
+        '<option value="1 hour before">1 hour before</option>'+
+        '<option value="1 day before">1 day before</option>'+
+      '</select>'+
+      '<div style="display:flex;gap:8px;margin-top:12px">'+
+        '<button class="pt-save-btn" style="flex:1" onclick="calSaveEvent(\''+ds+'\')">Save event</button>'+
+        '<button class="btn-outline" onclick="document.getElementById(\'cal-add-form-wrap\').innerHTML=\'\'">Cancel</button>'+
+      '</div>'+
+    '</div>';
+  setTimeout(function(){ var t=document.getElementById('cal-ev-title'); if(t) t.focus(); }, 50);
+}
+
+function calSaveEvent(ds) {
+  var title    = (document.getElementById('cal-ev-title')||{}).value||'';
+  var location = (document.getElementById('cal-ev-location')||{}).value||'';
+  var duration = (document.getElementById('cal-ev-duration')||{}).value||'';
+  var alert    = (document.getElementById('cal-ev-alert')||{}).value||'';
+  if (!title.trim()) { showToast('Title is required'); return; }
+  _calEvents.push({ id: Date.now(), date: ds, title: title.trim(), location: location.trim(), duration: duration.trim(), alert: alert });
   localStorage.setItem('fk_cal_events', JSON.stringify(_calEvents));
   renderCalendar();
-  calShowDay(date);
+  calShowDay(ds);
   showToast('\u2713 Event added');
 }
 function calDeleteEvent(id) {
   _calEvents = _calEvents.filter(function(e){ return e.id !== id; });
   localStorage.setItem('fk_cal_events', JSON.stringify(_calEvents));
   renderCalendar();
-  var detail = document.getElementById('cal-detail');
-  if (detail) detail.style.display = 'none';
+  if (_calSelectedDay) calShowDay(_calSelectedDay);
   showToast('Event removed');
 }
 
@@ -5703,10 +5785,16 @@ function calDeleteEvent(id) {
 function initHomeDashboard() {
   renderRecentPanels();
   loadTodos();
-  updateTodoProjDropdowns();
   renderUpcoming();
   loadProjectTasksForHome();
   renderCalendar();
+  // Load projects for todo filter and upcoming deadlines (even if Projects panel not yet visited)
+  if (!window._ptInit) {
+    window._ptInit = true;
+    if (typeof loadProjects === 'function') loadProjects();
+  } else {
+    updateTodoProjDropdowns();
+  }
 }
 
 // Income goal bar
@@ -6095,6 +6183,10 @@ function renderPtList() {
       (dates ? '<span style="font-size:11px;color:var(--ink-light)">' + escapeHTML(dates) + '</span>' : '') +
       '</div></div>';
   }).join('');
+  // Keep gantt in sync
+  if (document.getElementById('pt-global-gantt-wrap') && document.getElementById('pt-global-gantt-wrap').style.display !== 'none') {
+    renderGlobalGantt();
+  }
 }
 
 function selectPtProject(id) {
@@ -6809,6 +6901,18 @@ function toggleGlobalGantt() {
   if (!visible) renderGlobalGantt();
 }
 
+function togglePtListView() {
+  var listEl = document.getElementById('pt-projects-list');
+  var ganttEl = document.getElementById('pt-global-gantt-wrap');
+  var btn = document.getElementById('pt-list-toggle-btn');
+  if (!listEl || !ganttEl) return;
+  var listVisible = listEl.style.display !== 'none';
+  listEl.style.display = listVisible ? 'none' : '';
+  ganttEl.style.display = listVisible ? '' : 'none';
+  if (btn) btn.textContent = listVisible ? '\u2630 List view' : '\uD83D\uDCC5 Gantt view';
+  if (!listVisible) renderGlobalGantt();
+}
+
 function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
   var tickInterval = totalDays > 120 ? 14 : 7;
   var ticks = [];
@@ -6863,7 +6967,14 @@ function ganttScrollToToday(wrapperId) {
 function renderGlobalGantt() {
   var el = document.getElementById('pt-global-gantt');
   if (!el) return;
+  var sortSel = document.getElementById('pt-gantt-sort');
+  var sortBy = sortSel ? sortSel.value : 'created';
   var active = (_ptProjects || []).filter(function(p){ return p.status !== 'completed' && p.status !== 'archived'; });
+  if (sortBy === 'name') {
+    active = active.slice().sort(function(a,b){ return (a.name||'').localeCompare(b.name||''); });
+  } else if (sortBy === 'deadline') {
+    active = active.slice().sort(function(a,b){ return (a.end_date||'9999') < (b.end_date||'9999') ? -1 : 1; });
+  }
   if (!active.length) { el.innerHTML = '<div style="padding:20px;color:var(--ink-light);font-size:13px">No active projects found.</div>'; return; }
 
   var allDates = [];
