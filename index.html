@@ -3038,11 +3038,12 @@ var RateLimiter = (function() {
 </div>
 
 <!-- ── Invoice Full Preview Overlay ── -->
-<div id="foei-full-preview-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);overflow-y:auto;padding:48px 20px">
-  <div style="max-width:720px;margin:0 auto">
+<div id="foei-full-preview-overlay" onclick="if(event.target===this)foeiCloseFullPreview()" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.75);overflow-y:auto;padding:48px 20px;flex-direction:column;align-items:center">
+  <div style="max-width:720px;width:100%">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <button onclick="foeiCloseFullPreview()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:var(--font-body)">&#8592; Back to edit</button>
       <span style="color:#fff;font-size:14px;font-weight:700;letter-spacing:.03em">Invoice Preview</span>
-      <button onclick="document.getElementById('foei-full-preview-overlay').style.display='none'" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;border-radius:50%;width:34px;height:34px;cursor:pointer;line-height:1;font-family:var(--font-body)">&times;</button>
+      <button onclick="foeiDownloadPdf()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:var(--font-body)">&#8659; Download PDF</button>
     </div>
     <div id="foei-full-preview-content"></div>
   </div>
@@ -5157,13 +5158,28 @@ function foeiRenderPreview() {
     (notes?'<div class="inv-footer"><div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val">'+escapeHTML(notes)+'</div></div></div>':'');
 }
 function foeiShowFullPreview() {
-  foeiRenderPreview();
-  var prev = document.getElementById('foei-preview');
   var content = document.getElementById('foei-full-preview-content');
   var overlay = document.getElementById('foei-full-preview-overlay');
-  if (!prev || !content || !overlay) return;
-  content.innerHTML = prev.outerHTML;
-  overlay.style.display = '';
+  var editModal = document.getElementById('fo-inv-edit-modal');
+  if (!content || !overlay) return;
+  // Temporarily swap IDs so foeiRenderPreview writes into the visible overlay content
+  var hidden = document.getElementById('foei-preview');
+  if (hidden) hidden.id = '__foei_bak';
+  content.id = 'foei-preview';
+  content.className = '';
+  foeiRenderPreview(); // sets content.className='inv-paper' and innerHTML
+  content.id = 'foei-full-preview-content';
+  if (hidden) hidden.id = 'foei-preview';
+  // Hide edit modal, show overlay
+  if (editModal) editModal.style.display = 'none';
+  overlay.style.display = 'flex';
+  overlay.scrollTop = 0;
+}
+function foeiCloseFullPreview() {
+  var overlay = document.getElementById('foei-full-preview-overlay');
+  var editModal = document.getElementById('fo-inv-edit-modal');
+  if (overlay) overlay.style.display = 'none';
+  if (editModal) editModal.style.display = 'flex';
 }
 function foeiDownloadPdf() {
   var prev = document.getElementById('foei-preview');
