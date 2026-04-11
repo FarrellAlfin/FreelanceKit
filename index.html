@@ -318,10 +318,10 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .dsb-scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 0 8px}
 .dsb-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--on-surface-light);padding:0 18px;margin:20px 0 8px;white-space:nowrap;overflow:hidden;transition:all .2s;font-family:'Manrope',sans-serif}
 .dsb-section:first-child{margin-top:8px}
-.dsb-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:13px;color:var(--on-surface-mid);cursor:pointer;border-left:3px solid transparent;transition:all .15s;white-space:nowrap;font-family:'Manrope',sans-serif}
+.dsb-item{display:flex;align-items:center;gap:0;padding:8px 18px;font-size:13px;color:var(--on-surface-mid);cursor:pointer;border-left:3px solid transparent;transition:all .15s;white-space:nowrap;font-family:'Manrope',sans-serif}
 .dsb-item:hover{background:var(--surface-container);color:var(--on-surface)}
 .dsb-item.active{background:var(--surface-container);color:var(--on-surface);border-left-color:var(--tertiary-fixed-dim);font-weight:600}
-.dsb-item .dsb-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;color:var(--on-surface-mid)}
+.dsb-item .dsb-icon{display:none}
 .dsb-item .dsb-label{overflow:hidden;transition:opacity .15s,max-width .22s ease;max-width:180px;opacity:1}
 .dsb-count{margin-left:auto;font-size:10px;background:var(--surface-high);color:var(--on-surface-light);padding:1px 7px;border-radius:4px;transition:opacity .15s;font-weight:700}
 .dsb-item.active .dsb-count{background:rgba(78,222,163,0.2);color:var(--on-tertiary-fixed-variant)}
@@ -2928,6 +2928,48 @@ var RateLimiter = (function() {
 
 <div class="toast" id="toast"></div>
 
+<!-- ── Invoice Inline Edit Modal ── -->
+<div id="fo-inv-edit-modal" onclick="if(event.target===this)foCloseEditInv()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:500;overflow-y:auto;padding:40px 20px;align-items:flex-start;justify-content:center">
+  <div style="width:100%;max-width:680px;background:var(--white);border-radius:var(--radius-lg);box-shadow:0 8px 40px rgba(0,0,0,0.18);overflow:hidden;margin:0 auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)">
+      <div style="font-size:17px;font-weight:700;color:var(--ink)">Edit Invoice</div>
+      <button onclick="foCloseEditInv()" style="background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:var(--ink-mid)">&times;</button>
+    </div>
+    <div style="padding:24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><div class="m-lbl">Invoice #</div><input class="m-inp" id="foei-num" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Status</div>
+          <select class="m-sel" id="foei-status">
+            <option value="draft">Draft</option><option value="sent">Sent</option>
+            <option value="paid">Paid</option><option value="overdue">Overdue</option>
+          </select>
+        </div>
+        <div><div class="m-lbl">Issue date</div><input class="m-inp" id="foei-issue" type="date" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Due date</div><input class="m-inp" id="foei-due" type="date" style="margin-bottom:0"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><div class="m-lbl">Client name</div><input class="m-inp" id="foei-client" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Contact person</div><input class="m-inp" id="foei-contact" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Client email</div><input class="m-inp" id="foei-email" style="margin-bottom:0"></div>
+        <div><div class="m-lbl">Project</div><input class="m-inp" id="foei-project" style="margin-bottom:0"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:8px;margin-top:4px">Line Items</div>
+      <div id="foei-items-wrap" style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:8px;background:var(--white)"></div>
+      <button onclick="foeiAddItem()" class="btn-outline" style="font-size:12px;padding:4px 12px;margin-bottom:16px">+ Add line item</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><div class="m-lbl">Tax (%)</div><input class="m-inp" id="foei-tax" type="number" placeholder="0" style="margin-bottom:0" oninput="foeiUpdateTotal()"></div>
+        <div><div class="m-lbl">Discount (%)</div><input class="m-inp" id="foei-disc" type="number" placeholder="0" style="margin-bottom:0" oninput="foeiUpdateTotal()"></div>
+      </div>
+      <div><div class="m-lbl">Notes</div><textarea class="pt-ta" id="foei-notes" style="min-height:56px;margin-bottom:0"></textarea></div>
+      <div style="text-align:right;padding:14px 0 4px;font-size:16px;font-weight:700;color:var(--ink);border-top:1px solid var(--border);margin-top:14px">Total: <span id="foei-total">$0.00</span></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--border);background:var(--cream)">
+      <button class="btn-outline" onclick="foCloseEditInv()">Cancel</button>
+      <button class="pt-save-btn" onclick="foSaveEditInv()">Save changes</button>
+    </div>
+  </div>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ═══════════════ SHARED ═══════════════
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>t.classList.remove('show'),3200)}
@@ -4389,7 +4431,7 @@ function renderClientList() {
     return '<div class="ct-row">' +
       '<div class="ct-cell name">' + escapeHTML(cl.name||'') + '</div>' +
       '<div class="ct-cell email">' + escapeHTML(cl.email||'—') + '</div>' +
-      '<div class="ct-cell">' + escapeHTML(cl.phone||'—') + '</div>' +
+      '<div class="ct-cell" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHTML(cl.phone||'—') + '</div>' +
       '<div class="ct-cell">' + escapeHTML(cl.company||'—') + '</div>' +
       '<div class="ct-cell" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">' + projHtml +
         '<button class="ct-btn" data-client-id="' + escapeHTML(cl.id) + '" data-client-name="' + escapeHTML(cl.name||'') + '" onclick="openClientLinkModal(this.dataset.clientId, this.dataset.clientName)" style="font-size:10px;padding:2px 7px;margin-left:4px" title="Link / unlink projects">🔗</button>' +
@@ -4679,6 +4721,23 @@ function filterInvHistory(filter, btn) {
 
 var _foManualIncome = JSON.parse(localStorage.getItem('fk_manual_income') || '[]');
 
+function _animateCount(el, targetVal, duration) {
+  if (!el) return;
+  var startTime = null;
+  var startVal = parseFloat(el.dataset.animVal) || 0;
+  el.dataset.animVal = targetVal;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var cur = startVal + (targetVal - startVal) * eased;
+    el.textContent = fmD(cur);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = fmD(targetVal);
+  }
+  requestAnimationFrame(step);
+}
+
 function foSwitchTab(tab, btn) {
   document.querySelectorAll('.fo-tab').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
@@ -4707,10 +4766,10 @@ function renderFinancialOverview() {
   }).reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
   var manualTotal = manuals.reduce(function(s,m){ return s + (parseFloat(m.amount)||0); }, 0);
 
-  document.getElementById('fo-total-earned').textContent = fmD(totalEarned);
-  document.getElementById('fo-outstanding').textContent = fmD(outstanding);
-  document.getElementById('fo-this-month').textContent = fmD(thisMonthEarned);
-  document.getElementById('fo-total-income').textContent = fmD(totalEarned + manualTotal);
+  _animateCount(document.getElementById('fo-total-earned'), totalEarned, 900);
+  _animateCount(document.getElementById('fo-outstanding'), outstanding, 900);
+  _animateCount(document.getElementById('fo-this-month'), thisMonthEarned, 900);
+  _animateCount(document.getElementById('fo-total-income'), totalEarned + manualTotal, 900);
   document.getElementById('fo-month-name').textContent = monthNames[now.getMonth()] + ' ' + now.getFullYear();
 
   // Monthly chart — last 6 months
@@ -4894,14 +4953,98 @@ function _syncInvProjLinkUI() {
 }
 
 function editInvoiceFromHistory(id) {
+  foOpenEditInv(id);
+}
+
+// ── Inline invoice edit modal ──
+var _foEditItems = [];
+var _foEditInvId = null;
+
+function foOpenEditInv(id) {
   var inv = _invoices.find(function(i){ return i.id === id; });
   if (!inv) return;
-  _editingInvoiceId = id; // track so Save does UPDATE not INSERT
-  lineItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
-  _loadInvFromRecord(inv);
-  renderLineItems(); updateInv();
-  showPanel('invoice', document.getElementById('nav-invoice'));
-  setTimeout(_syncInvProjLinkUI, 50);
+  _foEditInvId = id;
+  _foEditItems = (inv.line_items || []).map(function(li){ return Object.assign({}, li); });
+  var g = function(elId, val){ var el=document.getElementById(elId); if(el) el.value = (val == null ? '' : val); };
+  g('foei-num', inv.invoice_number);
+  document.getElementById('foei-status').value = inv.status || 'draft';
+  g('foei-issue', inv.issue_date);
+  g('foei-due', inv.due_date);
+  g('foei-client', inv.client_name);
+  g('foei-contact', inv.client_contact);
+  g('foei-email', inv.client_email);
+  g('foei-project', inv.project);
+  g('foei-tax', inv.tax_pct || 0);
+  g('foei-disc', inv.discount_pct || 0);
+  g('foei-notes', inv.notes || '');
+  foeiRenderItems();
+  foeiUpdateTotal();
+  document.getElementById('fo-inv-edit-modal').style.display = 'flex';
+}
+function foCloseEditInv() {
+  document.getElementById('fo-inv-edit-modal').style.display = 'none';
+}
+function foeiRenderItems() {
+  var wrap = document.getElementById('foei-items-wrap');
+  if (!wrap) return;
+  if (!_foEditItems.length) {
+    wrap.innerHTML = '<div style="padding:12px 14px;font-size:13px;color:var(--ink-light)">No line items yet.</div>';
+    return;
+  }
+  wrap.innerHTML = _foEditItems.map(function(item, i) {
+    return '<div style="display:grid;grid-template-columns:1fr 70px 100px auto;gap:6px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border)">' +
+      '<input class="m-inp" style="margin:0;font-size:12px" value="' + escapeHTML(item.desc||'') + '" oninput="_foEditItems[' + i + '].desc=this.value" placeholder="Description">' +
+      '<input class="m-inp" style="margin:0;font-size:12px;text-align:center" value="' + (item.qty!=null?item.qty:1) + '" type="number" min="0.01" step="0.01" oninput="_foEditItems[' + i + '].qty=parseFloat(this.value)||1;foeiUpdateTotal()" placeholder="Qty">' +
+      '<input class="m-inp" style="margin:0;font-size:12px;text-align:right" value="' + (item.rate!=null?item.rate:0) + '" type="number" min="0" step="0.01" oninput="_foEditItems[' + i + '].rate=parseFloat(this.value)||0;foeiUpdateTotal()" placeholder="Rate">' +
+      '<button onclick="_foEditItems.splice(' + i + ',1);foeiRenderItems();foeiUpdateTotal()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:18px;line-height:1;padding:0 4px">\u00d7</button>' +
+      '</div>';
+  }).join('');
+}
+function foeiAddItem() {
+  _foEditItems.push({ desc: '', qty: 1, rate: 0 });
+  foeiRenderItems();
+  foeiUpdateTotal();
+}
+function foeiUpdateTotal() {
+  var sub = _foEditItems.reduce(function(s,li){ return s + ((parseFloat(li.qty)||0) * (parseFloat(li.rate)||0)); }, 0);
+  var disc = parseFloat((document.getElementById('foei-disc')||{}).value) || 0;
+  var tax  = parseFloat((document.getElementById('foei-tax') ||{}).value) || 0;
+  var total = sub * (1 - disc/100) * (1 + tax/100);
+  var el = document.getElementById('foei-total');
+  if (el) el.textContent = fmD(total);
+}
+async function foSaveEditInv() {
+  if (!_currentUser || !_foEditInvId) return;
+  var g = function(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; };
+  var sub = _foEditItems.reduce(function(s,li){ return s + ((parseFloat(li.qty)||0)*(parseFloat(li.rate)||0)); }, 0);
+  var disc = parseFloat(g('foei-disc')) || 0;
+  var tax  = parseFloat(g('foei-tax'))  || 0;
+  var total = sub * (1 - disc/100) * (1 + tax/100);
+  var payload = {
+    invoice_number: g('foei-num'),
+    status: g('foei-status'),
+    issue_date: g('foei-issue') || null,
+    due_date: g('foei-due') || null,
+    client_name: g('foei-client'),
+    client_contact: g('foei-contact'),
+    client_email: g('foei-email'),
+    project: g('foei-project'),
+    line_items: _foEditItems,
+    tax_pct: tax, discount_pct: disc,
+    notes: g('foei-notes'),
+    total: total,
+    updated_at: new Date().toISOString()
+  };
+  var res = await _supabase.from('invoices').update(payload).eq('id', _foEditInvId).eq('user_id', _currentUser.id).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  if (res.data) {
+    var idx = _invoices.findIndex(function(i){ return i.id === _foEditInvId; });
+    if (idx >= 0) _invoices[idx] = res.data;
+  }
+  foCloseEditInv();
+  renderInvHistory();
+  renderFinancialOverview();
+  showToast('\u2713 Invoice updated');
 }
 
 // ═══════════════ RATE SCENARIOS ═══════════════
