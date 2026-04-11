@@ -868,6 +868,38 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .ct-proj-chip:hover{opacity:.75}
 .client-empty{text-align:center;padding:40px;color:var(--ink-light);font-size:14px}
 
+/* ── FINANCIAL OVERVIEW ── */
+.fo-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.fo-stat-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.fo-sc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:6px}
+.fo-sc-val{font-size:24px;font-weight:700;font-family:var(--font-mono);color:var(--ink);line-height:1}
+.fo-sc-val.fo-sc-warn{color:var(--amber)}
+.fo-sc-val.fo-sc-accent{color:var(--sage)}
+.fo-sc-sub{font-size:11px;color:var(--ink-light);margin-top:4px}
+.fo-tab-bar{display:flex;gap:6px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0}
+.fo-tab{padding:8px 16px;border:none;background:transparent;font-family:var(--font-body);font-size:13px;color:var(--ink-mid);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.fo-tab:hover{color:var(--ink)}
+.fo-tab.active{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
+.fo-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:14px}
+.fo-chart-wrap{display:flex;align-items:flex-end;gap:8px;height:120px;background:var(--cream);border-radius:var(--radius);padding:16px;overflow-x:auto}
+.fo-bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:36px}
+.fo-bar{background:var(--amber-mid);border-radius:3px 3px 0 0;width:100%;min-height:4px;transition:height .3s}
+.fo-bar-lbl{font-size:9px;color:var(--ink-light);white-space:nowrap}
+.fo-bar-val{font-size:9px;color:var(--ink-mid);font-family:var(--font-mono)}
+.fo-proj-table{width:100%;border-collapse:collapse}
+.fo-proj-tr{border-bottom:1px solid var(--border)}
+.fo-proj-tr:last-child{border-bottom:none}
+.fo-proj-td{padding:10px 14px;font-size:13px;color:var(--ink-mid)}
+.fo-proj-td.name{color:var(--ink);font-weight:500}
+.fo-proj-td.amt{font-family:var(--font-mono);color:var(--ink);font-weight:600;text-align:right}
+.fo-proj-bar-wrap{height:6px;background:var(--border);border-radius:3px;width:100%;min-width:80px}
+.fo-proj-bar-fill{height:6px;background:var(--sage);border-radius:3px;transition:width .3s}
+.fo-manual-row{display:grid;grid-template-columns:1fr 100px 110px 80px auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--white)}
+.fo-manual-row:last-child{border-bottom:none}
+.fo-manual-row-head{display:grid;grid-template-columns:1fr 100px 110px 80px auto;gap:10px;padding:8px 14px;background:var(--cream-dark);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light)}
+.fo-manual-wrap{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--white)}
+.fo-add-form{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:grid;grid-template-columns:1fr 130px 140px 90px auto;gap:10px;align-items:end}
+.fo-empty{text-align:center;padding:40px;color:var(--ink-light);font-size:13px}
 /* ── INVOICE HISTORY ── */
 .inv-hist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
 .inv-status-filter{display:flex;gap:6px}
@@ -1814,59 +1846,54 @@ var RateLimiter = (function() {
       <div class="dsb-scroll-area">
       <div class="dsb-section">Library</div>
       <div class="dsb-item active" onclick="showPanel('home',this)" id="nav-home">
-        <span class="dsb-icon">&#127968;</span><span class="dsb-label">Home</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Home</span>
       </div>
 
       <div class="dsb-section">Business Operations</div>
       <div class="dsb-item" onclick="showPanel('projects',this)" id="nav-projects">
-        <span class="dsb-icon">&#128736;&#65039;</span><span class="dsb-label">Project Tracker</span>
-        <span class="dsb-count">New</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Project Tracker</span>
       </div>
       <div class="dsb-item" onclick="showPanel('pipeline',this)" id="nav-pipeline">
-        <span class="dsb-icon">&#128193;&#65039;</span><span class="dsb-label">Pipeline Tracker</span>
-        <span class="dsb-count">Live</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Pipeline Tracker</span>
       </div>
       <div class="dsb-item" onclick="showPanel('tax',this)" id="nav-tax">
-        <span class="dsb-icon">&#129518;</span><span class="dsb-label">Tax Tracker</span>
-        <span class="dsb-count">Live</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Tax Tracker</span>
       </div>
       <div class="dsb-item" onclick="showPanel('timesheet',this)" id="nav-timesheet">
-        <span class="dsb-icon">&#9201;</span><span class="dsb-label">Timesheet</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Timesheet</span>
       </div>
 
-<div class="dsb-section">Invoicing &amp; Payments</div>
+      <div class="dsb-section">Invoicing &amp; Payments</div>
       <div class="dsb-item" onclick="showPanel('invoice',this)" id="nav-invoice">
-        <span class="dsb-icon">&#129534;</span><span class="dsb-label">Invoice Builder</span>
-        <span class="dsb-count">Live</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Invoice Builder</span>
       </div>
 
       <div class="dsb-section">Pricing</div>
       <div class="dsb-item" onclick="showPanel('ratecalc',this)" id="nav-ratecalc">
-        <span class="dsb-icon">&#128202;</span><span class="dsb-label">Rate Calculator</span>
-        <span class="dsb-count">Live</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Rate Calculator</span>
       </div>
 
       <div class="dsb-section">Client Onboarding</div>
       <div class="dsb-item" onclick="showPanel('welcome',this)" id="nav-welcome">
-        <span class="dsb-icon">&#127873;</span><span class="dsb-label">Welcome Packet</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Welcome Packet</span>
       </div>
       <div class="dsb-item" onclick="showPanel('brief',this)" id="nav-brief">
-        <span class="dsb-icon">&#128203;</span><span class="dsb-label">Project Brief Form</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Project Brief Form</span>
       </div>
 
       <div class="dsb-section">My Business</div>
       <div class="dsb-item" onclick="showPanel('mydetails',this)" id="nav-mydetails">
-        <span class="dsb-icon">&#9881;&#65039;</span><span class="dsb-label">My Details</span>
+        <span class="dsb-icon"></span><span class="dsb-label">My Details</span>
       </div>
       <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
-        <span class="dsb-icon">&#128101;</span><span class="dsb-label">Client Contacts</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Client Contacts</span>
       </div>
       <div class="dsb-item" onclick="showPanel('invhistory',this)" id="nav-invhistory">
-        <span class="dsb-icon">&#128196;</span><span class="dsb-label">Invoice History</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Financial Overview</span>
       </div>
       <div class="dsb-section">Account</div>
       <div class="dsb-item" onclick="handleSignOut()">
-        <span class="dsb-icon">&#128682;</span><span class="dsb-label">Sign out</span>
+        <span class="dsb-icon"></span><span class="dsb-label">Sign out</span>
       </div>
 
       </div><!-- end dsb-scroll-area -->
@@ -2269,7 +2296,7 @@ var RateLimiter = (function() {
               </div>
             </div>
             <div class="ip-actions">
-              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+              <div id="inv-proj-link-wrap" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
                 <label style="font-size:12px;color:var(--ink-mid);white-space:nowrap">Save to project:</label>
                 <select id="inv-proj-link" style="flex:1;min-width:140px;font-family:var(--font-body);font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;background:var(--white);color:var(--ink)">
                   <option value="">— none —</option>
@@ -2784,34 +2811,93 @@ var RateLimiter = (function() {
         <div id="gts-body"><div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">Loading timesheet data…</div></div>
       </div>
 
-      <!-- ─── INVOICE HISTORY ─── -->
+      <!-- ─── FINANCIAL OVERVIEW ─── -->
       <div class="tmpl-panel" id="panel-invhistory">
         <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing</span></div>
-          <div class="tv-title">Invoice <em>History</em></div>
-          <div class="tv-desc">Every invoice you've saved, with live status tracking. Update status as invoices are sent, viewed, and paid.</div>
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Finance</span></div>
+          <div class="tv-title">Financial <em>Overview</em></div>
+          <div class="tv-desc">A snapshot of your freelance earnings — compiled from invoices and other income sources.</div>
         </div>
-        <div class="inv-hist-header">
-          <div class="inv-status-filter">
-            <button class="isf-btn active" onclick="filterInvHistory('all',this)">All</button>
-            <button class="isf-btn" onclick="filterInvHistory('draft',this)">Draft</button>
-            <button class="isf-btn" onclick="filterInvHistory('sent',this)">Sent</button>
-            <button class="isf-btn" onclick="filterInvHistory('paid',this)">Paid</button>
-            <button class="isf-btn" onclick="filterInvHistory('overdue',this)">Overdue</button>
+
+        <!-- Stats -->
+        <div class="fo-stats">
+          <div class="fo-stat-card">
+            <div class="fo-sc-label">Total Earned</div>
+            <div class="fo-sc-val" id="fo-total-earned">$0</div>
+            <div class="fo-sc-sub">from paid invoices</div>
           </div>
-          <button class="btn-use" onclick="_editingInvoiceId=null;showPanel('invoice',document.getElementById('nav-invoice'))">+ New invoice</button>
+          <div class="fo-stat-card">
+            <div class="fo-sc-label">Outstanding</div>
+            <div class="fo-sc-val fo-sc-warn" id="fo-outstanding">$0</div>
+            <div class="fo-sc-sub">invoiced, not yet paid</div>
+          </div>
+          <div class="fo-stat-card">
+            <div class="fo-sc-label">This Month</div>
+            <div class="fo-sc-val" id="fo-this-month">$0</div>
+            <div class="fo-sc-sub">paid in <span id="fo-month-name">—</span></div>
+          </div>
+          <div class="fo-stat-card">
+            <div class="fo-sc-label">Total Income</div>
+            <div class="fo-sc-val fo-sc-accent" id="fo-total-income">$0</div>
+            <div class="fo-sc-sub">invoices + other income</div>
+          </div>
         </div>
-        <div class="inv-hist-table">
-          <div class="iht-head">
-            <div class="iht-hc">Invoice #</div>
-            <div class="iht-hc">Client</div>
-            <div class="iht-hc">Project</div>
-            <div class="iht-hc">Total</div>
-            <div class="iht-hc">Due</div>
-            <div class="iht-hc">Status</div>
-            <div class="iht-hc"></div>
+
+        <!-- Tabs -->
+        <div class="fo-tab-bar">
+          <button class="fo-tab active" onclick="foSwitchTab('overview',this)">Overview</button>
+          <button class="fo-tab" onclick="foSwitchTab('invoices',this)">All Invoices</button>
+          <button class="fo-tab" onclick="foSwitchTab('manual',this)">Other Income</button>
+        </div>
+
+        <!-- Overview tab -->
+        <div id="fo-panel-overview">
+          <div class="fo-section-title">Monthly Earnings</div>
+          <div class="fo-chart-wrap" id="fo-chart"></div>
+          <div class="fo-section-title" style="margin-top:24px">By Project / Client</div>
+          <div id="fo-by-project"></div>
+        </div>
+
+        <!-- Invoices tab -->
+        <div id="fo-panel-invoices" style="display:none">
+          <div class="inv-hist-header">
+            <div class="inv-status-filter">
+              <button class="isf-btn active" onclick="filterInvHistory('all',this)">All</button>
+              <button class="isf-btn" onclick="filterInvHistory('draft',this)">Draft</button>
+              <button class="isf-btn" onclick="filterInvHistory('sent',this)">Sent</button>
+              <button class="isf-btn" onclick="filterInvHistory('paid',this)">Paid</button>
+              <button class="isf-btn" onclick="filterInvHistory('overdue',this)">Overdue</button>
+            </div>
+            <button class="btn-use" onclick="_editingInvoiceId=null;_syncInvProjLinkUI();showPanel('invoice',document.getElementById('nav-invoice'))">+ New invoice</button>
           </div>
-          <div id="inv-history-body"><div class="inv-hist-empty">No invoices saved yet. Build one in the Invoice Builder and click Save.</div></div>
+          <div class="inv-hist-table">
+            <div class="iht-head">
+              <div class="iht-hc">Invoice #</div>
+              <div class="iht-hc">Client</div>
+              <div class="iht-hc">Project</div>
+              <div class="iht-hc">Total</div>
+              <div class="iht-hc">Due</div>
+              <div class="iht-hc">Status</div>
+              <div class="iht-hc"></div>
+            </div>
+            <div id="inv-history-body"><div class="inv-hist-empty">No invoices saved yet. Build one in the Invoice Builder and click Save.</div></div>
+          </div>
+        </div>
+
+        <!-- Other Income tab -->
+        <div id="fo-panel-manual" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="fo-section-title" style="margin:0">Other Income Entries</div>
+            <button class="btn-use" onclick="foShowAddIncome()">+ Add income</button>
+          </div>
+          <div id="fo-add-income-form" style="display:none" class="fo-add-form">
+            <div><div style="font-size:11px;font-weight:600;color:var(--ink-light);margin-bottom:4px">Description</div><input class="pt-inp" id="fo-inc-desc" placeholder="e.g. Cash payment from client"></div>
+            <div><div style="font-size:11px;font-weight:600;color:var(--ink-light);margin-bottom:4px">Amount ($)</div><input class="pt-inp" id="fo-inc-amount" type="number" placeholder="0"></div>
+            <div><div style="font-size:11px;font-weight:600;color:var(--ink-light);margin-bottom:4px">Date</div><input class="pt-inp" id="fo-inc-date" type="date"></div>
+            <div><div style="font-size:11px;font-weight:600;color:var(--ink-light);margin-bottom:4px">Source</div><input class="pt-inp" id="fo-inc-source" placeholder="e.g. Bank transfer"></div>
+            <div style="display:flex;gap:6px;padding-top:19px"><button class="pt-save-btn" onclick="foSaveIncome()">Save</button><button class="btn-outline" onclick="foHideAddIncome()">Cancel</button></div>
+          </div>
+          <div id="fo-manual-list"></div>
         </div>
       </div>
 
@@ -2888,10 +2974,11 @@ function showPanel(id,el){
   if(id==='brief'&&!window._briefInit){window._briefInit=true;renderBrief()}
   if(id==='projects'&&!window._ptInit){window._ptInit=true;loadProjects()}
   if(id==='clients'&&!window._ptInit){window._ptInit=true;loadProjects()}
-  if(id==='invoice'){ if(typeof populateInvProjSelect==='function') populateInvProjSelect(); }
+  if(id==='invoice'){ if(typeof populateInvProjSelect==='function') populateInvProjSelect(); _syncInvProjLinkUI(); }
   if(id==='timesheet'){ if(typeof loadGlobalTimesheet==='function') loadGlobalTimesheet(); }
   if(id==='home'){ if(typeof initHomeDashboard==='function') initHomeDashboard(); }
   if(id==='contract'||id==='scope'){ if(typeof populateDocProjSelects==='function') populateDocProjSelects(); }
+  if(id==='invhistory'){ if(typeof renderFinancialOverview==='function') renderFinancialOverview(); }
   if(typeof _trackRecentPanel==='function') _trackRecentPanel(id);
 }
 
@@ -4485,7 +4572,7 @@ function _getBillingInvLink(billingId) {
 async function loadInvoiceHistory() {
   if (!_currentUser) return;
   var res = await _supabase.from('invoices').select('*').eq('user_id', _currentUser.id).order('created_at', { ascending: false });
-  if (res.data) { _invoices = res.data; renderInvHistory(); }
+  if (res.data) { _invoices = res.data; renderInvHistory(); renderFinancialOverview(); }
 }
 
 async function saveInvoiceToHistory() {
@@ -4528,6 +4615,7 @@ async function saveInvoiceToHistory() {
       if (idx >= 0) _invoices[idx] = res.data; else _invoices.unshift(res.data);
     }
     _editingInvoiceId = null;
+    _syncInvProjLinkUI();
   } else {
     // INSERT new invoice
     res = await _supabase.from('invoices').insert(payload).select().single();
@@ -4585,6 +4673,151 @@ function filterInvHistory(filter, btn) {
   document.querySelectorAll('.isf-btn').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   renderInvHistory();
+}
+
+// ═══════════════ FINANCIAL OVERVIEW ═══════════════
+
+var _foManualIncome = JSON.parse(localStorage.getItem('fk_manual_income') || '[]');
+
+function foSwitchTab(tab, btn) {
+  document.querySelectorAll('.fo-tab').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  document.getElementById('fo-panel-overview').style.display = tab === 'overview' ? '' : 'none';
+  document.getElementById('fo-panel-invoices').style.display = tab === 'invoices' ? '' : 'none';
+  document.getElementById('fo-panel-manual').style.display = tab === 'manual' ? '' : 'none';
+  if (tab === 'invoices') renderInvHistory();
+  if (tab === 'manual') foRenderManualList();
+}
+
+function renderFinancialOverview() {
+  if (!document.getElementById('fo-total-earned')) return;
+  var invs = _invoices || [];
+  var manuals = _foManualIncome || [];
+  var now = new Date();
+  var thisMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Stats
+  var totalEarned = invs.filter(function(i){ return i.status === 'paid'; })
+    .reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+  var outstanding = invs.filter(function(i){ return i.status === 'sent' || i.status === 'overdue'; })
+    .reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+  var thisMonthEarned = invs.filter(function(i){
+    return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === thisMonth;
+  }).reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+  var manualTotal = manuals.reduce(function(s,m){ return s + (parseFloat(m.amount)||0); }, 0);
+
+  document.getElementById('fo-total-earned').textContent = fmD(totalEarned);
+  document.getElementById('fo-outstanding').textContent = fmD(outstanding);
+  document.getElementById('fo-this-month').textContent = fmD(thisMonthEarned);
+  document.getElementById('fo-total-income').textContent = fmD(totalEarned + manualTotal);
+  document.getElementById('fo-month-name').textContent = monthNames[now.getMonth()] + ' ' + now.getFullYear();
+
+  // Monthly chart — last 6 months
+  var months = [];
+  for (var m = 5; m >= 0; m--) {
+    var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: monthNames[d.getMonth()] });
+  }
+  var monthTotals = months.map(function(mo) {
+    var invAmt = invs.filter(function(i){ return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === mo.key; })
+      .reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+    var manAmt = manuals.filter(function(m){ return m.date && m.date.slice(0,7) === mo.key; })
+      .reduce(function(s,m){ return s + (parseFloat(m.amount)||0); }, 0);
+    return { label: mo.label, val: invAmt + manAmt };
+  });
+  var maxVal = Math.max.apply(null, monthTotals.map(function(m){ return m.val; }).concat([1]));
+  var chartEl = document.getElementById('fo-chart');
+  if (chartEl) {
+    chartEl.innerHTML = monthTotals.map(function(m) {
+      var pct = Math.round((m.val / maxVal) * 80) + '%';
+      return '<div class="fo-bar-col">' +
+        (m.val > 0 ? '<div class="fo-bar-val">' + fm(m.val) + '</div>' : '<div class="fo-bar-val" style="color:transparent">$0</div>') +
+        '<div class="fo-bar" style="height:' + pct + '"></div>' +
+        '<div class="fo-bar-lbl">' + m.label + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // By project/client
+  var byProj = {};
+  invs.filter(function(i){ return i.status === 'paid'; }).forEach(function(i) {
+    var key = i.project || i.client_name || 'Other';
+    byProj[key] = (byProj[key] || 0) + (parseFloat(i.total)||0);
+  });
+  manuals.forEach(function(m) {
+    var key = m.source || 'Other Income';
+    byProj[key] = (byProj[key] || 0) + (parseFloat(m.amount)||0);
+  });
+  var projList = Object.keys(byProj).map(function(k){ return { name: k, val: byProj[k] }; })
+    .sort(function(a,b){ return b.val - a.val; });
+  var maxProj = projList.length ? projList[0].val : 1;
+  var projEl = document.getElementById('fo-by-project');
+  if (projEl) {
+    if (!projList.length) {
+      projEl.innerHTML = '<div class="fo-empty">No paid invoices yet. Income will appear here once invoices are marked as paid.</div>';
+    } else {
+      projEl.innerHTML = '<table class="fo-proj-table">' +
+        projList.map(function(p) {
+          var barW = Math.round((p.val / maxProj) * 100) + '%';
+          return '<tr class="fo-proj-tr">' +
+            '<td class="fo-proj-td name">' + escapeHTML(p.name) + '</td>' +
+            '<td class="fo-proj-td" style="width:160px"><div class="fo-proj-bar-wrap"><div class="fo-proj-bar-fill" style="width:' + barW + '"></div></div></td>' +
+            '<td class="fo-proj-td amt">' + fmD(p.val) + '</td>' +
+            '</tr>';
+        }).join('') +
+        '</table>';
+    }
+  }
+}
+
+function foShowAddIncome() {
+  var form = document.getElementById('fo-add-income-form');
+  if (form) { form.style.display = 'grid'; document.getElementById('fo-inc-date').value = new Date().toISOString().slice(0,10); }
+}
+function foHideAddIncome() {
+  var form = document.getElementById('fo-add-income-form');
+  if (form) form.style.display = 'none';
+}
+function foSaveIncome() {
+  var desc = (document.getElementById('fo-inc-desc') || {}).value || '';
+  var amount = parseFloat((document.getElementById('fo-inc-amount') || {}).value) || 0;
+  var date = (document.getElementById('fo-inc-date') || {}).value || '';
+  var source = (document.getElementById('fo-inc-source') || {}).value || '';
+  if (!desc || !amount) { showToast('Description and amount are required'); return; }
+  _foManualIncome.push({ desc: desc, amount: amount, date: date, source: source, id: Date.now() });
+  localStorage.setItem('fk_manual_income', JSON.stringify(_foManualIncome));
+  foHideAddIncome();
+  ['fo-inc-desc','fo-inc-amount','fo-inc-source'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  foRenderManualList();
+  renderFinancialOverview();
+  showToast('\u2713 Income entry added');
+}
+function foDeleteIncome(id) {
+  _foManualIncome = _foManualIncome.filter(function(m){ return m.id !== id; });
+  localStorage.setItem('fk_manual_income', JSON.stringify(_foManualIncome));
+  foRenderManualList();
+  renderFinancialOverview();
+}
+function foRenderManualList() {
+  var el = document.getElementById('fo-manual-list');
+  if (!el) return;
+  if (!_foManualIncome.length) {
+    el.innerHTML = '<div class="fo-empty">No other income entries yet. Add cash payments, bank transfers, or any income not tracked via invoices.</div>';
+    return;
+  }
+  el.innerHTML = '<div class="fo-manual-wrap">' +
+    '<div class="fo-manual-row-head"><div>Description</div><div>Amount</div><div>Date</div><div>Source</div><div></div></div>' +
+    _foManualIncome.slice().reverse().map(function(m) {
+      return '<div class="fo-manual-row">' +
+        '<div style="font-size:13px;color:var(--ink)">' + escapeHTML(m.desc) + '</div>' +
+        '<div style="font-family:var(--font-mono);font-size:13px;font-weight:600">' + fmD(m.amount) + '</div>' +
+        '<div style="font-size:12px;color:var(--ink-mid)">' + (m.date || '—') + '</div>' +
+        '<div style="font-size:12px;color:var(--ink-mid)">' + escapeHTML(m.source || '—') + '</div>' +
+        '<button onclick="foDeleteIncome(' + m.id + ')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:14px;padding:0 4px">\u00d7</button>' +
+        '</div>';
+    }).join('') +
+    '</div>';
 }
 
 function renderInvHistory() {
@@ -4655,6 +4888,11 @@ function downloadInvoicePDFFromHistory(id) {
   }, 350);
 }
 
+function _syncInvProjLinkUI() {
+  var wrap = document.getElementById('inv-proj-link-wrap');
+  if (wrap) wrap.style.display = _editingInvoiceId ? 'none' : 'flex';
+}
+
 function editInvoiceFromHistory(id) {
   var inv = _invoices.find(function(i){ return i.id === id; });
   if (!inv) return;
@@ -4663,6 +4901,7 @@ function editInvoiceFromHistory(id) {
   _loadInvFromRecord(inv);
   renderLineItems(); updateInv();
   showPanel('invoice', document.getElementById('nav-invoice'));
+  setTimeout(_syncInvProjLinkUI, 50);
 }
 
 // ═══════════════ RATE SCENARIOS ═══════════════
@@ -6786,7 +7025,13 @@ async function savePtProject() {
       var myLast  = (document.getElementById('my-lastname')  || {}).value || '';
       var myName  = [myFirst, myLast].filter(Boolean).join(' ') || (_currentUser.email ? _currentUser.email.split('@')[0] : '');
       if (myName) {
-        savePtPeople([{ name: myName, role: 'Freelancer', side: 'freelancer' }], res.data.id);
+        var existingPeople = loadPtPeople(res.data.id);
+        var alreadyAdded = existingPeople.some(function(p){
+          return p.name && p.name.toLowerCase() === myName.toLowerCase();
+        });
+        if (!alreadyAdded) {
+          savePtPeople(existingPeople.concat([{ name: myName, role: 'Freelancer', side: 'freelancer' }]), res.data.id);
+        }
       }
     }
   }
@@ -7001,6 +7246,7 @@ function openPtEditBilling(i) {
     setTimeout(function() {
       if (typeof renderLineItems === 'function') renderLineItems();
       if (typeof updateInv === 'function') updateInv();
+      _syncInvProjLinkUI();
       showToast('\u2713 Invoice loaded — edit line items and save to update');
     }, 150);
   } else {
