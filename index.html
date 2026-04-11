@@ -1089,12 +1089,9 @@ input[type=number]{-moz-appearance:textfield}
 .cal-detail-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
 .cal-detail-item:last-child{border-bottom:none}
 /* ── INVOICE EDIT MODAL ── */
-.foei-modal-body{display:grid;grid-template-columns:1fr 380px;gap:0;max-height:80vh;overflow:hidden}
-.foei-form-col{padding:24px;overflow-y:auto;border-right:1px solid var(--border)}
-.foei-preview-col{padding:20px;overflow-y:auto;background:var(--cream)}
-.foei-preview-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:12px}
+.foei-modal-body{max-height:80vh;overflow-y:auto}
+.foei-form-col{padding:24px}
 .foei-paper{background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:28px;font-family:-apple-system,sans-serif;font-size:12px;color:#222;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-@media(max-width:860px){.foei-modal-body{grid-template-columns:1fr}.foei-preview-col{display:none}}
 @media(max-width:768px){
   .settings-grid{grid-template-columns:1fr}
   .ct-head,.ct-row{grid-template-columns:1fr 1fr 60px}
@@ -2994,13 +2991,14 @@ var RateLimiter = (function() {
 
 <!-- ── Invoice Inline Edit Modal ── -->
 <div id="fo-inv-edit-modal" onclick="if(event.target===this)foCloseEditInv()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.45);z-index:500;overflow-y:auto;padding:32px 16px;align-items:flex-start;justify-content:center">
-  <div style="width:100%;max-width:1060px;background:var(--white);border-radius:var(--radius-lg);box-shadow:0 8px 40px rgba(0,0,0,0.18);overflow:hidden;margin:0 auto">
+  <div style="width:100%;max-width:680px;background:var(--white);border-radius:var(--radius-lg);box-shadow:0 8px 40px rgba(0,0,0,0.18);overflow:hidden;margin:0 auto">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border)">
       <div style="font-size:17px;font-weight:700;color:var(--ink)">Edit Invoice</div>
       <button onclick="foCloseEditInv()" style="background:none;border:none;font-size:22px;line-height:1;cursor:pointer;color:var(--ink-mid)">&times;</button>
     </div>
     <div class="foei-modal-body">
-      <!-- Left: form -->
+      <div id="foei-preview" style="display:none"></div>
+      <!-- Form -->
       <div class="foei-form-col">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
           <div><div class="m-lbl">Invoice #</div><input class="m-inp" id="foei-num" style="margin-bottom:0" oninput="foeiRenderPreview()"></div>
@@ -3029,17 +3027,24 @@ var RateLimiter = (function() {
         <div><div class="m-lbl">Notes</div><textarea class="pt-ta" id="foei-notes" style="min-height:56px;margin-bottom:0" oninput="foeiRenderPreview()"></textarea></div>
         <div style="text-align:right;padding:14px 0 4px;font-size:16px;font-weight:700;color:var(--ink);border-top:1px solid var(--border);margin-top:14px">Total: <span id="foei-total">$0.00</span></div>
       </div>
-      <!-- Right: live preview -->
-      <div class="foei-preview-col">
-        <div class="foei-preview-title">Invoice Preview</div>
-        <div id="foei-preview"></div>
-      </div>
     </div>
     <div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--border);background:var(--cream)">
       <button class="btn-outline" onclick="foCloseEditInv()">Cancel</button>
-      <button class="btn-outline" onclick="foeiDownloadPdf()">&#128196; Download PDF</button>
+      <button class="btn-outline" onclick="foeiShowFullPreview()">&#128196; Preview</button>
+      <button class="btn-outline" onclick="foeiDownloadPdf()">&#8659; Download PDF</button>
       <button class="pt-save-btn" onclick="foSaveEditInv()">Save changes</button>
     </div>
+  </div>
+</div>
+
+<!-- ── Invoice Full Preview Overlay ── -->
+<div id="foei-full-preview-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.65);overflow-y:auto;padding:48px 20px">
+  <div style="max-width:720px;margin:0 auto">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <span style="color:#fff;font-size:14px;font-weight:700;letter-spacing:.03em">Invoice Preview</span>
+      <button onclick="document.getElementById('foei-full-preview-overlay').style.display='none'" style="background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;border-radius:50%;width:34px;height:34px;cursor:pointer;line-height:1;font-family:var(--font-body)">&times;</button>
+    </div>
+    <div id="foei-full-preview-content"></div>
   </div>
 </div>
 
@@ -5151,6 +5156,15 @@ function foeiRenderPreview() {
     '</div></div>' +
     (notes?'<div class="inv-footer"><div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val">'+escapeHTML(notes)+'</div></div></div>':'');
 }
+function foeiShowFullPreview() {
+  foeiRenderPreview();
+  var prev = document.getElementById('foei-preview');
+  var content = document.getElementById('foei-full-preview-content');
+  var overlay = document.getElementById('foei-full-preview-overlay');
+  if (!prev || !content || !overlay) return;
+  content.innerHTML = prev.outerHTML;
+  overlay.style.display = '';
+}
 function foeiDownloadPdf() {
   var prev = document.getElementById('foei-preview');
   if (!prev) return;
@@ -5705,7 +5719,7 @@ function calShowDay(ds) {
   try { JSON.parse(localStorage.getItem('fk_todos')||'[]').forEach(function(t){ if(t.dueDate&&t.dueDate.slice(0,10)===ds&&!t.done) its.push({type:'todo',label:t.text}); }); } catch(e){}
   (window._ptMilestones||[]).forEach(function(m){ if(m.due_date&&m.due_date.slice(0,10)===ds) its.push({type:'milestone',label:m.title}); });
   (window._ptTasks||[]).forEach(function(t){ if(t.due_date&&t.due_date.slice(0,10)===ds) its.push({type:'todo',label:t.title}); });
-  _calEvents.filter(function(e){ return e.date===ds; }).forEach(function(e){ its.push({type:'event',label:e.title,id:e.id,location:e.location,duration:e.duration,alert:e.alert}); });
+  _calEvents.filter(function(e){ return e.date===ds; }).forEach(function(e){ its.push({type:'event',label:e.title,id:e.id,location:e.location,duration:e.duration,project:e.project}); });
   var d = new Date(ds+'T12:00:00');
   var dlbl = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   if (emptyEl) emptyEl.style.display = 'none';
@@ -5722,9 +5736,12 @@ function calShowDay(ds) {
           '<div style="font-size:12px;color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHTML(it.label)+'</div>'+
           (it.location?'<div style="font-size:11px;color:var(--ink-light)">\uD83D\uDCCD '+escapeHTML(it.location)+'</div>':'')+
           (it.duration?'<div style="font-size:11px;color:var(--ink-light)">\u23F1 '+escapeHTML(it.duration)+'</div>':'')+
-          (it.alert?'<div style="font-size:11px;color:var(--ink-light)">\uD83D\uDD14 '+escapeHTML(it.alert)+'</div>':'')+
+          (it.project?'<div style="font-size:11px;color:var(--ink-light)">&#128193; '+escapeHTML(it.project)+'</div>':'')+
         '</div>'+
-        (it.id?'<button onclick="calDeleteEvent('+it.id+')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;flex-shrink:0">\u00d7</button>':'')+
+        (it.id?'<div style="display:flex;gap:2px;flex-shrink:0">'+
+          '<button onclick="calEditEvent('+it.id+',\''+ds+'\')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:13px;line-height:1;padding:2px 4px">&#9998;</button>'+
+          '<button onclick="calDeleteEvent('+it.id+')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:18px;line-height:1;padding:0 2px">\u00d7</button>'+
+        '</div>':'')+
         '</div>';
     }).join('') : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">No events scheduled</div>') +
     '<div id="cal-add-form-wrap"></div>';
@@ -5733,45 +5750,56 @@ function calAddEvent(dateStr) {
   calShowAddForm(dateStr || new Date().toISOString().slice(0,10));
 }
 
-function calShowAddForm(ds) {
+var _calEditingEventId = null;
+function calShowAddForm(ds, editId) {
   if (ds && ds !== _calSelectedDay) calShowDay(ds);
+  _calEditingEventId = editId || null;
+  var ev = editId ? _calEvents.find(function(e){ return e.id===editId; }) : null;
   var wrap = document.getElementById('cal-add-form-wrap');
   if (!wrap) return;
   wrap.innerHTML =
     '<div class="cal-event-form">'+
-      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:10px">New Event</div>'+
+      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:10px">'+(editId?'Edit Event':'New Event')+'</div>'+
       '<div class="m-lbl" style="margin-top:0">Title *</div><input class="m-inp" id="cal-ev-title" placeholder="e.g. Client call" style="margin-bottom:0">'+
       '<div class="m-lbl">Location</div><input class="m-inp" id="cal-ev-location" placeholder="e.g. Zoom / 123 Street" style="margin-bottom:0">'+
       '<div class="m-lbl">Duration</div><input class="m-inp" id="cal-ev-duration" placeholder="e.g. 1 hour, 30 mins" style="margin-bottom:0">'+
-      '<div class="m-lbl">Alert</div>'+
-      '<select class="m-sel" id="cal-ev-alert">'+
-        '<option value="">No alert</option>'+
-        '<option value="At time of event">At time of event</option>'+
-        '<option value="5 min before">5 min before</option>'+
-        '<option value="15 min before">15 min before</option>'+
-        '<option value="30 min before">30 min before</option>'+
-        '<option value="1 hour before">1 hour before</option>'+
-        '<option value="1 day before">1 day before</option>'+
+      '<div class="m-lbl">Project</div>'+
+      '<select class="m-sel" id="cal-ev-project">'+
+        '<option value="">No project</option>'+
+        ((window._ptProjects||[]).filter(function(p){ return p.status!=='completed'&&p.status!=='archived'; }).map(function(p){ return '<option value="'+escapeHTML(p.name)+'">'+escapeHTML(p.name)+'</option>'; }).join(''))+
       '</select>'+
       '<div style="display:flex;gap:8px;margin-top:12px">'+
-        '<button class="pt-save-btn" style="flex:1" onclick="calSaveEvent(\''+ds+'\')">Save event</button>'+
-        '<button class="btn-outline" onclick="document.getElementById(\'cal-add-form-wrap\').innerHTML=\'\'">Cancel</button>'+
+        '<button class="pt-save-btn" style="flex:1" id="cal-ev-save-btn" onclick="calSaveEvent(\''+ds+'\',_calEditingEventId)">Save event</button>'+
+        '<button class="btn-outline" onclick="calCancelEventForm()">Cancel</button>'+
       '</div>'+
     '</div>';
-  setTimeout(function(){ var t=document.getElementById('cal-ev-title'); if(t) t.focus(); }, 50);
+  setTimeout(function(){
+    if (ev) {
+      var t=document.getElementById('cal-ev-title'); if(t) t.value=ev.title||'';
+      var l=document.getElementById('cal-ev-location'); if(l) l.value=ev.location||'';
+      var d=document.getElementById('cal-ev-duration'); if(d) d.value=ev.duration||'';
+      var p=document.getElementById('cal-ev-project'); if(p) p.value=ev.project||'';
+    }
+    var t=document.getElementById('cal-ev-title'); if(t) t.focus();
+  }, 50);
 }
 
-function calSaveEvent(ds) {
+function calSaveEvent(ds, editId) {
   var title    = (document.getElementById('cal-ev-title')||{}).value||'';
   var location = (document.getElementById('cal-ev-location')||{}).value||'';
   var duration = (document.getElementById('cal-ev-duration')||{}).value||'';
-  var alert    = (document.getElementById('cal-ev-alert')||{}).value||'';
+  var project  = (document.getElementById('cal-ev-project')||{}).value||'';
   if (!title.trim()) { showToast('Title is required'); return; }
-  _calEvents.push({ id: Date.now(), date: ds, title: title.trim(), location: location.trim(), duration: duration.trim(), alert: alert });
+  if (editId) {
+    _calEvents = _calEvents.map(function(e){ return e.id===editId ? { id:editId, date:e.date, title:title.trim(), location:location.trim(), duration:duration.trim(), project:project } : e; });
+    showToast('\u2713 Event updated');
+  } else {
+    _calEvents.push({ id: Date.now(), date: ds, title: title.trim(), location: location.trim(), duration: duration.trim(), project: project });
+    showToast('\u2713 Event added');
+  }
   localStorage.setItem('fk_cal_events', JSON.stringify(_calEvents));
   renderCalendar();
   calShowDay(ds);
-  showToast('\u2713 Event added');
 }
 function calDeleteEvent(id) {
   _calEvents = _calEvents.filter(function(e){ return e.id !== id; });
@@ -5779,6 +5807,14 @@ function calDeleteEvent(id) {
   renderCalendar();
   if (_calSelectedDay) calShowDay(_calSelectedDay);
   showToast('Event removed');
+}
+function calEditEvent(id, ds) {
+  calShowAddForm(ds, id);
+}
+function calCancelEventForm() {
+  _calEditingEventId = null;
+  var w = document.getElementById('cal-add-form-wrap');
+  if (w) w.innerHTML = '';
 }
 
 // ─── HOME INIT ────────────────────────────────────────────────────────────────
@@ -6929,10 +6965,9 @@ function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
   var tickHtml = ticks.map(function(t) {
     var isToday = todayPct !== null && Math.abs(parseFloat(t.pct) - parseFloat(todayPct)) < 0.5;
     if (isToday) {
-      // Today tick: "Today" label on top, date number below it, no red line
-      return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:2">' +
-        '<span style="font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;line-height:1.3">Today</span>' +
+      return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;pointer-events:none;z-index:2">' +
         '<span style="font-size:9px;color:#E8594A;font-weight:600;transform:translateX(-50%);white-space:nowrap;line-height:1.3">' + t.d + '</span>' +
+        '<span style="font-size:9px;font-weight:700;color:#E8594A;white-space:nowrap;transform:translateX(-100%);margin-top:auto;padding-right:2px;line-height:1.3">Today</span>' +
         '</div>';
     }
     return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none">' +
@@ -6943,9 +6978,9 @@ function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
 
   // If today falls between ticks, add a standalone "Today" marker
   if (todayPct !== null && !todayOnTick) {
-    tickHtml += '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:2">' +
-      '<span style="font-size:9px;font-weight:700;color:#E8594A;transform:translateX(-50%);white-space:nowrap;line-height:1.3">Today</span>' +
+    tickHtml += '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;display:flex;flex-direction:column;pointer-events:none;z-index:2">' +
       '<div style="width:1px;flex:1;background:#E8594A;opacity:.5"></div>' +
+      '<span style="font-size:9px;font-weight:700;color:#E8594A;white-space:nowrap;transform:translateX(-100%);padding-right:2px;line-height:1.3">Today</span>' +
       '</div>';
   }
 
@@ -7511,6 +7546,7 @@ async function savePtProject() {
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   closePtModal();
   renderPtList();
+  if (typeof renderGlobalGantt === 'function') renderGlobalGantt();
   if (_ptModalMode === 'edit-project' && _ptCurrentId) selectPtProject(_ptCurrentId);
   showToast('\u2713 Project saved');
 }
@@ -7528,7 +7564,7 @@ async function savePtMilestone() {
   window._ptMilestones = window._ptMilestones || [];
   window._ptMilestones.push(res.data);
   window._ptMilestones.sort(function(a,b){ return (a.due_date||'') < (b.due_date||'') ? -1 : 1; });
-  closePtModal(); renderPtMilestones(); showToast('\u2713 Milestone added');
+  closePtModal(); renderPtMilestones(); if(typeof renderGlobalGantt==='function') renderGlobalGantt(); showToast('\u2713 Milestone added');
 }
 
 async function savePtTask() {
