@@ -1186,7 +1186,8 @@ input[type=number]{-moz-appearance:textfield}
 .pt-note-item{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
 .pt-note-date{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px}
 .pt-note-text{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
-.pt-note-del{float:right;background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:12px;margin-top:-2px}
+.pt-note-del{background:none;border:none;cursor:pointer;color:#E8594A;font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;transition:background .15s}
+.pt-note-del:hover{background:#FEE2E2}
 /* Timesheet */
 .pt-time-row{display:grid;grid-template-columns:90px 60px auto 1fr auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
@@ -1275,8 +1276,12 @@ input[type=number]{-moz-appearance:textfield}
 .pt-doc-name{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pt-doc-task{font-size:11px;color:var(--ink-light);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* Multi-assignee checkbox list */
-.pt-assignee-cb-list{display:flex;flex-direction:column;gap:4px;padding:8px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);max-height:140px;overflow-y:auto}
-.pt-assignee-cb-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;padding:2px 0}
+.pt-assignee-cb-list{display:flex;flex-direction:column;gap:4px;padding:8px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);max-height:160px;overflow-y:auto}
+.pt-assignee-cb-label{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink);cursor:pointer;padding:5px 8px;border-radius:6px;transition:background .12s}
+.pt-assignee-cb-label:hover{background:var(--cream)}
+.pt-assignee-cb-label input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;border:2px solid var(--border);border-radius:4px;background:var(--white);cursor:pointer;position:relative;transition:border-color .15s,background .15s;flex-shrink:0}
+.pt-assignee-cb-label input[type="checkbox"]:checked{background:var(--sage);border-color:var(--sage)}
+.pt-assignee-cb-label input[type="checkbox"]:checked::after{content:'';position:absolute;left:3px;top:0px;width:5px;height:9px;border:2px solid #fff;border-left:none;border-top:none;transform:rotate(45deg)}
 .pt-filter-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
 /* Priority badges */
 .pt-prio{font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
@@ -7324,7 +7329,7 @@ function renderPtHours() {
     var hrs = (parseFloat(h.hours) || 0).toFixed(1) + 'h';
     var actions = isOwn
       ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit" style="margin-right:4px">&#9998;</button>' +
-        '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')" title="Delete">&#215;</button>'
+        '<button class="pt-note-del" onclick="deletePtItem(\'timesheet\',' + i + ')" title="Delete">&#215; Delete</button>'
       : '';
     return '<tr>' +
       '<td style="white-space:nowrap;color:var(--ink-light);font-size:12px;padding:10px 12px">' + dateDisp + '</td>' +
@@ -7983,7 +7988,7 @@ function openPtModal(mode) {
     var assigneeHtml = ppl.length
       ? '<div class="pt-assignee-cb-list">' + ppl.map(function(p){
           var chk = curAssignees.indexOf(p.name) >= 0 ? ' checked' : '';
-          return '<label class="pt-assignee-cb-label"><input type="checkbox" name="ptm-assignee-cb" value="' + escapeHTML(p.name) + '"' + chk + ' style="width:14px;height:14px;flex-shrink:0;margin:0;cursor:pointer"><span style="line-height:1.4">' + escapeHTML(p.name) + (p.role ? ' <span style="font-size:11px;color:var(--ink-light)">· ' + escapeHTML(p.role) + '</span>' : '') + '</span></label>';
+          return '<label class="pt-assignee-cb-label"><input type="checkbox" name="ptm-assignee-cb" value="' + escapeHTML(p.name) + '"' + chk + '><span style="line-height:1.4;font-weight:500">' + escapeHTML(p.name) + (p.role ? ' <span style="font-size:11px;font-weight:400;color:var(--ink-light)">· ' + escapeHTML(p.role) + '</span>' : '') + '</span></label>';
         }).join('') + '</div>'
       : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">Add people in the Overview tab first</div>';
     html = '<div class="pt-modal-title">' + (mode === 'edit-task' ? 'Edit task' : 'Add task') + '</div>' +
