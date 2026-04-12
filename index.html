@@ -1192,6 +1192,31 @@ input[type=number]{-moz-appearance:textfield}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
 .pt-time-desc{font-size:13px;color:var(--ink)}
 .pt-time-total{font-size:13px;font-weight:700;color:var(--ink-mid);padding:4px 0}
+/* Global Timesheet */
+.gts-stat-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px;min-width:130px;flex:1}
+.gts-stat-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:6px}
+.gts-stat-val{font-size:24px;font-weight:700;font-family:var(--font-mono);color:var(--ink)}
+.gts-section{margin-bottom:32px}
+.gts-section-hdr{margin-bottom:14px}
+.gts-section-title{font-size:15px;font-weight:700;color:var(--ink)}
+.gts-week-label{font-size:12px;color:var(--ink-light);margin-top:2px}
+.gts-week-table{width:100%;border-collapse:collapse;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.gts-week-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);padding:10px;border-bottom:1.5px solid var(--border);text-align:center;background:var(--cream)}
+.gts-week-table th:first-child{text-align:left;padding-left:16px}
+.gts-wt-name{font-size:13px;font-weight:600;color:var(--ink);padding:10px 10px 10px 16px;border-bottom:1px solid var(--border)}
+.gts-wt-cell{text-align:center;font-size:13px;color:var(--ink-mid);padding:10px;border-bottom:1px solid var(--border)}
+.gts-wt-total{text-align:center;font-weight:700;font-size:13px;background:var(--ink);color:var(--cream);padding:10px;border-bottom:1px solid var(--border)}
+.gts-week-table tfoot td{padding:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-light);background:var(--cream)}
+.gts-wt-foot-lbl{text-align:left;padding-left:16px}
+.gts-wt-foot-cell{text-align:center;color:var(--ink)}
+.gts-wt-foot-cell.today{color:var(--sage);font-weight:800}
+.gts-wt-foot-total{text-align:center;font-weight:700;color:var(--ink)}
+.gts-hist-table{width:100%;border-collapse:collapse}
+.gts-hist-table th{text-align:left;padding:8px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);border-bottom:1.5px solid var(--border)}
+.gts-hist-date{font-size:12px;color:var(--ink-light);padding:13px 14px;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--border)}
+.gts-hist-proj{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1.5px solid;display:inline-block;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.gts-hist-desc{font-size:13px;color:var(--ink);padding:13px 14px;vertical-align:top;border-bottom:1px solid var(--border)}
+.gts-hist-dur{font-size:14px;font-weight:700;color:var(--ink);padding:13px 14px;text-align:right;white-space:nowrap;vertical-align:top;border-bottom:1px solid var(--border)}
 /* Modal */
 .pt-modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,16,10,.45);z-index:200;align-items:center;justify-content:center}
 .pt-modal-overlay.open{display:flex}
@@ -2418,8 +2443,8 @@ var RateLimiter = (function() {
                 <div style="display:flex;align-items:center;gap:12px">
                   <img id="p-logo" src="" alt="" style="display:none;max-height:48px;max-width:120px;object-fit:contain">
                   <div>
-                    <div class="inv-brand-name" id="p-yourname">Alex Chen Design</div>
-                    <div class="inv-brand-detail" id="p-youremail">alex@alexchendesign.com</div>
+                    <div class="inv-brand-name" id="p-yourname">Your Name</div>
+                    <div class="inv-brand-detail" id="p-youremail"></div>
                     <div class="inv-brand-detail" id="p-yourphone" style="display:none"></div>
                   </div>
                 </div>
@@ -2429,25 +2454,25 @@ var RateLimiter = (function() {
                 <div>
                   <div class="inv-meta-lbl">Bill to</div>
                   <div class="inv-meta-val">
-                    <strong id="p-client">Acme Studio Ltd.</strong><br>
-                    <span id="p-contact">Jamie Reyes</span><br>
-                    <span style="font-size:11px;color:var(--ink-light)" id="p-cemail">jamie@acmestudio.com</span><br>
+                    <strong id="p-client">—</strong><br>
+                    <span id="p-contact"></span><br>
+                    <span style="font-size:11px;color:var(--ink-light)" id="p-cemail"></span><br>
                     <span style="font-size:11px;color:var(--ink-light)" id="p-ccphone" style="display:none"></span>
                     <span style="font-size:11px;color:var(--ink-light)" id="p-caddress" style="display:none"></span>
                   </div>
                 </div>
-                <div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val" id="p-project">Brand Identity Refresh</div></div>
+                <div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val" id="p-project">—</div></div>
               </div>
               <div class="inv-dates">
                 <div><div class="inv-date-lbl">Issue date</div><div class="inv-date-val" id="p-issued">—</div></div>
                 <div><div class="inv-date-lbl">Due date</div><div class="inv-date-val" id="p-due">—</div></div>
                 <div><div class="inv-date-lbl">Status</div><div class="inv-date-val" style="color:var(--amber)">Unpaid</div></div>
               </div>
-              <table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody id="p-lineitems"><tr><td>Brand strategy</td><td>1</td><td>$1,200.00</td><td>$1,200.00</td></tr><tr><td>Logo design (3 concepts)</td><td>1</td><td>$1,800.00</td><td>$1,800.00</td></tr><tr><td>Brand guidelines</td><td>1</td><td>$600.00</td><td>$600.00</td></tr></tbody></table>
-              <div class="inv-totals"><div class="inv-tot-inner"><div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val" id="p-sub">$3,600.00</span></div><div class="inv-tot-row" id="p-disc-row" style="display:none"><span class="inv-tot-lbl">Discount</span><span class="inv-tot-val" id="p-disc-val">—</span></div><div class="inv-tot-row" id="p-tax-row" style="display:none"><span class="inv-tot-lbl">Tax</span><span class="inv-tot-val" id="p-tax-val">—</span></div><div class="inv-tot-div"></div><div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val" id="p-total">$3,600.00</span></div></div></div>
+              <table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody id="p-lineitems"><tr><td>—</td><td>1</td><td>$0.00</td><td>$0.00</td></tr></tbody></table>
+              <div class="inv-totals"><div class="inv-tot-inner"><div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val" id="p-sub">$0.00</span></div><div class="inv-tot-row" id="p-disc-row" style="display:none"><span class="inv-tot-lbl">Discount</span><span class="inv-tot-val" id="p-disc-val">—</span></div><div class="inv-tot-row" id="p-tax-row" style="display:none"><span class="inv-tot-lbl">Tax</span><span class="inv-tot-val" id="p-tax-val">—</span></div><div class="inv-tot-div"></div><div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val" id="p-total">$0.00</span></div></div></div>
               <div class="inv-footer">
-                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val" id="p-pay-details">Bank Transfer</div></div>
-                <div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val" id="p-notes">Thank you for your business.</div></div>
+                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val" id="p-pay-details">—</div></div>
+                <div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val" id="p-notes">—</div></div>
               </div>
             </div>
           </div>
@@ -2466,7 +2491,7 @@ var RateLimiter = (function() {
           <div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="60000" oninput="calcRate()"></div></div>
-              <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option></select></div>
+              <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option><option value="Rp">🇮🇩 IDR</option></select></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
@@ -3288,7 +3313,7 @@ function updateHomeHero(){
 initHomeGrid();
 
 // ═══════════════ INVOICE ═══════════════
-let lineItems=[{desc:'Brand strategy',qty:1,rate:1200},{desc:'Logo design (3 concepts)',qty:1,rate:1800},{desc:'Brand guidelines',qty:1,rate:600}];
+let lineItems=[{desc:'',qty:1,rate:0}];
 function initInvoice(){
   const today=new Date(),due=new Date();due.setDate(today.getDate()+30);
   document.getElementById('i-issued').value=today.toISOString().split('T')[0];
@@ -4033,15 +4058,7 @@ const pfStages=[
   {id:'negotiating',label:'Negotiating',prob:.75,color:'#5A7A65',stripe:'#8AB395'},
   {id:'active',label:'Active',prob:.95,color:'#6D28D9',stripe:'#A78BFA'},
 ];
-let pfClients=[
-  {id:1,client:'Bloom Studio',project:'Social templates',value:1800,stage:0,temp:'warm',date:'Apr 12'},
-  {id:2,client:'Meridian Co.',project:'Annual report',value:4500,stage:1,temp:'hot',date:'Apr 18'},
-  {id:3,client:'Nova Labs',project:'Website copy',value:3200,stage:2,temp:'warm',date:'Apr 25'},
-  {id:4,client:'Apex Creative',project:'Brand guidelines',value:6000,stage:2,temp:'hot',date:'Apr 30'},
-  {id:5,client:'Fieldwork Agency',project:'Email campaign',value:2400,stage:3,temp:'warm',date:'May 5'},
-  {id:6,client:'Dune & Co.',project:'Packaging design',value:5500,stage:4,temp:'hot',date:'May 10'},
-  {id:7,client:'Wren Digital',project:'UX copy',value:2800,stage:0,temp:'cold',date:'May 15'},
-];
+let pfClients=[];
 let pfNextId=8,pfDragId=null;
 function renderPipeline(){
   const board=document.getElementById('pf-kanban');if(!board)return;
@@ -7131,19 +7148,45 @@ function renderPtHours() {
   if (!el) return;
   var total = hr.reduce(function(s, h){ return s + (parseFloat(h.hours) || 0); }, 0);
   if (totEl) totEl.innerHTML = 'Total logged: <strong>' + total.toFixed(1) + ' hrs</strong>';
-  if (!hr.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No time logged yet.</div>'; return; }
+  if (!hr.length) {
+    el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No time logged yet.</div>';
+    return;
+  }
   var uid = _currentUser && _currentUser.id;
-  el.innerHTML = hr.map(function(h, i) {
+  var rows = hr.map(function(h, i) {
     var isOwn = !h.user_id || h.user_id === uid;
-    return '<div class="pt-time-row">' +
-      '<span style="font-size:12px;color:var(--ink-light)">' + (h.log_date ? h.log_date.slice(0,10) : '—') + '</span>' +
-      '<span class="pt-time-hrs">' + (parseFloat(h.hours) || 0).toFixed(1) + 'h</span>' +
-      '<span>' + (h.person_name ? '<span style="font-size:12px;color:var(--ink-mid);background:var(--surface);padding:2px 7px;border-radius:10px">' + escapeHTML(h.person_name) + '</span>' : '') + '</span>' +
-      '<span class="pt-time-desc">' + escapeHTML(h.description || '') + '</span>' +
-      (isOwn ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit entry">&#9998;</button>' : '<span></span>') +
-      (isOwn ? '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')">&#215;</button>' : '<span></span>') +
-      '</div>';
+    var dateStr = h.log_date ? h.log_date.slice(0,10) : '—';
+    // Format date as e.g. "Apr 12"
+    var dateDisp = '—';
+    if (h.log_date) {
+      var dObj = new Date(h.log_date + 'T00:00:00');
+      var mNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      dateDisp = mNames[dObj.getMonth()] + ' ' + dObj.getDate();
+    }
+    var desc = h.description ? escapeHTML(h.description) : '<span style="color:var(--ink-light);font-style:italic">No description</span>';
+    var person = h.person_name ? '<div style="font-size:11px;color:var(--ink-light);margin-top:2px">' + escapeHTML(h.person_name) + '</div>' : '';
+    var hrs = (parseFloat(h.hours) || 0).toFixed(1) + 'h';
+    var actions = isOwn
+      ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit" style="margin-right:4px">&#9998;</button>' +
+        '<button class="pt-row-del" onclick="deletePtItem(\'timesheet\',' + i + ')" title="Delete">&#215;</button>'
+      : '';
+    return '<tr>' +
+      '<td style="white-space:nowrap;color:var(--ink-light);font-size:12px;padding:10px 12px">' + dateDisp + '</td>' +
+      '<td style="padding:10px 12px"><div style="font-size:13px;color:var(--ink)">' + desc + '</div>' + person + '</td>' +
+      '<td style="white-space:nowrap;font-size:13px;font-weight:600;font-family:var(--font-mono);color:var(--ink);padding:10px 12px;text-align:right">' + hrs + '</td>' +
+      '<td style="white-space:nowrap;padding:10px 8px;text-align:right">' + actions + '</td>' +
+    '</tr>';
   }).join('');
+  el.innerHTML =
+    '<table class="gts-hist-table" style="width:100%">' +
+      '<thead><tr>' +
+        '<th style="text-align:left;padding:8px 12px">Date</th>' +
+        '<th style="text-align:left;padding:8px 12px">Description</th>' +
+        '<th style="text-align:right;padding:8px 12px">Duration</th>' +
+        '<th style="padding:8px 8px"></th>' +
+      '</tr></thead>' +
+      '<tbody>' + rows + '</tbody>' +
+    '</table>';
 }
 
 // ─── GLOBAL TIMESHEET ───
@@ -7171,50 +7214,103 @@ function renderGlobalTimesheet(entries) {
     body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">No time logged yet. Open a project and log time from the Hours tab.</div>';
     return;
   }
-  // Group by project
-  var groups = {};
-  entries.forEach(function(e) {
-    var pid = e.project_id;
-    var pname = (e.projects && e.projects.name) ? e.projects.name : ('Project ' + (pid || '?'));
-    if (!groups[pid]) groups[pid] = { name: pname, entries: [], total: 0 };
+
+  // --- Week bounds (Mon–Sun) ---
+  var today = new Date(); today.setHours(0,0,0,0);
+  var dow = today.getDay();
+  var weekStart = new Date(today); weekStart.setDate(today.getDate() + (dow===0?-6:1-dow));
+  var weekEnd   = new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6);
+  var toKey = function(d){ return d.toISOString().slice(0,10); };
+  var inWeek = function(ds){ if(!ds) return false; var d=new Date(ds+'T00:00:00'); return d>=weekStart&&d<=weekEnd; };
+
+  // --- Group by project ---
+  var groups = {}, projectKeys = [];
+  entries.forEach(function(e){
+    var pid = String(e.project_id);
+    var pname = (e.projects&&e.projects.name) ? e.projects.name : 'Project '+(pid||'?');
+    if (!groups[pid]){ groups[pid]={name:pname,entries:[],total:0,weekDayHours:{}}; projectKeys.push(pid); }
     groups[pid].entries.push(e);
-    groups[pid].total += parseFloat(e.hours) || 0;
+    groups[pid].total += parseFloat(e.hours)||0;
+    if (inWeek(e.log_date)){
+      var k=e.log_date.slice(0,10);
+      groups[pid].weekDayHours[k]=(groups[pid].weekDayHours[k]||0)+(parseFloat(e.hours)||0);
+    }
   });
-  var grandTotal = entries.reduce(function(s,e){ return s + (parseFloat(e.hours)||0); }, 0);
-  var projectKeys = Object.keys(groups);
-  // Colour palette for project chips
-  var palette = ['#6D28D9','#1967D2','#C8621A','#5A7A65','#B4B2A9','#C2185B','#00796B'];
+  var grandTotal = entries.reduce(function(s,e){ return s+(parseFloat(e.hours)||0); },0);
+  var weekTotal  = entries.filter(function(e){ return inWeek(e.log_date); }).reduce(function(s,e){ return s+(parseFloat(e.hours)||0); },0);
+
+  // --- Summary cards ---
   if (summaryEl) {
-    summaryEl.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
-      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Total hours</div>' +
-      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + grandTotal.toFixed(1) + 'h</div></div>' +
-      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
-      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Projects tracked</div>' +
-      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + projectKeys.length + '</div></div>' +
-      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;min-width:140px">' +
-      '<div style="font-size:11px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Entries</div>' +
-      '<div style="font-size:22px;font-weight:700;color:var(--ink)">' + entries.length + '</div></div>';
+    summaryEl.innerHTML =
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">This week</div><div class="gts-stat-val">'+weekTotal.toFixed(1)+'h</div></div>'+
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">All time</div><div class="gts-stat-val">'+grandTotal.toFixed(1)+'h</div></div>'+
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">Projects</div><div class="gts-stat-val">'+projectKeys.length+'</div></div>'+
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">Entries</div><div class="gts-stat-val">'+entries.length+'</div></div>';
   }
-  body.innerHTML = projectKeys.map(function(pid, pi) {
-    var g = groups[pid];
-    var color = palette[pi % palette.length];
-    var rows = g.entries.map(function(e) {
-      return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px">' +
-        '<span style="min-width:90px;color:var(--ink-light)">' + (e.log_date ? e.log_date.slice(0,10) : '—') + '</span>' +
-        '<span style="min-width:44px;font-weight:600;color:var(--ink)">' + (parseFloat(e.hours)||0).toFixed(1) + 'h</span>' +
-        (e.person_name ? '<span style="font-size:11px;color:var(--ink-mid);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:10px">' + escapeHTML(e.person_name) + '</span>' : '') +
-        '<span style="color:var(--ink-mid);flex:1">' + escapeHTML(e.description || '') + '</span>' +
-        '</div>';
-    }).join('');
-    return '<div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px">' +
-      '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-left:4px solid ' + color + ';background:var(--surface)">' +
-        '<span style="font-weight:600;font-size:14px;flex:1;color:var(--ink)">' + escapeHTML(g.name) + '</span>' +
-        '<span style="font-size:13px;color:var(--ink-mid)">' + g.entries.length + ' entr' + (g.entries.length===1?'y':'ies') + '</span>' +
-        '<span style="font-weight:700;font-size:15px;color:' + color + '">' + g.total.toFixed(1) + 'h</span>' +
-      '</div>' +
-      rows +
-    '</div>';
-  }).join('');
+
+  // --- Weekly overview table ---
+  var dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var weekDays = dayNames.map(function(_,i){ var d=new Date(weekStart); d.setDate(weekStart.getDate()+i); return d; });
+  var weekLabel = monthNames[weekStart.getMonth()]+' '+weekStart.getDate()+' \u2014 '+monthNames[weekEnd.getMonth()]+' '+weekEnd.getDate()+', '+weekEnd.getFullYear();
+  var weekProjectKeys = projectKeys.filter(function(pid){ return Object.keys(groups[pid].weekDayHours).length>0; });
+  var dailyTotals = weekDays.map(function(d){ var k=toKey(d); return projectKeys.reduce(function(s,pid){ return s+(groups[pid].weekDayHours[k]||0); },0); });
+
+  var weekTableHtml;
+  if (weekProjectKeys.length) {
+    weekTableHtml = '<div class="gts-section">'+
+      '<div class="gts-section-hdr"><div class="gts-section-title">Weekly Overview</div><div class="gts-week-label">'+weekLabel+'</div></div>'+
+      '<div style="overflow-x:auto">'+
+      '<table class="gts-week-table"><thead><tr>'+
+        '<th style="text-align:left">Project / Task</th>'+
+        weekDays.map(function(d,i){
+          var isT=toKey(d)===toKey(today);
+          return '<th'+(isT?' style="color:var(--sage)"':'')+'>'+dayNames[i]+'<br><span style="font-weight:400;font-size:10px">'+d.getDate()+'</span></th>';
+        }).join('')+
+        '<th>Total</th>'+
+      '</tr></thead><tbody>'+
+      weekProjectKeys.map(function(pid){
+        var p=groups[pid];
+        var rowTotal=weekDays.reduce(function(s,d){ return s+(p.weekDayHours[toKey(d)]||0); },0);
+        return '<tr>'+
+          '<td class="gts-wt-name">'+escapeHTML(p.name)+'</td>'+
+          weekDays.map(function(d){ var h=p.weekDayHours[toKey(d)]||0; return '<td class="gts-wt-cell">'+(h>0?h.toFixed(1):'—')+'</td>'; }).join('')+
+          '<td class="gts-wt-total">'+rowTotal.toFixed(1)+'</td>'+
+        '</tr>';
+      }).join('')+
+      '</tbody><tfoot><tr>'+
+        '<td class="gts-wt-foot-lbl">Daily Totals</td>'+
+        dailyTotals.map(function(h,i){ var isT=toKey(weekDays[i])===toKey(today); return '<td class="gts-wt-foot-cell'+(isT?' today':'')+'">'+h.toFixed(1)+'</td>'; }).join('')+
+        '<td class="gts-wt-foot-total">'+weekTotal.toFixed(1)+'</td>'+
+      '</tr></tfoot></table></div></div>';
+  } else {
+    weekTableHtml = '<div class="gts-section"><div class="gts-section-hdr"><div class="gts-section-title">Weekly Overview</div><div class="gts-week-label">'+weekLabel+'</div></div>'+
+      '<div style="font-size:13px;color:var(--ink-light);padding:16px 0">No hours logged this week.</div></div>';
+  }
+
+  // --- Detailed History ---
+  var palette=['#6D28D9','#1967D2','#C8621A','#5A7A65','#5B8BA0','#C2185B','#00796B'];
+  var histHtml = '<div class="gts-section">'+
+    '<div class="gts-section-hdr"><div class="gts-section-title">Detailed History</div></div>'+
+    '<table class="gts-hist-table"><thead><tr>'+
+      '<th>Date</th><th>Project</th><th>Description</th><th style="text-align:right">Duration</th>'+
+    '</tr></thead><tbody>'+
+    entries.map(function(e){
+      var pi=projectKeys.indexOf(String(e.project_id));
+      var color=palette[pi>=0?pi%palette.length:0];
+      var pname=(e.projects&&e.projects.name)?e.projects.name:'—';
+      return '<tr>'+
+        '<td class="gts-hist-date">'+(e.log_date?e.log_date.slice(0,10):'—')+'</td>'+
+        '<td style="padding:13px 14px;vertical-align:top;border-bottom:1px solid var(--border)">'+
+          '<span class="gts-hist-proj" style="border-color:'+color+';color:'+color+'">'+escapeHTML(pname)+'</span>'+
+        '</td>'+
+        '<td class="gts-hist-desc">'+escapeHTML(e.description||'—')+(e.person_name?'<br><span style="font-size:11px;color:var(--ink-light)">'+escapeHTML(e.person_name)+'</span>':'')+'</td>'+
+        '<td class="gts-hist-dur">'+((parseFloat(e.hours)||0).toFixed(1))+' hrs</td>'+
+      '</tr>';
+    }).join('')+
+    '</tbody></table></div>';
+
+  body.innerHTML = weekTableHtml + histHtml;
 }
 
 // ─── GLOBAL GANTT ───
@@ -7731,7 +7827,7 @@ function openPtModal(mode) {
     var assigneeHtml = ppl.length
       ? '<div class="pt-assignee-cb-list">' + ppl.map(function(p){
           var chk = curAssignees.indexOf(p.name) >= 0 ? ' checked' : '';
-          return '<label class="pt-assignee-cb-label"><input type="checkbox" name="ptm-assignee-cb" value="' + escapeHTML(p.name) + '"' + chk + ' style="width:14px;height:14px;flex-shrink:0"> ' + escapeHTML(p.name) + '</label>';
+          return '<label class="pt-assignee-cb-label"><input type="checkbox" name="ptm-assignee-cb" value="' + escapeHTML(p.name) + '"' + chk + ' style="width:14px;height:14px;flex-shrink:0;margin:0;cursor:pointer"><span style="line-height:1.4">' + escapeHTML(p.name) + (p.role ? ' <span style="font-size:11px;color:var(--ink-light)">· ' + escapeHTML(p.role) + '</span>' : '') + '</span></label>';
         }).join('') + '</div>'
       : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">Add people in the Overview tab first</div>';
     html = '<div class="pt-modal-title">' + (mode === 'edit-task' ? 'Edit task' : 'Add task') + '</div>' +
