@@ -1200,6 +1200,47 @@ input[type=number]{-moz-appearance:textfield}
 .pt-filter-btn{padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:11px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);transition:all .15s}
 .pt-filter-btn:hover{border-color:var(--ink);color:var(--ink)}
 .pt-filter-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+/* Task cards */
+.pt-tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:4px}
+.pt-task-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;position:relative;transition:border-color .15s}
+.pt-task-card:hover{border-color:var(--amber-mid)}
+.pt-task-card.done-card{opacity:.55}
+.pt-task-card-hdr{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
+.pt-task-card-title{font-size:13px;font-weight:600;color:var(--ink);flex:1;line-height:1.4}
+.pt-task-card-title.done{text-decoration:line-through;color:var(--ink-light)}
+.pt-task-card-notes{font-size:12px;color:var(--ink-mid);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pt-task-card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pt-task-card-actions{display:flex;justify-content:flex-end;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border)}
+.pt-assignee-chips{display:flex;gap:3px;flex-wrap:wrap}
+/* Overview pulse cards */
+.pt-ov-pulse-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.pt-ov-pulse-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.pt-ov-pulse-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:8px}
+.pt-ov-pulse-val{font-size:28px;font-weight:700;font-family:var(--font-mono);color:var(--ink);line-height:1;margin-bottom:4px}
+.pt-ov-pulse-sub{font-size:12px;color:var(--ink-mid)}
+/* Active timeline */
+.pt-ov-section{margin-top:20px}
+.pt-ov-section-hdr{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:12px}
+.pt-timeline-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.pt-timeline-item:last-child{border-bottom:none}
+.pt-timeline-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.pt-timeline-body{flex:1;min-width:0}
+.pt-timeline-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.pt-timeline-title{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt-timeline-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.pt-timeline-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pt-timeline-date{font-size:11px;color:var(--ink-light)}
+.pt-timeline-date.overdue{color:#DC2626;font-weight:600}
+/* Key documents */
+.pt-docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.pt-doc-chip{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;text-decoration:none;transition:border-color .15s;overflow:hidden}
+.pt-doc-chip:hover{border-color:var(--amber)}
+.pt-doc-icon{font-size:18px;flex-shrink:0}
+.pt-doc-name{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt-doc-task{font-size:11px;color:var(--ink-light);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Multi-assignee checkbox list */
+.pt-assignee-cb-list{display:flex;flex-direction:column;gap:4px;padding:8px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);max-height:140px;overflow-y:auto}
+.pt-assignee-cb-label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;padding:2px 0}
 .pt-filter-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
 /* Priority badges */
 .pt-prio{font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
@@ -2526,6 +2567,20 @@ var RateLimiter = (function() {
           </div>
           <!-- Overview tab -->
           <div class="pt-tab-content" id="pt-tab-overview">
+            <!-- Pulse stat cards -->
+            <div class="pt-ov-pulse-row">
+              <div class="pt-ov-pulse-card">
+                <div class="pt-ov-pulse-lbl">Productivity Pulse</div>
+                <div class="pt-ov-pulse-val"><span id="ptv-pulse-hrs">—</span></div>
+                <div class="pt-ov-pulse-sub">hours logged</div>
+              </div>
+              <div class="pt-ov-pulse-card" style="background:var(--ink);border-color:var(--ink)">
+                <div class="pt-ov-pulse-lbl" style="color:rgba(250,247,242,.55)">Upcoming</div>
+                <div class="pt-ov-pulse-val" style="color:var(--cream)"><span id="ptv-deadline-count">—</span></div>
+                <div class="pt-ov-pulse-sub" style="color:rgba(250,247,242,.65)">Deadlines this week</div>
+              </div>
+            </div>
+            <!-- Project metadata -->
             <div class="pt-grid2">
               <div class="pt-field"><label>Client</label><div id="ptv-client" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
               <div class="pt-field"><label>Status</label><div id="ptv-status" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
@@ -2556,6 +2611,16 @@ var RateLimiter = (function() {
             <div class="pt-field" id="ptv-shares-wrap" style="display:none">
               <label>Shared with</label>
               <div id="ptv-shares-list" style="display:flex;flex-wrap:wrap;gap:6px;padding:4px 0"></div>
+            </div>
+            <!-- Active Timeline -->
+            <div class="pt-ov-section">
+              <div class="pt-ov-section-hdr">Active Timeline</div>
+              <div id="ptv-timeline-list"></div>
+            </div>
+            <!-- Key Documents -->
+            <div class="pt-ov-section">
+              <div class="pt-ov-section-hdr">Key Documents</div>
+              <div id="ptv-docs-list"></div>
             </div>
           </div>
           <!-- Milestones tab -->
@@ -6380,6 +6445,103 @@ function renderPtAllTabs() {
   renderPtBilling();
   renderPtMeetings();
   renderPtHours();
+  renderPtOverview();
+}
+
+function _parseAssignees(t) {
+  if (!t.assignee) return [];
+  try { var a = JSON.parse(t.assignee); if (Array.isArray(a)) return a; } catch(e) {}
+  return [t.assignee];
+}
+
+function renderPtOverview() {
+  var ts = window._ptTasks || [];
+  var hr = window._ptHours || [];
+
+  // Productivity Pulse — total hours logged
+  var totalHrs = hr.reduce(function(s,h){ return s + (parseFloat(h.hours)||0); }, 0);
+  var phEl = document.getElementById('ptv-pulse-hrs');
+  if (phEl) phEl.textContent = totalHrs.toFixed(1);
+
+  // Upcoming deadlines — within 7 days, not done
+  var now = new Date(); now.setHours(0,0,0,0);
+  var soon = new Date(now.getTime() + 7*24*60*60*1000);
+  var upcomingCount = ts.filter(function(t) {
+    if (t.status === 'done') return false;
+    if (!t.due_date) return false;
+    var d = new Date(t.due_date + 'T00:00:00');
+    return d >= now && d <= soon;
+  }).length;
+  var dcEl = document.getElementById('ptv-deadline-count');
+  if (dcEl) dcEl.textContent = String(upcomingCount).padStart(2, '0');
+
+  // Active Timeline — all non-done tasks sorted by due date
+  var active = ts.filter(function(t){ return t.status !== 'done'; })
+    .slice().sort(function(a,b){
+      var da = a.due_date ? new Date(a.due_date+'T00:00:00').getTime() : 9e15;
+      var db = b.due_date ? new Date(b.due_date+'T00:00:00').getTime() : 9e15;
+      return da - db;
+    });
+  var tlEl = document.getElementById('ptv-timeline-list');
+  if (tlEl) {
+    if (!active.length) {
+      tlEl.innerHTML = '<div style="font-size:13px;color:var(--ink-light);padding:10px 0">No active tasks yet.</div>';
+    } else {
+      tlEl.innerHTML = active.map(function(t) {
+        var isOverdue = _isOverdue(t.due_date, false);
+        var isInProgress = t.status === 'in_progress';
+        var dotColor = isOverdue ? '#DC2626' : isInProgress ? '#059669' : '#94a3b8';
+        var stLabel = isOverdue ? 'Overdue' : isInProgress ? 'In Progress' : 'Scheduled';
+        var stStyle = isOverdue ? 'color:#B91C1C;background:#FEE2E2' : isInProgress ? 'color:#065F46;background:#D1FAE5' : 'color:#475569;background:#F1F5F9';
+        var assignees = _parseAssignees(t);
+        var avatars = assignees.slice(0,3).map(function(a){
+          var ini = a.trim().split(' ').map(function(w){ return w[0]||''; }).join('').slice(0,2).toUpperCase();
+          return '<span class="pt-assignee" title="' + escapeHTML(a) + '">' + ini + '</span>';
+        }).join('');
+        var attachArr = []; try { attachArr = JSON.parse(t.attachments||'[]'); } catch(e){}
+        return '<div class="pt-timeline-item">' +
+          '<span class="pt-timeline-dot" style="background:' + dotColor + '"></span>' +
+          '<div class="pt-timeline-body">' +
+            '<div class="pt-timeline-top">' +
+              '<span class="pt-timeline-title">' + escapeHTML(t.title) + '</span>' +
+              '<span class="pt-timeline-status" style="' + stStyle + '">' + stLabel + '</span>' +
+            '</div>' +
+            '<div class="pt-timeline-meta">' +
+              (t.due_date ? '<span class="pt-timeline-date' + (isOverdue ? ' overdue' : '') + '">' + (isOverdue ? '⚠ ' : '') + t.due_date.slice(0,10) + '</span>' : '') +
+              (attachArr.length ? '<span style="font-size:11px;color:var(--ink-light)">📎 ' + attachArr.length + '</span>' : '') +
+              (avatars ? '<span class="pt-assignee-chips">' + avatars + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  // Key Documents — all attachments from tasks
+  var docs = [];
+  ts.forEach(function(t) {
+    var arr = []; try { arr = JSON.parse(t.attachments||'[]'); } catch(e){}
+    arr.forEach(function(a){ docs.push({ name: a.name, url: a.url, task: t.title }); });
+  });
+  var docsEl = document.getElementById('ptv-docs-list');
+  if (docsEl) {
+    if (!docs.length) {
+      docsEl.innerHTML = '<div style="font-size:13px;color:var(--ink-light);padding:10px 0">No documents attached to tasks yet.</div>';
+    } else {
+      docsEl.innerHTML = '<div class="pt-docs-grid">' +
+        docs.map(function(d) {
+          var ext = (d.name.split('.').pop()||'').toUpperCase();
+          var icon = ext==='PDF'?'📄': (ext==='JPG'||ext==='JPEG'||ext==='PNG'||ext==='GIF')?'🖼':'📎';
+          return '<a class="pt-doc-chip" href="' + escapeHTML(d.url||'#') + '" target="_blank">' +
+            '<span class="pt-doc-icon">' + icon + '</span>' +
+            '<div style="min-width:0">' +
+              '<div class="pt-doc-name">' + escapeHTML(d.name) + '</div>' +
+              '<div class="pt-doc-task">' + escapeHTML(d.task) + '</div>' +
+            '</div>' +
+          '</a>';
+        }).join('') + '</div>';
+    }
+  }
 }
 
 function renderPtMilestones() {
@@ -6502,13 +6664,15 @@ function renderPtTasks() {
   var filterBar = document.getElementById('pt-task-filter-bar');
   if (filterBar) {
     filterBar.style.display = ts.length > 1 ? '' : 'none';
-    // Populate assignee buttons
-    var assignees = [];
-    ts.forEach(function(t){ if (t.assignee && assignees.indexOf(t.assignee) < 0) assignees.push(t.assignee); });
+    // Collect all unique assignees across multi-assignee tasks
+    var assigneeSet = [];
+    ts.forEach(function(t){
+      _parseAssignees(t).forEach(function(a){ if (assigneeSet.indexOf(a) < 0) assigneeSet.push(a); });
+    });
     var assignBtns = document.getElementById('pt-assignee-filter-btns');
     if (assignBtns) {
       var allBtn = '<button class="pt-filter-btn' + (_ptTaskAssignFilter === 'all' ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',\'all\')">All</button>';
-      assignBtns.innerHTML = allBtn + assignees.map(function(a) {
+      assignBtns.innerHTML = allBtn + assigneeSet.map(function(a) {
         var safeA = escapeHTML(a).replace(/'/g,'&#39;');
         return '<button class="pt-filter-btn' + (_ptTaskAssignFilter === a ? ' active' : '') + '" onclick="setPtTaskFilter(\'assign\',\'' + safeA + '\')">' + escapeHTML(a) + '</button>';
       }).join('');
@@ -6518,40 +6682,48 @@ function renderPtTasks() {
   // Apply filters
   var filtered = ts.filter(function(t) {
     var prioOk = _ptTaskPrioFilter === 'all' || (t.priority || 'medium') === _ptTaskPrioFilter;
-    var assignOk = _ptTaskAssignFilter === 'all' || t.assignee === _ptTaskAssignFilter;
+    var assignOk = _ptTaskAssignFilter === 'all' || _parseAssignees(t).indexOf(_ptTaskAssignFilter) >= 0;
     return prioOk && assignOk;
   });
 
   if (!filtered.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--ink-light);font-size:13px">No tasks match the current filter.</div>'; return; }
 
-  var prioColors = { high:'#DC2626', medium:'#D97706', low:'#059669' };
+  var prioStyle = { high:'color:#B91C1C;background:#FEE2E2', medium:'color:#92400E;background:#FEF3C7', low:'color:#065F46;background:#D1FAE5' };
   var prioLabels = { high:'High', medium:'Medium', low:'Low' };
 
-  el.innerHTML = filtered.map(function(t, filtIdx) {
+  el.innerHTML = '<div class="pt-tasks-grid">' + filtered.map(function(t) {
     var realIdx = ts.indexOf(t);
     var done = t.status === 'done';
+    var inProgress = t.status === 'in_progress';
     var prio = t.priority || 'medium';
     var overdue = _isOverdue(t.due_date, done);
-    var initials = t.assignee ? t.assignee.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase() : '';
-    var attachArr = [];
-    try { attachArr = JSON.parse(t.attachments || '[]'); } catch(e){}
-    return '<div class="pt-row" draggable="true" data-idx="' + realIdx + '" ' +
-      'ondragstart="ptTaskDragStart(event,' + realIdx + ')" ' +
-      'ondragover="ptTaskDragOver(event)" ' +
-      'ondragleave="ptTaskDragLeave(event)" ' +
-      'ondrop="ptTaskDrop(event,' + realIdx + ')">' +
-      '<span class="pt-drag-handle" title="Drag to reorder">⠿</span>' +
-      '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + realIdx + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
-      '<span class="pt-row-name' + (done ? ' done' : '') + '" style="flex:1">' + escapeHTML(t.title) + '</span>' +
-      '<span class="pt-prio pt-prio-' + prio + '" title="Priority: ' + prioLabels[prio] + '">' + prioLabels[prio] + '</span>' +
-      (initials ? '<span class="pt-assignee" title="' + escapeHTML(t.assignee) + '">' + initials + '</span>' : '') +
-      (t.due_date ? '<span class="pt-row-date" style="' + (overdue ? 'color:#DC2626;font-weight:600' : '') + '">' + (overdue ? '⚠ ' : '') + t.due_date.slice(0,10) + '</span>' : '') +
-      (attachArr.length ? '<span style="font-size:11px;color:var(--ink-mid)" title="' + attachArr.length + ' attachment(s)">📎' + attachArr.length + '</span>' : '') +
-      '<button class="pt-row-edit" onclick="openPtEditTask(' + realIdx + ')">Edit</button>' +
-      '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">&#215;</button>' +
-      '</div>';
-  }).join('');
-  // Enable drag-person-to-task after DOM update
+    var assignees = _parseAssignees(t);
+    var avatars = assignees.slice(0,3).map(function(a){
+      var ini = a.trim().split(' ').map(function(w){ return w[0]||''; }).join('').slice(0,2).toUpperCase();
+      return '<span class="pt-assignee" title="' + escapeHTML(a) + '">' + ini + '</span>';
+    }).join('');
+    var attachArr = []; try { attachArr = JSON.parse(t.attachments||'[]'); } catch(e){}
+    var stLabel = done ? 'Done' : inProgress ? 'In Progress' : overdue ? 'Overdue' : 'To Do';
+    var stStyle = done ? 'color:#475569;background:#F1F5F9' : inProgress ? 'color:#065F46;background:#D1FAE5' : overdue ? 'color:#B91C1C;background:#FEE2E2' : 'color:#92400E;background:#FEF3C7';
+    return '<div class="pt-task-card' + (done ? ' done-card' : '') + '" data-idx="' + realIdx + '">' +
+      '<div class="pt-task-card-hdr">' +
+        '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + realIdx + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
+        '<span class="pt-task-card-title' + (done ? ' done' : '') + '">' + escapeHTML(t.title) + '</span>' +
+        '<span style="font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;flex-shrink:0;' + prioStyle[prio] + '">' + prioLabels[prio] + '</span>' +
+      '</div>' +
+      (t.notes ? '<div class="pt-task-card-notes">' + escapeHTML(t.notes) + '</div>' : '') +
+      '<div class="pt-task-card-meta">' +
+        '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;' + stStyle + '">' + stLabel + '</span>' +
+        (t.due_date ? '<span class="pt-row-date" style="' + (overdue && !done ? 'color:#DC2626;font-weight:600' : '') + '">' + (overdue && !done ? '⚠ ' : '') + t.due_date.slice(0,10) + '</span>' : '') +
+        (attachArr.length ? '<span style="font-size:11px;color:var(--ink-mid)">📎 ' + attachArr.length + '</span>' : '') +
+      '</div>' +
+      (avatars ? '<div class="pt-assignee-chips" style="margin-top:8px">' + avatars + '</div>' : '') +
+      '<div class="pt-task-card-actions">' +
+        '<button class="pt-row-edit" onclick="openPtEditTask(' + realIdx + ')">Edit</button>' +
+        '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">&#215;</button>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '</div>';
   setTimeout(_attachPersonDropToTasks, 0);
 }
 
@@ -6627,7 +6799,8 @@ function renderPtPeople() {
   if (!wrap) return;
   var people = loadPtPeople();
   // Also pull unique assignees from tasks as "auto" members
-  var taskAssignees = (window._ptTasks || []).map(function(t){ return t.assignee; }).filter(Boolean);
+  var taskAssignees = [];
+  (window._ptTasks || []).forEach(function(t){ _parseAssignees(t).forEach(function(a){ if (taskAssignees.indexOf(a) < 0) taskAssignees.push(a); }); });
   taskAssignees.forEach(function(name) {
     if (!people.find(function(p){ return p.name === name; })) {
       people.push({name: name, role: '', side: 'freelancer', auto: true});
@@ -6681,28 +6854,33 @@ function personDragStart(e, name) {
   e.currentTarget.classList.add('dragging');
 }
 
-// Patch task rows to accept person drops (called after renderPtTasks)
+// Patch task cards to accept person drops (called after renderPtTasks)
 function _attachPersonDropToTasks() {
-  document.querySelectorAll('#pt-tasks-list .pt-row').forEach(function(row) {
-    row.addEventListener('dragover', function(e) {
+  document.querySelectorAll('#pt-tasks-list .pt-task-card').forEach(function(card) {
+    card.addEventListener('dragover', function(e) {
       if (e.dataTransfer.types.indexOf('person-name') >= 0) {
-        e.preventDefault(); row.classList.add('person-drag-over');
+        e.preventDefault(); card.style.borderColor = 'var(--amber)';
       }
     });
-    row.addEventListener('dragleave', function() { row.classList.remove('person-drag-over'); });
-    row.addEventListener('drop', function(e) {
+    card.addEventListener('dragleave', function() { card.style.borderColor = ''; });
+    card.addEventListener('drop', function(e) {
       var pname = e.dataTransfer.getData('person-name');
       if (!pname) return;
-      row.classList.remove('person-drag-over');
-      var idx = parseInt(row.getAttribute('data-idx'));
+      card.style.borderColor = '';
+      var idx = parseInt(card.getAttribute('data-idx'));
       var ts = window._ptTasks;
       if (!ts || isNaN(idx) || !ts[idx]) return;
-      ts[idx].assignee = pname;
+      // Add to existing assignees (avoid duplicates)
+      var existing = _parseAssignees(ts[idx]);
+      if (existing.indexOf(pname) < 0) existing.push(pname);
+      var newVal = JSON.stringify(existing);
+      ts[idx].assignee = newVal;
       if (_supabase && _currentUser) {
-        _supabase.from('project_tasks').update({assignee: pname}).eq('id', ts[idx].id).eq('user_id', _currentUser.id);
+        _supabase.from('project_tasks').update({assignee: newVal}).eq('id', ts[idx].id).eq('user_id', _currentUser.id);
       }
       renderPtTasks();
-      showToast('✓ Assigned to ' + pname);
+      renderPtOverview();
+      showToast('✓ Assigned ' + pname);
     });
   });
 }
@@ -7507,10 +7685,18 @@ function openPtModal(mode) {
   } else if (mode === 'add-task' || mode === 'edit-task') {
     var et = (mode === 'edit-task' && window._ptEditTaskIdx !== undefined) ? (window._ptTasks[window._ptEditTaskIdx] || {}) : {};
     var selOpt = function(val, opt) { return val === opt ? ' selected' : ''; };
+    var curAssignees = _parseAssignees(et);
+    var ppl = loadPtPeople(_ptCurrentId);
+    var assigneeHtml = ppl.length
+      ? '<div class="pt-assignee-cb-list">' + ppl.map(function(p){
+          var chk = curAssignees.indexOf(p.name) >= 0 ? ' checked' : '';
+          return '<label class="pt-assignee-cb-label"><input type="checkbox" name="ptm-assignee-cb" value="' + escapeHTML(p.name) + '"' + chk + ' style="width:14px;height:14px;flex-shrink:0"> ' + escapeHTML(p.name) + '</label>';
+        }).join('') + '</div>'
+      : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">Add people in the Overview tab first</div>';
     html = '<div class="pt-modal-title">' + (mode === 'edit-task' ? 'Edit task' : 'Add task') + '</div>' +
       '<div class="pt-field"><label>Task *</label><input class="pt-inp" id="ptm-task-title" value="' + escapeHTML(et.title || '') + '" placeholder="e.g. Design mockups"></div>' +
+      '<div class="pt-field"><label>Assigned to</label>' + assigneeHtml + '</div>' +
       '<div class="pt-grid2">' +
-      (function(){ var ppl = loadPtPeople(_ptCurrentId); var opts = '<option value="">— unassigned —</option>' + ppl.map(function(p){ return '<option value="' + escapeHTML(p.name) + '"' + (et.assignee === p.name ? ' selected' : '') + '>' + escapeHTML(p.name) + '</option>'; }).join(''); return '<div class="pt-field"><label>Assigned to</label><select class="pt-sel" id="ptm-task-assignee">' + opts + '</select></div>'; })() +
       '<div class="pt-field"><label>Due date</label><input class="pt-inp" type="date" id="ptm-task-date" value="' + (et.due_date ? et.due_date.slice(0,10) : '') + '"></div>' +
       '<div class="pt-field"><label>Status</label><select class="pt-sel" id="ptm-task-status"><option value="todo"' + selOpt(et.status,'todo') + '>To do</option><option value="in_progress"' + selOpt(et.status,'in_progress') + '>In progress</option><option value="done"' + selOpt(et.status,'done') + '>Done</option></select></div>' +
       '<div class="pt-field"><label>Priority</label><select class="pt-sel" id="ptm-task-priority"><option value="low"' + selOpt(et.priority,'low') + '>Low</option><option value="medium"' + (et.priority ? selOpt(et.priority,'medium') : ' selected') + '>Medium</option><option value="high"' + selOpt(et.priority,'high') + '>High</option></select></div>' +
@@ -7646,8 +7832,10 @@ async function savePtTask() {
   var title = document.getElementById('ptm-task-title')&&document.getElementById('ptm-task-title').value.trim();
   if (!title) { showToast('Task title required'); return; }
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
+  var selectedAssignees = Array.from(document.querySelectorAll('[name="ptm-assignee-cb"]:checked')).map(function(cb){ return cb.value; });
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id, title: title,
-    assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null,
+    assignee: selectedAssignees.length ? JSON.stringify(selectedAssignees) : null,
+    due_date: g('ptm-task-date') || null,
     status: g('ptm-task-status') || 'todo', priority: g('ptm-task-priority') || 'medium',
     notes: g('ptm-task-notes'),
     attachments: JSON.stringify(_ptPendingAttachments),
@@ -7914,7 +8102,8 @@ async function updatePtTask() {
   try { existAttach = JSON.parse(ts[window._ptEditTaskIdx].attachments || '[]'); } catch(e){}
   var merged = existAttach.concat(_ptPendingAttachments);
   _ptPendingAttachments = [];
-  var payload = { title: title, assignee: g('ptm-task-assignee'), due_date: g('ptm-task-date') || null, status: g('ptm-task-status'), priority: g('ptm-task-priority'), notes: g('ptm-task-notes'), attachments: JSON.stringify(merged) };
+  var selectedAssignees = Array.from(document.querySelectorAll('[name="ptm-assignee-cb"]:checked')).map(function(cb){ return cb.value; });
+  var payload = { title: title, assignee: selectedAssignees.length ? JSON.stringify(selectedAssignees) : null, due_date: g('ptm-task-date') || null, status: g('ptm-task-status'), priority: g('ptm-task-priority'), notes: g('ptm-task-notes'), attachments: JSON.stringify(merged) };
   var res = await _supabase.from('project_tasks').update(payload).eq('id', ts[window._ptEditTaskIdx].id).eq('user_id', _currentUser.id).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   ts[window._ptEditTaskIdx] = res.data;
