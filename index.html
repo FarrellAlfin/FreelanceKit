@@ -890,8 +890,8 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .fo-tab:hover{color:var(--ink)}
 .fo-tab.active{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
 .fo-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:14px}
-.fo-chart-wrap{display:flex;align-items:flex-end;gap:8px;height:120px;background:var(--cream);border-radius:var(--radius);padding:16px;overflow-x:auto}
-.fo-bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:36px}
+.fo-chart-wrap{display:flex;align-items:flex-end;gap:24px;height:140px;background:var(--cream);border-radius:var(--radius);padding:20px 32px;overflow-x:auto;justify-content:center}
+.fo-bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;max-width:120px;flex:1}
 .fo-bar{background:var(--amber-mid);border-radius:3px 3px 0 0;width:100%;min-height:4px;transition:height .3s}
 .fo-bar-lbl{font-size:9px;color:var(--ink-light);white-space:nowrap}
 .fo-bar-val{font-size:9px;color:var(--ink-mid);font-family:var(--font-mono)}
@@ -1258,7 +1258,6 @@ input[type=number]{-moz-appearance:textfield}
 .attendee-add-btn:hover{border-color:var(--amber);color:var(--amber)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 <script>
   // ─── SUPABASE CONFIGURATION ───────────────────────────────────
   // OWASP NOTE: The Supabase "anon" key is intentionally public — it
@@ -1887,6 +1886,17 @@ var RateLimiter = (function() {
         <span class="dsb-icon"></span><span class="dsb-label">Home</span>
       </div>
 
+      <div class="dsb-section">My Business</div>
+      <div class="dsb-item" onclick="showPanel('mydetails',this)" id="nav-mydetails">
+        <span class="dsb-icon"></span><span class="dsb-label">My Details</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
+        <span class="dsb-icon"></span><span class="dsb-label">Client Contacts</span>
+      </div>
+      <div class="dsb-item" onclick="showPanel('invhistory',this)" id="nav-invhistory">
+        <span class="dsb-icon"></span><span class="dsb-label">Financial Overview</span>
+      </div>
+
       <div class="dsb-section">Business Operations</div>
       <div class="dsb-item" onclick="showPanel('projects',this)" id="nav-projects">
         <span class="dsb-icon"></span><span class="dsb-label">Project Tracker</span>
@@ -1900,13 +1910,9 @@ var RateLimiter = (function() {
       <div class="dsb-item" onclick="showPanel('timesheet',this)" id="nav-timesheet">
         <span class="dsb-icon"></span><span class="dsb-label">Timesheet</span>
       </div>
-
-      <div class="dsb-section">Invoicing &amp; Payments</div>
       <div class="dsb-item" onclick="showPanel('invoice',this)" id="nav-invoice">
         <span class="dsb-icon"></span><span class="dsb-label">Invoice Builder</span>
       </div>
-
-      <div class="dsb-section">Pricing</div>
       <div class="dsb-item" onclick="showPanel('ratecalc',this)" id="nav-ratecalc">
         <span class="dsb-icon"></span><span class="dsb-label">Rate Calculator</span>
       </div>
@@ -1919,16 +1925,6 @@ var RateLimiter = (function() {
         <span class="dsb-icon"></span><span class="dsb-label">Project Brief Form</span>
       </div>
 
-      <div class="dsb-section">My Business</div>
-      <div class="dsb-item" onclick="showPanel('mydetails',this)" id="nav-mydetails">
-        <span class="dsb-icon"></span><span class="dsb-label">My Details</span>
-      </div>
-      <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
-        <span class="dsb-icon"></span><span class="dsb-label">Client Contacts</span>
-      </div>
-      <div class="dsb-item" onclick="showPanel('invhistory',this)" id="nav-invhistory">
-        <span class="dsb-icon"></span><span class="dsb-label">Financial Overview</span>
-      </div>
       <div class="dsb-section">Account</div>
       <div class="dsb-item" onclick="handleSignOut()">
         <span class="dsb-icon"></span><span class="dsb-label">Sign out</span>
@@ -1965,15 +1961,6 @@ var RateLimiter = (function() {
             <div class="hw-title">
               <span>To-do list</span>
               <button class="hw-title-action" onclick="clearDoneTodos()">Clear done</button>
-            </div>
-            <div class="todo-add-row">
-              <input class="todo-inp" id="todo-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTodo()">
-              <button class="todo-add-btn" onclick="addTodo()">+ Add</button>
-            </div>
-            <div style="margin-bottom:8px">
-              <select id="todo-proj-sel" style="width:100%;font-size:12px;color:var(--ink-mid);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;font-family:var(--font-body);cursor:pointer">
-                <option value="">No project (personal task)</option>
-              </select>
             </div>
             <div class="todo-filter-row" id="todo-filter-row">
               <button class="todo-filter active" data-proj-id="" onclick="setTodoFilter('')">All</button>
@@ -2066,7 +2053,7 @@ var RateLimiter = (function() {
           <div class="tv-title">Client Contract —<br><em>Full Protection</em></div>
           <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
           <div class="tv-actions">
-            <button class="btn-outline" onclick="window.location.href='FreelanceKit_Client_Contract.docx'">&#128196; Download Word doc</button>
+            <button class="btn-outline" onclick="printDocPanel('contract-doc-body','Client Contract')">&#128196; Download PDF</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> This template is for general informational purposes only. It does not constitute legal advice. Laws vary by jurisdiction — consult a qualified attorney for high-value or complex engagements. FreelanceKit accepts no liability for outcomes arising from use of this template.</div>
@@ -2139,7 +2126,7 @@ var RateLimiter = (function() {
           <div class="tv-title">Scope Change<br><em>Order</em></div>
           <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
           <div class="tv-actions">
-            <button class="btn-outline" onclick="window.location.href='FreelanceKit_Scope_Change_Order.docx'">&#128196; Download Word doc</button>
+            <button class="btn-outline" onclick="printDocPanel('scope-doc-body','Scope Change Order')">&#128196; Download PDF</button>
           </div>
         </div>
         <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> For general use. Ensure your primary contract includes a provision allowing for written scope changes. Consult a local attorney for complex arrangements.</div>
@@ -3422,6 +3409,20 @@ function updateInv(){
   if(dr)dr.style.display=disc>0?'':'none';if(g('p-disc-val'))g('p-disc-val').textContent='−'+fmD(da)+' ('+disc+'%)';
   if(tr)tr.style.display=tax>0?'':'none';if(g('p-tax-val'))g('p-tax-val').textContent='+'+fmD(ta)+' ('+tax+'%)';
   g('p-total').textContent=fmD(tot);
+}
+
+function printDocPanel(panelId, title) {
+  var el = document.getElementById(panelId);
+  if (!el) return;
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + escapeHTML(title||'Document') + '</title>' +
+    '<style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:48px;max-width:720px;margin:0 auto;color:#222;font-size:13px;line-height:1.7}' +
+    'h1,h2,h3{line-height:1.3}p{margin:0 0 10px}table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border:1px solid #e5e5e0;font-size:12px}' +
+    '@media print{body{padding:24px}}</style>' +
+    '</head><body onload="setTimeout(function(){window.print();},300)">' + el.innerHTML + '</body></html>';
+  var blob = new Blob([html], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 15000);
 }
 
 // ═══════════════ WORD DOCUMENT GENERATOR ═══════════════
@@ -4853,11 +4854,11 @@ function renderFinancialOverview() {
   _animateCount(document.getElementById('fo-total-income'), totalEarned + manualTotal, 900);
   document.getElementById('fo-month-name').textContent = monthNames[now.getMonth()] + ' ' + now.getFullYear();
 
-  // Monthly chart — last 6 months
+  // Monthly chart — 2 months prior to current month
   var months = [];
-  for (var m = 5; m >= 0; m--) {
+  for (var m = 2; m >= 1; m--) {
     var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
-    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: monthNames[d.getMonth()] });
+    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: monthNames[d.getMonth()] + ' ' + d.getFullYear() });
   }
   var monthTotals = months.map(function(mo) {
     var invAmt = invs.filter(function(i){ return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === mo.key; })
@@ -5181,23 +5182,59 @@ function foeiCloseFullPreview() {
   if (overlay) overlay.style.display = 'none';
   if (editModal) editModal.style.display = 'flex';
 }
+function _invPdfCss() {
+  return [
+    'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0;padding:0;color:#222;background:#fff}',
+    '.inv-paper{padding:40px 48px;max-width:720px;margin:0 auto}',
+    '.inv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}',
+    '.inv-brand-name{font-size:20px;font-weight:400;color:#222;margin-bottom:3px}',
+    '.inv-brand-detail{font-size:11px;color:#888;line-height:1.7}',
+    '.inv-word{font-size:32px;font-weight:300;color:#222;letter-spacing:-.02em;font-style:italic;text-align:right}',
+    '.inv-num{font-size:12px;color:#888;font-family:"Courier New",monospace;text-align:right;margin-top:3px}',
+    '.inv-meta{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid #e5e5e0}',
+    '.inv-meta-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:5px}',
+    '.inv-meta-val{font-size:13px;color:#222}',
+    '.inv-dates{display:flex;gap:24px;margin-bottom:22px}',
+    '.inv-date-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#888;margin-bottom:2px}',
+    '.inv-date-val{font-size:13px;font-weight:500;color:#222;font-family:"Courier New",monospace}',
+    '.inv-table{width:100%;border-collapse:collapse;margin-bottom:20px}',
+    '.inv-table th{text-align:left;padding:8px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;background:#f7f6f3;border-bottom:1px solid #e5e5e0}',
+    '.inv-table th:not(:first-child){text-align:right}',
+    '.inv-table td{padding:10px;font-size:13px;color:#222;border-bottom:1px solid #e5e5e0;vertical-align:top}',
+    '.inv-table td:not(:first-child){text-align:right;font-family:"Courier New",monospace}',
+    '.inv-table tr:last-child td{border-bottom:none}',
+    '.inv-totals{display:flex;justify-content:flex-end;margin-bottom:24px}',
+    '.inv-tot-inner{width:240px}',
+    '.inv-tot-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}',
+    '.inv-tot-lbl{color:#555}',
+    '.inv-tot-val{font-weight:500;font-family:"Courier New",monospace}',
+    '.inv-tot-div{height:1px;background:#e5e5e0;margin:8px 0}',
+    '.inv-tot-grand{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;font-weight:700}',
+    '.inv-footer{border-top:1px solid #e5e5e0;padding-top:20px}',
+    '.inv-footer-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px}',
+    '.inv-footer-val{font-size:13px;color:#555;line-height:1.6}',
+    '@media print{.inv-paper{padding:24px 32px}}'
+  ].join('');
+}
 function foeiDownloadPdf() {
+  // Render fresh into a temp div to get latest data
+  foeiRenderPreview();
   var prev = document.getElementById('foei-preview');
   if (!prev) return;
   var myName = (function(){ var fn=document.getElementById('my-firstname'); var ln=document.getElementById('my-lastname'); return ([fn&&fn.value,ln&&ln.value].filter(Boolean).join(' '))||'Invoice'; })();
   var num = (document.getElementById('foei-num')||{}).value || 'Invoice';
-  var html = '<!DOCTYPE html><html><head><title>' + escapeHTML(myName) + ' – ' + escapeHTML(num) + '</title>' +
-    '<style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:48px;max-width:680px;margin:0 auto;color:#222;font-size:13px}' +
-    'table{width:100%;border-collapse:collapse}th,td{padding:6px 0}' +
-    '@media print{body{padding:24px}}</style>' +
-    '</head><body onload="setTimeout(function(){window.print();},200)">' + prev.innerHTML + '</body></html>';
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + escapeHTML(myName) + ' \u2013 ' + escapeHTML(num) + '</title>' +
+    '<style>' + _invPdfCss() + '</style>' +
+    '</head><body onload="setTimeout(function(){window.print();},300)">' +
+    '<div class="inv-paper">' + prev.innerHTML + '</div>' +
+    '</body></html>';
   var blob = new Blob([html], { type: 'text/html' });
   var url = URL.createObjectURL(blob);
-  var w = window.open(url, '_blank');
-  setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
+  window.open(url, '_blank');
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 15000);
 }
 async function foSaveEditInv() {
-  if (!_currentUser || !_foEditInvId) return;
+  if (!_foEditInvId) { showToast('No invoice selected'); return; }
   var g = function(id){ var el=document.getElementById(id); return el ? el.value.trim() : ''; };
   var sub = _foEditItems.reduce(function(s,li){ return s + ((parseFloat(li.qty)||0)*(parseFloat(li.rate)||0)); }, 0);
   var disc = parseFloat(g('foei-disc')) || 0;
@@ -5213,23 +5250,27 @@ async function foSaveEditInv() {
     client_email: g('foei-email'),
     project: g('foei-project'),
     line_items: _foEditItems,
+    subtotal: sub,
     tax_pct: tax, discount_pct: disc,
     notes: g('foei-notes'),
     total: total,
     updated_at: new Date().toISOString()
   };
-  var res = await _supabase.from('invoices').update(payload).eq('id', _foEditInvId).eq('user_id', _currentUser.id).select().single();
-  if (res.error) { showToast('Error: ' + res.error.message); return; }
-  if (res.data) {
-    var idx = _invoices.findIndex(function(i){ return i.id === _foEditInvId; });
-    if (idx >= 0) _invoices[idx] = res.data;
-  }
+  // Update local array immediately for instant feedback
+  var idx = (_invoices || []).findIndex(function(i){ return i.id === _foEditInvId; });
+  if (idx >= 0) _invoices[idx] = Object.assign({}, _invoices[idx], payload);
   foCloseEditInv();
   renderInvHistory();
   renderFinancialOverview();
-  // Also refresh Project Tracker billing tab if it's currently open
   if (_ptCurrentId && typeof renderPtBilling === 'function') renderPtBilling();
   showToast('\u2713 Invoice updated');
+  // Persist to Supabase in the background
+  if (_currentUser && _supabase) {
+    _supabase.from('invoices').update(payload).eq('id', _foEditInvId).eq('user_id', _currentUser.id).select().single().then(function(res) {
+      if (res.error) { showToast('Sync error: ' + res.error.message); return; }
+      if (res.data && idx >= 0) _invoices[idx] = res.data;
+    });
+  }
 }
 
 // ═══════════════ RATE SCENARIOS ═══════════════
@@ -5425,32 +5466,13 @@ function renderTodos() {
   var list = document.getElementById('todo-list');
   if (!list) return;
 
-  var filtered = _todoFilter ? _todos.filter(function(t){ return t.project_id === _todoFilter; }) : _todos;
-  var active = filtered.filter(function(t){ return !t.done; });
-  var done   = filtered.filter(function(t){ return t.done; });
-
-  // Active personal todos + project tasks — merged into one list
+  // Only show project tasks from the project tracker
   var today = new Date(); today.setHours(0,0,0,0);
   var projTasks = _homeProjectTasks.filter(function(t){
     return !_todoFilter || t.project_id === _todoFilter;
   });
 
-  var html = active.map(function(t) {
-    var color = getProjectColor(t.project_id);
-    var tid = t.id.replace(/['"]/g,'');
-    var proj = t.project_id ? (_ptProjects || []).find(function(p){ return p.id === t.project_id; }) : null;
-    return '<div class="todo-item">' +
-      '<div class="todo-dot" style="background:' + color + '"></div>' +
-      '<input type="checkbox" class="todo-check" onchange="toggleTodo(\'' + tid + '\')">' +
-      '<div style="flex:1;min-width:0">' +
-        '<div class="todo-text">' + escapeHTML(t.text) + '</div>' +
-        (proj ? '<div style="font-size:10px;color:var(--ink-light);margin-top:1px">' + escapeHTML(proj.name) + '</div>' : '') +
-      '</div>' +
-      '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
-    '</div>';
-  }).join('');
-
-  html += projTasks.map(function(t) {
+  var html = projTasks.map(function(t) {
     var color = getProjectColor(t.project_id);
     var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
     var overdue = t.due_date && new Date(t.due_date + 'T00:00:00') < today;
@@ -5469,25 +5491,12 @@ function renderTodos() {
     '</div>';
   }).join('');
 
-  // Recently completed (personal todos + project tasks)
+  // Recently completed project tasks
   var doneProjTasks = (_homeProjectTasksDone || []).filter(function(t){
     return !_todoFilter || t.project_id === _todoFilter;
   });
-  if (done.length || doneProjTasks.length) {
-    html += '<div class="todo-section-lbl" style="margin-top:16px;display:flex;align-items:center;justify-content:space-between">' +
-      '<span>Recently completed</span>' +
-      '<button onclick="clearDoneTodos()" style="font-size:10px;color:var(--ink-light);background:none;border:none;cursor:pointer;padding:0;font-family:var(--font-body)">Clear all</button>' +
-    '</div>';
-    html += done.map(function(t) {
-      var color = getProjectColor(t.project_id);
-      var tid = t.id.replace(/['"]/g,'');
-      return '<div class="todo-item" style="opacity:.55">' +
-        '<div class="todo-dot" style="background:' + color + '"></div>' +
-        '<input type="checkbox" class="todo-check" checked onchange="toggleTodo(\'' + tid + '\')">' +
-        '<span class="todo-text done">' + escapeHTML(t.text) + '</span>' +
-        '<button class="todo-del" onclick="deleteTodo(\'' + tid + '\')">✕</button>' +
-      '</div>';
-    }).join('');
+  if (doneProjTasks.length) {
+    html += '<div class="todo-section-lbl" style="margin-top:16px">Recently completed</div>';
     html += doneProjTasks.map(function(t) {
       var color = getProjectColor(t.project_id);
       var proj = (_ptProjects || []).find(function(p){ return p.id === t.project_id; });
@@ -5503,7 +5512,7 @@ function renderTodos() {
     }).join('');
   }
 
-  if (!html) { list.innerHTML = '<div class="hw-empty">Nothing here — add your first task ✓</div>'; return; }
+  if (!html) { list.innerHTML = '<div class="hw-empty">No project tasks — open Project Tracker to add tasks</div>'; return; }
   list.innerHTML = html;
 }
 
@@ -6401,9 +6410,7 @@ function renderPtMilestones() {
       '</td></tr>';
   }).join('');
 
-  var todayBtn = '<div style="display:flex;justify-content:flex-end;margin-bottom:6px"><button onclick="ganttScrollToToday(\'ms-gantt-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button></div>';
-
-  el.innerHTML = todayBtn +
+  el.innerHTML =
     '<div style="overflow-x:auto" id="ms-gantt-scroll" data-today-pct="' + (todayPct || '') + '">' +
     '<table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:500px">' +
     '<colgroup><col style="width:' + nameColW + '"></colgroup>' +
@@ -7091,9 +7098,7 @@ function renderGlobalGantt() {
       '</div></div></td></tr>';
   }).join('');
 
-  var todayBtn = '<button onclick="ganttScrollToToday(\'gg-scroll\')" style="font-size:11px;padding:4px 10px;border:1px solid #E8594A;color:#E8594A;background:transparent;border-radius:6px;cursor:pointer;font-family:var(--font-body)">📍 Today</button>';
-
-  el.innerHTML = '<div style="display:flex;justify-content:flex-end;margin-bottom:6px">' + todayBtn + '</div>' +
+  el.innerHTML =
     '<div style="overflow-x:auto" id="gg-scroll" data-today-pct="' + (todayPct || '') + '">' +
     '<table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:600px">' +
     '<colgroup><col style="width:170px"></colgroup>' +
