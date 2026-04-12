@@ -890,11 +890,16 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .fo-tab:hover{color:var(--ink)}
 .fo-tab.active{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
 .fo-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:14px}
-.fo-chart-wrap{display:flex;align-items:flex-end;gap:24px;height:140px;background:var(--cream);border-radius:var(--radius);padding:20px 32px;overflow-x:auto;justify-content:center}
-.fo-bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;max-width:120px;flex:1}
-.fo-bar{background:var(--amber-mid);border-radius:3px 3px 0 0;width:100%;min-height:4px;transition:height .3s}
-.fo-bar-lbl{font-size:9px;color:var(--ink-light);white-space:nowrap}
-.fo-bar-val{font-size:9px;color:var(--ink-mid);font-family:var(--font-mono)}
+.fo-chart-wrap{background:var(--cream);border-radius:var(--radius);padding:18px 24px}
+.fo-hbar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fo-hbar-row:last-of-type{margin-bottom:0}
+.fo-hbar-lbl{font-size:11px;color:var(--ink-mid);min-width:72px;text-align:right;white-space:nowrap;flex-shrink:0}
+.fo-hbar-track{flex:1;height:26px;background:var(--border);border-radius:4px;overflow:hidden;display:flex}
+.fo-hbar-seg{height:100%;transition:width .4s;flex-shrink:0}
+.fo-hbar-val{font-size:11px;font-family:var(--font-mono);color:var(--ink-mid);min-width:56px;flex-shrink:0}
+.fo-chart-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.fo-legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;flex-shrink:0}
+.fo-legend-item{display:flex;align-items:center;font-size:11px;color:var(--ink-mid)}
 .fo-proj-table{width:100%;border-collapse:collapse}
 .fo-proj-tr{border-bottom:1px solid var(--border)}
 .fo-proj-tr:last-child{border-bottom:none}
@@ -4855,30 +4860,51 @@ function renderFinancialOverview() {
   _animateCount(document.getElementById('fo-total-income'), totalEarned + manualTotal, 900);
   document.getElementById('fo-month-name').textContent = monthNames[now.getMonth()] + ' ' + now.getFullYear();
 
-  // Monthly chart — 2 months prior + current month
+  // Monthly chart — 2 months prior + current month (horizontal bars by project)
+  var _foChartColors = ['#7B9E87','#D4A853','#C17B6A','#6B8EAD','#9B8BC3','#C4A882','#8BC4B8','#E8956D','#A8C4A2','#D4956A'];
+  // Build global project color map (consistent across months)
+  var _allProjKeys = {};
+  invs.filter(function(i){ return i.status === 'paid'; }).forEach(function(i){
+    var k = i.project || i.client_name || 'Other'; _allProjKeys[k] = true;
+  });
+  manuals.forEach(function(m){ var k = m.source || 'Other Income'; _allProjKeys[k] = true; });
+  var _projColorMap = {};
+  Object.keys(_allProjKeys).forEach(function(k, idx){ _projColorMap[k] = _foChartColors[idx % _foChartColors.length]; });
+
   var months = [];
   for (var m = 2; m >= 0; m--) {
     var d = new Date(now.getFullYear(), now.getMonth() - m, 1);
-    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: monthNames[d.getMonth()] + ' ' + d.getFullYear() });
+    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: monthNames[d.getMonth()] });
   }
-  var monthTotals = months.map(function(mo) {
-    var invAmt = invs.filter(function(i){ return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === mo.key; })
-      .reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
-    var manAmt = manuals.filter(function(m){ return m.date && m.date.slice(0,7) === mo.key; })
-      .reduce(function(s,m){ return s + (parseFloat(m.amount)||0); }, 0);
-    return { label: mo.label, val: invAmt + manAmt };
+  var monthData = months.map(function(mo) {
+    var segs = {};
+    invs.filter(function(i){ return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === mo.key; })
+      .forEach(function(i){ var k = i.project || i.client_name || 'Other'; segs[k] = (segs[k]||0) + (parseFloat(i.total)||0); });
+    manuals.filter(function(mi){ return mi.date && mi.date.slice(0,7) === mo.key; })
+      .forEach(function(mi){ var k = mi.source || 'Other Income'; segs[k] = (segs[k]||0) + (parseFloat(mi.amount)||0); });
+    var total = Object.keys(segs).reduce(function(s,k){ return s+segs[k]; }, 0);
+    return { label: mo.label, segs: segs, total: total };
   });
-  var maxVal = Math.max.apply(null, monthTotals.map(function(m){ return m.val; }).concat([1]));
+  var maxVal = Math.max.apply(null, monthData.map(function(m){ return m.total; }).concat([1]));
   var chartEl = document.getElementById('fo-chart');
   if (chartEl) {
-    chartEl.innerHTML = monthTotals.map(function(m) {
-      var pct = Math.round((m.val / maxVal) * 80) + '%';
-      return '<div class="fo-bar-col">' +
-        (m.val > 0 ? '<div class="fo-bar-val">' + fm(m.val) + '</div>' : '<div class="fo-bar-val" style="color:transparent">$0</div>') +
-        '<div class="fo-bar" style="height:' + pct + '"></div>' +
-        '<div class="fo-bar-lbl">' + m.label + '</div>' +
+    var legendKeys = Object.keys(_projColorMap);
+    var barsHtml = monthData.map(function(mo) {
+      var barPct = (mo.total / maxVal) * 100;
+      var segsHtml = Object.keys(mo.segs).map(function(k) {
+        var segPct = mo.total > 0 ? (mo.segs[k] / mo.total) * barPct : 0;
+        return '<div class="fo-hbar-seg" title="' + escapeHTML(k) + ': ' + fmD(mo.segs[k]) + '" style="width:' + segPct.toFixed(1) + '%;background:' + (_projColorMap[k]||'#ccc') + '"></div>';
+      }).join('');
+      return '<div class="fo-hbar-row">' +
+        '<div class="fo-hbar-lbl">' + escapeHTML(mo.label) + '</div>' +
+        '<div class="fo-hbar-track">' + (mo.total > 0 ? segsHtml : '') + '</div>' +
+        '<div class="fo-hbar-val">' + (mo.total > 0 ? fm(mo.total) : '—') + '</div>' +
         '</div>';
     }).join('');
+    var legendHtml = legendKeys.length > 0 ? '<div class="fo-chart-legend">' +
+      legendKeys.map(function(k){ return '<span class="fo-legend-item"><span class="fo-legend-dot" style="background:' + _projColorMap[k] + '"></span>' + escapeHTML(k) + '</span>'; }).join('') +
+      '</div>' : '';
+    chartEl.innerHTML = barsHtml + legendHtml;
   }
 
   // By project/client
@@ -4902,13 +4928,14 @@ function renderFinancialOverview() {
       projEl.innerHTML = '<table class="fo-proj-table">' +
         projList.map(function(p) {
           var barW = Math.round((p.val / maxProj) * 100) + '%';
+          var barColor = _projColorMap[p.name] || '#7B9E87';
           return '<tr class="fo-proj-tr">' +
             '<td class="fo-proj-td name-amt">' +
               '<div class="fo-proj-name-row">' +
-                '<span class="fo-proj-name">' + escapeHTML(p.name) + '</span>' +
+                '<span class="fo-proj-name"><span class="fo-legend-dot" style="background:' + barColor + '"></span>' + escapeHTML(p.name) + '</span>' +
                 '<span class="fo-proj-amt">' + fmD(p.val) + '</span>' +
               '</div>' +
-              '<div class="fo-proj-bar-wrap"><div class="fo-proj-bar-fill" style="width:' + barW + '"></div></div>' +
+              '<div class="fo-proj-bar-wrap"><div class="fo-proj-bar-fill" style="width:' + barW + ';background:' + barColor + '"></div></div>' +
             '</td>' +
             '</tr>';
         }).join('') +
@@ -5129,6 +5156,9 @@ function foeiRenderPreview() {
   var statusLabel = status.charAt(0).toUpperCase()+status.slice(1);
 
   el.className = 'inv-paper';
+  var _pFontVal = _invFontMap[_invFontId] || _invFontMap['manrope'];
+  el.style.setProperty('--inv-font', _pFontVal);
+  el.style.setProperty('--inv-accent', _invAccent || '#D4A853');
   el.innerHTML =
     '<div class="inv-top">' +
       '<div><div class="inv-brand-name">'+escapeHTML(myName)+'</div>' +
