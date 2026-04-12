@@ -861,9 +861,9 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 /* ── CLIENT DIRECTORY ── */
 .client-dir-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .client-table{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.ct-head{display:grid;grid-template-columns:1fr 1fr 120px 1fr 1fr 80px;gap:0;background:var(--cream-dark);border-bottom:1px solid var(--border)}
+.ct-head{display:grid;grid-template-columns:160px 1.3fr 170px 1fr 1fr 80px;gap:0;background:var(--cream-dark);border-bottom:1px solid var(--border)}
 .ct-head-cell{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);padding:10px 14px}
-.ct-row{display:grid;grid-template-columns:1fr 1fr 120px 1fr 1fr 80px;gap:0;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
+.ct-row{display:grid;grid-template-columns:160px 1.3fr 170px 1fr 1fr 80px;gap:0;border-bottom:1px solid var(--border);align-items:center;transition:background .15s}
 .ct-row:last-child{border-bottom:none}
 .ct-row:hover{background:var(--cream)}
 .ct-cell{padding:11px 14px;font-size:13px;color:var(--ink-mid)}
@@ -2283,8 +2283,8 @@ var RateLimiter = (function() {
                   <button id="logo-delete-btn" onclick="deleteLogo()" style="display:none;padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--ink-mid);font-size:12px;cursor:pointer;" title="Remove logo">✕ Remove</button>
                 </div>
               </div>
-              <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="Alex Chen Design" oninput="updateInv()"></div>
-              <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="alex@alexchendesign.com" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="" placeholder="Your name or business" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="" placeholder="hello@yourbusiness.com" oninput="updateInv()"></div>
               <div class="ip-field"><div class="ip-lbl">Your phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-yourphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
               <div class="ip-divider"></div>
               <div class="ip-row2">
@@ -2297,17 +2297,17 @@ var RateLimiter = (function() {
               <div class="ip-field">
                 <div class="ip-lbl">Client name</div>
                 <div class="client-dropdown">
-                  <input class="ip-inp" id="i-client" value="Acme Studio Ltd." oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
+                  <input class="ip-inp" id="i-client" value="" placeholder="Client name" oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
                   <div class="client-dd-list" id="client-dd"></div>
                 </div>
               </div>
-              <div class="ip-field"><div class="ip-lbl">Contact person</div><input class="ip-inp" id="i-contact" value="Jamie Reyes" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Contact person</div><input class="ip-inp" id="i-contact" value="" placeholder="Contact name" oninput="updateInv()"></div>
               <div class="ip-row2">
-                <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="jamie@acmestudio.com" oninput="updateInv()"></div>
+                <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="" placeholder="client@example.com" oninput="updateInv()"></div>
                 <div class="ip-field"><div class="ip-lbl">Client phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
               </div>
               <div class="ip-field"><div class="ip-lbl">Client address <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientaddress" placeholder="123 Street, City, Country" oninput="updateInv()"></div>
-              <div class="ip-field"><div class="ip-lbl">Project</div><input class="ip-inp" id="i-project" value="Brand Identity Refresh" oninput="updateInv()"></div>
+              <div class="ip-field"><div class="ip-lbl">Project</div><input class="ip-inp" id="i-project" value="" placeholder="Project name" oninput="updateInv()"></div>
               <div class="ip-divider"></div>
               <div class="ip-lbl" style="margin-bottom:7px">Line items</div>
               <div class="li-hdr"><div class="li-hlbl" style="text-align:left">Description</div><div class="li-hlbl">Qty</div><div class="li-hlbl">Rate</div><div class="li-hlbl">Total</div><div></div></div>
@@ -2490,12 +2490,12 @@ var RateLimiter = (function() {
         <div class="calc-grid">
           <div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
-              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="60000" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="" placeholder="e.g. 60000" oninput="calcRate()"></div></div>
               <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option><option value="Rp">🇮🇩 IDR</option></select></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
-              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="3600" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="" placeholder="e.g. 3600" oninput="calcRate()"></div></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl"><span>Weeks off per year: <strong id="rc-woff-lbl">6</strong></span><span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="0" max="51" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0 wks</span><span>51 wks</span></div></div>
@@ -2814,13 +2814,21 @@ var RateLimiter = (function() {
       <!-- ─── WELCOME PACKET ─── -->
       <div class="tmpl-panel" id="panel-welcome">
         <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Canva</span><span class="tv-tag" style="background:#F0FFF4;color:#166634">Google Docs</span></div>
+          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Client Onboarding</span></div>
           <div class="tv-title">Client Welcome<br><em>Packet</em></div>
           <div class="tv-desc">Send this within 24 hours of a client signing. Sets expectations, explains how you work, and immediately signals that you run a professional operation.</div>
+          <div class="tv-actions">
+            <button class="btn-outline" onclick="printDocPanel('welcome-doc-body','Client Welcome Packet')">&#128196; Download PDF</button>
+          </div>
+        </div>
+        <div class="doc-edit-bar">
+          <button class="doc-edit-toggle" id="welcome-edit-toggle" onclick="toggleDocEdit('welcome')">✏️ Edit fields</button>
+          <div class="doc-edit-proj">🔗 Link to project: <select id="welcome-proj-sel" onchange="linkDocToProject('welcome',this.value)"><option value="">— none —</option></select></div>
+          <span class="doc-edit-hint">Click highlighted fields to edit</span>
         </div>
         <div class="doc-wrap">
-          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt" style="background:var(--amber-light);color:var(--amber)">PDF / Canva</span></div>
-          <div class="doc-body" id="wp-body">
+          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Welcome Packet.pdf</span><span class="db-fmt">Editable</span></div>
+          <div class="doc-body" id="welcome-doc-body">
             <div class="wp-cover-box">
               <div class="wp-cover-name">Freelance<span>Kit</span></div>
               <div class="wp-cover-pretitle">Welcome to the project</div>
@@ -4213,13 +4221,14 @@ function openPtProjectFromPipeline(projectId) {
 // ═══════════════ TAX TRACKER ═══════════════
 const txCats=['Software & subscriptions','Equipment & hardware','Home office','Phone & internet','Professional development','Marketing & advertising','Contractor fees','Banking fees','Insurance','Travel & transport','Meals (50% deductible)','Legal & professional fees','Other'];
 let txData={
-  1:{income:[{desc:'Brand project — Meridian',amt:4500},{desc:'Templates — Bloom Studio',amt:1800}],expenses:[{desc:'Adobe CC',cat:'Software & subscriptions',amt:600},{desc:'Monitor',cat:'Equipment & hardware',amt:450}]},
-  2:{income:[{desc:'Apex Creative — brand guidelines',amt:6000}],expenses:[{desc:'Adobe CC',cat:'Software & subscriptions',amt:600},{desc:'Domain & hosting',cat:'Software & subscriptions',amt:120}]},
-  3:{income:[],expenses:[]},4:{income:[],expenses:[]}
+  1:{income:[],expenses:[]},
+  2:{income:[],expenses:[]},
+  3:{income:[],expenses:[]},
+  4:{income:[],expenses:[]}
 };
 let txQ=2;
 // Tracks whether each quarter has been marked paid
-let txPaid={1:true,2:false,3:false,4:false};
+let txPaid={1:false,2:false,3:false,4:false};
 
 function updateTaxTabUI(){
   // Sync all tab labels and classes with txPaid state
@@ -5796,7 +5805,7 @@ function populateDocProjSelects() {
   var projects = window._ptProjects || [];
   var opts = '<option value="">— none —</option>' +
     projects.map(function(p){ return '<option value="' + escapeHTML(p.id) + '">' + escapeHTML(p.name) + '</option>'; }).join('');
-  ['contract-proj-sel','scope-proj-sel'].forEach(function(id) {
+  ['contract-proj-sel','scope-proj-sel','welcome-proj-sel'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.innerHTML = opts;
   });
@@ -5823,10 +5832,10 @@ function linkDocToProject(docId, projectId) {
   var fields = body.querySelectorAll('.field');
   fields.forEach(function(f) {
     var text = f.textContent;
-    if (/CLIENT FULL NAME|CLIENT NAME/.test(text) && p.client_name) f.textContent = p.client_name;
+    if (/CLIENT FULL NAME|CLIENT NAME|CLIENT FIRST NAME/.test(text) && p.client_name) f.textContent = p.client_name;
     if (/PROJECT NAME/.test(text) && p.name) f.textContent = p.name;
     if (/START DATE/.test(text) && p.start_date) f.textContent = p.start_date;
-    if (/END DATE/.test(text) && p.end_date) f.textContent = p.end_date;
+    if (/END DATE|DELIVERY DATE/.test(text) && p.end_date) f.textContent = p.end_date;
     if (/ORIGINAL AGREEMENT DATE/.test(text) && p.start_date) f.textContent = p.start_date;
   });
   showToast('✓ Linked to ' + p.name + ' — fields pre-filled');
