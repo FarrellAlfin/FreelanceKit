@@ -1171,6 +1171,17 @@ input[type=number]{-moz-appearance:textfield}
 .pt-bs-invoiced{background:#DBEAFE;color:#1E40AF}
 .pt-bs-paid{background:#D1FAE5;color:#065F46}
 .pt-bill-total{font-size:14px;font-weight:700;color:var(--amber);padding:4px 0}
+/* Billing cards */
+.pt-bill-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.pt-bill-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+.pt-bill-card-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.pt-bill-card-amt{font-size:22px;font-weight:700;font-family:var(--font-mono);color:var(--ink);margin-bottom:12px;line-height:1}
+.pt-bill-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin-bottom:12px}
+.pt-bill-card-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:2px}
+.pt-bill-card-val{font-size:12px;color:var(--ink);font-weight:500}
+/* Shared delete button */
+.pt-btn-del{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:#B91C1C;font-size:11px;font-weight:600;padding:2px 7px;flex-shrink:0;font-family:var(--font-body)}
+.pt-btn-del:hover{background:#FEE2E2;border-color:#B91C1C}
 /* Meeting notes */
 .pt-note-item{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
 .pt-note-date{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px}
@@ -1297,8 +1308,10 @@ input[type=number]{-moz-appearance:textfield}
 .rte-btn{padding:3px 8px;border:1px solid transparent;border-radius:4px;background:transparent;cursor:pointer;font-size:13px;font-family:var(--font-body);color:var(--ink);transition:all .1s;line-height:1.4}
 .rte-btn:hover{background:var(--border);border-color:var(--border)}
 .rte-btn.active{background:var(--ink);color:var(--cream)}
-.rte-editor{min-height:140px;border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px;font-size:13px;font-family:var(--font-body);color:var(--ink);outline:none;line-height:1.7;overflow-y:auto}
+.rte-editor{min-height:140px;max-height:320px;border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);padding:10px 12px;font-size:13px;font-family:var(--font-body);color:var(--ink);outline:none;line-height:1.7;overflow-y:auto;word-break:break-word}
 .rte-editor:focus{border-color:var(--ink)}
+.rte-editor ol,.rte-editor ul{padding-left:22px;margin:4px 0}
+.rte-editor li{line-height:1.7}
 /* Attendee input rows */
 .attendee-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
 .attendee-row input{flex:1;border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:12px;font-family:var(--font-body);color:var(--ink);background:var(--cream)}
@@ -6719,8 +6732,8 @@ function renderPtTasks() {
       '</div>' +
       (avatars ? '<div class="pt-assignee-chips" style="margin-top:8px">' + avatars + '</div>' : '') +
       '<div class="pt-task-card-actions">' +
-        '<button class="pt-row-edit" onclick="openPtEditTask(' + realIdx + ')">Edit</button>' +
-        '<button class="pt-row-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">&#215;</button>' +
+        '<button class="pt-row-edit" style="font-weight:700" onclick="openPtEditTask(' + realIdx + ')">Edit</button>' +
+        '<button class="pt-btn-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">Delete</button>' +
       '</div>' +
     '</div>';
   }).join('') + '</div>';
@@ -6736,16 +6749,31 @@ function renderPtBilling() {
   var paid = bs.filter(function(b){ return b.status === 'paid'; }).reduce(function(s, b){ return s + (parseFloat(b.amount) || 0); }, 0);
   if (totEl) totEl.innerHTML = 'Total: <strong>$' + total.toLocaleString() + '</strong> &nbsp;·&nbsp; Outstanding: <strong style="color:var(--amber)">$' + (total - paid).toLocaleString() + '</strong>';
   if (!bs.length) { el.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink-light);font-size:13px">No billing phases yet.</div>'; return; }
-  var statusClass = {pending:'pt-bs-pending',invoiced:'pt-bs-invoiced',paid:'pt-bs-paid'};
-  el.innerHTML = bs.map(function(b, i) {
-    return '<div class="pt-bill-row">' +
-      '<span class="pt-bill-name">' + escapeHTML(b.phase_name) + (b.billing_type === 'per_phase' ? ' <span style="font-size:10px;color:var(--ink-light)">(per phase)</span>' : '') + '</span>' +
-      '<span class="pt-bill-amt">$' + (parseFloat(b.amount) || 0).toLocaleString() + '</span>' +
-      '<span class="pt-bill-status ' + (statusClass[b.status] || 'pt-bs-pending') + '" onclick="cyclePtBillingStatus(' + i + ')">' + (b.status || 'pending') + '</span>' +
-      '<button class="pt-row-edit" onclick="openPtEditBilling(' + i + ')">Edit</button>' +
-      '<button class="pt-row-del" onclick="deletePtItem(\'billing\',' + i + ')">&#215;</button>' +
-      '</div>';
-  }).join('');
+  var proj = (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; });
+  var clientName = proj ? (proj.client_name || '—') : '—';
+  var statusClass = {pending:'pt-bs-pending', invoiced:'pt-bs-invoiced', paid:'pt-bs-paid'};
+  var statusLabels = {pending:'Pending', invoiced:'Invoiced', paid:'Paid'};
+  el.innerHTML = '<div class="pt-bill-cards-grid">' + bs.map(function(b, i) {
+    var fmtAmt = '$' + (parseFloat(b.amount)||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    var fmtDate = b.due_date ? b.due_date.slice(0,10) : '—';
+    var typeLabel = b.billing_type === 'per_phase' ? 'Per phase' : 'One-time';
+    return '<div class="pt-bill-card">' +
+      '<div class="pt-bill-card-name">' + escapeHTML(b.phase_name) + '</div>' +
+      '<div class="pt-bill-card-amt">' + fmtAmt + '</div>' +
+      '<div class="pt-bill-card-grid">' +
+        '<div><div class="pt-bill-card-lbl">Billed to</div><div class="pt-bill-card-val">' + escapeHTML(clientName) + '</div></div>' +
+        '<div><div class="pt-bill-card-lbl">Due date</div><div class="pt-bill-card-val">' + fmtDate + '</div></div>' +
+        '<div><div class="pt-bill-card-lbl">Type</div><div class="pt-bill-card-val">' + typeLabel + '</div></div>' +
+        '<div><div class="pt-bill-card-lbl">Status</div>' +
+          '<span class="pt-bill-status ' + (statusClass[b.status]||'pt-bs-pending') + '" onclick="cyclePtBillingStatus(' + i + ')" title="Click to change">' + (statusLabels[b.status]||'Pending') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pt-task-card-actions">' +
+        '<button class="pt-row-edit" style="font-weight:700" onclick="openPtEditBilling(' + i + ')">Edit</button>' +
+        '<button class="pt-btn-del" onclick="deletePtItem(\'billing\',' + i + ')">Delete</button>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '</div>';
 }
 
 function createInvoiceFromProject() {
@@ -6978,6 +7006,14 @@ function printMeetingNote() {
   setTimeout(function(){ win.print(); }, 400);
 }
 
+function _rteUpdateBtns() {
+  [['bold','rte-btn-bold'],['italic','rte-btn-italic'],['underline','rte-btn-underline']].forEach(function(pair) {
+    var btn = document.getElementById(pair[1]);
+    if (!btn) return;
+    try { btn.classList.toggle('active', document.queryCommandState(pair[0])); } catch(e){}
+  });
+}
+
 function openMeetingEditor(idx) {
   _mnEditIdx = (idx !== undefined) ? idx : null;
   var me = window._ptMeetings || [];
@@ -7018,14 +7054,14 @@ function openMeetingEditor(idx) {
     '<button class="attendee-add-btn" style="margin-top:4px" onclick="addAttendeeRow(\'mne-client-rows\',\'client\')">+ Add person</button></div>' +
     '<div class="pt-field"><label>Meeting notes</label>' +
     '<div class="rte-toolbar">' +
-    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'bold\')" title="Bold"><b>B</b></button>' +
-    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'italic\')" title="Italic"><i>I</i></button>' +
-    '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'underline\')" title="Underline"><u>U</u></button>' +
+    '<button class="rte-btn" id="rte-btn-bold" onmousedown="event.preventDefault();document.execCommand(\'bold\');_rteUpdateBtns()" title="Bold"><b>B</b></button>' +
+    '<button class="rte-btn" id="rte-btn-italic" onmousedown="event.preventDefault();document.execCommand(\'italic\');_rteUpdateBtns()" title="Italic"><i>I</i></button>' +
+    '<button class="rte-btn" id="rte-btn-underline" onmousedown="event.preventDefault();document.execCommand(\'underline\');_rteUpdateBtns()" title="Underline"><u>U</u></button>' +
     '<span style="width:1px;background:var(--border);margin:2px 4px;display:inline-block"></span>' +
     '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'insertUnorderedList\')" title="Bullet list">• List</button>' +
     '<button class="rte-btn" onmousedown="event.preventDefault();document.execCommand(\'insertOrderedList\')" title="Numbered list">1. List</button>' +
     '</div>' +
-    '<div class="rte-editor" id="mne-notes" contenteditable="true">' + (m.notes_html || escapeHTML(m.notes||'')) + '</div></div>' +
+    '<div class="rte-editor" id="mne-notes" contenteditable="true" onkeyup="_rteUpdateBtns()" onmouseup="_rteUpdateBtns()">' + (m.notes_html || escapeHTML(m.notes||'')) + '</div></div>' +
     '<div class="pt-field"><label>Action items</label><textarea class="pt-ta" id="mne-actions" style="min-height:60px" placeholder="• Item 1&#10;• Item 2">' + escapeHTML(m.action_items||'') + '</textarea></div>';
 
   document.getElementById('mn-editor-popup').style.display = 'flex';
@@ -7549,8 +7585,13 @@ var _ptPendingAttachments = [];
 async function handlePtAttach(input) {
   if (!input.files || !input.files.length) return;
   var listEl = document.getElementById('ptm-attach-list');
+  var MAX_BYTES = 50 * 1024 * 1024; // 50 MB — Supabase Storage default limit
   for (var i = 0; i < input.files.length; i++) {
     var file = input.files[i];
+    if (file.size > MAX_BYTES) {
+      showToast('⚠ ' + file.name + ' exceeds the 50 MB limit. Increase the limit in Supabase Storage → Buckets → pt-attachments → Edit.');
+      continue;
+    }
     if (!_supabase || !_currentUser) {
       // Fallback: store as object URL (not persisted)
       var url = URL.createObjectURL(file);
