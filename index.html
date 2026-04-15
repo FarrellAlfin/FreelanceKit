@@ -78,6 +78,27 @@ body{font-family:var(--font-body);background:var(--surface);color:var(--on-surfa
 .nav-links a{font-size:14px;color:var(--on-surface-mid);text-decoration:none;cursor:pointer;transition:color .2s}
 .nav-links a:hover{color:var(--on-surface)}
 .nav-avatar{width:34px;height:34px;border-radius:50%;background:var(--primary-container);border:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Manrope',sans-serif}
+/* ── NOTIFICATIONS ── */
+.notif-bell{position:relative;background:none;border:none;cursor:pointer;padding:6px 8px;border-radius:8px;color:var(--ink-mid);transition:background .15s;display:flex;align-items:center;font-size:18px;line-height:1}
+.notif-bell:hover{background:var(--surface)}
+.notif-badge{position:absolute;top:1px;right:1px;background:#E8594A;color:#fff;font-size:9px;font-weight:700;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px;pointer-events:none;border:2px solid var(--white)}
+.notif-panel{position:fixed;top:66px;right:16px;width:360px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 32px rgba(0,0,0,.13);z-index:500;max-height:500px;display:none;flex-direction:column;overflow:hidden}
+.notif-panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.notif-panel-title{font-size:14px;font-weight:700;color:var(--ink)}
+.notif-list{overflow-y:auto;flex:1}
+.notif-empty{padding:32px 18px;text-align:center;font-size:13px;color:var(--ink-light)}
+.notif-item{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.notif-item:last-child{border-bottom:none}
+.notif-item-project{font-size:14px;font-weight:700;color:var(--ink)}
+.notif-item-sub{font-size:12px;color:var(--ink-light);line-height:1.5}
+.notif-item-actions{display:flex;gap:6px;margin-top:2px}
+.notif-accept-btn{padding:5px 16px;background:var(--sage);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.notif-accept-btn:hover{opacity:.85}
+.notif-decline-btn{padding:5px 14px;background:none;border:1.5px solid var(--border);color:var(--ink-mid);border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+.notif-decline-btn:hover{background:var(--surface)}
+.share-status{font-size:10px;font-weight:700;padding:1px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.share-status.pending{background:var(--amber-light);color:var(--amber)}
+.share-status.accepted{background:#F0FFF4;color:#166634}
 
 /* ════════════════════════════════════
    LANDING PAGE
@@ -1973,10 +1994,25 @@ var RateLimiter = (function() {
       <span style="font-size:12px;color:var(--ink-light)">10 templates</span>
     </div>
     <div class="nav-actions">
+      <button class="notif-bell" id="notif-bell-btn" onclick="toggleNotificationPanel()" title="Notifications" style="display:none">
+        🔔
+        <span class="notif-badge" id="notif-badge"></span>
+      </button>
       <span style="font-size:13px;color:var(--ink-mid)">Alex Chen</span>
       <div class="nav-avatar">AC</div>
     </div>
   </nav>
+
+  <!-- Notification panel -->
+  <div class="notif-panel" id="notif-panel">
+    <div class="notif-panel-hdr">
+      <span class="notif-panel-title">🔔 Notifications</span>
+      <button onclick="closeNotificationPanel()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--ink-light);padding:2px 6px">✕</button>
+    </div>
+    <div class="notif-list" id="notif-list">
+      <div class="notif-empty">No notifications yet.</div>
+    </div>
+  </div>
 
   <div class="dash-layout">
     <!-- Sidebar -->
@@ -2662,8 +2698,8 @@ var RateLimiter = (function() {
               </div>
             </div>
             <div class="pt-field" id="ptv-shares-wrap" style="display:none">
-              <label>Shared with</label>
-              <div id="ptv-shares-list" style="display:flex;flex-wrap:wrap;gap:6px;padding:4px 0"></div>
+              <label>Collaborators</label>
+              <div id="ptv-shares-list" style="display:flex;flex-direction:column;gap:0;padding:4px 0"></div>
             </div>
             <!-- Active Timeline -->
             <div class="pt-ov-section">
@@ -4480,6 +4516,7 @@ function setLoggedInUser(user) {
     try { loadRateScenarios(); } catch(e) { console.warn('loadRateScenarios:', e); }
     try { loadPipelineCards(); } catch(e) { console.warn('loadPipelineCards:', e); }
     try { loadTaxEntries(); } catch(e) { console.warn('loadTaxEntries:', e); }
+    try { loadNotifications(); } catch(e) { console.warn('loadNotifications:', e); }
   }, 0);
 }
 
@@ -7877,6 +7914,97 @@ async function handlePtAttach(input) {
 
 var _ptShares = [];
 
+// ─── NOTIFICATIONS ───
+
+var _notifications = [];
+
+function toggleNotificationPanel() {
+  var panel = document.getElementById('notif-panel');
+  if (!panel) return;
+  var isOpen = panel.style.display === 'flex';
+  panel.style.display = isOpen ? 'none' : 'flex';
+  if (!isOpen) renderNotifications();
+}
+
+function closeNotificationPanel() {
+  var panel = document.getElementById('notif-panel');
+  if (panel) panel.style.display = 'none';
+}
+
+async function loadNotifications() {
+  if (!_supabase || !_currentUser || !_currentUser.email) return;
+  var bell = document.getElementById('notif-bell-btn');
+  if (bell) bell.style.display = 'flex';
+  var res = await _supabase.from('project_shares')
+    .select('*, projects(name, id)')
+    .eq('shared_email', _currentUser.email.toLowerCase())
+    .eq('status', 'pending');
+  if (res.error) return;
+  _notifications = res.data || [];
+  updateNotificationBadge(_notifications.length);
+}
+
+function updateNotificationBadge(count) {
+  var badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function renderNotifications() {
+  var list = document.getElementById('notif-list');
+  if (!list) return;
+  if (!_notifications.length) {
+    list.innerHTML = '<div class="notif-empty">You have no pending invitations.</div>';
+    return;
+  }
+  list.innerHTML = _notifications.map(function(n) {
+    var projName = (n.projects && n.projects.name) ? n.projects.name : 'a project';
+    var safeId = escapeHTML(n.id);
+    var safeName = escapeHTML(projName);
+    return '<div class="notif-item">' +
+      '<div class="notif-item-project">' + safeName + '</div>' +
+      '<div class="notif-item-sub">You\'ve been invited to collaborate on this project.</div>' +
+      '<div class="notif-item-actions">' +
+        '<button class="notif-accept-btn" onclick="acceptInvitation(\'' + safeId + '\',\'' + safeName + '\')">✓ Accept</button>' +
+        '<button class="notif-decline-btn" onclick="declineInvitation(\'' + safeId + '\')">Decline</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function acceptInvitation(shareId, projName) {
+  if (!_supabase || !_currentUser) return;
+  var res = await _supabase.from('project_shares')
+    .update({ status: 'accepted', accepted_user_id: _currentUser.id })
+    .eq('id', shareId).select().single();
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _notifications = _notifications.filter(function(n){ return n.id !== shareId; });
+  updateNotificationBadge(_notifications.length);
+  renderNotifications();
+  showToast('✓ You joined ' + projName);
+  if (typeof loadProjects === 'function') loadProjects();
+}
+
+async function declineInvitation(shareId) {
+  if (!_supabase || !_currentUser) return;
+  var res = await _supabase.from('project_shares').delete().eq('id', shareId);
+  if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _notifications = _notifications.filter(function(n){ return n.id !== shareId; });
+  updateNotificationBadge(_notifications.length);
+  renderNotifications();
+  showToast('Invitation declined');
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click', function(e) {
+  var panel = document.getElementById('notif-panel');
+  var bell = document.getElementById('notif-bell-btn');
+  if (panel && panel.style.display === 'flex' && !panel.contains(e.target) && bell && !bell.contains(e.target)) {
+    panel.style.display = 'none';
+  }
+});
+
 function openShareModal() {
   if (!_ptCurrentId) return;
   var html = '<div class="pt-modal-title">👥 Share project</div>' +
@@ -7899,9 +8027,11 @@ function _renderShareList() {
   if (!_ptShares.length) { el.innerHTML = '<div style="font-size:12px;color:var(--ink-light)">No one else has access yet.</div>'; return; }
   el.innerHTML = '<div style="font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:6px">Current access:</div>' +
     _ptShares.map(function(s) {
-      return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)">' +
-        '<span class="pt-share-chip">' + escapeHTML(s.shared_email) + '</span>' +
-        '<button class="pt-row-del" style="margin-left:auto" onclick="removePtShare(\'' + s.id + '\')">Remove</button>' +
+      var status = s.status || 'pending';
+      return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">' +
+        '<span style="font-size:13px;color:var(--ink);flex:1">' + escapeHTML(s.shared_email) + '</span>' +
+        '<span class="share-status ' + status + '">' + (status === 'accepted' ? 'Joined' : 'Pending') + '</span>' +
+        '<button class="pt-note-del" style="font-size:11px" onclick="removePtShare(\'' + s.id + '\')">Remove</button>' +
         '</div>';
     }).join('');
 }
@@ -7915,6 +8045,7 @@ async function savePtShare() {
     project_id: _ptCurrentId,
     owner_id: _currentUser.id,
     shared_email: email.trim().toLowerCase(),
+    status: 'pending',
     created_at: new Date().toISOString()
   }).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
@@ -7944,9 +8075,34 @@ async function loadPtShares(projectId) {
   if (!wrap || !list) return;
   if (!_ptShares.length) { wrap.style.display = 'none'; return; }
   wrap.style.display = '';
-  list.innerHTML = _ptShares.map(function(s){
-    return '<span class="pt-share-chip">' + escapeHTML(s.shared_email) + '</span>';
-  }).join('');
+  var accepted = _ptShares.filter(function(s){ return s.status === 'accepted'; });
+  var pending  = _ptShares.filter(function(s){ return s.status !== 'accepted'; });
+  var html = '';
+  if (accepted.length) {
+    html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px">Active collaborators</div>' +
+      accepted.map(function(s){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0">' +
+          '<div style="width:26px;height:26px;border-radius:50%;background:var(--sage-light);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sage);flex-shrink:0">' +
+            escapeHTML(s.shared_email.slice(0,2).toUpperCase()) +
+          '</div>' +
+          '<span style="font-size:13px;color:var(--ink)">' + escapeHTML(s.shared_email) + '</span>' +
+          '<span class="share-status accepted" style="margin-left:auto">Joined</span>' +
+        '</div>';
+      }).join('');
+  }
+  if (pending.length) {
+    html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-top:' + (accepted.length?'12px':'0') + ';margin-bottom:6px">Pending invitation</div>' +
+      pending.map(function(s){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0">' +
+          '<div style="width:26px;height:26px;border-radius:50%;background:var(--amber-light);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--amber);flex-shrink:0">' +
+            escapeHTML(s.shared_email.slice(0,2).toUpperCase()) +
+          '</div>' +
+          '<span style="font-size:13px;color:var(--ink-mid)">' + escapeHTML(s.shared_email) + '</span>' +
+          '<span class="share-status pending" style="margin-left:auto">Pending</span>' +
+        '</div>';
+      }).join('');
+  }
+  list.innerHTML = html;
 }
 
 // ─── MODAL ───
