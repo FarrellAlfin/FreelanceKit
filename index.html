@@ -1105,13 +1105,13 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .cg-wrap{display:flex;flex-direction:column;gap:4px;width:100%}
 .cg-month-row{display:flex;gap:3px;padding-left:26px}
 .cg-ml{font-size:10px;color:var(--ink-light);text-align:left;flex:1}
-.cg-body{display:flex;gap:4px;width:100%}
-.cg-day-labels{display:flex;flex-direction:column;gap:3px;padding-top:2px}
-.cg-dl{height:15px;width:18px;font-size:10px;color:var(--ink-light);line-height:15px;text-align:right;flex-shrink:0}
-.cg-cols{display:flex;gap:3px;flex:1;justify-content:space-between}
-.cg-col{display:flex;flex-direction:column;gap:3px}
-.cg-cell{width:15px;height:15px;border-radius:3px;cursor:default;transition:transform .1s;flex-shrink:0}
-.cg-cell:hover{transform:scale(1.25)}
+.cg-body{display:flex;gap:3px;width:100%}
+.cg-day-labels{display:flex;flex-direction:column;gap:2px;padding-top:2px}
+.cg-dl{height:11px;width:16px;font-size:9px;color:var(--ink-light);line-height:11px;text-align:right;flex-shrink:0}
+.cg-cols{display:flex;gap:2px;flex:1;justify-content:space-between}
+.cg-col{display:flex;flex-direction:column;gap:2px}
+.cg-cell{width:11px;height:11px;border-radius:2px;cursor:default;transition:transform .1s;flex-shrink:0}
+.cg-cell:hover{transform:scale(1.3)}
 .cg-future{background:transparent}
 .cg-l0{background:#ebedf0}
 .cg-l1{background:#9be9a8}
@@ -1644,8 +1644,6 @@ var RateLimiter = (function() {
         <span class="hm-url">freelancekit.io/templates</span>
       </div>
       <div class="hm-body">
-        <div class="hm-row"><div class="hm-icon" style="background:#FFF3E8">📄</div><div class="hm-info"><div class="hm-name">Client Contract — Full Protection</div><div class="hm-meta">Updated 2 days ago</div></div><span class="hm-badge badge-pop">Popular</span></div>
-        <div class="hm-row"><div class="hm-icon" style="background:#EAF1EC">⚠️</div><div class="hm-info"><div class="hm-name">Scope Change Order</div><div class="hm-meta">Google Docs · Updated 1 week ago</div></div><span class="hm-badge badge-new">New</span></div>
         <div class="hm-row"><div class="hm-icon" style="background:#E8F0FE">📊</div><div class="hm-info"><div class="hm-name">Freelance Rate Calculator</div><div class="hm-meta">Interactive · Live calculator</div></div><span class="hm-badge badge-pop">Popular</span></div>
         <div class="hm-row"><div class="hm-icon" style="background:#F5E6D3">🧾</div><div class="hm-info"><div class="hm-name">Invoice Builder</div><div class="hm-meta">Live preview · Custom payment terms</div></div><span class="hm-badge badge-new">New</span></div>
         <div class="hm-row"><div class="hm-icon" style="background:#EDE9FE">🗂️</div><div class="hm-info"><div class="hm-name">Client Pipeline Tracker</div><div class="hm-meta">Interactive kanban · Draggable</div></div><span class="hm-badge badge-new">New</span></div>
@@ -1840,7 +1838,6 @@ var RateLimiter = (function() {
         <div class="price-amount"><sup>$</sup>0</div>
         <div class="price-period">forever, no card needed</div>
         <ul class="price-features">
-          <li>Contracts &amp; Legal (full access)</li>
           <li>My Business tools (full access)</li>
           <li>Client directory</li>
           <li>Invoice history</li>
@@ -2309,354 +2306,6 @@ var RateLimiter = (function() {
         </div>
       </div>
 
-      <!-- ─── CONTRACT ─── -->
-      <div class="tmpl-panel" id="panel-contract">
-        <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Contracts & Legal</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span></div>
-          <div class="tv-title">Client Contract —<br><em>Full Protection</em></div>
-          <div class="tv-desc">A comprehensive freelance services agreement covering scope, payment, IP, revisions, kill fees, and dispute resolution. Written in plain English.</div>
-          <div class="tv-actions">
-            <button class="btn-outline" onclick="printDocPanel('contract-doc-body','Client Contract')">&#128196; Download PDF</button>
-          </div>
-        </div>
-        <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> This template is for general informational purposes only. It does not constitute legal advice. Laws vary by jurisdiction — consult a qualified attorney for high-value or complex engagements. FreelanceKit accepts no liability for outcomes arising from use of this template.</div>
-        <div class="doc-edit-bar">
-          <button class="doc-edit-toggle" id="contract-edit-toggle" onclick="toggleDocEdit('contract')">✏️ Edit fields</button>
-          <div class="doc-edit-proj">🔗 Link to project: <select id="contract-proj-sel" onchange="linkDocToProject('contract',this.value)"><option value="">— none —</option></select></div>
-          <span class="doc-edit-hint">Click highlighted fields to edit</span>
-        </div>
-        <div class="doc-wrap">
-          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Client Contract (Full Protection).docx</span><span class="db-fmt">Editable</span></div>
-          <div class="doc-body" id="contract-doc-body">
-            <div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Freelance Services Agreement</div>
-            <div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · freelancekit.io</div>
-            <hr class="doc-thick">
-            <h2>1. The Parties</h2>
-            <p>This Agreement is entered into as of <span class="field">[DATE]</span> between <strong>Freelancer:</strong> <span class="field">[YOUR FULL NAME OR BUSINESS NAME]</span>, located at <span class="field">[YOUR CITY, STATE/PROVINCE, COUNTRY]</span>, and <strong>Client:</strong> <span class="field">[CLIENT FULL NAME OR COMPANY NAME]</span>, located at <span class="field">[CLIENT ADDRESS]</span>, represented by <span class="field">[CLIENT CONTACT NAME, TITLE]</span>.</p>
-            <hr class="doc-divider">
-            <h2>2. Project Scope & Deliverables</h2>
-            <p>Freelancer agrees to provide the following services:</p>
-            <span class="field-block">[DESCRIBE THE PROJECT IN SPECIFIC, MEASURABLE TERMS. E.G. "Design of 5 social media templates for Instagram (1080×1080px), delivered as editable Figma files and exported JPEGs. Includes 2 rounds of revisions."]</span>
-            <p>Deliverables:</p>
-            <span class="field-block">[LIST EACH DELIVERABLE:
-• Deliverable 1: [Description, format]
-• Deliverable 2: [Description, format]
-• Deliverable 3: [Description, format]]</span>
-            <div class="doc-callout"><strong>Scope note:</strong> Any work, deliverables, or revisions not listed above are outside scope and will require a written Scope Change Order with additional fees.</div>
-            <hr class="doc-divider">
-            <h2>3. Timeline</h2>
-            <p><strong>Start:</strong> <span class="field">[START DATE]</span> · <strong>Final delivery:</strong> <span class="field">[END DATE]</span>. Timeline assumes Client provides materials and feedback within <span class="field">[3]</span> business days of each request. Delays caused by late feedback extend the deadline accordingly.</p>
-            <hr class="doc-divider">
-            <h2>4. Fees & Payment</h2>
-            <p><strong>Total fee:</strong> <span class="field">[AMOUNT AND CURRENCY]</span></p>
-            <ul><li><span class="field">[50%]</span> deposit due on signing: <span class="field">[AMOUNT]</span></li><li><span class="field">[50%]</span> final payment due on delivery: <span class="field">[AMOUNT]</span></li></ul>
-            <p>Invoices due within <span class="field">[7]</span> days of receipt. Late balances accrue <span class="field">[1.5%]</span>/month. Work does not begin until deposit clears. Final files withheld until final payment clears.</p>
-            <hr class="doc-divider">
-            <h2>5. Revision Policy</h2>
-            <p>Includes <span class="field">[2]</span> rounds of revisions. Additional rounds billed at <span class="field">[YOUR HOURLY RATE]</span>/hr. Feedback must be submitted consolidated within <span class="field">[7]</span> days of delivery; late feedback treated as approval.</p>
-            <hr class="doc-divider">
-            <h2>6. Kill Fee</h2>
-            <ul><li>Cancelled before work begins: deposit refunded in full.</li><li>Cancelled after work begins but before 50% completion: deposit forfeited.</li><li>Cancelled after 50% completion: full fee owed.</li></ul>
-            <hr class="doc-divider">
-            <h2>7. Intellectual Property</h2>
-            <p>Upon receipt of full payment, Freelancer assigns all rights in final approved deliverables to Client. Until then, all work remains Freelancer's property. Source files, rejected concepts, and third-party assets are excluded unless explicitly listed as deliverables. Freelancer retains portfolio rights unless Client requests otherwise in writing.</p>
-            <hr class="doc-divider">
-            <h2>8. Confidentiality</h2>
-            <p>Both parties agree to keep confidential all proprietary information shared during this engagement and not to disclose it to third parties without prior written consent.</p>
-            <hr class="doc-divider">
-            <h2>9. Independent Contractor</h2>
-            <p>Freelancer is an independent contractor, not an employee. Freelancer is responsible for their own taxes, insurance, and equipment.</p>
-            <hr class="doc-divider">
-            <h2>10. Dispute Resolution</h2>
-            <p>Disputes will first be addressed in good faith within <span class="field">[14]</span> days. If unresolved, disputes will proceed to binding arbitration in <span class="field">[YOUR CITY, STATE/PROVINCE]</span> before either party pursues litigation.</p>
-            <hr class="doc-divider">
-            <h2>11. Governing Law</h2>
-            <p>This Agreement is governed by the laws of <span class="field">[YOUR STATE/PROVINCE AND COUNTRY]</span>.</p>
-            <hr class="doc-thick">
-            <h2>Signatures</h2>
-            <div class="sig-grid">
-              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Date</div></div>
-              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Title · Date</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── SCOPE CHANGE ORDER ─── -->
-      <div class="tmpl-panel" id="panel-scope">
-        <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Contracts & Legal</span><span class="tv-tag" style="background:#F0FFF4;color:#166534">Google Docs</span></div>
-          <div class="tv-title">Scope Change<br><em>Order</em></div>
-          <div class="tv-desc">Send this the moment a client asks for anything outside the original agreement. Professional, not confrontational — and it gets you paid for extra work.</div>
-          <div class="tv-actions">
-            <button class="btn-outline" onclick="printDocPanel('scope-doc-body','Scope Change Order')">&#128196; Download PDF</button>
-          </div>
-        </div>
-        <div class="disclaimer"><strong>⚖️ Legal disclaimer:</strong> For general use. Ensure your primary contract includes a provision allowing for written scope changes. Consult a local attorney for complex arrangements.</div>
-        <div class="doc-edit-bar">
-          <button class="doc-edit-toggle" id="scope-edit-toggle" onclick="toggleDocEdit('scope')">✏️ Edit fields</button>
-          <div class="doc-edit-proj">🔗 Link to project: <select id="scope-proj-sel" onchange="linkDocToProject('scope',this.value)"><option value="">— none —</option></select></div>
-          <span class="doc-edit-hint">Click highlighted fields to edit</span>
-        </div>
-        <div class="doc-wrap">
-          <div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div><span class="db-name">FreelanceKit — Scope Change Order.docx</span><span class="db-fmt">Editable</span></div>
-          <div class="doc-body" id="scope-doc-body">
-            <div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Scope Change Order</div>
-            <div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body)">Addendum to Freelance Services Agreement · FreelanceKit Template</div>
-            <hr class="doc-thick">
-            <table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-family:var(--font-body)">
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream);width:35%">Change Order #</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[#001]</span></td></tr>
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Date issued</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DATE]</span></td></tr>
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Project</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[PROJECT NAME]</span></td></tr>
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Original contract date</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[ORIGINAL AGREEMENT DATE]</span></td></tr>
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Freelancer</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[YOUR NAME]</span></td></tr>
-              <tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Client</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[CLIENT NAME]</span></td></tr>
-            </table>
-            <hr class="doc-divider">
-            <h2>Description of Requested Change</h2>
-            <p>Client has requested the following addition or modification to the original scope:</p>
-            <span class="field-block">[DESCRIBE THE CHANGE REQUEST SPECIFICALLY. E.G.:
-• "Client requested an additional revision round beyond the 2 included."
-• "Client requested a 6th template not in the original scope of 5."
-• "Client requested a complete concept change after the approved direction was in progress."]</span>
-            <div class="doc-callout"><strong>Original scope reference:</strong> Per Section 2 of the Agreement dated <span class="field">[DATE]</span>, agreed deliverables were: <span class="field">[PASTE RELEVANT DELIVERABLES HERE]</span>. The request above falls outside this scope.</div>
-            <hr class="doc-divider">
-            <h2>Additional Fee</h2>
-            <table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-family:var(--font-body)">
-              <tr style="background:var(--cream)"><th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border)">Item</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Hours</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Rate</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Amount</th></tr>
-              <tr><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DESCRIBE EXTRA WORK]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[X hrs]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$X/hr]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$TOTAL]</span></td></tr>
-              <tr><td colspan="3" style="padding:10px 12px;border:1px solid var(--border);font-size:13px;font-weight:600;text-align:right">Total additional fee:</td><td style="padding:10px 12px;border:1px solid var(--border);font-size:14px;font-weight:600;text-align:right;color:var(--amber);font-family:var(--font-mono)"><span class="field">[$GRAND TOTAL]</span></td></tr>
-            </table>
-            <div class="doc-callout"><strong>Important:</strong> Work on this change will not begin until this Change Order is signed. If an upfront payment is required, work begins upon receipt.</div>
-            <hr class="doc-thick">
-            <h2>Signatures</h2>
-            <div class="sig-grid">
-              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Date</div></div>
-              <div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Title · Date</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── INVOICE BUILDER ─── -->
-      <div class="tmpl-panel" id="panel-invoice">
-        <div class="tv-header">
-          <div class="tv-eyebrow"><span class="tv-tag" style="background:var(--sage-light);color:var(--sage)">Invoicing & Payments</span><span class="tv-tag" style="background:var(--amber-light);color:var(--amber)">Interactive</span></div>
-          <div class="tv-title">Invoice <em>Builder</em></div>
-          <div class="tv-desc">Fill in the panel, watch the invoice update live. Add line items, set tax and discount. Download as PDF when ready.</div>
-        </div>
-        <div class="inv-layout">
-          <div class="inv-panel">
-            <div class="ip-head"><span style="font-size:14px">⚙️</span><span class="ip-head-title">Invoice builder</span><span class="ip-head-badge">Live preview →</span></div>
-            <div class="ip-body">
-              <!-- Logo upload -->
-              <div class="ip-field">
-                <div class="ip-lbl">Brand logo <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional · shows top-left)</span></div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <label class="logo-upload-btn" for="i-logo-input">
-                    <span id="logo-upload-label">📎 Upload logo</span>
-                    <input type="file" id="i-logo-input" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
-                  </label>
-                  <button id="logo-delete-btn" onclick="deleteLogo()" style="display:none;padding:6px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--white);color:var(--ink-mid);font-size:12px;cursor:pointer;" title="Remove logo">✕ Remove</button>
-                </div>
-              </div>
-              <div class="ip-field"><div class="ip-lbl">Your name / business</div><input class="ip-inp" id="i-yourname" value="" placeholder="Your name or business" oninput="updateInv()"></div>
-              <div class="ip-field"><div class="ip-lbl">Your email</div><input class="ip-inp" id="i-youremail" value="" placeholder="hello@yourbusiness.com" oninput="updateInv()"></div>
-              <div class="ip-field"><div class="ip-lbl">Your phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-yourphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
-              <div class="ip-divider"></div>
-              <div class="ip-row2">
-                <div class="ip-field"><div class="ip-lbl">Invoice #</div><input class="ip-inp" id="i-num" value="INV-001" oninput="updateInv()"></div>
-                <div class="ip-field"><div class="ip-lbl">Issue date</div><input class="ip-inp" type="date" id="i-issued" oninput="updateInv()"></div>
-              </div>
-              <div class="ip-field"><div class="ip-lbl">Due date</div><input class="ip-inp" type="date" id="i-due" oninput="updateInv()"></div>
-              <input type="hidden" id="i-terms-text" value="">
-              <div class="ip-divider"></div>
-              <div class="ip-field">
-                <div class="ip-lbl">Client name</div>
-                <div class="client-dropdown">
-                  <input class="ip-inp" id="i-client" value="" placeholder="Client name" oninput="updateInv();showClientDd(this.value)" autocomplete="off" onfocus="showClientDd(this.value)" onblur="setTimeout(hideClientDd,200)">
-                  <div class="client-dd-list" id="client-dd"></div>
-                </div>
-              </div>
-              <div class="ip-field"><div class="ip-lbl">Contact person</div><input class="ip-inp" id="i-contact" value="" placeholder="Contact name" oninput="updateInv()"></div>
-              <div class="ip-row2">
-                <div class="ip-field"><div class="ip-lbl">Client email</div><input class="ip-inp" id="i-email" value="" placeholder="client@example.com" oninput="updateInv()"></div>
-                <div class="ip-field"><div class="ip-lbl">Client phone <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientphone" placeholder="+1 (555) 000-0000" oninput="updateInv()"></div>
-              </div>
-              <div class="ip-field"><div class="ip-lbl">Client address <span style="font-size:11px;color:var(--ink-light);font-weight:400">(optional)</span></div><input class="ip-inp" id="i-clientaddress" placeholder="123 Street, City, Country" oninput="updateInv()"></div>
-              <div class="ip-field"><div class="ip-lbl">Project</div><input class="ip-inp" id="i-project" value="" placeholder="Project name" oninput="updateInv()"></div>
-              <div class="ip-divider"></div>
-              <div class="ip-lbl" style="margin-bottom:7px">Line items</div>
-              <div class="li-hdr"><div class="li-hlbl" style="text-align:left">Description</div><div class="li-hlbl">Qty</div><div class="li-hlbl">Rate</div><div class="li-hlbl">Total</div><div></div></div>
-              <div id="li-container"></div>
-              <button class="add-li-btn" onclick="addLineItem()">+ Add line item</button>
-              <div class="ip-divider"></div>
-              <div class="ip-row2">
-                <div class="ip-field"><div class="ip-lbl">Tax %</div><input class="ip-inp" type="number" id="i-tax" value="0" min="0" max="100" oninput="updateInv()"></div>
-                <div class="ip-field"><div class="ip-lbl">Discount %</div><input class="ip-inp" type="number" id="i-disc" value="0" min="0" max="100" oninput="updateInv()"></div>
-              </div>
-              <!-- Payment section -->
-              <div class="ip-field">
-                <div class="ip-lbl">Payment method</div>
-                <select class="ip-sel" id="i-pay" onchange="handleInvPay(this)">
-                  <option value="bank">Bank Transfer</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="venmo">Venmo</option>
-                  <option value="zelle">Zelle</option>
-                  <option value="cashapp">Cash App</option>
-                  <option value="stripe">Stripe</option>
-                  <option value="wise">Wise</option>
-                  <option value="wire">Wire Transfer</option>
-                  <option value="custom">Custom…</option>
-                </select>
-              </div>
-              <!-- Payment detail fields — shown/hidden per method -->
-              <div id="i-pay-bank" class="pay-detail-block">
-                <div class="ip-lbl" style="margin-bottom:6px;font-size:11px;color:var(--ink-light)">Bank details</div>
-                <div class="ip-field"><input class="ip-inp" id="i-bank-name" placeholder="Bank name (e.g. Chase, Wells Fargo)" oninput="updateInv()"></div>
-                <div class="ip-row2">
-                  <div class="ip-field"><input class="ip-inp" id="i-bank-routing" placeholder="Routing number" oninput="updateInv()"></div>
-                  <div class="ip-field"><input class="ip-inp" id="i-bank-account" placeholder="Account number" oninput="updateInv()"></div>
-                </div>
-                <div class="ip-field"><input class="ip-inp" id="i-bank-holder" placeholder="Account holder name" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-paypal" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-paypal-email" placeholder="PayPal email address" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-venmo" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-venmo-handle" placeholder="Venmo @username or phone" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-zelle" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-zelle-contact" placeholder="Zelle email or phone number" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-cashapp" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-cashapp-tag" placeholder="Cash App $cashtag" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-stripe" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-stripe-link" placeholder="Stripe payment link (https://…)" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-wise" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-wise-email" placeholder="Wise email address" oninput="updateInv()"></div>
-              </div>
-              <div id="i-pay-wire" class="pay-detail-block" style="display:none">
-                <div class="ip-lbl" style="margin-bottom:6px;font-size:11px;color:var(--ink-light)">Wire transfer details</div>
-                <div class="ip-field"><input class="ip-inp" id="i-wire-bank" placeholder="Bank name" oninput="updateInv()"></div>
-                <div class="ip-row2">
-                  <div class="ip-field"><input class="ip-inp" id="i-wire-swift" placeholder="SWIFT/BIC code" oninput="updateInv()"></div>
-                  <div class="ip-field"><input class="ip-inp" id="i-wire-iban" placeholder="IBAN / Account number" oninput="updateInv()"></div>
-                </div>
-              </div>
-              <div id="i-pay-custom" class="pay-detail-block" style="display:none">
-                <div class="ip-field"><input class="ip-inp" id="i-pay-custom-text" placeholder="Enter payment details…" oninput="updateInv()"></div>
-              </div>
-              <div class="ip-field" style="margin-top:14px"><div class="ip-lbl">Notes</div><input class="ip-inp" id="i-notes" value="Thank you for your business." oninput="updateInv()"></div>
-              <!-- Invoice customise -->
-              <div class="inv-cust">
-                <div class="inv-cust-hdr" onclick="toggleInvCust()">
-                  <span class="inv-cust-hdr-icon">🎨</span>
-                  <span>Customize style</span>
-                  <span class="inv-cust-arrow" id="inv-cust-arrow">▼</span>
-                </div>
-                <div class="inv-cust-body" id="inv-cust-body">
-                  <div class="inv-cust-lbl">Font</div>
-                  <div class="inv-font-grid">
-                    <button class="inv-font-opt active" data-font-id="manrope" onclick="selectInvFont('manrope')">
-                      <div class="inv-font-name" style="font-family:'Manrope',sans-serif">Manrope</div>
-                      <div class="inv-font-preview" style="font-family:'Manrope',sans-serif">Modern &amp; clean</div>
-                    </button>
-                    <button class="inv-font-opt" data-font-id="inter" onclick="selectInvFont('inter')">
-                      <div class="inv-font-name" style="font-family:'Inter',sans-serif">Inter</div>
-                      <div class="inv-font-preview" style="font-family:'Inter',sans-serif">Minimal &amp; precise</div>
-                    </button>
-                    <button class="inv-font-opt" data-font-id="playfair" onclick="selectInvFont('playfair')">
-                      <div class="inv-font-name" style="font-family:'Playfair Display',serif">Playfair</div>
-                      <div class="inv-font-preview" style="font-family:'Playfair Display',serif;font-style:italic">Elegant &amp; editorial</div>
-                    </button>
-                    <button class="inv-font-opt" data-font-id="dm-sans" onclick="selectInvFont('dm-sans')">
-                      <div class="inv-font-name" style="font-family:'DM Sans',sans-serif">DM Sans</div>
-                      <div class="inv-font-preview" style="font-family:'DM Sans',sans-serif">Friendly &amp; rounded</div>
-                    </button>
-                    <button class="inv-font-opt" data-font-id="lato" onclick="selectInvFont('lato')">
-                      <div class="inv-font-name" style="font-family:'Lato',sans-serif">Lato</div>
-                      <div class="inv-font-preview" style="font-family:'Lato',sans-serif">Warm &amp; readable</div>
-                    </button>
-                  </div>
-                  <div class="inv-cust-lbl">Accent color</div>
-                  <div class="inv-color-row">
-                    <div class="inv-swatch active" style="background:#D4A853" data-color="#D4A853" title="Amber" onclick="selectInvAccent('#D4A853',this)"></div>
-                    <div class="inv-swatch" style="background:#2D6A4F" data-color="#2D6A4F" title="Forest" onclick="selectInvAccent('#2D6A4F',this)"></div>
-                    <div class="inv-swatch" style="background:#1D4ED8" data-color="#1D4ED8" title="Cobalt" onclick="selectInvAccent('#1D4ED8',this)"></div>
-                    <div class="inv-swatch" style="background:#7C3AED" data-color="#7C3AED" title="Violet" onclick="selectInvAccent('#7C3AED',this)"></div>
-                    <div class="inv-swatch" style="background:#DC2626" data-color="#DC2626" title="Crimson" onclick="selectInvAccent('#DC2626',this)"></div>
-                    <div class="inv-swatch" style="background:#0F172A" data-color="#0F172A" title="Ink" onclick="selectInvAccent('#0F172A',this)"></div>
-                    <div class="inv-color-custom" title="Custom color">
-                      <span class="inv-color-custom-icon">+</span>
-                      <input type="color" id="inv-accent-custom" value="#D4A853" oninput="selectInvAccentCustom(this.value)">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="totals-block">
-                <div class="tot-row"><span class="tot-lbl">Subtotal</span><span class="tot-val" id="tot-sub">$0.00</span></div>
-                <div class="tot-row"><span class="tot-lbl">Discount</span><span class="tot-val" id="tot-disc">−$0.00</span></div>
-                <div class="tot-row"><span class="tot-lbl">Tax</span><span class="tot-val" id="tot-tax">+$0.00</span></div>
-                <div class="tot-row grand"><span class="tot-lbl">Total due</span><span class="tot-val" id="tot-total">$0.00</span></div>
-              </div>
-            </div>
-            <div class="ip-actions">
-              <div id="inv-proj-link-wrap" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-                <label style="font-size:12px;color:var(--ink-mid);white-space:nowrap">Save to project:</label>
-                <select id="inv-proj-link" style="flex:1;min-width:140px;font-family:var(--font-body);font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:5px 8px;background:var(--white);color:var(--ink)">
-                  <option value="">— none —</option>
-                </select>
-              </div>
-              <button class="ip-btn-p" onclick="saveInvoiceToHistory()">&#128190; Save invoice</button>
-              <button class="ip-btn-g" onclick="downloadInvoicePdf()">&#128196; Download PDF</button>
-            </div>
-          </div>
-          <div class="inv-preview" id="inv-preview">
-            <div class="inv-paper" id="inv-paper">
-              <div class="inv-top">
-                <div style="display:flex;align-items:center;gap:12px">
-                  <img id="p-logo" src="" alt="" style="display:none;max-height:48px;max-width:120px;object-fit:contain">
-                  <div>
-                    <div class="inv-brand-name" id="p-yourname">Your Name</div>
-                    <div class="inv-brand-detail" id="p-youremail"></div>
-                    <div class="inv-brand-detail" id="p-yourphone" style="display:none"></div>
-                  </div>
-                </div>
-                <div><div class="inv-word">Invoice</div><div class="inv-num" id="p-invnum">INV-001</div></div>
-              </div>
-              <div class="inv-meta">
-                <div>
-                  <div class="inv-meta-lbl">Bill to</div>
-                  <div class="inv-meta-val">
-                    <strong id="p-client">—</strong><br>
-                    <span id="p-contact"></span><br>
-                    <span style="font-size:11px;color:var(--ink-light)" id="p-cemail"></span><br>
-                    <span style="font-size:11px;color:var(--ink-light)" id="p-ccphone" style="display:none"></span>
-                    <span style="font-size:11px;color:var(--ink-light)" id="p-caddress" style="display:none"></span>
-                  </div>
-                </div>
-                <div><div class="inv-meta-lbl">Project</div><div class="inv-meta-val" id="p-project">—</div></div>
-              </div>
-              <div class="inv-dates">
-                <div><div class="inv-date-lbl">Issue date</div><div class="inv-date-val" id="p-issued">—</div></div>
-                <div><div class="inv-date-lbl">Due date</div><div class="inv-date-val" id="p-due">—</div></div>
-                <div><div class="inv-date-lbl">Status</div><div class="inv-date-val" style="color:var(--amber)">Unpaid</div></div>
-              </div>
-              <table class="inv-table"><thead><tr><th style="width:46%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Rate</th><th style="width:24%">Amount</th></tr></thead><tbody id="p-lineitems"><tr><td>—</td><td>1</td><td>$0.00</td><td>$0.00</td></tr></tbody></table>
-              <div class="inv-totals"><div class="inv-tot-inner"><div class="inv-tot-row"><span class="inv-tot-lbl">Subtotal</span><span class="inv-tot-val" id="p-sub">$0.00</span></div><div class="inv-tot-row" id="p-disc-row" style="display:none"><span class="inv-tot-lbl">Discount</span><span class="inv-tot-val" id="p-disc-val">—</span></div><div class="inv-tot-row" id="p-tax-row" style="display:none"><span class="inv-tot-lbl">Tax</span><span class="inv-tot-val" id="p-tax-val">—</span></div><div class="inv-tot-div"></div><div class="inv-tot-grand"><span class="inv-tot-lbl">Total due</span><span class="inv-tot-val" id="p-total">$0.00</span></div></div></div>
-              <div class="inv-footer">
-                <div><div class="inv-footer-lbl">Payment details</div><div class="inv-footer-val" id="p-pay-details">—</div></div>
-                <div><div class="inv-footer-lbl">Notes</div><div class="inv-footer-val" id="p-notes">—</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
       <!-- ─── RATE CALCULATOR ─── -->
       <div class="tmpl-panel" id="panel-ratecalc">
         <div class="tv-header">
@@ -2777,8 +2426,6 @@ var RateLimiter = (function() {
             <button class="pt-tab" onclick="showPtTab('billing',this)">Billing</button>
             <button class="pt-tab" onclick="showPtTab('meetings',this)">Meeting Notes</button>
             <button class="pt-tab" onclick="showPtTab('hours',this)">Timesheet</button>
-            <button class="pt-tab" onclick="showPtTab('contract',this)">Contract</button>
-            <button class="pt-tab" onclick="showPtTab('scope',this)">Scope Change</button>
           </div>
           <!-- Overview tab -->
           <div class="pt-tab-content" id="pt-tab-overview">
@@ -2878,10 +2525,7 @@ var RateLimiter = (function() {
             <div class="pt-sec-hdr">Time log <button class="pt-add-btn" onclick="openPtModal('add-time')">+ Log time</button></div>
             <div id="pt-hours-list"></div>
           </div>
-          <!-- Contract tab (rendered by JS) -->
-          <div class="pt-tab-content" id="pt-tab-contract" style="display:none"></div>
-          <!-- Scope Change tab (rendered by JS) -->
-          <div class="pt-tab-content" id="pt-tab-scope" style="display:none"></div>
+
         </div>
       </div>
 
@@ -3380,7 +3024,6 @@ function showPanel(id,el){
   if(id==='invoice'){ if(typeof populateInvProjSelect==='function') populateInvProjSelect(); _syncInvProjLinkUI(); }
   if(id==='timesheet'){ if(typeof loadGlobalTimesheet==='function') loadGlobalTimesheet(); }
   if(id==='home'){ if(typeof initHomeDashboard==='function') initHomeDashboard(); }
-  if(id==='contract'||id==='scope'){ if(typeof populateDocProjSelects==='function') populateDocProjSelects(); }
   if(id==='invhistory'){ if(typeof renderFinancialOverview==='function') renderFinancialOverview(); }
   if(typeof _trackRecentPanel==='function') _trackRecentPanel(id);
 }
@@ -4611,7 +4254,7 @@ var BETA_MODE = true;
 // Plan gating: 'free' users get access to FREE_PANELS only; 'pro' users get everything
 // In BETA_MODE everyone gets pro — including unauthenticated visitors
 var _userPlan = BETA_MODE ? 'pro' : 'free';
-var FREE_PANELS = ['home','contract','scope','mydetails','clients','invhistory'];
+var FREE_PANELS = ['home','mydetails','clients','invhistory'];
 
 function setLoggedInUser(user) {
   _currentUser = user;
@@ -6013,7 +5656,7 @@ async function renderContribGrid() {
 
   // Day labels + cell columns
   html += '<div class="cg-body">';
-  html += '<div class="cg-day-labels"><div class="cg-dl"></div><div class="cg-dl">M</div><div class="cg-dl"></div><div class="cg-dl">W</div><div class="cg-dl"></div><div class="cg-dl">F</div><div class="cg-dl"></div></div>';
+  html += '<div class="cg-day-labels"><div class="cg-dl">Su</div><div class="cg-dl">M</div><div class="cg-dl">Tu</div><div class="cg-dl">W</div><div class="cg-dl">Th</div><div class="cg-dl">F</div><div class="cg-dl">Sa</div></div>';
   html += '<div class="cg-cols">';
   weeks.forEach(function(col) {
     html += '<div class="cg-col">';
@@ -6032,8 +5675,8 @@ async function renderContribGrid() {
 }
 
 // ─── RECENTLY VISITED ─────────────────────────────────────────────────────────
-var _PANEL_ICONS = { contract:'📄', scope:'⚠️', invoice:'🧾', ratecalc:'📊', projects:'🛠️', pipeline:'🗂️', tax:'🦆', timesheet:'⏱', welcome:'🎁', brief:'📋', mydetails:'⚙️', clients:'👥', invhistory:'📁' };
-var _PANEL_NAMES = { contract:'Client Contract', scope:'Scope Change Order', invoice:'Invoice Builder', ratecalc:'Rate Calculator', projects:'Project Tracker', pipeline:'Pipeline Tracker', tax:'Tax Tracker', timesheet:'Timesheet', welcome:'Welcome Packet', brief:'Project Brief', mydetails:'My Details', clients:'Client Contacts', invhistory:'Invoice History' };
+var _PANEL_ICONS = { invoice:'🧾', ratecalc:'📊', projects:'🛠️', pipeline:'🗂️', tax:'🦆', timesheet:'⏱', welcome:'🎁', brief:'📋', mydetails:'⚙️', clients:'👥', invhistory:'📁' };
+var _PANEL_NAMES = { invoice:'Invoice Builder', ratecalc:'Rate Calculator', projects:'Project Tracker', pipeline:'Pipeline Tracker', tax:'Tax Tracker', timesheet:'Timesheet', welcome:'Welcome Packet', brief:'Project Brief', mydetails:'My Details', clients:'Client Contacts', invhistory:'Invoice History' };
 var _RECENT_EXCLUDE = ['home','scope'];
 function _trackRecentPanel(id) {
   if (!id || _RECENT_EXCLUDE.indexOf(id) !== -1) return;
