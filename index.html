@@ -1038,14 +1038,49 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .recent-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;background:var(--white);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--ink);cursor:pointer;transition:all .15s}
 .recent-chip:hover{border-color:var(--amber);background:var(--amber-light)}
 .recent-chip-icon{font-size:12px}
-/* ── LIVE TIMER ── */
-.nav-timer{display:flex;align-items:center;gap:6px;background:var(--surface-low);border:1.5px solid var(--border);border-radius:20px;padding:4px 10px 4px 12px;transition:border-color .2s}
-.nav-timer.running{border-color:var(--sage);background:#f0faf4}
-.timer-display{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.04em;min-width:58px}
-.timer-btn{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:50%;font-size:12px;color:var(--ink-mid);transition:all .15s;line-height:1;display:flex;align-items:center;justify-content:center}
-.timer-btn:hover{background:var(--surface);color:var(--ink)}
-.timer-btn.t-play{color:var(--sage)}
-.timer-btn.t-stop{color:#E8594A}
+/* ── LIVE TIMER BUTTON ── */
+.nav-timer-btn{display:flex;align-items:center;gap:6px;background:var(--surface-low);border:1.5px solid var(--border);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .2s;font-family:var(--font-body)}
+.nav-timer-btn:hover{border-color:var(--sage)}
+.nav-timer-btn.running{border-color:var(--sage);background:#f0faf4}
+.nav-timer-icon{font-size:14px;line-height:1}
+.nav-timer-mini{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--sage);letter-spacing:.04em}
+/* ── TIMER PANEL ── */
+.timer-panel{position:fixed;top:66px;right:130px;width:310px;background:#0f1624;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:490;display:none;flex-direction:column;padding:24px 22px 20px;color:#fff}
+.timer-panel.open{display:flex}
+.tp-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:-.01em}
+.tp-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px}
+.tp-select{width:100%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;font-weight:500;font-family:var(--font-body);cursor:pointer;appearance:none;-webkit-appearance:none;margin-bottom:20px}
+.tp-select option{background:#1a2235;color:#fff}
+.tp-divider{height:1px;background:rgba(255,255,255,.1);margin:16px 0}
+.tp-clock{font-family:var(--font-mono);font-size:52px;font-weight:700;color:#fff;letter-spacing:.02em;text-align:center;margin:8px 0 6px;line-height:1}
+.tp-status{font-size:13px;font-weight:600;color:#40c463;text-align:center;margin-bottom:18px;min-height:20px}
+.tp-status.paused{color:rgba(255,255,255,.4)}
+.tp-status.idle{color:rgba(255,255,255,.3)}
+.tp-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.tp-btn{padding:13px 0;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s}
+.tp-btn:hover{opacity:.85}
+.tp-btn.play{background:#fff;color:#0f1624}
+.tp-btn.save{background:#40c463;color:#fff}
+.tp-btn.save:disabled{background:rgba(255,255,255,.15);color:rgba(255,255,255,.3);cursor:default}
+.tp-deadline-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.tp-deadline-row:last-child{border-bottom:none}
+.tp-dl-name{font-size:12px;color:rgba(255,255,255,.75);font-weight:500;flex:1;line-height:1.4}
+.tp-dl-date{font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.tp-dl-date.urgent{color:#40c463}
+.tp-dl-date.soon{color:#f4a73a}
+.tp-dl-date.normal{color:rgba(255,255,255,.4)}
+/* ── PROFILE MENU ── */
+.nav-avatar-wrap{position:relative}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:var(--primary-container);border:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Manrope',sans-serif;user-select:none}
+.profile-dropdown{position:absolute;right:0;top:calc(100% + 8px);width:210px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 28px rgba(0,0,0,.13);z-index:600;display:none;flex-direction:column;overflow:hidden}
+.profile-dropdown.open{display:flex}
+.profile-dd-info{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
+.profile-dd-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.profile-dd-email{font-size:11px;color:var(--ink-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-dd-btn{display:flex;align-items:center;gap:9px;padding:11px 16px;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;border:none;background:none;text-align:left;width:100%;font-family:var(--font-body);transition:background .12s}
+.profile-dd-btn:hover{background:var(--surface-low)}
+.profile-dd-btn.danger{color:#E8594A}
+.profile-dd-btn.danger:hover{background:#FFF0EE}
 /* Timer log modal */
 .timer-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:600;display:none;align-items:center;justify-content:center}
 .timer-modal-overlay.open{display:flex}
@@ -1066,17 +1101,17 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .contrib-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .contrib-title{font-size:13px;font-weight:700;color:var(--ink)}
 .contrib-subtitle{font-size:11px;color:var(--ink-light)}
-.cg-outer{overflow-x:auto}
-.cg-wrap{display:inline-flex;flex-direction:column;gap:3px;min-width:max-content}
-.cg-month-row{display:flex;gap:3px;padding-left:24px}
-.cg-ml{width:13px;font-size:9px;color:var(--ink-light);text-align:left;min-width:13px}
-.cg-body{display:flex;gap:4px}
+.cg-outer{width:100%}
+.cg-wrap{display:flex;flex-direction:column;gap:4px;width:100%}
+.cg-month-row{display:flex;gap:3px;padding-left:26px}
+.cg-ml{font-size:10px;color:var(--ink-light);text-align:left;flex:1}
+.cg-body{display:flex;gap:4px;width:100%}
 .cg-day-labels{display:flex;flex-direction:column;gap:3px;padding-top:2px}
-.cg-dl{height:13px;width:16px;font-size:9px;color:var(--ink-light);line-height:13px;text-align:right;flex-shrink:0}
-.cg-cols{display:flex;gap:3px}
+.cg-dl{height:15px;width:18px;font-size:10px;color:var(--ink-light);line-height:15px;text-align:right;flex-shrink:0}
+.cg-cols{display:flex;gap:3px;flex:1;justify-content:space-between}
 .cg-col{display:flex;flex-direction:column;gap:3px}
-.cg-cell{width:13px;height:13px;border-radius:2px;cursor:default;transition:transform .1s}
-.cg-cell:hover{transform:scale(1.3)}
+.cg-cell{width:15px;height:15px;border-radius:3px;cursor:default;transition:transform .1s;flex-shrink:0}
+.cg-cell:hover{transform:scale(1.25)}
 .cg-future{background:transparent}
 .cg-l0{background:#ebedf0}
 .cg-l1{background:#9be9a8}
@@ -2029,17 +2064,27 @@ var RateLimiter = (function() {
       <span style="font-size:12px;color:var(--ink-light)">10 templates</span>
     </div>
     <div class="nav-actions">
-      <!-- Live Timer -->
-      <div class="nav-timer" id="nav-timer" title="Billable hours timer">
-        <span class="timer-display" id="timer-display">00:00:00</span>
-        <button class="timer-btn t-play" id="timer-toggle-btn" onclick="timerToggle()" title="Start timer">&#9654;</button>
-        <button class="timer-btn t-stop" id="timer-stop-btn" onclick="timerStop()" title="Stop &amp; log" style="display:none">&#9632;</button>
-      </div>
+      <!-- Live Timer button -->
+      <button class="nav-timer-btn" id="nav-timer-btn" onclick="toggleTimerPanel()" title="Quick Active Timer">
+        <span class="nav-timer-icon">⏱</span>
+        <span class="nav-timer-mini" id="nav-timer-mini" style="display:none">00:00:00</span>
+      </button>
       <button class="notif-bell" id="notif-bell-btn" onclick="toggleNotificationPanel()" title="Notifications" style="display:none">
         🔔
         <span class="notif-badge" id="notif-badge"></span>
       </button>
-      <div class="nav-avatar" id="nav-avatar">AC</div>
+      <!-- Profile avatar with dropdown -->
+      <div class="nav-avatar-wrap" id="nav-avatar-wrap">
+        <div class="nav-avatar" id="nav-avatar" onclick="toggleProfileMenu()">AC</div>
+        <div class="profile-dropdown" id="profile-dropdown">
+          <div class="profile-dd-info">
+            <div class="profile-dd-name" id="profile-dd-name">—</div>
+            <div class="profile-dd-email" id="profile-dd-email">—</div>
+          </div>
+          <button class="profile-dd-btn" onclick="closeProfileMenu();showPanel('mydetails',document.getElementById('nav-mydetails'))">&#9881;&#65039; My Details</button>
+          <button class="profile-dd-btn danger" onclick="closeProfileMenu();handleSignOut()">&#8594; Sign out</button>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -2063,6 +2108,24 @@ var RateLimiter = (function() {
         <button class="timer-modal-btn save" onclick="timerLogSave()">Save time log</button>
       </div>
     </div>
+  </div>
+
+  <!-- Quick Active Timer Panel -->
+  <div class="timer-panel" id="timer-panel">
+    <div class="tp-title">Quick Active Timer</div>
+    <div class="tp-label">Currently Tracking</div>
+    <select class="tp-select" id="tp-project-sel">
+      <option value="">— No project —</option>
+    </select>
+    <div class="tp-clock" id="tp-clock">00:00:00</div>
+    <div class="tp-status idle" id="tp-status">Ready to start</div>
+    <div class="tp-btns">
+      <button class="tp-btn play" id="tp-play-btn" onclick="timerToggle()">&#9654; Start</button>
+      <button class="tp-btn save" id="tp-save-btn" onclick="timerStop()" disabled>&#9632; Save Log</button>
+    </div>
+    <div class="tp-divider"></div>
+    <div class="tp-label">Upcoming Deadlines</div>
+    <div id="tp-deadlines"><div style="font-size:12px;color:rgba(255,255,255,.3);padding:8px 0">No upcoming deadlines 🎉</div></div>
   </div>
 
   <!-- Notification panel -->
@@ -4568,6 +4631,10 @@ function setLoggedInUser(user) {
   if (nameEl) nameEl.textContent = name;
   var avEl = document.querySelector('#page-dash .nav-avatar');
   if (avEl) avEl.textContent = name.slice(0,2).toUpperCase();
+  var ddName = document.getElementById('profile-dd-name');
+  var ddEmail = document.getElementById('profile-dd-email');
+  if (ddName) ddName.textContent = name;
+  if (ddEmail) ddEmail.textContent = user.email || '';
   var wbEl = document.querySelector('.wb-text h3');
   if (wbEl) wbEl.textContent = 'Welcome back, ' + name.split(' ')[0] + '.';
   // Start inactivity timer now that a real user is logged in
@@ -5663,27 +5730,94 @@ function _fmtTimerDisplay(s) {
   return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
 }
 
+function _updateTimerUI() {
+  var t = _fmtTimerDisplay(_timerSeconds);
+  var clock = document.getElementById('tp-clock');
+  var mini = document.getElementById('nav-timer-mini');
+  if (clock) clock.textContent = t;
+  if (mini) mini.textContent = t;
+}
+
+function toggleTimerPanel() {
+  var panel = document.getElementById('timer-panel');
+  if (!panel) return;
+  var isOpen = panel.classList.contains('open');
+  if (isOpen) { panel.classList.remove('open'); return; }
+  // Populate project dropdown
+  var sel = document.getElementById('tp-project-sel');
+  if (sel) {
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">— No project —</option>';
+    (_ptProjects || []).forEach(function(p) {
+      var opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name + (p.client_name ? ' · ' + p.client_name : '');
+      sel.appendChild(opt);
+    });
+    if (cur) sel.value = cur;
+  }
+  // Populate upcoming deadlines
+  _renderTimerDeadlines();
+  panel.classList.add('open');
+}
+
+function _renderTimerDeadlines() {
+  var el = document.getElementById('tp-deadlines');
+  if (!el) return;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var items = [];
+  (_ptProjects || []).forEach(function(p) {
+    if (p.end_date) {
+      var d = new Date(p.end_date + 'T00:00:00');
+      if (d >= today) items.push({ name: p.name, date: d, ds: p.end_date });
+    }
+  });
+  (_ptMilestones || []).forEach(function(m) {
+    if (m.end_date && !m.completed) {
+      var d = new Date(m.end_date + 'T00:00:00');
+      if (d >= today) items.push({ name: m.title, date: d, ds: m.end_date });
+    }
+  });
+  items.sort(function(a,b){ return a.date - b.date; });
+  items = items.slice(0, 5);
+  if (!items.length) { el.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,.3);padding:8px 0">No upcoming deadlines &#127881;</div>'; return; }
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.innerHTML = items.map(function(item) {
+    var diff = Math.round((item.date - today) / 86400000);
+    var label, cls;
+    if (diff === 0) { label = 'Today'; cls = 'urgent'; }
+    else if (diff === 1) { label = 'Tomorrow'; cls = 'urgent'; }
+    else if (diff <= 7) { label = 'In ' + diff + ' days'; cls = 'soon'; }
+    else { label = MONTHS[item.date.getMonth()] + ' ' + item.date.getDate(); cls = 'normal'; }
+    return '<div class="tp-deadline-row"><div class="tp-dl-name">' + escapeHTML(item.name) + '</div><div class="tp-dl-date ' + cls + '">' + label + '</div></div>';
+  }).join('');
+}
+
 function timerToggle() {
-  var wrap = document.getElementById('nav-timer');
-  var btn = document.getElementById('timer-toggle-btn');
-  var stopBtn = document.getElementById('timer-stop-btn');
+  var playBtn = document.getElementById('tp-play-btn');
+  var saveBtn = document.getElementById('tp-save-btn');
+  var status = document.getElementById('tp-status');
+  var navBtn = document.getElementById('nav-timer-btn');
+  var mini = document.getElementById('nav-timer-mini');
   if (_timerRunning) {
     // Pause
     clearInterval(_timerInterval);
     _timerRunning = false;
-    if (btn) { btn.innerHTML = '&#9654;'; btn.title = 'Resume timer'; btn.className = 'timer-btn t-play'; }
-    if (wrap) wrap.classList.remove('running');
+    if (playBtn) playBtn.innerHTML = '&#9654; Resume';
+    if (status) { status.textContent = 'Paused'; status.className = 'tp-status paused'; }
+    if (navBtn) navBtn.classList.remove('running');
   } else {
     // Start / Resume
     _timerRunning = true;
     _timerInterval = setInterval(function() {
       _timerSeconds++;
-      var disp = document.getElementById('timer-display');
-      if (disp) disp.textContent = _fmtTimerDisplay(_timerSeconds);
+      _updateTimerUI();
     }, 1000);
-    if (btn) { btn.innerHTML = '&#9646;&#9646;'; btn.title = 'Pause timer'; btn.className = 'timer-btn t-play'; }
-    if (stopBtn) stopBtn.style.display = '';
-    if (wrap) wrap.classList.add('running');
+    if (playBtn) playBtn.innerHTML = '&#9646;&#9646; Pause';
+    if (saveBtn) { saveBtn.disabled = false; }
+    if (status) { status.textContent = 'Recording...'; status.className = 'tp-status'; }
+    if (navBtn) navBtn.classList.add('running');
+    if (mini) mini.style.display = '';
   }
 }
 
@@ -5693,19 +5827,28 @@ function timerStop() {
   _timerLoggedHours = parseFloat((_timerSeconds / 3600).toFixed(2));
   var totalSec = _timerSeconds;
   _timerSeconds = 0;
-  var disp = document.getElementById('timer-display');
-  if (disp) disp.textContent = '00:00:00';
-  var btn = document.getElementById('timer-toggle-btn');
-  var stopBtn = document.getElementById('timer-stop-btn');
-  var wrap = document.getElementById('nav-timer');
-  if (btn) { btn.innerHTML = '&#9654;'; btn.title = 'Start timer'; btn.className = 'timer-btn t-play'; }
-  if (stopBtn) stopBtn.style.display = 'none';
-  if (wrap) wrap.classList.remove('running');
+  _updateTimerUI();
+  var playBtn = document.getElementById('tp-play-btn');
+  var saveBtn = document.getElementById('tp-save-btn');
+  var status = document.getElementById('tp-status');
+  var navBtn = document.getElementById('nav-timer-btn');
+  var mini = document.getElementById('nav-timer-mini');
+  if (playBtn) playBtn.innerHTML = '&#9654; Start';
+  if (saveBtn) saveBtn.disabled = true;
+  if (status) { status.textContent = 'Ready to start'; status.className = 'tp-status idle'; }
+  if (navBtn) navBtn.classList.remove('running');
+  if (mini) { mini.textContent = '00:00:00'; mini.style.display = 'none'; }
+  // Close the panel and open the log modal
+  var panel = document.getElementById('timer-panel');
+  if (panel) panel.classList.remove('open');
   if (totalSec < 30) { showToast('Timer stopped (less than 30s — not logged)'); return; }
-  openTimerModal(_timerLoggedHours);
+  // Pre-select the project from the panel dropdown
+  var tpSel = document.getElementById('tp-project-sel');
+  var preselect = tpSel ? tpSel.value : '';
+  openTimerModal(_timerLoggedHours, preselect);
 }
 
-function openTimerModal(hours) {
+function openTimerModal(hours, preselectProjId) {
   var overlay = document.getElementById('timer-modal-overlay');
   var sub = document.getElementById('timer-modal-sub');
   var desc = document.getElementById('timer-modal-desc');
@@ -5722,10 +5865,35 @@ function openTimerModal(hours) {
       opt.textContent = p.name + (p.client_name ? ' (' + p.client_name + ')' : '');
       sel.appendChild(opt);
     });
+    if (preselectProjId) sel.value = preselectProjId;
   }
   overlay.classList.add('open');
   if (desc) setTimeout(function(){ desc.focus(); }, 100);
 }
+
+// ─── PROFILE MENU ─────────────────────────────────────────────────────────────
+function toggleProfileMenu() {
+  var dd = document.getElementById('profile-dropdown');
+  if (!dd) return;
+  dd.classList.toggle('open');
+}
+function closeProfileMenu() {
+  var dd = document.getElementById('profile-dropdown');
+  if (dd) dd.classList.remove('open');
+}
+// Close both menus when clicking outside
+document.addEventListener('click', function(e) {
+  var timerPanel = document.getElementById('timer-panel');
+  var timerBtn = document.getElementById('nav-timer-btn');
+  if (timerPanel && timerPanel.classList.contains('open') && !timerPanel.contains(e.target) && timerBtn && !timerBtn.contains(e.target)) {
+    timerPanel.classList.remove('open');
+  }
+  var dd = document.getElementById('profile-dropdown');
+  var wrap = document.getElementById('nav-avatar-wrap');
+  if (dd && dd.classList.contains('open') && wrap && !wrap.contains(e.target)) {
+    dd.classList.remove('open');
+  }
+});
 
 function closeTimerModal() {
   var overlay = document.getElementById('timer-modal-overlay');
@@ -8054,8 +8222,7 @@ function renderPtDocTab(type) {
         '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">✏️ Edit fields</button>' +
         '<span class="doc-edit-hint">Click highlighted fields to edit</span>' +
         '<button class="btn-primary" style="font-size:12px;padding:5px 12px" onclick="ptSaveDoc(\'' + type + '\')">&#128190; Save</button>' +
-        '<button class="btn-outline" style="font-size:12px;padding:5px 10px" onclick="window.location.href=\'' + downloadFile + '\'">&#128196; Download .docx</button>' +
-        '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128438; PDF / Print</button>' +
+        '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128196; Download PDF</button>' +
       '</div>' +
     '</div>' +
     '<div class="doc-wrap" style="max-height:70vh;overflow-y:auto">' +
