@@ -6407,9 +6407,28 @@ var _ptModalMode = null;   // current modal mode
 async function loadProjects() {
   if (!_currentUser) return;
   var uid = _currentUser.id;
-  var res = await _supabase.from('projects').select('*').eq('user_id', uid).order('created_at', {ascending: false});
+  var email = (_currentUser.email || '').toLowerCase();
+  // Load owned projects + accepted shared projects in parallel
+  var [ownedRes, sharedRes] = await Promise.all([
+    _supabase.from('projects').select('*').eq('user_id', uid).order('created_at', {ascending: false}),
+    email ? _supabase.from('project_shares').select('projects(*)').eq('shared_email', email).eq('status', 'accepted') : Promise.resolve({data:[]})
+  ]);
   if (!_currentUser || _currentUser.id !== uid) return;
-  if (res.data) { _ptProjects = res.data; renderPtList(); if(typeof updateTodoProjDropdowns==='function') updateTodoProjDropdowns(); if(typeof populateDocProjSelects==='function') populateDocProjSelects(); if(typeof renderUpcoming==='function') renderUpcoming(); if(typeof renderClientList==='function') renderClientList(); }
+  var projects = ownedRes.data || [];
+  // Merge in shared projects not already in the owned list
+  if (sharedRes.data) {
+    sharedRes.data.forEach(function(s) {
+      if (s.projects && !projects.find(function(p){ return p.id === s.projects.id; })) {
+        projects.push(Object.assign({}, s.projects, { _shared: true }));
+      }
+    });
+  }
+  _ptProjects = projects;
+  renderPtList();
+  if (typeof updateTodoProjDropdowns === 'function') updateTodoProjDropdowns();
+  if (typeof populateDocProjSelects === 'function') populateDocProjSelects();
+  if (typeof renderUpcoming === 'function') renderUpcoming();
+  if (typeof renderClientList === 'function') renderClientList();
 }
 
 async function ptLoadProjectData(projectId) {
