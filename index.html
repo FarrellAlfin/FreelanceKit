@@ -7384,7 +7384,7 @@ function renderPtHours() {
   }
   var uid = _currentUser && _currentUser.id;
   var rows = hr.map(function(h, i) {
-    var isOwn = !h.user_id || h.user_id === uid;
+    var isOwn = !!uid && h.user_id === uid;
     var dateStr = h.log_date ? h.log_date.slice(0,10) : '—';
     // Format date as e.g. "Apr 12"
     var dateDisp = '—';
@@ -8412,7 +8412,7 @@ async function savePtTime() {
 function openPtEditTime(i) {
   var hr = window._ptHours; if (!hr || !hr[i]) return;
   // Only allow editing own entries
-  if (_currentUser && hr[i].user_id && hr[i].user_id !== _currentUser.id) {
+  if (!_currentUser || hr[i].user_id !== _currentUser.id) {
     showToast('You can only edit your own time entries'); return;
   }
   _ptEditIdx = i;
@@ -8635,6 +8635,15 @@ async function cyclePtBillingStatus(i) {
 
 async function deletePtItem(table, i) {
   if (!_currentUser) return;
+  // Only allow deleting own timesheet entries
+  if (table === 'timesheet') {
+    var _hr = window._ptHours;
+    if (!_hr || !_hr[i]) return;
+    if (_hr[i].user_id !== _currentUser.id) {
+      showToast('You can only delete your own time entries');
+      return;
+    }
+  }
   var collections = {milestones:'_ptMilestones',tasks:'_ptTasks',billing:'_ptBilling',meetings:'_ptMeetings',timesheet:'_ptHours'};
   var dbTable = {milestones:'project_milestones',tasks:'project_tasks',billing:'project_billing',meetings:'project_meetings',timesheet:'project_timesheet'};
   var col = window[collections[table]]; if (!col || !col[i]) return;
