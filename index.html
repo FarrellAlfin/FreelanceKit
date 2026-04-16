@@ -1155,7 +1155,7 @@ input[type=number]{-moz-appearance:textfield}
 .pt-detail-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
 .pt-back-btn{background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px 12px;font-size:12px;cursor:pointer;color:var(--ink-mid);flex-shrink:0}
 .pt-back-btn:hover{border-color:var(--ink);color:var(--ink)}
-.pt-detail-name{font-size:17px;font-weight:700;color:var(--ink);flex:1}
+.pt-detail-name{font-size:22px;font-weight:800;color:var(--ink);flex:1;letter-spacing:-.01em}
 .pt-tabs{display:flex;gap:2px;border-bottom:1.5px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
 .pt-tab{background:none;border:none;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-light);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:all .15s;font-family:var(--font-body)}
 .pt-tab:hover{color:var(--ink)}
@@ -6484,6 +6484,9 @@ function selectPtProject(id) {
   // Show detail view
   document.getElementById('pt-list-view').style.display = 'none';
   document.getElementById('pt-detail-view').style.display = '';
+  // Hide the panel-level header (title + desc) when inside a project
+  var ptPanelHdr = document.querySelector('#panel-projects .tv-header');
+  if (ptPanelHdr) ptPanelHdr.style.display = 'none';
   // Populate header
   document.getElementById('pt-detail-name').textContent = proj.name;
   var badge = document.getElementById('pt-detail-status-badge');
@@ -6533,6 +6536,9 @@ function ptBackToList() {
   _ptCurrentId = null;
   document.getElementById('pt-list-view').style.display = '';
   document.getElementById('pt-detail-view').style.display = 'none';
+  // Restore the panel-level header
+  var ptPanelHdr = document.querySelector('#panel-projects .tv-header');
+  if (ptPanelHdr) ptPanelHdr.style.display = '';
   renderPtList();
 }
 
@@ -6922,12 +6928,19 @@ function renderPtPeople() {
   var wrap = document.getElementById('ptv-people-wrap');
   if (!wrap) return;
   var people = loadPtPeople();
-  // Also pull unique assignees from tasks as "auto" members
+  // Pull unique assignees from tasks as "auto" members
   var taskAssignees = [];
   (window._ptTasks || []).forEach(function(t){ _parseAssignees(t).forEach(function(a){ if (taskAssignees.indexOf(a) < 0) taskAssignees.push(a); }); });
   taskAssignees.forEach(function(name) {
     if (!people.find(function(p){ return p.name === name; })) {
       people.push({name: name, role: '', side: 'freelancer', auto: true});
+    }
+  });
+  // Add accepted collaborators from project_shares
+  (_ptShares || []).filter(function(s){ return s.status === 'accepted'; }).forEach(function(s) {
+    var displayName = s.accepted_user_name || s.shared_email || '';
+    if (displayName && !people.find(function(p){ return p.name === displayName; })) {
+      people.push({ name: displayName, role: s.shared_email || '', side: 'freelancer', auto: true, collaborator: true });
     }
   });
   var chips = people.map(function(p, i) {
@@ -6939,7 +6952,8 @@ function renderPtPeople() {
       'title="' + escapeHTML(p.name) + (p.role ? ' · ' + escapeHTML(p.role) : '') + (p.side === 'client' ? ' (client)' : '') + '">' +
       '<div class="pt-person-avatar" style="background:' + color + '">' + initials + '</div>' +
       '<span>' + escapeHTML(p.name) + '</span>' +
-      (p.side === 'client' ? '<span style="font-size:10px;color:var(--ink-light);background:#F3F4F6;padding:1px 5px;border-radius:10px">client</span>' : '') +
+      (p.collaborator ? '<span style="font-size:10px;color:var(--sage);background:var(--sage-light);padding:1px 5px;border-radius:10px;flex-shrink:0">collab</span>' : '') +
+      (p.side === 'client' && !p.collaborator ? '<span style="font-size:10px;color:var(--ink-light);background:#F3F4F6;padding:1px 5px;border-radius:10px">client</span>' : '') +
       (!p.auto ? '<span style="font-size:11px;color:var(--ink-light);cursor:pointer;padding:0 2px" onclick="removePtPerson(' + i + ')">✕</span>' : '') +
       '</div>';
   }).join('');
@@ -7125,13 +7139,13 @@ function openMeetingPopup(idx) {
     (proj ? '<div style="font-size:12px;color:var(--ink-light);margin-bottom:14px">' + escapeHTML(proj.name) + (m.project_number ? ' · #' + escapeHTML(m.project_number) : '') + '</div>' : '') +
     locHtml +
     (attendeeHtml ? '<div style="background:#F8F7F4;border-radius:8px;padding:14px;margin-bottom:18px"><div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Team</div>' + attendeeHtml + '</div>' : '') +
-    '<div style="margin-bottom:18px">' +
-      '<div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Notes</div>' +
+    '<div style="background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px">' +
+      '<div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Notes</div>' +
       (m.notes_html
-        ? '<div style="font-size:14px;line-height:1.8;color:var(--ink)">' + m.notes_html + '</div>'
-        : (m.notes ? '<div style="font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap">' + escapeHTML(m.notes) + '</div>' : '<div style="color:var(--ink-light);font-size:13px;font-style:italic">No notes added.</div>')) +
+        ? '<div style="font-size:14px;line-height:1.85;color:var(--ink)">' + m.notes_html + '</div>'
+        : (m.notes ? '<div style="font-size:14px;line-height:1.85;color:var(--ink);white-space:pre-wrap">' + escapeHTML(m.notes) + '</div>' : '<div style="color:var(--ink-light);font-size:13px;font-style:italic">No notes added.</div>')) +
     '</div>' +
-    (m.action_items ? '<div style="padding-top:16px;border-top:1px solid var(--border)"><div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Action items</div>' + _renderActionItems(m.action_items) + '</div>' : '') +
+    (m.action_items ? '<div style="background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px"><div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Action items</div>' + _renderActionItems(m.action_items) + '</div>' : '') +
     '</div>';
 
   popup.style.display = 'flex';
@@ -7978,28 +7992,49 @@ function renderNotifications() {
   }
   list.innerHTML = _notifications.map(function(n) {
     var projName = (n.projects && n.projects.name) ? n.projects.name : 'a project';
+    var inviterName = n.owner_name || 'Someone';
+    // Trim to first + last name only (drop middle)
+    var nameParts = inviterName.split(' ').filter(Boolean);
+    var displayInviter = nameParts.length >= 2
+      ? nameParts[0] + ' ' + nameParts[nameParts.length - 1]
+      : inviterName;
     var safeId = escapeHTML(n.id);
     var safeName = escapeHTML(projName);
+    var projId = n.projects && n.projects.id ? escapeHTML(n.projects.id) : '';
     return '<div class="notif-item">' +
       '<div class="notif-item-project">' + safeName + '</div>' +
-      '<div class="notif-item-sub">You\'ve been invited to collaborate on this project.</div>' +
+      '<div class="notif-item-sub"><strong>' + escapeHTML(displayInviter) + '</strong> invited you to collaborate on this project.</div>' +
       '<div class="notif-item-actions">' +
-        '<button class="notif-accept-btn" onclick="acceptInvitation(\'' + safeId + '\',\'' + safeName + '\')">✓ Accept</button>' +
+        '<button class="notif-accept-btn" onclick="acceptInvitation(\'' + safeId + '\',\'' + safeName + '\',\'' + projId + '\')">✓ Accept</button>' +
         '<button class="notif-decline-btn" onclick="declineInvitation(\'' + safeId + '\')">Decline</button>' +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-async function acceptInvitation(shareId, projName) {
+async function acceptInvitation(shareId, projName, projId) {
   if (!_supabase || !_currentUser) return;
+  var myName = getMyFullName()
+    || (_currentUser.user_metadata && (_currentUser.user_metadata.full_name || _currentUser.user_metadata.name))
+    || _currentUser.email || '';
   var res = await _supabase.from('project_shares')
-    .update({ status: 'accepted', accepted_user_id: _currentUser.id })
+    .update({ status: 'accepted', accepted_user_id: _currentUser.id, accepted_user_name: myName })
     .eq('id', shareId).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
+  // Add self to this project's people list in localStorage so they appear immediately
+  if (projId && myName) {
+    var peopleKey = 'pt_people_' + projId;
+    var existing = [];
+    try { existing = JSON.parse(localStorage.getItem(peopleKey) || '[]'); } catch(e){}
+    if (!existing.find(function(p){ return p.name === myName; })) {
+      existing.push({ name: myName, role: _currentUser.email || '', side: 'freelancer' });
+      localStorage.setItem(peopleKey, JSON.stringify(existing));
+    }
+  }
   _notifications = _notifications.filter(function(n){ return n.id !== shareId; });
   updateNotificationBadge(_notifications.length);
   renderNotifications();
+  closeNotificationPanel();
   showToast('✓ You joined ' + projName);
   if (typeof loadProjects === 'function') loadProjects();
 }
@@ -8059,9 +8094,13 @@ async function savePtShare() {
   if (!email || !email.includes('@')) { showToast('Enter a valid email'); return; }
   if (!_currentUser || !_ptCurrentId) return;
   if (!_supabase) { showToast('Database not connected'); return; }
+  var ownerName = getMyFullName()
+    || (_currentUser.user_metadata && (_currentUser.user_metadata.full_name || _currentUser.user_metadata.name))
+    || _currentUser.email || 'Someone';
   var res = await _supabase.from('project_shares').insert({
     project_id: _ptCurrentId,
     owner_id: _currentUser.id,
+    owner_name: ownerName,
     shared_email: email.trim().toLowerCase(),
     status: 'pending',
     created_at: new Date().toISOString()
@@ -8358,7 +8397,9 @@ async function savePtTime() {
   if (!_currentUser || !_ptCurrentId) return;
   var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():null; };
   var hrs = parseFloat(g('ptm-time-hrs')); if (!hrs || hrs <= 0) { showToast('Hours required'); return; }
-  var myName = getMyFullName() || (_currentUser.email ? _currentUser.email.split('@')[0] : null);
+  var myName = getMyFullName()
+    || (_currentUser.user_metadata && (_currentUser.user_metadata.full_name || _currentUser.user_metadata.name))
+    || (_currentUser.email ? _currentUser.email.split('@')[0] : null);
   var payload = { project_id: _ptCurrentId, user_id: _currentUser.id,
     log_date: g('ptm-time-date') || null, hours: hrs, description: g('ptm-time-desc'),
     person_name: myName || null };
