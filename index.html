@@ -1121,6 +1121,31 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 .cg-l4{background:#216e39}
 .cg-legend{display:flex;align-items:center;gap:5px;margin-top:10px;justify-content:flex-end;font-size:10px;color:var(--ink-light)}
 .cg-legend-cell{width:11px;height:11px;border-radius:2px}
+/* ── Calendar-style contribution grid ── */
+.cg-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;width:100%}
+.cg-cal-dow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-light);text-align:center;padding-bottom:5px}
+.cg-cal-cell{border-radius:5px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:default;transition:opacity .15s}
+.cg-cal-cell:hover:not(.cg-cal-empty){opacity:.75}
+.cg-cal-today{outline:2px solid var(--ink);outline-offset:1px;font-weight:800}
+.cg-cal-future{opacity:.22;pointer-events:none}
+.cg-cal-empty{visibility:hidden;pointer-events:none}
+.cg-cal-l0{background:var(--cream-dark);color:var(--ink-light)}
+.cg-cal-l1{background:#9be9a8;color:#1a6b2a}
+.cg-cal-l2{background:#40c463;color:#fff}
+.cg-cal-l3{background:#30a14e;color:#fff}
+.cg-cal-l4{background:#216e39;color:#fff}
+/* ── Timer panel mini calendar grid ── */
+.cg-tm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;width:100%}
+.cg-tm-dow{font-size:8px;color:rgba(250,247,242,.38);text-align:center;padding-bottom:3px;font-weight:600}
+.cg-tm-cell{border-radius:3px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;cursor:default;color:rgba(250,247,242,.45)}
+.cg-tm-today{outline:1.5px solid rgba(250,247,242,.8);outline-offset:1px;color:rgba(250,247,242,.95);font-weight:800}
+.cg-tm-empty{visibility:hidden;pointer-events:none}
+.cg-tm-future{opacity:.18;pointer-events:none}
+.cg-tm-l0{background:rgba(255,255,255,.09);color:rgba(250,247,242,.35)}
+.cg-tm-l1{background:#9be9a8;color:#1a6b2a}
+.cg-tm-l2{background:#40c463;color:#fff}
+.cg-tm-l3{background:#30a14e;color:#fff}
+.cg-tm-l4{background:#216e39;color:#fff}
 /* ── COLLAB CHART ── */
 .collab-chart-wrap{background:var(--cream-dark);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px}
 .collab-chart-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-mid);margin-bottom:14px}
@@ -4824,12 +4849,31 @@ var _invFilter = 'all';
 var _editingInvoiceId = null;   // set when editing an existing invoice — causes Save to UPDATE
 var _editingBillingRowId = null; // set when opening invoice builder from a billing row (new invoice path)
 
-// Helpers: store/retrieve billing-row → invoice ID mapping in localStorage
+// Helpers: store/retrieve billing-row ↔ invoice ID mapping in localStorage
 function _saveBillingInvLink(billingId, invoiceId) {
-  try { localStorage.setItem('fk_billing_inv_' + billingId, invoiceId); } catch(e){}
+  try {
+    localStorage.setItem('fk_billing_inv_' + billingId, invoiceId);
+    localStorage.setItem('fk_inv_billing_' + invoiceId, billingId); // reverse map
+  } catch(e){}
 }
 function _getBillingInvLink(billingId) {
   try { return localStorage.getItem('fk_billing_inv_' + billingId) || null; } catch(e){ return null; }
+}
+function _getInvBillingLink(invoiceId) {
+  try { return localStorage.getItem('fk_inv_billing_' + invoiceId) || null; } catch(e){ return null; }
+}
+// Sync invoice status change → linked project billing row status
+function _syncInvoiceStatusToBilling(invoiceId, invoiceStatus) {
+  var billingId = _getInvBillingLink(invoiceId);
+  if (!billingId || !_currentUser) return;
+  var billingStatus = { draft:'pending', sent:'invoiced', overdue:'invoiced', paid:'paid' }[invoiceStatus] || 'pending';
+  // Update local _ptBilling array and re-render if loaded
+  if (window._ptBilling) {
+    var bi = window._ptBilling.findIndex(function(b){ return b.id === billingId; });
+    if (bi >= 0) { window._ptBilling[bi].status = billingStatus; if (typeof renderPtBilling === 'function') renderPtBilling(); }
+  }
+  // Persist to Supabase in background
+  _supabase.from('project_billing').update({ status: billingStatus }).eq('id', billingId).eq('user_id', _currentUser.id);
 }
 
 async function loadInvoiceHistory() {
@@ -4924,6 +4968,8 @@ async function updateInvStatus(id, status) {
   if (inv) inv.status = status;
   renderInvHistory();
   renderFinancialOverview();
+  // Sync linked billing row
+  _syncInvoiceStatusToBilling(id, status);
   // Persist to DB in background
   await _supabase.from('invoices').update({ status: status, updated_at: new Date().toISOString() })
     .eq('id', id).eq('user_id', _currentUser.id);
@@ -5454,19 +5500,35 @@ async function foSaveEditInv() {
     total: total,
     updated_at: new Date().toISOString()
   };
+  // Capture invoice id before closing modal
+  var savedInvId = _foEditInvId;
   // Update local array immediately for instant feedback
-  var idx = (_invoices || []).findIndex(function(i){ return i.id === _foEditInvId; });
-  if (idx >= 0) _invoices[idx] = Object.assign({}, _invoices[idx], payload);
+  var idx = (_invoices || []).findIndex(function(i){ return i.id === savedInvId; });
+  if (idx >= 0) {
+    _invoices[idx] = Object.assign({}, _invoices[idx], payload);
+  } else {
+    // Invoice not yet in local array — add it
+    _invoices = _invoices || [];
+    _invoices.unshift(Object.assign({ id: savedInvId, user_id: (_currentUser||{}).id }, payload));
+    idx = 0;
+  }
   foCloseEditInv();
   renderInvHistory();
   renderFinancialOverview();
-  if (_ptCurrentId && typeof renderPtBilling === 'function') renderPtBilling();
+  // Sync linked billing row status
+  _syncInvoiceStatusToBilling(savedInvId, payload.status);
+  if (typeof renderPtBilling === 'function') renderPtBilling();
   showToast('\u2713 Invoice updated');
-  // Persist to Supabase in the background
+  // Persist to Supabase in the background; re-render once server confirms
   if (_currentUser && _supabase) {
-    _supabase.from('invoices').update(payload).eq('id', _foEditInvId).eq('user_id', _currentUser.id).select().single().then(function(res) {
+    _supabase.from('invoices').update(payload).eq('id', savedInvId).eq('user_id', _currentUser.id).select().single().then(function(res) {
       if (res.error) { showToast('Sync error: ' + res.error.message); return; }
-      if (res.data && idx >= 0) _invoices[idx] = res.data;
+      if (res.data) {
+        var i2 = (_invoices || []).findIndex(function(i){ return i.id === savedInvId; });
+        if (i2 >= 0) _invoices[i2] = res.data;
+        renderInvHistory();
+        renderFinancialOverview();
+      }
     });
   }
 }
@@ -5620,45 +5682,39 @@ function toggleTimerPanel() {
 function _renderTimerMiniGrid() {
   var el = document.getElementById('tp-mini-grid');
   if (!el) return;
-  // Gather contribution counts for current month
   var now = new Date();
   var year = now.getFullYear();
   var month = now.getMonth();
   var daysInMonth = new Date(year, month + 1, 0).getDate();
-  var firstDow = new Date(year, month, 1).getDay(); // 0=Sun
+  var firstDow = new Date(year, month, 1).getDay();
+  var monthStart = year + '-' + ('0'+(month+1)).slice(-2) + '-01';
+  var monthEnd   = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+daysInMonth).slice(-2);
+  var todayStr = now.toISOString().slice(0,10);
 
-  // Build counts from localStorage contributions + timesheet
+  // Counts from localStorage + loaded timesheet
   var counts = {};
   try {
     var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
-    Object.keys(stored).forEach(function(d) {
-      var dt = new Date(d + 'T00:00:00');
-      if (dt.getFullYear() === year && dt.getMonth() === month) counts[d] = (counts[d]||0) + stored[d];
-    });
+    Object.keys(stored).forEach(function(d){ if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0)+stored[d]; });
   } catch(e) {}
-  // Also count from loaded timesheet data
   (window._ptHours || []).forEach(function(h) {
     if (!h.log_date) return;
     var d = h.log_date.slice(0,10);
-    var dt = new Date(d + 'T00:00:00');
-    if (dt.getFullYear() === year && dt.getMonth() === month) counts[d] = (counts[d]||0) + 1;
+    if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0)+1;
   });
 
-  var todayStr = now.toISOString().slice(0,10);
-  var DAYS = ['S','M','T','W','T','F','S'];
-  var html = '<div style="display:flex;gap:4px;margin-bottom:4px">';
-  DAYS.forEach(function(d){ html += '<div style="width:16px;text-align:center;font-size:8px;color:rgba(255,255,255,.3);font-weight:600">' + d + '</div>'; });
-  html += '</div><div style="display:grid;grid-template-columns:repeat(7,16px);gap:3px">';
-  // leading empty cells
-  for (var e = 0; e < firstDow; e++) html += '<div></div>';
-  for (var day = 1; day <= daysInMonth; day++) {
-    var ds = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+day).slice(-2);
+  var DOW = ['Su','M','Tu','W','Th','F','Sa'];
+  var html = '<div class="cg-tm-grid">';
+  DOW.forEach(function(l){ html += '<div class="cg-tm-dow">' + l + '</div>'; });
+  for (var e = 0; e < firstDow; e++) { html += '<div class="cg-tm-cell cg-tm-empty"></div>'; }
+  for (var d = 1; d <= daysInMonth; d++) {
+    var ds  = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+d).slice(-2);
+    var fut = ds > todayStr;
+    var tod = ds === todayStr;
     var cnt = counts[ds] || 0;
-    var lvl = cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
-    var isToday = ds === todayStr;
-    var bgColors = ['rgba(255,255,255,.07)','#9be9a8','#40c463','#30a14e','#216e39'];
-    var border = isToday ? 'border:1.5px solid rgba(255,255,255,.4);' : '';
-    html += '<div style="width:16px;height:16px;border-radius:3px;background:' + bgColors[lvl] + ';' + border + '" title="' + ds + (cnt ? ': ' + cnt + ' contribution' + (cnt!==1?'s':'') : '') + '"></div>';
+    var lvl = fut ? -1 : cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
+    var cls = 'cg-tm-cell' + (lvl >= 0 ? ' cg-tm-l'+lvl : '') + (tod ? ' cg-tm-today' : '') + (fut ? ' cg-tm-future' : '');
+    html += '<div class="' + cls + '">' + d + '</div>';
   }
   html += '</div>';
   el.innerHTML = html;
@@ -5829,72 +5885,46 @@ async function renderContribGrid() {
   var month = today.getMonth();
   var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var daysInMonth = new Date(year, month + 1, 0).getDate();
-  var firstDow = new Date(year, month, 1).getDay(); // 0=Sun
+  var firstDow = new Date(year, month, 1).getDay(); // 0 = Sun
   var monthStart = year + '-' + ('0'+(month+1)).slice(-2) + '-01';
-  var monthEnd = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+daysInMonth).slice(-2);
+  var monthEnd   = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+daysInMonth).slice(-2);
 
   // Query this month's timesheet entries
   var counts = {};
   var res = await _supabase.from('project_timesheet')
-    .select('log_date')
-    .eq('user_id', _currentUser.id)
-    .gte('log_date', monthStart)
-    .lte('log_date', monthEnd);
+    .select('log_date').eq('user_id', _currentUser.id)
+    .gte('log_date', monthStart).lte('log_date', monthEnd);
   if (res.data) {
-    res.data.forEach(function(r) {
-      if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0) + 1; }
-    });
+    res.data.forEach(function(r){ if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0)+1; } });
   }
   // Merge localStorage contributions
   try {
     var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
-    Object.keys(stored).forEach(function(d) {
-      if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0) + stored[d];
-    });
+    Object.keys(stored).forEach(function(d){ if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0)+stored[d]; });
   } catch(e) {}
 
   var todayStr = today.toISOString().slice(0,10);
+  var DOW = ['Su','M','Tu','W','Th','F','Sa'];
 
-  // Build calendar grid (weeks as columns, Sun–Sat rows)
-  // Each column = one week
-  var totalCells = firstDow + daysInMonth;
-  var numWeeks = Math.ceil(totalCells / 7);
-  var weeks = [];
-  for (var w = 0; w < numWeeks; w++) {
-    var col = [];
-    for (var dow = 0; dow < 7; dow++) {
-      var dayNum = w * 7 + dow - firstDow + 1;
-      if (dayNum < 1 || dayNum > daysInMonth) { col.push(null); continue; }
-      var ds = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+dayNum).slice(-2);
-      var isFuture = ds > todayStr;
-      var cnt = counts[ds] || 0;
-      var lvl = isFuture ? -1 : cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
-      col.push({ ds: ds, cnt: cnt, lvl: lvl, today: ds === todayStr, future: isFuture, day: dayNum });
-    }
-    weeks.push(col);
+  // Build calendar: 7-column grid, rows = weeks, cells show day number
+  var html = '<div class="cg-cal-grid">';
+  DOW.forEach(function(l){ html += '<div class="cg-cal-dow">' + l + '</div>'; });
+  // Leading empty cells
+  for (var e = 0; e < firstDow; e++) { html += '<div class="cg-cal-cell cg-cal-empty"></div>'; }
+  // Day cells
+  for (var d = 1; d <= daysInMonth; d++) {
+    var ds  = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+d).slice(-2);
+    var fut = ds > todayStr;
+    var tod = ds === todayStr;
+    var cnt = counts[ds] || 0;
+    var lvl = fut ? -1 : cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
+    var cls = 'cg-cal-cell' + (lvl >= 0 ? ' cg-cal-l'+lvl : '') + (tod ? ' cg-cal-today' : '') + (fut ? ' cg-cal-future' : '');
+    var tip = ds + (cnt ? ': '+cnt+' contribution'+(cnt!==1?'s':'') : ': no activity');
+    html += '<div class="' + cls + '" title="' + tip + '">' + d + '</div>';
   }
-
-  // Render: day labels row + columns
-  var DAY_LABELS = ['Su','M','Tu','W','Th','F','Sa'];
-  var html = '<div class="cg-body" style="gap:2px">';
-  html += '<div class="cg-day-labels">';
-  DAY_LABELS.forEach(function(l){ html += '<div class="cg-dl">' + l + '</div>'; });
   html += '</div>';
-  html += '<div class="cg-cols" style="gap:2px">';
-  weeks.forEach(function(col) {
-    html += '<div class="cg-col">';
-    col.forEach(function(cell) {
-      if (!cell) { html += '<div class="cg-cell" style="background:transparent"></div>'; return; }
-      if (cell.future) { html += '<div class="cg-cell" style="background:transparent"></div>'; return; }
-      var extra = cell.today ? 'outline:1.5px solid var(--ink);outline-offset:1px;' : '';
-      html += '<div class="cg-cell cg-l' + cell.lvl + '" style="' + extra + '" title="' + cell.ds + (cell.cnt ? ': ' + cell.cnt + ' contribution' + (cell.cnt!==1?'s':'') : ': no activity') + '"></div>';
-    });
-    html += '</div>';
-  });
-  html += '</div></div>';
   el.innerHTML = html;
 
-  // Total count for this month
   var total = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
   if (totalEl) totalEl.textContent = total + ' contribution' + (total!==1?'s':'') + ' in ' + MONTH_NAMES[month];
 }
