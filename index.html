@@ -1038,6 +1038,61 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .recent-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;background:var(--white);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--ink);cursor:pointer;transition:all .15s}
 .recent-chip:hover{border-color:var(--amber);background:var(--amber-light)}
 .recent-chip-icon{font-size:12px}
+/* ── LIVE TIMER ── */
+.nav-timer{display:flex;align-items:center;gap:6px;background:var(--surface-low);border:1.5px solid var(--border);border-radius:20px;padding:4px 10px 4px 12px;transition:border-color .2s}
+.nav-timer.running{border-color:var(--sage);background:#f0faf4}
+.timer-display{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.04em;min-width:58px}
+.timer-btn{background:none;border:none;cursor:pointer;padding:3px 5px;border-radius:50%;font-size:12px;color:var(--ink-mid);transition:all .15s;line-height:1;display:flex;align-items:center;justify-content:center}
+.timer-btn:hover{background:var(--surface);color:var(--ink)}
+.timer-btn.t-play{color:var(--sage)}
+.timer-btn.t-stop{color:#E8594A}
+/* Timer log modal */
+.timer-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:600;display:none;align-items:center;justify-content:center}
+.timer-modal-overlay.open{display:flex}
+.timer-modal{background:var(--white);border-radius:var(--radius);padding:28px 28px 24px;width:400px;max-width:calc(100vw - 32px);box-shadow:0 16px 48px rgba(0,0,0,.18)}
+.timer-modal-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.timer-modal-sub{font-size:12px;color:var(--ink-mid);margin-bottom:20px}
+.timer-modal-field{margin-bottom:14px}
+.timer-modal-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-mid);margin-bottom:5px}
+.timer-modal-input{width:100%;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;font-family:var(--font-body);font-size:13px;color:var(--ink);background:var(--white);resize:vertical;box-sizing:border-box}
+.timer-modal-input:focus{outline:none;border-color:var(--ink)}
+.timer-modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+.timer-modal-btn{padding:9px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body)}
+.timer-modal-btn.save{background:var(--ink);color:var(--cream)}
+.timer-modal-btn.save:hover{background:var(--amber)}
+.timer-modal-btn.cancel{background:none;border:1.5px solid var(--border);color:var(--ink)}
+/* ── CONTRIBUTION GRID ── */
+.contrib-section{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:24px}
+.contrib-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.contrib-title{font-size:13px;font-weight:700;color:var(--ink)}
+.contrib-subtitle{font-size:11px;color:var(--ink-light)}
+.cg-outer{overflow-x:auto}
+.cg-wrap{display:inline-flex;flex-direction:column;gap:3px;min-width:max-content}
+.cg-month-row{display:flex;gap:3px;padding-left:24px}
+.cg-ml{width:13px;font-size:9px;color:var(--ink-light);text-align:left;min-width:13px}
+.cg-body{display:flex;gap:4px}
+.cg-day-labels{display:flex;flex-direction:column;gap:3px;padding-top:2px}
+.cg-dl{height:13px;width:16px;font-size:9px;color:var(--ink-light);line-height:13px;text-align:right;flex-shrink:0}
+.cg-cols{display:flex;gap:3px}
+.cg-col{display:flex;flex-direction:column;gap:3px}
+.cg-cell{width:13px;height:13px;border-radius:2px;cursor:default;transition:transform .1s}
+.cg-cell:hover{transform:scale(1.3)}
+.cg-future{background:transparent}
+.cg-l0{background:#ebedf0}
+.cg-l1{background:#9be9a8}
+.cg-l2{background:#40c463}
+.cg-l3{background:#30a14e}
+.cg-l4{background:#216e39}
+.cg-legend{display:flex;align-items:center;gap:5px;margin-top:10px;justify-content:flex-end;font-size:10px;color:var(--ink-light)}
+.cg-legend-cell{width:11px;height:11px;border-radius:2px}
+/* ── COLLAB CHART ── */
+.collab-chart-wrap{background:var(--cream-dark);border:1.5px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:20px}
+.collab-chart-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-mid);margin-bottom:14px}
+.collab-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.collab-bar-name{font-size:12px;color:var(--ink);font-weight:500;min-width:100px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
+.collab-bar-track{flex:1;background:var(--border);border-radius:3px;height:12px;overflow:hidden}
+.collab-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+.collab-bar-hrs{font-size:11px;font-weight:700;color:var(--ink-mid);min-width:36px;font-family:var(--font-mono)}
 /* Tips */
 .tips-section{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:24px;overflow:hidden}
 .tips-hdr{padding:13px 18px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none}
@@ -1974,13 +2029,41 @@ var RateLimiter = (function() {
       <span style="font-size:12px;color:var(--ink-light)">10 templates</span>
     </div>
     <div class="nav-actions">
+      <!-- Live Timer -->
+      <div class="nav-timer" id="nav-timer" title="Billable hours timer">
+        <span class="timer-display" id="timer-display">00:00:00</span>
+        <button class="timer-btn t-play" id="timer-toggle-btn" onclick="timerToggle()" title="Start timer">&#9654;</button>
+        <button class="timer-btn t-stop" id="timer-stop-btn" onclick="timerStop()" title="Stop &amp; log" style="display:none">&#9632;</button>
+      </div>
       <button class="notif-bell" id="notif-bell-btn" onclick="toggleNotificationPanel()" title="Notifications" style="display:none">
         🔔
         <span class="notif-badge" id="notif-badge"></span>
       </button>
-      <div class="nav-avatar">AC</div>
+      <div class="nav-avatar" id="nav-avatar">AC</div>
     </div>
   </nav>
+
+  <!-- Timer log modal -->
+  <div class="timer-modal-overlay" id="timer-modal-overlay" onclick="if(event.target===this)closeTimerModal()">
+    <div class="timer-modal">
+      <div class="timer-modal-title">Log time</div>
+      <div class="timer-modal-sub" id="timer-modal-sub">0.0 hours tracked</div>
+      <div class="timer-modal-field">
+        <div class="timer-modal-lbl">Description</div>
+        <textarea class="timer-modal-input" id="timer-modal-desc" rows="3" placeholder="What did you work on?"></textarea>
+      </div>
+      <div class="timer-modal-field">
+        <div class="timer-modal-lbl">Add to project timesheet</div>
+        <select class="timer-modal-input" id="timer-modal-project" style="resize:none;height:auto;padding:9px 12px">
+          <option value="">— Don't add to a project —</option>
+        </select>
+      </div>
+      <div class="timer-modal-actions">
+        <button class="timer-modal-btn cancel" onclick="closeTimerModal()">Discard</button>
+        <button class="timer-modal-btn save" onclick="timerLogSave()">Save time log</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Notification panel -->
   <div class="notif-panel" id="notif-panel">
@@ -2068,6 +2151,26 @@ var RateLimiter = (function() {
         <div class="home-section-label">Recently visited</div>
         <div class="home-recent-row" id="home-recent-row">
           <span style="font-size:12px;color:var(--ink-light)">Nothing yet — start exploring</span>
+        </div>
+
+        <!-- Contribution Grid -->
+        <div class="contrib-section">
+          <div class="contrib-header">
+            <div>
+              <div class="contrib-title">Activity</div>
+              <div class="contrib-subtitle" id="contrib-total">Loading activity…</div>
+            </div>
+            <div class="cg-legend">
+              <span>Less</span>
+              <div class="cg-legend-cell cg-l0"></div>
+              <div class="cg-legend-cell cg-l1"></div>
+              <div class="cg-legend-cell cg-l2"></div>
+              <div class="cg-legend-cell cg-l3"></div>
+              <div class="cg-legend-cell cg-l4"></div>
+              <span>More</span>
+            </div>
+          </div>
+          <div class="cg-outer" id="contrib-grid-cells"></div>
         </div>
 
         <!-- Widgets: To-do + Upcoming -->
@@ -2708,6 +2811,7 @@ var RateLimiter = (function() {
           <!-- Timesheet tab -->
           <div class="pt-tab-content" id="pt-tab-hours" style="display:none">
             <div id="pt-hours-total" class="pt-time-total" style="margin-bottom:16px"></div>
+            <div id="pt-collab-chart"></div>
             <div class="pt-sec-hdr">Time log <button class="pt-add-btn" onclick="openPtModal('add-time')">+ Log time</button></div>
             <div id="pt-hours-list"></div>
           </div>
@@ -4890,10 +4994,12 @@ async function saveInvoiceToHistory() {
       if (br.data) _saveBillingInvLink(br.data.id, res.data.id);
       window._ptBilling = window._ptBilling || [];
       if (_ptCurrentId === linkedProjId) { window._ptBilling.push(br.data); renderPtBilling(); }
+      _recordContrib(1);
       showToast('\u2713 Invoice saved + billing entry added to project');
       return;
     }
   }
+  _recordContrib(1);
   showToast('\u2713 Invoice saved to history');
 }
 
@@ -5544,11 +5650,225 @@ function getProjectColor(projectId) {
   return PROJECT_COLORS[Math.max(0,idx) % PROJECT_COLORS.length];
 }
 
+// ─── LIVE TIMER ───────────────────────────────────────────────────────────────
+var _timerInterval = null;
+var _timerSeconds = 0;
+var _timerRunning = false;
+var _timerLoggedHours = 0;
+
+function _fmtTimerDisplay(s) {
+  var h = Math.floor(s / 3600);
+  var m = Math.floor((s % 3600) / 60);
+  var sec = s % 60;
+  return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function timerToggle() {
+  var wrap = document.getElementById('nav-timer');
+  var btn = document.getElementById('timer-toggle-btn');
+  var stopBtn = document.getElementById('timer-stop-btn');
+  if (_timerRunning) {
+    // Pause
+    clearInterval(_timerInterval);
+    _timerRunning = false;
+    if (btn) { btn.innerHTML = '&#9654;'; btn.title = 'Resume timer'; btn.className = 'timer-btn t-play'; }
+    if (wrap) wrap.classList.remove('running');
+  } else {
+    // Start / Resume
+    _timerRunning = true;
+    _timerInterval = setInterval(function() {
+      _timerSeconds++;
+      var disp = document.getElementById('timer-display');
+      if (disp) disp.textContent = _fmtTimerDisplay(_timerSeconds);
+    }, 1000);
+    if (btn) { btn.innerHTML = '&#9646;&#9646;'; btn.title = 'Pause timer'; btn.className = 'timer-btn t-play'; }
+    if (stopBtn) stopBtn.style.display = '';
+    if (wrap) wrap.classList.add('running');
+  }
+}
+
+function timerStop() {
+  clearInterval(_timerInterval);
+  _timerRunning = false;
+  _timerLoggedHours = parseFloat((_timerSeconds / 3600).toFixed(2));
+  var totalSec = _timerSeconds;
+  _timerSeconds = 0;
+  var disp = document.getElementById('timer-display');
+  if (disp) disp.textContent = '00:00:00';
+  var btn = document.getElementById('timer-toggle-btn');
+  var stopBtn = document.getElementById('timer-stop-btn');
+  var wrap = document.getElementById('nav-timer');
+  if (btn) { btn.innerHTML = '&#9654;'; btn.title = 'Start timer'; btn.className = 'timer-btn t-play'; }
+  if (stopBtn) stopBtn.style.display = 'none';
+  if (wrap) wrap.classList.remove('running');
+  if (totalSec < 30) { showToast('Timer stopped (less than 30s — not logged)'); return; }
+  openTimerModal(_timerLoggedHours);
+}
+
+function openTimerModal(hours) {
+  var overlay = document.getElementById('timer-modal-overlay');
+  var sub = document.getElementById('timer-modal-sub');
+  var desc = document.getElementById('timer-modal-desc');
+  var sel = document.getElementById('timer-modal-project');
+  if (!overlay) return;
+  if (sub) sub.textContent = hours.toFixed(2) + ' hours tracked';
+  if (desc) desc.value = '';
+  // Populate project dropdown
+  if (sel) {
+    sel.innerHTML = '<option value="">— Don\'t add to a project —</option>';
+    (_ptProjects || []).forEach(function(p) {
+      var opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = p.name + (p.client_name ? ' (' + p.client_name + ')' : '');
+      sel.appendChild(opt);
+    });
+  }
+  overlay.classList.add('open');
+  if (desc) setTimeout(function(){ desc.focus(); }, 100);
+}
+
+function closeTimerModal() {
+  var overlay = document.getElementById('timer-modal-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+async function timerLogSave() {
+  if (!_currentUser) { showToast('Please sign in'); return; }
+  var desc = (document.getElementById('timer-modal-desc') || {}).value || '';
+  var projId = (document.getElementById('timer-modal-project') || {}).value || '';
+  var hours = _timerLoggedHours;
+  if (!hours) { closeTimerModal(); return; }
+  var myName = getMyFullName()
+    || (_currentUser.user_metadata && (_currentUser.user_metadata.full_name || _currentUser.user_metadata.name))
+    || (_currentUser.email ? _currentUser.email.split('@')[0] : null);
+  var today = new Date().toISOString().slice(0, 10);
+  if (projId) {
+    var payload = {
+      project_id: projId,
+      user_id: _currentUser.id,
+      log_date: today,
+      hours: hours,
+      description: desc || null,
+      person_name: myName || null
+    };
+    var res = await _supabase.from('project_timesheet').insert(payload).select().single();
+    if (res.error) { showToast('Error: ' + res.error.message); return; }
+    // Update local cache if this project is open
+    if (_ptCurrentId === projId) {
+      window._ptHours = window._ptHours || [];
+      window._ptHours.unshift(res.data);
+      renderPtHours();
+    }
+  }
+  _recordContrib(1);
+  closeTimerModal();
+  showToast('\u2713 Time logged' + (projId ? ' to project' : ''));
+}
+
+// ─── CONTRIBUTION GRID ────────────────────────────────────────────────────────
+function _recordContrib(n) {
+  var today = new Date().toISOString().slice(0, 10);
+  try {
+    var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
+    stored[today] = (stored[today] || 0) + (n || 1);
+    // Trim entries older than 6 months
+    var cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
+    var cutoffStr = cutoff.toISOString().slice(0, 10);
+    Object.keys(stored).forEach(function(d){ if (d < cutoffStr) delete stored[d]; });
+    localStorage.setItem('fk_contribs', JSON.stringify(stored));
+  } catch(e) {}
+}
+
+async function renderContribGrid() {
+  var el = document.getElementById('contrib-grid-cells');
+  var totalEl = document.getElementById('contrib-total');
+  if (!el) return;
+  if (!_currentUser) { if (totalEl) totalEl.textContent = 'Sign in to see activity'; return; }
+
+  // Query last 6 months of timesheet entries
+  var cutoff = new Date(); cutoff.setMonth(cutoff.getMonth() - 6);
+  var cutoffStr = cutoff.toISOString().slice(0, 10);
+  var counts = {};
+  var res = await _supabase.from('project_timesheet')
+    .select('log_date')
+    .eq('user_id', _currentUser.id)
+    .gte('log_date', cutoffStr);
+  if (res.data) {
+    res.data.forEach(function(r) {
+      if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0) + 1; }
+    });
+  }
+  // Merge localStorage contributions (tasks, invoices, etc.)
+  try {
+    var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
+    Object.keys(stored).forEach(function(d) { counts[d] = (counts[d]||0) + stored[d]; });
+  } catch(e) {}
+
+  // Build 26-week grid ending today (aligned to Sunday start)
+  var today = new Date();
+  var endDay = new Date(today); endDay.setHours(0,0,0,0);
+  // Find the Sunday at or after today to complete the last week column
+  var startDay = new Date(endDay);
+  startDay.setDate(startDay.getDate() - 26 * 7 + 1);
+  // align to Sunday
+  var dow = startDay.getDay();
+  startDay.setDate(startDay.getDate() - dow);
+
+  var NUM_WEEKS = 27;
+  var weeks = [];
+  var monthLabels = [];
+  var lastMonth = -1;
+  for (var w = 0; w < NUM_WEEKS; w++) {
+    var col = [];
+    for (var d = 0; d < 7; d++) {
+      var dt = new Date(startDay);
+      dt.setDate(startDay.getDate() + w * 7 + d);
+      if (dt > today) { col.push(null); continue; }
+      var ds = dt.getFullYear() + '-' + ('0'+(dt.getMonth()+1)).slice(-2) + '-' + ('0'+dt.getDate()).slice(-2);
+      var cnt = counts[ds] || 0;
+      var lvl = cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
+      col.push({ ds: ds, cnt: cnt, lvl: lvl });
+    }
+    // Month label: use 1st Sunday of each new month
+    var weekSunday = new Date(startDay); weekSunday.setDate(startDay.getDate() + w * 7);
+    var wm = weekSunday.getMonth();
+    monthLabels.push(wm !== lastMonth ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][wm] : '');
+    if (wm !== lastMonth) lastMonth = wm;
+    weeks.push(col);
+  }
+
+  // Render month row
+  var html = '<div class="cg-wrap">';
+  html += '<div class="cg-month-row">';
+  monthLabels.forEach(function(lbl) { html += '<div class="cg-ml">' + (lbl||'') + '</div>'; });
+  html += '</div>';
+
+  // Day labels + cell columns
+  html += '<div class="cg-body">';
+  html += '<div class="cg-day-labels"><div class="cg-dl"></div><div class="cg-dl">M</div><div class="cg-dl"></div><div class="cg-dl">W</div><div class="cg-dl"></div><div class="cg-dl">F</div><div class="cg-dl"></div></div>';
+  html += '<div class="cg-cols">';
+  weeks.forEach(function(col) {
+    html += '<div class="cg-col">';
+    col.forEach(function(cell) {
+      if (!cell) { html += '<div class="cg-cell"></div>'; return; }
+      html += '<div class="cg-cell cg-l' + cell.lvl + '" title="' + cell.ds + (cell.cnt ? ': ' + cell.cnt + ' contribution' + (cell.cnt!==1?'s':'') : ': no activity') + '"></div>';
+    });
+    html += '</div>';
+  });
+  html += '</div></div></div>';
+  el.innerHTML = html;
+
+  // Total count
+  var total = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
+  if (totalEl) totalEl.textContent = total + ' contribution' + (total!==1?'s':'') + ' in the last 6 months';
+}
+
 // ─── RECENTLY VISITED ─────────────────────────────────────────────────────────
 var _PANEL_ICONS = { contract:'📄', scope:'⚠️', invoice:'🧾', ratecalc:'📊', projects:'🛠️', pipeline:'🗂️', tax:'🦆', timesheet:'⏱', welcome:'🎁', brief:'📋', mydetails:'⚙️', clients:'👥', invhistory:'📁' };
 var _PANEL_NAMES = { contract:'Client Contract', scope:'Scope Change Order', invoice:'Invoice Builder', ratecalc:'Rate Calculator', projects:'Project Tracker', pipeline:'Pipeline Tracker', tax:'Tax Tracker', timesheet:'Timesheet', welcome:'Welcome Packet', brief:'Project Brief', mydetails:'My Details', clients:'Client Contacts', invhistory:'Invoice History' };
+var _RECENT_EXCLUDE = ['home','scope'];
 function _trackRecentPanel(id) {
-  if (!id || id === 'home') return;
+  if (!id || _RECENT_EXCLUDE.indexOf(id) !== -1) return;
   try {
     var rec = JSON.parse(localStorage.getItem('fk_recent') || '[]');
     rec = rec.filter(function(x){ return x !== id; });
@@ -6018,6 +6338,7 @@ function initHomeDashboard() {
   renderUpcoming();
   loadProjectTasksForHome();
   renderCalendar();
+  renderContribGrid();
   // Load projects for todo filter and upcoming deadlines (even if Projects panel not yet visited)
   if (!window._ptInit) {
     window._ptInit = true;
@@ -7334,9 +7655,38 @@ async function saveMeetingFromEditor() {
     if (!res.error) { window._ptMeetings = window._ptMeetings || []; window._ptMeetings.unshift(res.data); }
   }
   if (res.error) { showToast('Error: ' + res.error.message); return; }
+  _recordContrib(1);
   closeMeetingEditor();
   renderPtMeetings();
   showToast('✓ Meeting note saved');
+}
+
+function renderCollabChart() {
+  var hr = window._ptHours || [];
+  var el = document.getElementById('pt-collab-chart');
+  if (!el) return;
+  if (hr.length < 2) { el.innerHTML = ''; return; }
+  // Aggregate hours per person
+  var byPerson = {};
+  hr.forEach(function(h) {
+    var name = h.person_name || 'Unknown';
+    byPerson[name] = (byPerson[name] || 0) + (parseFloat(h.hours) || 0);
+  });
+  var people = Object.keys(byPerson).sort(function(a,b){ return byPerson[b]-byPerson[a]; });
+  if (people.length < 2) { el.innerHTML = ''; return; }
+  var maxHrs = Math.max.apply(null, people.map(function(p){ return byPerson[p]; }));
+  var COLORS = ['#40c463','#5b8dee','#f4a73a','#e87c5b','#a78bfa','#34d399','#f472b6','#60a5fa'];
+  var rows = people.map(function(name, i) {
+    var hrs = byPerson[name];
+    var pct = maxHrs > 0 ? (hrs / maxHrs * 100).toFixed(1) : 0;
+    var color = COLORS[i % COLORS.length];
+    return '<div class="collab-bar-row">' +
+      '<div class="collab-bar-name" title="' + escapeHTML(name) + '">' + escapeHTML(name) + '</div>' +
+      '<div class="collab-bar-track"><div class="collab-bar-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+      '<div class="collab-bar-hrs">' + hrs.toFixed(1) + 'h</div>' +
+    '</div>';
+  }).join('');
+  el.innerHTML = '<div class="collab-chart-wrap"><div class="collab-chart-title">Contributor breakdown</div>' + rows + '</div>';
 }
 
 function renderPtHours() {
@@ -7344,6 +7694,7 @@ function renderPtHours() {
   var el = document.getElementById('pt-hours-list');
   var totEl = document.getElementById('pt-hours-total');
   if (!el) return;
+  renderCollabChart();
   var total = hr.reduce(function(s, h){ return s + (parseFloat(h.hours) || 0); }, 0);
   if (totEl) totEl.innerHTML = 'Total logged: <strong>' + total.toFixed(1) + ' hrs</strong>';
   if (!hr.length) {
@@ -8374,6 +8725,7 @@ async function savePtTime() {
   var res = await _supabase.from('project_timesheet').insert(payload).select().single();
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   window._ptHours = window._ptHours || []; window._ptHours.unshift(res.data);
+  _recordContrib(1);
   closePtModal(); renderPtHours(); showToast('\u2713 Time logged');
 }
 
@@ -8409,6 +8761,7 @@ async function updatePtTime() {
   if (res.error) { showToast('Error: ' + res.error.message); return; }
   hr[_ptEditIdx] = res.data;
   _ptEditIdx = null;
+  _recordContrib(1);
   closePtModal(); renderPtHours(); showToast('\u2713 Time entry updated');
 }
 
