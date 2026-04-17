@@ -787,6 +787,136 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .toast.show{display:flex;animation:toastIn .25s ease}
 @keyframes toastIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
 
+/* ── GLOBAL ANIMATION SYSTEM ── */
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes softPulse{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes barFillX{from{width:0!important;opacity:0}to{opacity:1}}
+@keyframes dotPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes countUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Panel entrance */
+.tmpl-panel.active{animation:fadeSlideIn .28s cubic-bezier(0.4,0,0.2,1) both}
+
+/* Staggered stat card entrances */
+.fo-stat-card{animation:slideUp .38s ease both}
+.fo-stat-card:nth-child(1){animation-delay:.03s}
+.fo-stat-card:nth-child(2){animation-delay:.08s}
+.fo-stat-card:nth-child(3){animation-delay:.13s}
+.fo-stat-card:nth-child(4){animation-delay:.18s}
+.fo-stat-card:nth-child(5){animation-delay:.23s}
+.gts-stat-card{animation:slideUp .38s ease both}
+.gts-stat-card:nth-child(1){animation-delay:.04s}
+.gts-stat-card:nth-child(2){animation-delay:.09s}
+.gts-stat-card:nth-child(3){animation-delay:.14s}
+.gts-stat-card:nth-child(4){animation-delay:.19s}
+.gts-stat-card:nth-child(5){animation-delay:.24s}
+.pt-ov-pulse-card{animation:slideUp .38s ease both}
+.pt-ov-pulse-card:nth-child(1){animation-delay:.04s}
+.pt-ov-pulse-card:nth-child(2){animation-delay:.09s}
+.pt-ov-pulse-card:nth-child(3){animation-delay:.14s}
+.pt-ov-pulse-card:nth-child(4){animation-delay:.19s}
+.hw-card{animation:slideUp .38s ease both}
+.hw-card:nth-child(1){animation-delay:.06s}
+.hw-card:nth-child(2){animation-delay:.12s}
+
+/* Hover lift — all cards */
+.fo-stat-card,.gts-stat-card,.hw-card,.pt-ov-pulse-card,.pt-task-card,.pt-bill-card,.mn-card,.hq-card,.tg-card,.qs,.pt-bill-card{
+  transition:transform .2s ease,box-shadow .2s ease
+}
+.fo-stat-card:hover,.gts-stat-card:hover,.hw-card:hover,.pt-ov-pulse-card:hover{
+  transform:translateY(-3px);box-shadow:0 12px 30px rgba(25,28,30,0.1)
+}
+.pt-task-card:hover,.pt-bill-card:hover,.mn-card:hover{
+  transform:translateY(-2px);box-shadow:0 8px 22px rgba(25,28,30,0.09)
+}
+.hq-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(25,28,30,0.1)}
+
+/* Progress bar transitions */
+.fo-proj-bar-fill,.goal-bar-fill,.util-fill,.age-fill{
+  transition:width .85s cubic-bezier(0.4,0,0.2,1)
+}
+
+/* Chart bar grow animation */
+.fo-hbar-seg{animation:barFillX .65s cubic-bezier(0.4,0,0.2,1) both}
+.fo-hbar-row:nth-child(1) .fo-hbar-seg{animation-delay:.1s}
+.fo-hbar-row:nth-child(2) .fo-hbar-seg{animation-delay:.2s}
+.fo-hbar-row:nth-child(3) .fo-hbar-seg{animation-delay:.3s}
+
+/* Heatmap cell stagger */
+.cg-cell{animation:dotPop .25s ease both}
+
+/* Sidebar item transitions */
+.dsb-item{transition:background .15s ease,color .15s ease}
+
+/* Modal enhanced */
+.modal-box{animation:scaleIn .22s cubic-bezier(0.4,0,0.2,1)}
+
+/* ── NEW INSIGHT COMPONENT STYLES ── */
+/* Month-over-month delta badge */
+.fo-sc-delta{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:5px;display:inline-block}
+.fo-sc-delta.pos{background:#D1FAE5;color:#065F46}
+.fo-sc-delta.neg{background:#FEE2E2;color:#B91C1C}
+.fo-sc-delta.flat{background:var(--cream-dark);color:var(--ink-mid)}
+
+/* Invoice aging */
+.fo-aging-table{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.fo-aging-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);background:var(--white);animation:slideInRight .3s ease both}
+.fo-aging-row:last-child{border-bottom:none}
+.fo-aging-client{font-size:13px;font-weight:600;color:var(--ink)}
+.fo-aging-inv{font-size:11px;color:var(--ink-light);margin-top:2px}
+.fo-aging-amt{font-size:13px;font-weight:700;font-family:var(--font-mono);color:var(--ink);text-align:right}
+.fo-aging-days{font-size:11px;font-weight:700;margin-top:2px;text-align:right}
+.fo-age-ok{color:var(--sage)}
+.fo-age-warn{color:#B45309}
+.fo-age-bad{color:#B91C1C}
+
+/* By-client table */
+.fo-client-table{display:flex;flex-direction:column;gap:8px}
+.fo-client-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 14px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);animation:slideUp .3s ease both}
+.fo-client-name{font-size:14px;font-weight:600;color:var(--ink)}
+.fo-client-meta{font-size:11px;color:var(--ink-light);margin-top:2px}
+.fo-client-amt{font-size:15px;font-weight:700;font-family:var(--font-mono);color:var(--ink);text-align:right}
+.fo-client-right{min-width:120px;flex-shrink:0}
+
+/* Billability / utilization bar */
+.util-bar-wrap{background:var(--cream-dark);border-radius:4px;height:7px;overflow:hidden;margin-top:6px}
+.util-fill{height:100%;border-radius:4px;background:var(--sage)}
+.util-fill.warn{background:#D97706}
+.util-fill.bad{background:#DC2626}
+
+/* Effective rate card accent */
+.fo-sc-effrate{color:var(--purple)}
+
+/* Home goal bar widget */
+.home-goal-bar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;animation:slideUp .35s ease both}
+.hgb-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hgb-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light)}
+.hgb-pct{font-size:22px;font-weight:800;font-family:'Manrope',sans-serif;color:var(--ink);line-height:1}
+.hgb-track{background:var(--cream-dark);border-radius:6px;height:9px;overflow:hidden}
+.hgb-fill{height:100%;border-radius:6px;background:var(--amber);transition:width 1s cubic-bezier(0.4,0,0.2,1)}
+.hgb-meta{display:flex;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--ink-light)}
+
+/* Project pulse 4-grid */
+.pt-ov-pulse-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+
+/* Earnings per hour special */
+.fo-eff-rate-wrap{display:flex;align-items:center;gap:6px;margin-top:4px}
+.fo-eff-rate-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.fo-eff-above{background:#D1FAE5;color:#065F46}
+.fo-eff-below{background:#FEE2E2;color:#B91C1C}
+
+/* Timesheet billability */
+.gts-util-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+.gts-util-lbl{font-size:11px;color:var(--ink-light);white-space:nowrap}
+.gts-util-bar{flex:1;height:6px;background:var(--cream-dark);border-radius:3px;overflow:hidden}
+.gts-util-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(0.4,0,0.2,1)}
+/* Timeline stagger */
+.pt-timeline-item{animation:slideInRight .3s ease both}
+
 /* Terms tabs for invoice */
 .terms-tabs{display:flex;gap:6px;margin-bottom:14px}
 .tt{padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--ink-mid);font-family:var(--font-body);font-size:12px;cursor:pointer;transition:all .15s}
@@ -2234,6 +2364,19 @@ var RateLimiter = (function() {
           <p class="home-hero-sub">Everything you need to run your freelance business, in one place.</p>
         </div>
 
+        <!-- Annual goal bar -->
+        <div class="home-goal-bar" id="home-goal-bar" style="display:none">
+          <div class="hgb-top">
+            <span class="hgb-label">Annual income goal</span>
+            <span class="hgb-pct" id="hgb-pct">0%</span>
+          </div>
+          <div class="hgb-track"><div class="hgb-fill" id="hgb-fill" style="width:0%"></div></div>
+          <div class="hgb-meta">
+            <span id="hgb-earned">—</span>
+            <span id="hgb-goal-lbl">—</span>
+          </div>
+        </div>
+
         <!-- Recently visited -->
         <div class="home-section-label">Recently visited</div>
         <div class="home-recent-row" id="home-recent-row">
@@ -2677,6 +2820,18 @@ var RateLimiter = (function() {
                 <div class="pt-ov-pulse-val" style="color:var(--cream)"><span id="ptv-deadline-count">—</span></div>
                 <div class="pt-ov-pulse-sub" style="color:rgba(250,247,242,.65)">Deadlines this week</div>
               </div>
+              <div class="pt-ov-pulse-card">
+                <div class="pt-ov-pulse-lbl">Tasks Done</div>
+                <div class="pt-ov-pulse-val"><span id="ptv-task-done-pct">—</span></div>
+                <div class="pt-ov-pulse-sub" id="ptv-task-done-sub">of tasks complete</div>
+                <div class="util-bar-wrap" style="margin-top:8px"><div class="util-fill" id="ptv-task-bar" style="width:0%"></div></div>
+              </div>
+              <div class="pt-ov-pulse-card">
+                <div class="pt-ov-pulse-lbl">Budget Used</div>
+                <div class="pt-ov-pulse-val"><span id="ptv-budget-pct">—</span></div>
+                <div class="pt-ov-pulse-sub" id="ptv-budget-sub">of project budget</div>
+                <div class="util-bar-wrap" style="margin-top:8px"><div class="util-fill" id="ptv-budget-bar" style="width:0%"></div></div>
+              </div>
             </div>
             <!-- Main 2-column row: project info left, key documents right -->
             <div class="pt-ov-main-row">
@@ -3065,17 +3220,26 @@ var RateLimiter = (function() {
             <div class="fo-sc-label">This Month</div>
             <div class="fo-sc-val" id="fo-this-month">$0</div>
             <div class="fo-sc-sub">paid in <span id="fo-month-name">—</span></div>
+            <div id="fo-mom-delta" style="margin-top:4px"></div>
           </div>
           <div class="fo-stat-card">
             <div class="fo-sc-label">Total Income</div>
             <div class="fo-sc-val fo-sc-accent" id="fo-total-income">$0</div>
             <div class="fo-sc-sub">invoices + other income</div>
           </div>
+          <div class="fo-stat-card">
+            <div class="fo-sc-label">Eff. Rate</div>
+            <div class="fo-sc-val fo-sc-effrate" id="fo-eff-rate">—</div>
+            <div class="fo-sc-sub">earned per hour logged</div>
+            <div id="fo-eff-rate-badge" style="margin-top:4px"></div>
+          </div>
         </div>
 
         <!-- Tabs -->
         <div class="fo-tab-bar">
           <button class="fo-tab active" onclick="foSwitchTab('overview',this)">Overview</button>
+          <button class="fo-tab" onclick="foSwitchTab('aging',this)">Aging</button>
+          <button class="fo-tab" onclick="foSwitchTab('clients',this)">By Client</button>
           <button class="fo-tab" onclick="foSwitchTab('invoices',this)">All Invoices</button>
           <button class="fo-tab" onclick="foSwitchTab('manual',this)">Other Income</button>
         </div>
@@ -3086,6 +3250,19 @@ var RateLimiter = (function() {
           <div class="fo-chart-wrap" id="fo-chart"></div>
           <div class="fo-section-title" style="margin-top:24px">By Project / Client</div>
           <div id="fo-by-project"></div>
+        </div>
+
+        <!-- Aging tab -->
+        <div id="fo-panel-aging" style="display:none">
+          <div class="fo-section-title">Invoice Aging</div>
+          <div style="font-size:12px;color:var(--ink-light);margin-bottom:14px">Outstanding invoices and how long they've been waiting.</div>
+          <div id="fo-aging-list"></div>
+        </div>
+
+        <!-- By Client tab -->
+        <div id="fo-panel-clients" style="display:none">
+          <div class="fo-section-title">Revenue by Client</div>
+          <div id="fo-by-client"></div>
         </div>
 
         <!-- Invoices tab -->
@@ -4120,6 +4297,10 @@ function calcRate(){
   if(g('rc-fullday'))g('rc-fullday').textContent=F(rate*8);
   if(g('rc-week'))g('rc-week').textContent=F(rate*40);
   if(g('rc-insight'))g('rc-insight').innerHTML=`To take home <strong>${F(takeHome)}/year</strong>, working <strong>${hrs} billable hrs/week</strong> over <strong>${weeks} weeks</strong>, you need to charge at least <strong>${F(rate)}/hr</strong>. Charging less means subsidising your clients.`;
+  // Persist inputs so other panels can read them
+  try { localStorage.setItem('fk_rate_inputs', JSON.stringify({ takeHome: takeHome, billableHrs: hrs, weeksOff: woff })); } catch(e) {}
+  // Refresh home goal bar if it's visible
+  if (typeof renderHomeGoalBar === 'function') renderHomeGoalBar();
 }
 
 // ═══════════════ PIPELINE ═══════════════
@@ -5027,9 +5208,10 @@ function _animateCount(el, targetVal, duration) {
 function foSwitchTab(tab, btn) {
   document.querySelectorAll('.fo-tab').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
-  document.getElementById('fo-panel-overview').style.display = tab === 'overview' ? '' : 'none';
-  document.getElementById('fo-panel-invoices').style.display = tab === 'invoices' ? '' : 'none';
-  document.getElementById('fo-panel-manual').style.display = tab === 'manual' ? '' : 'none';
+  ['overview','aging','clients','invoices','manual'].forEach(function(t){
+    var el = document.getElementById('fo-panel-' + t);
+    if (el) el.style.display = t === tab ? '' : 'none';
+  });
   if (tab === 'invoices') renderInvHistory();
   if (tab === 'manual') foRenderManualList();
 }
@@ -5058,16 +5240,117 @@ function renderFinancialOverview() {
   _animateCount(document.getElementById('fo-total-income'), totalEarned + manualTotal, 900);
   document.getElementById('fo-month-name').textContent = monthNames[now.getMonth()] + ' ' + now.getFullYear();
 
-  // Monthly chart — 2 months prior + current month (horizontal bars by project)
+  // Build color map early so all sections can reference it
   var _foChartColors = ['#7B9E87','#D4A853','#C17B6A','#6B8EAD','#9B8BC3','#C4A882','#8BC4B8','#E8956D','#A8C4A2','#D4956A'];
-  // Build global project color map (consistent across months)
   var _allProjKeys = {};
-  invs.filter(function(i){ return i.status === 'paid'; }).forEach(function(i){
-    var k = i.project || i.client_name || 'Other'; _allProjKeys[k] = true;
-  });
+  invs.filter(function(i){ return i.status === 'paid'; }).forEach(function(i){ var k = i.project || i.client_name || 'Other'; _allProjKeys[k] = true; });
   manuals.forEach(function(m){ var k = m.source || 'Other Income'; _allProjKeys[k] = true; });
   var _projColorMap = {};
   Object.keys(_allProjKeys).forEach(function(k, idx){ _projColorMap[k] = _foChartColors[idx % _foChartColors.length]; });
+
+  // Month-over-month delta
+  var prevMonthDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  var prevMonthKey = prevMonthDate.getFullYear() + '-' + String(prevMonthDate.getMonth()+1).padStart(2,'0');
+  var prevMonthEarned = invs.filter(function(i){
+    return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,7) === prevMonthKey;
+  }).reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+  var momEl = document.getElementById('fo-mom-delta');
+  if (momEl) {
+    if (prevMonthEarned > 0) {
+      var momPct = Math.round((thisMonthEarned - prevMonthEarned) / prevMonthEarned * 100);
+      var momCls = momPct > 0 ? 'pos' : momPct < 0 ? 'neg' : 'flat';
+      var momArrow = momPct > 0 ? '▲' : momPct < 0 ? '▼' : '—';
+      momEl.innerHTML = '<span class="fo-sc-delta ' + momCls + '">' + momArrow + ' ' + Math.abs(momPct) + '% vs last month</span>';
+    } else {
+      momEl.innerHTML = '';
+    }
+  }
+
+  // Effective hourly rate (earnings per hour logged)
+  var effRateEl = document.getElementById('fo-eff-rate');
+  var effBadgeEl = document.getElementById('fo-eff-rate-badge');
+  var gtsHours = (window._gtsAllEntries || []).reduce(function(s,e){ return s+(parseFloat(e.hours)||0); }, 0);
+  if (effRateEl) {
+    if (gtsHours > 0 && totalEarned > 0) {
+      var effRate = totalEarned / gtsHours;
+      effRateEl.textContent = '$' + effRate.toFixed(0) + '/hr';
+      // Compare to calculated minimum rate if available
+      var minRate = parseFloat((document.getElementById('res-rate')||{}).textContent)||0;
+      if (effBadgeEl && minRate > 0) {
+        var above = effRate >= minRate;
+        effBadgeEl.innerHTML = '<span class="fo-eff-rate-badge ' + (above?'fo-eff-above':'fo-eff-below') + '">' + (above?'Above':'Below') + ' floor rate</span>';
+      } else if (effBadgeEl) { effBadgeEl.innerHTML = ''; }
+    } else {
+      effRateEl.textContent = '—';
+      if (effBadgeEl) effBadgeEl.innerHTML = '';
+    }
+  }
+
+  // Invoice aging
+  var agingEl = document.getElementById('fo-aging-list');
+  if (agingEl) {
+    var unpaid = invs.filter(function(i){ return i.status === 'sent' || i.status === 'overdue'; });
+    if (!unpaid.length) {
+      agingEl.innerHTML = '<div class="fo-empty" style="color:var(--sage);font-weight:600">✓ No outstanding invoices — all clear!</div>';
+    } else {
+      var agingToday = new Date(); agingToday.setHours(0,0,0,0);
+      var rows = unpaid.map(function(inv) {
+        var dueDate = inv.due_date ? new Date(inv.due_date + 'T00:00:00') : null;
+        var days = dueDate ? Math.floor((agingToday - dueDate) / 86400000) : null;
+        return { inv: inv, days: days };
+      }).sort(function(a,b){ return (b.days||0) - (a.days||0); });
+      agingEl.innerHTML = '<div class="fo-aging-table">' + rows.map(function(r,ri) {
+        var d = r.days;
+        var dLabel = d === null ? '—' : d <= 0 ? 'Due in ' + Math.abs(d) + 'd' : d + ' day' + (d!==1?'s':'') + ' overdue';
+        var dCls = d === null ? '' : d <= 0 ? 'fo-age-ok' : d <= 30 ? 'fo-age-warn' : 'fo-age-bad';
+        var proj = r.inv.project ? ' · ' + r.inv.project : '';
+        return '<div class="fo-aging-row" style="animation-delay:' + (ri*0.06) + 's">' +
+          '<div><div class="fo-aging-client">' + escapeHTML(r.inv.client_name||'—') + '</div>' +
+            '<div class="fo-aging-inv">' + escapeHTML(r.inv.invoice_number||'') + escapeHTML(proj) + '</div></div>' +
+          '<div style="text-align:right;flex-shrink:0">' +
+            '<div class="fo-aging-amt">' + fmD(parseFloat(r.inv.total)||0) + '</div>' +
+            '<div class="fo-aging-days ' + dCls + '">' + dLabel + '</div>' +
+          '</div></div>';
+      }).join('') + '</div>';
+    }
+  }
+
+  // By client
+  var byClient = {};
+  invs.filter(function(i){ return i.status === 'paid'; }).forEach(function(i) {
+    var key = i.client_name || 'Unknown client';
+    if (!byClient[key]) byClient[key] = { total: 0, count: 0, lastDate: null };
+    byClient[key].total += parseFloat(i.total)||0;
+    byClient[key].count++;
+    if (!byClient[key].lastDate || i.issue_date > byClient[key].lastDate) byClient[key].lastDate = i.issue_date;
+  });
+  var clientList = Object.keys(byClient).map(function(k){ return Object.assign({ name: k }, byClient[k]); })
+    .sort(function(a,b){ return b.total - a.total; });
+  var maxClient = clientList.length ? clientList[0].total : 1;
+  var clientEl = document.getElementById('fo-by-client');
+  if (clientEl) {
+    if (!clientList.length) {
+      clientEl.innerHTML = '<div class="fo-empty">No paid invoices yet — revenue by client will appear here.</div>';
+    } else {
+      clientEl.innerHTML = '<div class="fo-client-table">' + clientList.map(function(c, ci) {
+        var barW = Math.round(c.total / maxClient * 100);
+        var color = _projColorMap[c.name] || _foChartColors[ci % _foChartColors.length];
+        var lastActive = c.lastDate ? 'Last paid: ' + c.lastDate.slice(0,10) : '';
+        return '<div class="fo-client-row" style="animation-delay:' + (ci*0.07) + 's">' +
+          '<div style="flex:1;min-width:0">' +
+            '<div class="fo-client-name">' + escapeHTML(c.name) + '</div>' +
+            '<div class="fo-client-meta">' + c.count + ' invoice' + (c.count!==1?'s':'') + (lastActive ? ' · ' + lastActive : '') + '</div>' +
+            '<div class="fo-proj-bar-wrap" style="margin-top:6px"><div class="fo-proj-bar-fill" style="width:' + barW + '%;background:' + color + '"></div></div>' +
+          '</div>' +
+          '<div style="flex-shrink:0;text-align:right;padding-left:16px">' +
+            '<div class="fo-client-amt">' + fmD(c.total) + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>';
+    }
+  }
+
+  // Monthly chart — 2 months prior + current month (horizontal bars by project)
 
   var months = [];
   for (var m = 2; m >= 0; m--) {
@@ -5931,20 +6214,20 @@ async function renderContribGrid() {
   endDate.setDate(startDate.getDate() + WEEKS * 7 - 1);
   var endStr = endDate.toISOString().slice(0, 10);
 
-  // Query timesheet entries across the window
+  // Query timesheet entries across the window — sum hours per day
   var counts = {};
   var res = await _supabase.from('project_timesheet')
-    .select('log_date').eq('user_id', _currentUser.id)
+    .select('log_date,hours').eq('user_id', _currentUser.id)
     .gte('log_date', startStr).lte('log_date', endStr);
   if (res.data) {
-    res.data.forEach(function(r){ if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0)+1; } });
+    res.data.forEach(function(r){ if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0)+(parseFloat(r.hours)||1); } });
   }
   try {
     var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
     Object.keys(stored).forEach(function(d){ if (d >= startStr && d <= endStr) counts[d] = (counts[d]||0)+stored[d]; });
   } catch(e) {}
 
-  var total = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
+  var totalHrs = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
   var DAY_LABELS = ['Su','M','Tu','W','Th','F','Sa'];
 
   // Build: day labels + week columns (each column = 1 week, flex:1 fills container)
@@ -5960,9 +6243,9 @@ async function renderContribGrid() {
       var ds = d.toISOString().slice(0, 10);
       var fut = ds > todayStr;
       var cnt = counts[ds] || 0;
-      var lvl = fut ? 0 : cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
+      var lvl = fut ? 0 : cnt === 0 ? 0 : cnt < 2 ? 1 : cnt < 4 ? 2 : cnt < 7 ? 3 : 4;
       var extra = (ds === todayStr ? 'outline:1.5px solid var(--ink);outline-offset:1px;' : '') + (fut ? 'opacity:.2;' : '');
-      var tip = ds + (cnt ? ': '+cnt+' contribution'+(cnt!==1?'s':'') : ': no activity');
+      var tip = ds + (cnt ? ': '+cnt.toFixed(1)+'h logged' : ': no activity');
       html += '<div class="cg-cell cg-l'+lvl+'" style="'+extra+'" title="'+tip+'"></div>';
     }
     html += '</div>';
@@ -5970,7 +6253,7 @@ async function renderContribGrid() {
   html += '</div></div>';
   el.innerHTML = html;
 
-  if (totalEl) totalEl.textContent = total + ' contribution' + (total!==1?'s':'') + ' in the last 16 weeks';
+  if (totalEl) totalEl.textContent = totalHrs.toFixed(1) + ' hours logged in the last 16 weeks';
 }
 
 // ─── RECENTLY VISITED ─────────────────────────────────────────────────────────
@@ -6453,6 +6736,7 @@ function initHomeDashboard() {
   loadProjectTasksForHome();
   renderCalendar();
   renderContribGrid();
+  renderHomeGoalBar();
   // Load projects for todo filter and upcoming deadlines (even if Projects panel not yet visited)
   if (!window._ptInit) {
     window._ptInit = true;
@@ -6460,6 +6744,35 @@ function initHomeDashboard() {
   } else {
     updateTodoProjDropdowns();
   }
+}
+
+function renderHomeGoalBar() {
+  var barWrap = document.getElementById('home-goal-bar');
+  if (!barWrap) return;
+  // Pull goal from rate calculator inputs (localStorage)
+  var goal = 0, earned = 0;
+  try {
+    var ri = JSON.parse(localStorage.getItem('fk_rate_inputs') || '{}');
+    goal = parseFloat(ri.takeHome) || 0;
+  } catch(e) {}
+  // Earned = sum of paid invoices this year
+  var yearStr = new Date().getFullYear() + '';
+  if (_invoices && _invoices.length) {
+    earned = (_invoices || []).filter(function(i){
+      return i.status === 'paid' && i.issue_date && i.issue_date.slice(0,4) === yearStr;
+    }).reduce(function(s,i){ return s + (parseFloat(i.total)||0); }, 0);
+  }
+  if (!goal) { barWrap.style.display = 'none'; return; }
+  barWrap.style.display = '';
+  var pct = Math.min(100, Math.round(earned / goal * 100));
+  var pctEl = document.getElementById('hgb-pct');
+  var fillEl = document.getElementById('hgb-fill');
+  var earnedEl = document.getElementById('hgb-earned');
+  var goalLblEl = document.getElementById('hgb-goal-lbl');
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (fillEl) { fillEl.style.background = pct >= 100 ? 'var(--sage)' : 'var(--amber)'; setTimeout(function(){ fillEl.style.width = pct + '%'; }, 80); }
+  if (earnedEl) earnedEl.textContent = '$' + Math.round(earned).toLocaleString() + ' earned this year';
+  if (goalLblEl) goalLblEl.textContent = 'Goal: $' + Math.round(goal).toLocaleString();
 }
 
 // Income goal bar
@@ -6991,6 +7304,48 @@ function renderPtOverview() {
   }).length;
   var dcEl = document.getElementById('ptv-deadline-count');
   if (dcEl) dcEl.textContent = String(upcomingCount).padStart(2, '0');
+
+  // Task completion %
+  var doneTasks = ts.filter(function(t){ return t.status === 'done'; }).length;
+  var totalTasks = ts.length;
+  var taskPct = totalTasks > 0 ? Math.round(doneTasks / totalTasks * 100) : 0;
+  var tdPctEl = document.getElementById('ptv-task-done-pct');
+  var tdSubEl = document.getElementById('ptv-task-done-sub');
+  var tdBarEl = document.getElementById('ptv-task-bar');
+  if (tdPctEl) tdPctEl.textContent = totalTasks > 0 ? taskPct + '%' : '—';
+  if (tdSubEl) tdSubEl.textContent = totalTasks > 0 ? doneTasks + ' of ' + totalTasks + ' tasks done' : 'no tasks yet';
+  if (tdBarEl) {
+    setTimeout(function(){ tdBarEl.style.width = taskPct + '%'; }, 100);
+    tdBarEl.className = 'util-fill' + (taskPct >= 80 ? '' : taskPct >= 50 ? ' warn' : '');
+  }
+
+  // Budget utilization — hours * calculated rate / budget
+  var proj = (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; });
+  var budget = proj ? (parseFloat(proj.budget) || 0) : 0;
+  var bPctEl = document.getElementById('ptv-budget-pct');
+  var bSubEl = document.getElementById('ptv-budget-sub');
+  var bBarEl = document.getElementById('ptv-budget-bar');
+  if (budget > 0) {
+    // Try to get effective rate from rate calculator result or persisted inputs
+    var rateEl = document.getElementById('rc-hourly');
+    var rateText = rateEl ? rateEl.textContent.replace(/[^0-9.]/g,'') : '';
+    var hourlyRate = parseFloat(rateText) || 0;
+    if (!hourlyRate) {
+      try { var ri2 = JSON.parse(localStorage.getItem('fk_rate_inputs')||'{}'); hourlyRate = 0; } catch(e) {}
+    }
+    var budgetUsed = hourlyRate > 0 ? totalHrs * hourlyRate : 0;
+    var bPct = budgetUsed > 0 ? Math.min(150, Math.round(budgetUsed / budget * 100)) : 0;
+    if (bPctEl) bPctEl.textContent = bPct > 0 ? bPct + '%' : totalHrs.toFixed(1) + 'h';
+    if (bSubEl) bSubEl.textContent = bPct > 0 ? '$' + Math.round(budgetUsed).toLocaleString() + ' of $' + Math.round(budget).toLocaleString() : 'of $' + Math.round(budget).toLocaleString() + ' budget';
+    if (bBarEl) {
+      setTimeout(function(){ bBarEl.style.width = Math.min(100, bPct) + '%'; }, 150);
+      bBarEl.className = 'util-fill' + (bPct > 90 ? ' bad' : bPct > 70 ? ' warn' : '');
+    }
+  } else {
+    if (bPctEl) bPctEl.textContent = '—';
+    if (bSubEl) bSubEl.textContent = 'no budget set';
+    if (bBarEl) bBarEl.style.width = '0%';
+  }
 
   // Active Timeline — all non-done tasks sorted by due date
   var active = ts.filter(function(t){ return t.status !== 'done'; })
@@ -7864,6 +8219,7 @@ async function loadGlobalTimesheet() {
   body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--ink-light);font-size:13px">Loading…</div>';
   var res = await _supabase.from('project_timesheet').select('*, projects(name)').eq('user_id', _currentUser.id).order('log_date', {ascending: false});
   if (res.error) { body.innerHTML = '<div style="padding:20px;color:red;font-size:13px">Error: ' + escapeHTML(res.error.message) + '</div>'; return; }
+  window._gtsAllEntries = res.data || [];
   renderGlobalTimesheet(res.data || []);
 }
 
@@ -7902,12 +8258,25 @@ function renderGlobalTimesheet(entries) {
   var weekTotal  = entries.filter(function(e){ return inWeek(e.log_date); }).reduce(function(s,e){ return s+(parseFloat(e.hours)||0); },0);
 
   // --- Summary cards ---
+  // Billability rate: compare this week to a 40h standard (or stored billable_hours)
+  var billableHrPerWeek = 40;
+  try {
+    var storedScen = JSON.parse(localStorage.getItem('fk_rate_inputs') || '{}');
+    if (storedScen.billableHrs) billableHrPerWeek = parseFloat(storedScen.billableHrs) || 40;
+  } catch(e) {}
+  var utilPct = billableHrPerWeek > 0 ? Math.min(150, Math.round(weekTotal / billableHrPerWeek * 100)) : 0;
+  var utilColor = utilPct >= 80 ? 'var(--sage)' : utilPct >= 50 ? '#D97706' : '#DC2626';
+  var utilLabel = utilPct >= 100 ? '🔥 Fully booked' : utilPct >= 75 ? 'On track' : utilPct >= 40 ? 'Under capacity' : 'Low hours';
   if (summaryEl) {
     summaryEl.innerHTML =
-      '<div class="gts-stat-card"><div class="gts-stat-lbl">This week</div><div class="gts-stat-val">'+weekTotal.toFixed(1)+'h</div></div>'+
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">This week</div><div class="gts-stat-val">'+weekTotal.toFixed(1)+'h</div>'+
+        '<div class="gts-util-row"><div class="gts-util-lbl">vs '+billableHrPerWeek+'h target</div><div class="gts-util-bar"><div class="gts-util-fill" style="width:'+Math.min(100,utilPct)+'%;background:'+utilColor+'"></div></div></div>'+
+        '<div style="font-size:10px;font-weight:700;color:'+utilColor+';margin-top:4px">'+utilLabel+'</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">All time</div><div class="gts-stat-val">'+grandTotal.toFixed(1)+'h</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">Projects</div><div class="gts-stat-val">'+projectKeys.length+'</div></div>'+
-      '<div class="gts-stat-card"><div class="gts-stat-lbl">Entries</div><div class="gts-stat-val">'+entries.length+'</div></div>';
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">Entries</div><div class="gts-stat-val">'+entries.length+'</div></div>'+
+      '<div class="gts-stat-card"><div class="gts-stat-lbl">Utilization</div><div class="gts-stat-val" style="color:'+utilColor+'">'+utilPct+'%</div>'+
+        '<div style="font-size:11px;color:var(--ink-light);margin-top:2px">this week</div></div>';
   }
 
   // --- Weekly overview table ---
