@@ -1097,8 +1097,7 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 .sc-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
 .sc-rate{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--amber);line-height:1;margin-bottom:8px;letter-spacing:-.02em}
 .sc-meta{font-size:11px;color:var(--ink-light);line-height:1.6}
-.sc-delete{float:right;width:22px;height:22px;border-radius:5px;border:none;background:transparent;color:var(--ink-light);cursor:pointer;font-size:14px;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.sc-delete:hover{background:var(--red-light);color:var(--red)}
+/* sc-delete and sc-edit-btn styled in "Scenario edit" block below */
 .save-scenario-bar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:14px}
 .ss-label{font-size:13px;color:var(--ink-mid);font-weight:500}
 .ss-row{display:flex;gap:8px;align-items:center}
@@ -1307,10 +1306,13 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield}
 /* Scenario edit */
-.scenario-card{position:relative}
-.sc-delete{position:absolute;top:8px;right:8px;background:none;border:none;font-size:11px;color:var(--ink-light);cursor:pointer;padding:2px 5px;opacity:0;transition:opacity .15s}
-.sc-edit-btn{position:absolute;top:8px;right:30px;background:none;border:none;font-size:11px;color:var(--ink-light);cursor:pointer;padding:2px 5px;opacity:0;transition:opacity .15s}
-.scenario-card:hover .sc-delete,.scenario-card:hover .sc-edit-btn{opacity:1}
+.scenario-card{position:relative;display:flex;flex-direction:column}
+.sc-card-body{flex:1}
+.sc-card-actions{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+.sc-edit-btn{background:none;border:1px solid var(--border);border-radius:4px;font-size:11px;font-weight:600;color:var(--ink-mid);cursor:pointer;padding:3px 10px;font-family:var(--font-body);transition:all .15s}
+.sc-edit-btn:hover{border-color:var(--amber);color:var(--amber)}
+.sc-delete{background:none;border:1px solid var(--border);border-radius:4px;font-size:11px;font-weight:600;color:#B91C1C;cursor:pointer;padding:3px 10px;font-family:var(--font-body);transition:all .15s}
+.sc-delete:hover{background:#FEE2E2;border-color:#B91C1C}
 .sc-name-inp{font-size:14px;font-weight:700;color:var(--ink);border:none;border-bottom:1.5px solid var(--amber);background:transparent;font-family:var(--font-body);width:100%;outline:none;margin-bottom:2px;padding:2px 0}
 /* ── CLIENT DROPDOWN in invoice ── */
 .client-dropdown{position:relative}
@@ -2308,9 +2310,6 @@ var RateLimiter = (function() {
       </div>
 
       <div class="dsb-section">My Business</div>
-      <div class="dsb-item" onclick="showPanel('mydetails',this)" id="nav-mydetails">
-        <span class="dsb-icon"></span><span class="dsb-label">My Details</span>
-      </div>
       <div class="dsb-item" onclick="showPanel('clients',this)" id="nav-clients">
         <span class="dsb-icon"></span><span class="dsb-label">Client Contacts</span>
       </div>
@@ -2862,7 +2861,6 @@ var RateLimiter = (function() {
             </div>
             <!-- Active Collaborators strip -->
             <div class="pt-ov-collabs-strip" id="ptv-shares-wrap" style="display:none">
-              <div class="pt-ov-section-hdr">Active Collaborators</div>
               <div id="ptv-shares-list" style="display:flex;flex-direction:column;gap:0;padding:4px 0"></div>
             </div>
             <!-- Full width: Description / Contract / People / Timeline -->
@@ -5890,12 +5888,16 @@ function renderScenarios() {
     var sym = sc.currency || '$';
     var sid = sc.id;
     return '<div class="scenario-card" onclick="loadScenario(' + JSON.stringify(sc).replace(/"/g,'&quot;') + ')" data-sc-id="' + sid + '">' +
-      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario(\'' + sid + '\')">Delete</button>' +
-      '<button class="sc-edit-btn" onclick="event.stopPropagation();editScenarioName(\'' + sid + '\',this)" title="Rename">Edit</button>' +
-      '<div class="sc-name" id="sc-name-' + sid + '">' + escapeHTML(sc.name) + '</div>' +
-      '<div class="sc-rate">' + sym + Math.round(sc.result_hourly||0) + '/hr</div>' +
-      '<div class="sc-meta">Take-home: ' + sym + Math.round(sc.take_home||0).toLocaleString() + '/yr<br>' +
-        (sc.billable_hrs||0) + ' billable hrs/wk · ' + (sc.weeks_off||0) + ' wks off</div>' +
+      '<div class="sc-card-body">' +
+        '<div class="sc-name" id="sc-name-' + sid + '">' + escapeHTML(sc.name) + '</div>' +
+        '<div class="sc-rate">' + sym + Math.round(sc.result_hourly||0) + '/hr</div>' +
+        '<div class="sc-meta">Take-home: ' + sym + Math.round(sc.take_home||0).toLocaleString() + '/yr<br>' +
+          (sc.billable_hrs||0) + ' billable hrs/wk · ' + (sc.weeks_off||0) + ' wks off</div>' +
+      '</div>' +
+      '<div class="sc-card-actions">' +
+        '<button class="sc-edit-btn" onclick="event.stopPropagation();editScenarioName(\'' + sid + '\',this)">Edit</button>' +
+        '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario(\'' + sid + '\')">Delete</button>' +
+      '</div>' +
     '</div>';
   }).join('');
 }
