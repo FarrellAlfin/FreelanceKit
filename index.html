@@ -101,66 +101,201 @@ body{font-family:var(--font-body);background:var(--surface);color:var(--on-surfa
 .share-status.accepted{background:#F0FFF4;color:#166634}
 
 /* ════════════════════════════════════
-   LANDING PAGE
+   LANDING PAGE — v2
 ════════════════════════════════════ */
-/* Hero */
-.hero{max-width:1100px;margin:0 auto;padding:88px 40px 64px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--tertiary-fixed);color:var(--on-tertiary-fixed);border-radius:4px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;font-family:'Manrope',sans-serif}
-.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--on-tertiary-fixed)}
-h1{font-family:'Manrope',sans-serif;font-weight:800;font-size:54px;line-height:1.05;letter-spacing:-.04em;color:var(--on-surface);margin-bottom:18px}
-h1 em{font-style:normal;color:var(--tertiary)}
-.hero-sub{font-size:17px;color:var(--on-surface-mid);line-height:1.7;margin-bottom:32px;font-weight:400;max-width:440px}
-.hero-btns{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.btn-hero-primary{background:#000;color:#fff;border:none;padding:14px 28px;border-radius:4px;font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
+/* Shared */
+.btn-hero-primary{background:#000;color:#fff;border:none;padding:14px 28px;border-radius:6px;font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-hero-primary:hover{background:var(--on-surface-mid);transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.btn-hero-ghost{background:transparent;color:var(--on-surface);border:1.5px solid var(--outline-variant);padding:14px 28px;border-radius:4px;font-family:var(--font-body);font-size:15px;cursor:pointer;transition:all .2s}
+.btn-hero-ghost{background:transparent;color:var(--on-surface);border:1.5px solid var(--outline-variant);padding:14px 28px;border-radius:6px;font-family:var(--font-body);font-size:15px;cursor:pointer;transition:all .2s}
 .btn-hero-ghost:hover{border-color:var(--on-surface)}
-.hero-note{font-size:12px;color:var(--on-surface-light);margin-top:12px}
-
-/* Hero mockup */
-.hero-mockup{background:var(--primary-container);border-radius:12px;border:none;box-shadow:0 8px 24px rgba(25,28,30,0.18);overflow:hidden}
-.hm-bar{background:rgba(255,255,255,0.06);padding:12px 16px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.hm-dot{width:10px;height:10px;border-radius:50%}
-.hm-url{font-size:11px;color:var(--on-primary-container);margin-left:6px;font-family:var(--font-mono)}
-.hm-body{padding:18px}
-.hm-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:rgba(255,255,255,0.06);border-radius:8px;margin-bottom:8px;cursor:default;transition:all .15s;border:1px solid transparent}
-.hm-row:hover{border-color:var(--tertiary-fixed);transform:translateX(3px)}
-.hm-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.hm-info{flex:1}
-.hm-name{font-size:13px;font-weight:500;color:#fff}
-.hm-meta{font-size:11px;color:var(--on-primary-container);margin-top:1px}
-.hm-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
-.badge-new{background:var(--tertiary-fixed);color:var(--on-tertiary-fixed)}
-.badge-pop{background:rgba(111,251,190,0.2);color:var(--tertiary-fixed)}
-
-/* Social proof strip */
-.proof-strip{background:var(--surface-low);padding:20px 40px}
-.proof-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:40px;flex-wrap:wrap}
-.proof-label{font-size:12px;color:var(--on-surface-light)}
-.proof-avatars{display:flex}
-.proof-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--surface-low);margin-right:-7px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
-.proof-divider{width:1px;height:28px;background:var(--outline-variant)}
-.proof-stat{display:flex;align-items:center;gap:10px}
-.ps-num{font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:var(--on-surface)}
-.ps-lbl{font-size:12px;color:var(--on-surface-mid)}
-
-/* Features */
-.lp-section{max-width:1100px;margin:0 auto;padding:72px 40px}
 .lp-label{font-size:10px;color:var(--on-surface-mid);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;font-family:'Manrope',sans-serif}
+h1{font-family:'Manrope',sans-serif;font-weight:800;font-size:54px;line-height:1.04;letter-spacing:-.04em;color:var(--on-surface);margin-bottom:18px}
 h2{font-family:'Manrope',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.04em;line-height:1.1;color:var(--on-surface);margin-bottom:14px}
-h2 em{font-style:normal;color:var(--tertiary)}
-.lp-sub{font-size:16px;color:var(--on-surface-mid);font-weight:400;max-width:520px;line-height:1.7;margin-bottom:52px}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.feat-card{background:var(--surface-white);border-radius:12px;padding:24px 24px 24px 22px;transition:all .2s;border-left:3px solid transparent;box-shadow:none}
-.feat-card:hover{box-shadow:0 8px 24px rgba(25,28,30,0.06);transform:translateY(-3px);border-left-color:var(--tertiary-fixed-dim)}
-.feat-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:12px}
-.feat-problem{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--on-surface-light);margin-bottom:6px}
-.feat-card h3{font-size:16px;font-weight:700;color:var(--on-surface);margin-bottom:8px;line-height:1.3;letter-spacing:-.02em;font-family:'Manrope',sans-serif}
-.feat-card p{font-size:13px;color:var(--on-surface-mid);line-height:1.65;font-weight:400}
-.feat-templates{display:flex;gap:5px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(198,198,205,0.3)}
-.feat-t-chip{font-size:10px;background:var(--surface-container);color:var(--on-surface-light);padding:2px 8px;border-radius:4px;font-weight:600}
-
-
+h1 em,h2 em{font-style:normal;color:var(--tertiary)}
+.lp-sub{font-size:16px;color:var(--on-surface-mid);font-weight:400;max-width:520px;line-height:1.7;margin-bottom:40px}
+/* Animations */
+@keyframes lp-up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lp-right{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)}}
+@keyframes lp-float-a{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(.8deg)}}
+@keyframes lp-float-b{0%,100%{transform:translateY(0) rotate(1.5deg)}50%{transform:translateY(-8px) rotate(-.5deg)}}
+@keyframes lp-float-c{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes lp-ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes lp-dot-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+/* Scroll reveals */
+.lp-reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
+.lp-reveal.visible{opacity:1;transform:translateY(0)}
+.lp-reveal-r{opacity:0;transform:translateX(22px);transition:opacity .7s ease,transform .7s ease}
+.lp-reveal-r.visible{opacity:1;transform:translateX(0)}
+[data-d="1"]{transition-delay:.1s}[data-d="2"]{transition-delay:.2s}[data-d="3"]{transition-delay:.3s}
+[data-d="4"]{transition-delay:.4s}[data-d="5"]{transition-delay:.5s}
+/* Hero */
+.lp-hero{background:var(--surface);overflow:hidden;position:relative}
+.lp-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 68% -5%,rgba(0,150,104,.09) 0,transparent 65%),radial-gradient(ellipse 40% 40% at 5% 100%,rgba(0,104,78,.05) 0,transparent 55%);pointer-events:none}
+.lp-hero-inner{max-width:1120px;margin:0 auto;padding:88px 40px 72px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
+.lp-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,150,104,.1);border:1px solid rgba(0,150,104,.22);color:var(--sage);border-radius:100px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px;animation:lp-up .6s ease both}
+.lp-hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--sage);animation:lp-dot-pulse 2s ease infinite}
+.lp-hero-h1{animation:lp-up .7s .1s ease both}
+.lp-hero-sub{font-size:17px;color:var(--on-surface-mid);line-height:1.7;margin-bottom:32px;font-weight:400;max-width:460px;animation:lp-up .7s .2s ease both}
+.lp-hero-btns{display:flex;align-items:center;gap:12px;flex-wrap:wrap;animation:lp-up .7s .3s ease both}
+.lp-hero-note{font-size:12px;color:var(--on-surface-light);margin-top:12px;animation:lp-up .7s .4s ease both}
+.lp-hero-vis{position:relative;animation:lp-right .8s .25s ease both}
+/* Mockup window */
+.lp-mockup-wrap{position:relative}
+.lp-mockup-win{background:#141922;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.28);overflow:hidden;border:1px solid rgba(255,255,255,.07);transform:perspective(1000px) rotateY(-4deg) rotateX(2deg);transition:transform .5s ease}
+.lp-mockup-win:hover{transform:perspective(1000px) rotateY(-1deg) rotateX(0deg)}
+.lp-mw-bar{background:#0d1117;padding:10px 14px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.06)}
+.lp-mw-dot{width:9px;height:9px;border-radius:50%}
+.lp-mw-url{font-size:10px;color:rgba(255,255,255,.25);margin-left:10px;font-family:var(--font-mono)}
+.lp-mw-body{display:grid;grid-template-columns:52px 1fr;min-height:230px}
+.lp-mw-sb{padding:10px 5px;background:#0d1117;border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;gap:2px}
+.lp-mw-sbi{font-size:8.5px;padding:5px 6px;border-radius:4px;color:rgba(255,255,255,.38);cursor:default;font-family:var(--font-body);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.lp-mw-sbi.a{background:rgba(0,150,104,.15);color:rgba(0,200,140,.85)}
+.lp-mw-content{padding:11px;display:flex;flex-direction:column;gap:8px}
+.lp-mw-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.lp-mw-sc{background:rgba(255,255,255,.04);border-radius:6px;padding:7px 8px;border:1px solid rgba(255,255,255,.06)}
+.lp-mw-sc-l{font-size:7.5px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;font-family:var(--font-body)}
+.lp-mw-sc-v{font-size:13px;font-weight:700;color:#fff;font-family:'Manrope',sans-serif;letter-spacing:-.03em}
+.lp-mw-hm{display:grid;grid-template-columns:repeat(18,1fr);gap:2px}
+.lp-mw-hm-d{aspect-ratio:1;border-radius:1.5px;background:rgba(255,255,255,.04)}
+.lp-mw-hm-d.l1{background:rgba(0,150,104,.25)}.lp-mw-hm-d.l2{background:rgba(0,150,104,.5)}
+.lp-mw-hm-d.l3{background:rgba(0,150,104,.72)}.lp-mw-hm-d.l4{background:rgba(0,200,140,.9)}
+.lp-mw-proj-row{display:flex;align-items:center;gap:7px;padding:6px 7px;background:rgba(255,255,255,.04);border-radius:5px;border:1px solid rgba(255,255,255,.05)}
+.lp-mw-proj-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.lp-mw-proj-name{font-size:9px;color:rgba(255,255,255,.65);flex:1;font-family:var(--font-body)}
+.lp-mw-proj-pct{font-size:9px;font-weight:700;color:rgba(0,200,140,.8)}
+/* Floating metric cards */
+.lp-float-card{position:absolute;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;box-shadow:0 8px 28px rgba(0,0,0,.13);white-space:nowrap;z-index:10}
+.lp-float-card-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--on-surface-light);margin-bottom:3px;font-family:var(--font-body)}
+.lp-float-card-v{font-size:18px;font-weight:800;font-family:'Manrope',sans-serif;letter-spacing:-.04em;line-height:1}
+.lp-float-card-s{font-size:9px;color:var(--on-surface-light);margin-top:2px}
+.lp-fc-1{top:-16px;right:-18px;animation:lp-float-a 5s ease-in-out infinite}
+.lp-fc-2{bottom:18px;right:-26px;animation:lp-float-b 6.5s ease-in-out 1.5s infinite}
+.lp-fc-3{bottom:-14px;left:36px;animation:lp-float-c 4.5s ease-in-out .8s infinite}
+/* Ticker */
+.lp-ticker{background:var(--ink);overflow:hidden;line-height:0}
+.lp-ticker-track{display:flex;width:max-content;animation:lp-ticker 32s linear infinite}
+.lp-ticker-track:hover{animation-play-state:paused}
+.lp-tick-item{display:flex;align-items:center;gap:12px;padding:14px 32px;border-right:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.lp-tick-n{font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:var(--tertiary-fixed);letter-spacing:-.04em}
+.lp-tick-l{font-size:11px;color:rgba(250,247,242,.45);line-height:1.3;max-width:110px}
+/* Bento section */
+.lp-bento{padding:88px 40px;background:var(--surface)}
+.lp-bento-inner{max-width:1120px;margin:0 auto}
+.lp-bento-hdr{text-align:center;margin-bottom:56px}
+.lp-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.lp-bc{background:var(--white);border-radius:16px;padding:26px;border:1.5px solid var(--border);transition:transform .25s,box-shadow .25s,border-color .25s;overflow:hidden;position:relative}
+.lp-bc:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(25,28,30,.08);border-color:rgba(0,150,104,.2)}
+.lp-bc-a{grid-column:span 2;grid-row:span 2;background:var(--ink);border-color:transparent}
+.lp-bc-a:hover{border-color:rgba(0,200,140,.25)}
+.lp-bc-d{grid-column:span 3}
+.lp-bc-f{grid-column:span 2}
+.lp-bc-tag{display:inline-block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:100px;margin-bottom:12px}
+.lp-bc-title{font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px;color:var(--ink)}
+.lp-bc-desc{font-size:12.5px;color:var(--ink-mid);line-height:1.6}
+.lp-bc-a .lp-bc-title{color:#fff;font-size:22px}
+.lp-bc-a .lp-bc-desc{color:rgba(250,247,242,.55)}
+/* Bento mini UIs */
+.lp-pt-proj{background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.lp-pt-proj-hdr{font-size:11px;font-weight:600;color:rgba(250,247,242,.9);margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
+.lp-pt-bw{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.lp-pt-bf{height:100%;border-radius:2px;background:var(--sage);transition:width 1.2s ease}
+.lp-pt-tasks{display:flex;flex-direction:column;gap:4px}
+.lp-pt-tr{display:flex;align-items:center;gap:7px}
+.lp-pt-cb{width:13px;height:13px;border-radius:3px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px}
+.lp-pt-cb.done{background:var(--sage);border-color:var(--sage);color:#fff}
+.lp-pt-tn{font-size:10.5px;color:rgba(250,247,242,.7)}
+.lp-pt-tn.done{color:rgba(250,247,242,.35);text-decoration:line-through}
+.lp-pt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.lp-pt-stat{text-align:center;background:rgba(255,255,255,.05);border-radius:6px;padding:7px 4px}
+.lp-pt-stat-v{font-size:14px;font-weight:700;color:rgba(0,200,140,.9);font-family:'Manrope',sans-serif}
+.lp-pt-stat-l{font-size:8px;color:rgba(250,247,242,.4);margin-top:1px}
+.lp-rc-field{margin-bottom:8px}
+.lp-rc-label{font-size:9.5px;color:var(--ink-light);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.lp-rc-result{background:var(--amber-light);border-radius:8px;padding:12px;display:flex;align-items:baseline;gap:3px;margin-top:12px}
+.lp-rc-result-n{font-family:'Manrope',sans-serif;font-size:36px;font-weight:800;color:var(--amber);letter-spacing:-.04em}
+.lp-rc-result-u{font-size:14px;color:var(--amber-mid);font-weight:700}
+.lp-rc-result-s{font-size:11px;color:var(--amber-mid);margin-left:4px}
+.lp-fo-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
+.lp-fo-stat{background:var(--surface-container);border-radius:7px;padding:8px 10px}
+.lp-fo-stat-l{font-size:8.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.lp-fo-stat-v{font-size:14px;font-weight:700;color:var(--ink);font-family:'Manrope',sans-serif}
+.lp-fo-bars{display:flex;flex-direction:column;gap:6px}
+.lp-fo-br{display:flex;align-items:center;gap:8px}
+.lp-fo-br-l{font-size:10px;color:var(--ink-mid);width:70px;flex-shrink:0}
+.lp-fo-bw{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.lp-fo-bf{height:100%;border-radius:3px;transition:width 1.2s ease}
+.lp-fo-br-v{font-size:10px;font-weight:700;color:var(--ink-mid);width:40px;text-align:right}
+.lp-tax-qs{display:flex;gap:4px;margin-bottom:10px}
+.lp-tax-q{flex:1;text-align:center;padding:5px 0;border-radius:5px;font-size:10px;font-weight:600;border:1.5px solid var(--border);color:var(--ink-mid);font-family:var(--font-body)}
+.lp-tax-q.act{border-color:var(--amber);background:var(--amber-light);color:var(--amber)}
+.lp-tax-q.pd{border-color:var(--sage);background:var(--sage-light);color:var(--sage)}
+.lp-tax-r{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--ink-mid)}
+.lp-tax-due{background:var(--ink);border-radius:7px;padding:11px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.lp-tax-due-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(250,247,242,.45)}
+.lp-tax-due-v{font-size:18px;font-weight:700;color:var(--amber-mid);font-family:'Manrope',sans-serif;letter-spacing:-.03em}
+.lp-pipe-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.lp-pipe-col{background:var(--surface-container);border-radius:6px;padding:7px}
+.lp-pipe-col-h{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:5px}
+.lp-pipe-c{background:var(--white);border-radius:4px;padding:5px 7px;margin-bottom:3px;border:1px solid var(--border)}
+.lp-pipe-c:last-child{margin-bottom:0}
+.lp-pipe-c-n{font-size:9px;color:var(--ink-mid)}
+.lp-pipe-c-v{font-size:9px;font-weight:700;color:var(--sage);margin-top:1px}
+.lp-ts-hm{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-bottom:10px}
+.lp-ts-hm-d{aspect-ratio:1;border-radius:2px;background:var(--border)}
+.lp-ts-hm-d.l1{background:rgba(0,150,104,.2)}.lp-ts-hm-d.l2{background:rgba(0,150,104,.45)}
+.lp-ts-hm-d.l3{background:rgba(0,150,104,.7)}.lp-ts-hm-d.l4{background:rgba(0,150,104,.95)}
+.lp-ts-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.lp-ts-s{background:var(--surface-container);border-radius:6px;padding:8px 9px}
+.lp-ts-s-l{font-size:8.5px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.lp-ts-s-v{font-size:14px;font-weight:700;color:var(--ink);font-family:'Manrope',sans-serif}
+/* How It Works */
+.lp-hiw{background:var(--surface-low);padding:88px 40px}
+.lp-hiw-inner{max-width:1120px;margin:0 auto}
+.lp-hiw-hdr{text-align:center;margin-bottom:64px}
+.lp-hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative}
+.lp-hiw-steps::before{content:'';position:absolute;top:28px;left:calc(16.66%+24px);right:calc(16.66%+24px);height:1px;background:linear-gradient(90deg,var(--outline-variant),rgba(0,150,104,.4),var(--outline-variant));z-index:0}
+.lp-hiw-step{position:relative;z-index:1;text-align:center}
+.lp-hiw-num{width:56px;height:56px;border-radius:50%;background:var(--primary-container);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;margin:0 auto 22px;box-shadow:0 4px 16px rgba(25,28,30,.15)}
+.lp-hiw-title{font-family:'Manrope',sans-serif;font-size:20px;font-weight:700;color:var(--on-surface);letter-spacing:-.03em;margin-bottom:10px;line-height:1.25}
+.lp-hiw-title em{font-style:normal;color:var(--tertiary)}
+.lp-hiw-desc{font-size:13.5px;color:var(--on-surface-mid);line-height:1.7;font-weight:400;max-width:280px;margin:0 auto}
+/* Pricing */
+.lp-pricing{padding:88px 40px;background:var(--surface)}
+.lp-pricing-inner{max-width:960px;margin:0 auto}
+.lp-pricing-hdr{text-align:center;margin-bottom:52px}
+.lp-price-grid{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+.lp-price-card{flex:1;min-width:280px;max-width:420px;background:var(--white);border-radius:16px;padding:34px;box-shadow:0 2px 16px rgba(25,28,30,.06);border:1.5px solid var(--border);transition:all .25s}
+.lp-price-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(25,28,30,.1)}
+.lp-price-card.featured{background:var(--primary-container);border-color:transparent;position:relative;overflow:hidden}
+.lp-price-card.featured::after{content:'Most popular';position:absolute;top:20px;right:-26px;background:var(--tertiary-fixed);color:var(--on-tertiary-fixed);font-size:9px;font-weight:700;padding:4px 36px;transform:rotate(45deg);letter-spacing:.05em;text-transform:uppercase}
+.lp-price-tier{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:8px;font-family:'Manrope',sans-serif}
+.lp-price-card.featured .lp-price-tier{color:var(--tertiary-fixed-dim)}
+.lp-price-amt{font-family:'Manrope',sans-serif;font-size:52px;font-weight:800;letter-spacing:-.06em;line-height:1;margin-bottom:4px;color:var(--ink)}
+.lp-price-card.featured .lp-price-amt{color:var(--cream)}
+.lp-price-amt sup{font-size:22px;vertical-align:super;letter-spacing:0}
+.lp-price-period{font-size:13px;color:var(--ink-light);margin-bottom:26px}
+.lp-price-card.featured .lp-price-period{color:var(--on-primary-container)}
+.lp-price-feats{list-style:none;margin-bottom:28px}
+.lp-price-feats li{font-size:13px;color:var(--ink-mid);padding:7px 0;border-bottom:1px solid rgba(198,198,205,.2);display:flex;align-items:center;gap:9px}
+.lp-price-card.featured .lp-price-feats li{color:var(--on-primary-container);border-color:rgba(255,255,255,.08)}
+.lp-price-feats li::before{content:'✓';color:var(--tertiary);font-weight:700;font-size:12px;flex-shrink:0}
+.lp-price-card.featured .lp-price-feats li::before{color:var(--tertiary-fixed)}
+.lp-price-btn{width:100%;padding:14px;border-radius:8px;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid var(--ink);background:transparent;color:var(--ink)}
+.lp-price-btn:hover{background:var(--ink);color:#fff}
+.lp-price-btn.featured{background:var(--tertiary-fixed);border-color:var(--tertiary-fixed);color:var(--on-tertiary-fixed)}
+.lp-price-btn.featured:hover{background:var(--tertiary-fixed-dim);border-color:var(--tertiary-fixed-dim)}
+/* CTA band */
+.lp-cta{background:var(--primary-container);padding:96px 40px;text-align:center;position:relative;overflow:hidden}
+.lp-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(111,251,190,.08) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 80% 100%,rgba(111,251,190,.05) 0%,transparent 50%);pointer-events:none}
+.lp-cta-inner{max-width:560px;margin:0 auto;position:relative;z-index:1}
+.lp-cta-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tertiary-fixed-dim);margin-bottom:12px;font-family:'Manrope',sans-serif}
+.lp-cta h2{color:#fff;margin-bottom:16px}
+.lp-cta-sub{font-size:16px;color:var(--on-primary-container);font-weight:400;margin-bottom:32px;line-height:1.7}
+/* Footer */
+.lp-footer{background:var(--ink);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.lp-footer-logo{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--cream)}
+.lp-footer-logo span{color:var(--tertiary-fixed)}
+.lp-footer-r{font-size:12px;color:rgba(250,247,242,.3)}
 
 /* Auth page */
 .page-auth-wrap{min-height:100vh;display:flex;flex-direction:column;background:var(--surface)}
@@ -232,100 +367,7 @@ h2 em{font-style:normal;color:var(--tertiary)}
   .auth-nav{padding:0 20px}
 }
 
-/* How it works */
-.hiw-section{background:var(--surface-low);padding:80px 40px}
-.hiw-inner{max-width:1100px;margin:0 auto}
-.hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:52px;position:relative}
-.hiw-steps::before{content:'';position:absolute;top:28px;left:calc(16.66% + 24px);right:calc(16.66% + 24px);height:1px;background:var(--outline-variant);z-index:0}
-.hiw-step{padding:0 32px;position:relative;z-index:1}
-.hiw-step:first-child{padding-left:0}
-.hiw-step:last-child{padding-right:0}
-.hiw-num{width:56px;height:56px;border-radius:50%;background:var(--primary-container);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;margin-bottom:24px;flex-shrink:0}
-.hiw-step-title{font-family:'Manrope',sans-serif;font-size:22px;font-weight:700;color:var(--on-surface);letter-spacing:-.03em;margin-bottom:8px;line-height:1.2}
-.hiw-step-title em{font-style:normal;color:var(--tertiary)}
-.hiw-step-desc{font-size:14px;color:var(--on-surface-mid);line-height:1.7;font-weight:400;margin-bottom:20px;max-width:280px}
-.hiw-mini{background:var(--surface-white);border-radius:8px;overflow:hidden;box-shadow:var(--shadow)}
-.hiw-mini-bar{background:var(--surface-container);padding:7px 12px;border-bottom:1px solid rgba(198,198,205,0.2);display:flex;align-items:center;gap:4px}
-.hiw-mini-dot{width:7px;height:7px;border-radius:50%}
-.hiw-mini-body{padding:12px}
-.hiw-mini-card{display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--surface-low);border-radius:6px;margin-bottom:6px;border:1px solid transparent;cursor:pointer;transition:all .15s}
-.hiw-mini-card:last-child{margin-bottom:0}
-.hiw-mini-card:hover{border-color:var(--tertiary-fixed-dim);transform:translateX(2px)}
-.hiw-mini-card-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.hiw-mini-card-name{font-size:11px;font-weight:500;color:var(--on-surface);flex:1}
-.hiw-mini-card-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
-.hiw-platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:12px}
-.hiw-plat{padding:9px 12px;border-radius:6px;border:1px solid transparent;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;color:var(--on-surface);background:var(--surface-low);cursor:pointer;transition:all .15s}
-.hiw-plat:hover{border-color:var(--tertiary-fixed-dim);background:rgba(111,251,190,0.1)}
-.hiw-plat-icon{font-size:14px}
-.hiw-field-wrap{padding:12px;display:flex;flex-direction:column;gap:7px}
-.hiw-field-row{display:flex;align-items:center;gap:8px}
-.hiw-field-lbl{font-size:10px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.04em;width:56px;flex-shrink:0}
-.hiw-field-inp{flex:1;padding:5px 9px;border:1.5px solid var(--border);border-radius:5px;font-family:var(--font-body);font-size:11px;color:var(--ink);background:var(--white)}
-.hiw-field-inp.filled{background:var(--amber-light);border-color:var(--amber-mid);color:var(--amber);font-weight:500}
-.hiw-send-btn{margin:4px 0 0;width:100%;padding:7px;background:var(--ink);color:var(--cream);border:none;border-radius:5px;font-size:11px;font-weight:500;font-family:var(--font-body);cursor:pointer;letter-spacing:.02em}
-
-/* Template showcase */
-.showcase-band{background:var(--primary-container);padding:72px 40px}
-.showcase-inner{max-width:1100px;margin:0 auto}
-.showcase-inner .lp-label{color:var(--tertiary-fixed-dim)}
-.showcase-inner h2{color:#fff;margin-bottom:14px}
-.showcase-inner .lp-sub{color:var(--on-primary-container);margin-bottom:40px}
-.template-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
-.template-scroll::-webkit-scrollbar{display:none}
-.tcard{background:rgba(255,255,255,0.06);border-radius:12px;padding:18px;flex-shrink:0;width:200px;cursor:default;transition:all .2s}
-.tcard:hover{background:rgba(255,255,255,0.1);border-color:var(--tertiary-fixed-dim);transform:translateY(-2px)}
-.tc-emoji{font-size:22px;margin-bottom:10px}
-.tc-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;line-height:1.3;font-family:'Manrope',sans-serif}
-.tc-cat{font-size:11px;color:var(--on-primary-container);margin-bottom:10px}
-.tc-fmt{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
-.fmt-notion{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)}
-.fmt-gdoc{background:rgba(66,133,244,0.2);color:#89b4fa}
-.fmt-sheets{background:rgba(111,251,190,0.15);color:var(--tertiary-fixed)}
-.fmt-canva{background:rgba(111,251,190,0.15);color:var(--tertiary-fixed)}
-
-/* Testimonials */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.testi{background:var(--surface-white);border-radius:12px;padding:22px;box-shadow:var(--shadow)}
-.testi-stars{color:var(--tertiary);font-size:13px;margin-bottom:10px}
-.testi-quote{font-size:13px;color:var(--on-surface-mid);line-height:1.7;margin-bottom:14px;font-style:italic;font-weight:400}
-.testi-author{display:flex;align-items:center;gap:10px}
-.testi-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.testi-name{font-size:13px;font-weight:600;color:var(--on-surface);font-family:'Manrope',sans-serif}
-.testi-role{font-size:11px;color:var(--on-surface-light)}
-
-/* Pricing */
-.pricing-grid{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
-.price-card{flex:1;min-width:260px;background:var(--surface-white);border-radius:12px;padding:30px;box-shadow:var(--shadow)}
-.price-card.featured{background:var(--primary-container);color:#fff;position:relative;overflow:hidden}
-.price-card.featured::before{content:'Most popular';position:absolute;top:18px;right:-28px;background:var(--tertiary-fixed);color:var(--on-tertiary-fixed);font-size:10px;font-weight:700;padding:4px 36px;transform:rotate(45deg);letter-spacing:.05em;text-transform:uppercase}
-.price-tier{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--on-surface-light);margin-bottom:7px;font-family:'Manrope',sans-serif}
-.price-card.featured .price-tier{color:var(--tertiary-fixed-dim)}
-.price-amount{font-family:'Manrope',sans-serif;font-size:48px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:4px}
-.price-amount sup{font-size:22px;vertical-align:super}
-.price-period{font-size:13px;color:var(--on-surface-light);margin-bottom:22px}
-.price-card.featured .price-period{color:var(--on-primary-container)}
-.price-features{list-style:none;margin-bottom:26px}
-.price-features li{font-size:13px;color:var(--on-surface-mid);padding:6px 0;border-bottom:1px solid rgba(198,198,205,0.25);display:flex;align-items:center;gap:8px}
-.price-card.featured .price-features li{color:var(--on-primary-container);border-color:rgba(255,255,255,0.08)}
-.price-features li::before{content:'✓';color:var(--tertiary);font-weight:700;font-size:11px;flex-shrink:0}
-.price-card.featured .price-features li::before{color:var(--tertiary-fixed)}
-.btn-price{width:100%;padding:13px;border-radius:4px;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid var(--on-surface);background:transparent;color:var(--on-surface)}
-.btn-price:hover{background:var(--on-surface);color:#fff}
-.btn-price.featured{background:var(--tertiary-fixed);border-color:var(--tertiary-fixed);color:var(--on-tertiary-fixed)}
-.btn-price.featured:hover{background:var(--tertiary-fixed-dim);border-color:var(--tertiary-fixed-dim)}
-
-/* CTA band */
-.cta-band{background:var(--primary-container);padding:80px 40px;text-align:center}
-.cta-inner{max-width:540px;margin:0 auto}
-.cta-eyebrow{font-family:'Manrope',sans-serif;font-size:10px;color:var(--tertiary-fixed-dim);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-.cta-band h2{color:#fff;margin-bottom:14px}
-.cta-sub{font-size:16px;color:var(--on-primary-container);font-weight:400;margin-bottom:30px;line-height:1.7}
-
-/* Footer */
-footer{background:var(--surface-low);padding:32px 40px;text-align:center}
-.footer-logo{font-family:'Manrope',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px;letter-spacing:-.02em}
-.footer-logo span{color:var(--tertiary)}
+/* legacy footer kept minimal for safety */
 footer p{font-size:12px;color:var(--on-surface-light)}
 
 /* ════════════════════════════════════
@@ -701,6 +743,16 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .trb-inp{width:60px;padding:6px 9px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--ink);text-align:center;background:var(--cream)}
 .trb-inp:focus{outline:none;border-color:var(--amber)}
 .trb-pct{font-size:13px;color:var(--ink-mid)}
+.trb-sep{width:1px;height:24px;background:var(--border);margin:0 4px}
+.trb-currency-wrap{display:flex;align-items:center;gap:8px}
+.trb-currency-lbl{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.trb-currency-sel{padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font-body);font-size:12px;color:var(--ink);background:var(--cream);cursor:pointer}
+.trb-currency-sel:focus{outline:none;border-color:var(--amber)}
+/* Timesheet editable target */
+.gts-target-inp{width:38px;padding:1px 4px;border:1.5px solid var(--border);border-radius:4px;font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--ink);background:var(--cream);text-align:center;-moz-appearance:textfield;cursor:pointer}
+.gts-target-inp:hover{border-color:var(--sage)}
+.gts-target-inp:focus{outline:none;border-color:var(--sage)}
+.gts-target-inp::-webkit-inner-spin-button,.gts-target-inp::-webkit-outer-spin-button{-webkit-appearance:none}
 
 /* Welcome packet + brief — doc style */
 .wp-cover-box{text-align:center;padding-bottom:32px;margin-bottom:32px;border-bottom:2px solid var(--ink)}
@@ -1777,266 +1829,317 @@ var RateLimiter = (function() {
   <nav class="top-nav">
     <div class="nav-logo" onclick="">Freelance<span>Kit</span></div>
     <div class="nav-links">
-      <a onclick="scrollToSection('features')">Templates</a>
+      <a onclick="scrollToSection('features')">Features</a>
       <a onclick="scrollToSection('pricing')">Pricing</a>
     </div>
     <div class="nav-actions">
       <button class="btn-nav-ghost" onclick="showAuth('signin')">Sign in</button>
-      <button class="btn-nav-cta" onclick="showAuth('signup','pro')">Start free trial →</button>
+      <button class="btn-nav-cta" onclick="showAuth('signup','pro')">Get started free →</button>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
+  <!-- ─── HERO ─── -->
+  <section class="lp-hero">
+   <div class="lp-hero-inner">
     <div>
-      <div class="hero-badge">Now in beta · 10 templates ready</div>
-      <h1>Stop winging<br>your freelance<br><em>business.</em></h1>
-      <p class="hero-sub">Every contract, invoice, proposal, and tracker you need to run your freelance business like a pro — built by freelancers who learned the hard way.</p>
-      <div class="hero-btns">
-        <button class="btn-hero-primary" onclick="showAuth('signup','pro')">Start free trial →</button>
+      <div class="lp-hero-badge">✦ Free during beta</div>
+      <h1 class="lp-hero-h1">The OS for your<br>freelance<br><em>business.</em></h1>
+      <p class="lp-hero-sub">Projects. Invoices. Rates. Taxes. Pipeline. All connected — so you stop context-switching and start charging what you're worth.</p>
+      <div class="lp-hero-btns">
+        <button class="btn-hero-primary" onclick="showAuth('signup','pro')">Get started free →</button>
         <button class="btn-hero-ghost" onclick="scrollToSection('pricing')">See pricing</button>
       </div>
-      <p class="hero-note">7-day free trial · No credit card required · Cancel anytime</p>
+      <p class="lp-hero-note">No credit card · Free during beta · Cancel anytime</p>
     </div>
-    <div class="hero-mockup">
-      <div class="hm-bar">
-        <div class="hm-dot" style="background:#E8594A"></div>
-        <div class="hm-dot" style="background:#F4A73A;margin-left:4px"></div>
-        <div class="hm-dot" style="background:#5DC86A;margin-left:4px"></div>
-        <span class="hm-url">freelancekit.io/templates</span>
-      </div>
-      <div class="hm-body">
-        <div class="hm-row"><div class="hm-icon" style="background:#E8F0FE">📊</div><div class="hm-info"><div class="hm-name">Freelance Rate Calculator</div><div class="hm-meta">Interactive · Live calculator</div></div><span class="hm-badge badge-pop">Popular</span></div>
-        <div class="hm-row"><div class="hm-icon" style="background:#F5E6D3">🧾</div><div class="hm-info"><div class="hm-name">Invoice Builder</div><div class="hm-meta">Live preview · Custom payment terms</div></div><span class="hm-badge badge-new">New</span></div>
-        <div class="hm-row"><div class="hm-icon" style="background:#EDE9FE">🗂️</div><div class="hm-info"><div class="hm-name">Client Pipeline Tracker</div><div class="hm-meta">Interactive kanban · Draggable</div></div><span class="hm-badge badge-new">New</span></div>
+    <!-- Mockup -->
+    <div class="lp-hero-vis">
+      <div class="lp-mockup-wrap">
+        <div class="lp-mockup-win">
+          <div class="lp-mw-bar">
+            <div class="lp-mw-dot" style="background:#E8594A"></div>
+            <div class="lp-mw-dot" style="background:#F4A73A;margin-left:4px"></div>
+            <div class="lp-mw-dot" style="background:#5DC86A;margin-left:4px"></div>
+            <span class="lp-mw-url">app.freelancekit.io</span>
+          </div>
+          <div class="lp-mw-body">
+            <div class="lp-mw-sb">
+              <div class="lp-mw-sbi a">🏠 Home</div>
+              <div class="lp-mw-sbi">🗂 Projects</div>
+              <div class="lp-mw-sbi">💰 Finance</div>
+              <div class="lp-mw-sbi">📊 Rate</div>
+              <div class="lp-mw-sbi">🧾 Tax</div>
+              <div class="lp-mw-sbi">⚡ Pipeline</div>
+            </div>
+            <div class="lp-mw-content">
+              <div class="lp-mw-stats">
+                <div class="lp-mw-sc"><div class="lp-mw-sc-l">This month</div><div class="lp-mw-sc-v">$6.4k</div></div>
+                <div class="lp-mw-sc"><div class="lp-mw-sc-l">Hours</div><div class="lp-mw-sc-v">47.5h</div></div>
+                <div class="lp-mw-sc"><div class="lp-mw-sc-l">Rate</div><div class="lp-mw-sc-v">$87/h</div></div>
+              </div>
+              <div class="lp-mw-hm">
+                <div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l4"></div>
+                <div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l4"></div>
+                <div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l1"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l3"></div><div class="lp-mw-hm-d l2"></div><div class="lp-mw-hm-d l4"></div><div class="lp-mw-hm-d l3"></div>
+              </div>
+              <div class="lp-mw-proj-row"><div class="lp-mw-proj-dot" style="background:#009668"></div><span class="lp-mw-proj-name">Brand Redesign</span><span class="lp-mw-proj-pct">72%</span></div>
+              <div class="lp-mw-proj-row"><div class="lp-mw-proj-dot" style="background:#C8621A"></div><span class="lp-mw-proj-name">Website Copy</span><span class="lp-mw-proj-pct">45%</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating metric cards -->
+        <div class="lp-float-card lp-fc-1">
+          <div class="lp-float-card-l">Hourly rate</div>
+          <div class="lp-float-card-v" style="color:var(--amber)">$87/hr</div>
+          <div class="lp-float-card-s">calculated for you</div>
+        </div>
+        <div class="lp-float-card lp-fc-2">
+          <div class="lp-float-card-l">This month</div>
+          <div class="lp-float-card-v" style="color:var(--sage)">$6,240</div>
+          <div class="lp-float-card-s">4 invoices paid</div>
+        </div>
+        <div class="lp-float-card lp-fc-3">
+          <div class="lp-float-card-l">Utilization</div>
+          <div class="lp-float-card-v">91%</div>
+          <div class="lp-float-card-s">🔥 Fully booked</div>
+        </div>
       </div>
     </div>
+   </div><!-- /lp-hero-inner -->
   </section>
 
-  <!-- Social proof -->
-  <div class="proof-strip">
-    <div class="proof-inner">
-      <div class="proof-divider"></div>
-      <div class="proof-stat"><span class="ps-num">10</span><span class="ps-lbl">Templates<br>in library</span></div>
-      <div class="proof-divider"></div>
-      <div class="proof-stat"><span class="ps-num">$9</span><span class="ps-lbl">Per month,<br>flat pricing</span></div>
+  <!-- ─── TICKER ─── -->
+  <div class="lp-ticker">
+    <div class="lp-ticker-track">
+      <div class="lp-tick-item"><span class="lp-tick-n">12</span><span class="lp-tick-l">tools in one kit</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">$0</span><span class="lp-tick-l">free during beta</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Multi</span><span class="lp-tick-l">currency support throughout</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">4</span><span class="lp-tick-l">financial overview tabs</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Live</span><span class="lp-tick-l">pipeline revenue forecast</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Goals</span><span class="lp-tick-l">annual income tracker</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Collab</span><span class="lp-tick-l">project sharing &amp; invites</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Heat</span><span class="lp-tick-l">16-week activity heatmap</span></div>
+      <!-- Duplicate for infinite scroll -->
+      <div class="lp-tick-item"><span class="lp-tick-n">12</span><span class="lp-tick-l">tools in one kit</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">$0</span><span class="lp-tick-l">free during beta</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Multi</span><span class="lp-tick-l">currency support throughout</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">4</span><span class="lp-tick-l">financial overview tabs</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Live</span><span class="lp-tick-l">pipeline revenue forecast</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Goals</span><span class="lp-tick-l">annual income tracker</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Collab</span><span class="lp-tick-l">project sharing &amp; invites</span></div>
+      <div class="lp-tick-item"><span class="lp-tick-n">Heat</span><span class="lp-tick-l">16-week activity heatmap</span></div>
     </div>
   </div>
 
-  <!-- Features -->
-  <section class="lp-section" id="features">
-    <div class="lp-label">Six problems. Six fixes.</div>
-    <h2>The parts of freelancing<br>that go wrong. <em>Solved.</em></h2>
-    <p class="lp-sub">Most freelancers lose $3,000–$8,000/year to scope creep, late payments, and undercharging. These templates fix all three — and the other problems you haven't put a number on yet.</p>
-    <div class="features-grid">
-
-      <div class="feat-card">
-        <div class="feat-icon" style="background:#EDE9FE">🛠️</div>
-        <div class="feat-problem">The problem — projects running without structure</div>
-        <h3>Run every project end-to-end.</h3>
-        <p>Milestones, tasks, a Gantt chart, time logs, billing, and meeting notes — all in one place, all tied to one project. No more stitching together five different apps.</p>
-        <div class="feat-templates">
-          <span class="feat-t-chip">Project Tracker</span>
-          <span class="feat-t-chip">Timesheet</span>
-        </div>
+  <!-- ─── BENTO FEATURES ─── -->
+  <section class="lp-bento" id="features">
+    <div class="lp-bento-inner">
+      <div class="lp-bento-hdr lp-reveal">
+        <div class="lp-label">What's inside</div>
+        <h2>Every tool your freelance<br>business <em>actually needs.</em></h2>
+        <p class="lp-sub" style="margin:0 auto">No more stitching together five different apps. One kit — every tool connected.</p>
       </div>
+      <div class="lp-bento-grid">
 
-      <div class="feat-card">
-        <div class="feat-icon" style="background:#E8F4FF">🤝</div>
-        <div class="feat-problem">The problem — working with clients or contractors</div>
-        <h3>Collaborate without the chaos.</h3>
-        <p>Share any project with a collaborator. They accept the invite, get instant access to the tracker, and log their own time — while you stay in full control of what gets edited or deleted.</p>
-        <div class="feat-templates">
-          <span class="feat-t-chip">Project sharing</span>
-          <span class="feat-t-chip">Timesheet</span>
+        <!-- Project Tracker (big, 2col×2row, dark) -->
+        <div class="lp-bc lp-bc-a lp-reveal" data-d="1">
+          <div class="lp-bc-tag" style="background:rgba(0,150,104,.2);color:rgba(0,200,140,.9)">Project Tracker</div>
+          <div class="lp-bc-title">Run every project end-to-end.</div>
+          <div class="lp-bc-desc">Milestones, tasks, time logs, billing, Gantt chart — all in one place. Share with collaborators and track velocity in real time.</div>
+          <div style="margin-top:16px">
+            <div class="lp-pt-proj">
+              <div class="lp-pt-proj-hdr"><span style="background:rgba(0,150,104,.25);border-radius:4px;padding:1px 7px">🛠 Brand Redesign</span><span style="color:rgba(0,200,140,.8);font-size:11px;font-weight:700">72%</span></div>
+              <div class="lp-pt-bw"><div class="lp-pt-bf" style="width:72%"></div></div>
+              <div class="lp-pt-tasks">
+                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Brand audit complete</span></div>
+                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Wireframes approved</span></div>
+                <div class="lp-pt-tr"><div class="lp-pt-cb"></div><span class="lp-pt-tn">Final delivery</span></div>
+              </div>
+            </div>
+            <div class="lp-pt-stats">
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v">91%</div><div class="lp-pt-stat-l">Utilization</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v">0</div><div class="lp-pt-stat-l">Overdue</div></div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="feat-card">
-        <div class="feat-icon" style="background:#EAF1EC">💰</div>
-        <div class="feat-problem">The problem — no idea where the money actually goes</div>
-        <h3>See your full financial picture.</h3>
-        <p>The financial overview tracks every invoice — paid, overdue, and pending. Watch revenue trend over time, spot your best clients, and know exactly where you stand at any moment.</p>
-        <div class="feat-templates">
-          <span class="feat-t-chip">Financial Overview</span>
-          <span class="feat-t-chip">Invoice Builder</span>
+        <!-- Rate Calculator (1col) -->
+        <div class="lp-bc lp-reveal" data-d="2">
+          <div class="lp-bc-tag" style="background:var(--amber-light);color:var(--amber)">Rate Calculator</div>
+          <div class="lp-bc-title">Know your floor rate.</div>
+          <div class="lp-bc-desc">Enter your take-home target → get your minimum hourly rate. Accounts for taxes, expenses, and slow months. Multi-currency.</div>
+          <div style="margin-top:14px">
+            <div class="lp-rc-field">
+              <div class="lp-rc-label">Target take-home</div>
+              <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;background:var(--cream)"><span style="font-size:11px;color:var(--ink-light)">$</span><span style="font-size:11px;color:var(--ink)">60,000 / year</span></div>
+            </div>
+            <div class="lp-rc-result">
+              <span class="lp-rc-result-n">$87</span>
+              <span class="lp-rc-result-u">/hr</span>
+              <span class="lp-rc-result-s">minimum</span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="feat-card">
-        <div class="feat-icon" style="background:#FFF3E8">📑</div>
-        <div class="feat-problem">The problem — clients change scope mid-project</div>
-        <h3>Stop eating extra work.</h3>
-        <p>A client asks for "one small change." Six of those later, you've done two weeks of unpaid work. The scope change order ends that conversation in one email.</p>
-        <div class="feat-templates">
-          <span class="feat-t-chip">Client contract</span>
-          <span class="feat-t-chip">Scope change order</span>
+        <!-- Tax Tracker (1col) -->
+        <div class="lp-bc lp-reveal" data-d="3">
+          <div class="lp-bc-tag" style="background:var(--purple-light);color:var(--purple)">Tax Tracker</div>
+          <div class="lp-bc-title">Never miss a<br>tax deadline.</div>
+          <div class="lp-bc-desc">Log quarterly income &amp; expenses. See your estimated tax due instantly — in any currency.</div>
+          <div style="margin-top:14px">
+            <div class="lp-tax-qs">
+              <div class="lp-tax-q pd">Q1 ✓</div>
+              <div class="lp-tax-q act">Q2</div>
+              <div class="lp-tax-q">Q3</div>
+              <div class="lp-tax-q">Q4</div>
+            </div>
+            <div class="lp-tax-r"><span>Gross income</span><span style="font-weight:600;color:var(--ink)">$14,800</span></div>
+            <div class="lp-tax-r"><span>Deductions</span><span style="font-weight:600;color:var(--ink)">−$2,100</span></div>
+            <div class="lp-tax-due">
+              <div class="lp-tax-due-l">Est. tax due</div>
+              <div class="lp-tax-due-v">$3,556</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="feat-card">
-        <div class="feat-icon" style="background:#FCE4EC">📊</div>
-        <div class="feat-problem">The problem — feast-or-famine income swings</div>
-        <h3>See the dry month coming.</h3>
-        <p>The pipeline tracker shows your weighted revenue forecast by stage. You'll know four weeks early when work is about to run out — while there's still time to fill the gap.</p>
-        <div class="feat-templates">
-          <span class="feat-t-chip">Pipeline tracker</span>
-          <span class="feat-t-chip">Tax tracker</span>
+        <!-- Financial Overview (full-width) -->
+        <div class="lp-bc lp-bc-d lp-reveal" data-d="2">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
+            <div>
+              <div class="lp-bc-tag" style="background:var(--sage-light);color:var(--sage)">Financial Overview</div>
+              <div class="lp-bc-title">Your complete financial picture.</div>
+              <div class="lp-bc-desc">Track every invoice — paid, pending, overdue. Aging reports, by-client breakdown, MoM trends, and an annual income goal bar. Know exactly where you stand at any moment.</div>
+            </div>
+            <div>
+              <div class="lp-fo-stats">
+                <div class="lp-fo-stat"><div class="lp-fo-stat-l">Total earned</div><div class="lp-fo-stat-v">$48,200</div></div>
+                <div class="lp-fo-stat"><div class="lp-fo-stat-l">This month</div><div class="lp-fo-stat-v">$6,400</div></div>
+                <div class="lp-fo-stat"><div class="lp-fo-stat-l">Outstanding</div><div class="lp-fo-stat-v" style="color:#D97706">$3,200</div></div>
+                <div class="lp-fo-stat"><div class="lp-fo-stat-l">Eff. rate</div><div class="lp-fo-stat-v">$94/h</div></div>
+              </div>
+              <div class="lp-fo-bars">
+                <div class="lp-fo-br"><span class="lp-fo-br-l">Acme Corp</span><div class="lp-fo-bw"><div class="lp-fo-bf" style="width:72%;background:var(--sage)"></div></div><span class="lp-fo-br-v">$18k</span></div>
+                <div class="lp-fo-br"><span class="lp-fo-br-l">Studio Haus</span><div class="lp-fo-bw"><div class="lp-fo-bf" style="width:48%;background:var(--amber-mid)"></div></div><span class="lp-fo-br-v">$12k</span></div>
+                <div class="lp-fo-br"><span class="lp-fo-br-l">Indie Brands</span><div class="lp-fo-bw"><div class="lp-fo-bf" style="width:32%;background:#6366f1"></div></div><span class="lp-fo-br-v">$8k</span></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
+        <!-- Pipeline (1col) -->
+        <div class="lp-bc lp-reveal" data-d="1">
+          <div class="lp-bc-tag" style="background:#FEE2E2;color:#B91C1C">Pipeline Tracker</div>
+          <div class="lp-bc-title">See the dry<br>month coming.</div>
+          <div class="lp-bc-desc">Weighted revenue forecast by stage. Drag cards, watch the forecast update. Never be blindsided by a slow period again.</div>
+          <div class="lp-pipe-cols" style="margin-top:14px">
+            <div class="lp-pipe-col"><div class="lp-pipe-col-h">Lead</div><div class="lp-pipe-c"><div class="lp-pipe-c-n">Novo</div><div class="lp-pipe-c-v">$2.4k</div></div><div class="lp-pipe-c"><div class="lp-pipe-c-n">Bloom</div><div class="lp-pipe-c-v">$5k</div></div></div>
+            <div class="lp-pipe-col"><div class="lp-pipe-col-h">Proposal</div><div class="lp-pipe-c"><div class="lp-pipe-c-n">Axiom</div><div class="lp-pipe-c-v">$8k</div></div></div>
+            <div class="lp-pipe-col"><div class="lp-pipe-col-h">Negot.</div><div class="lp-pipe-c"><div class="lp-pipe-c-n">Helix</div><div class="lp-pipe-c-v">$12k</div></div></div>
+            <div class="lp-pipe-col"><div class="lp-pipe-col-h">Won ✓</div><div class="lp-pipe-c"><div class="lp-pipe-c-n">Drift</div><div class="lp-pipe-c-v" style="color:var(--sage)">$6k</div></div></div>
+          </div>
+        </div>
+
+        <!-- Timesheet + Heatmap (2col) -->
+        <div class="lp-bc lp-bc-f lp-reveal" data-d="2">
+          <div class="lp-bc-tag" style="background:var(--sage-light);color:var(--sage)">Timesheet + Heatmap</div>
+          <div class="lp-bc-title">See where your hours actually go.</div>
+          <div class="lp-bc-desc">Log hours per project. Activity heatmap shows 16 weeks at a glance. Utilization bar tracks your weekly billable target — editable right in the timesheet.</div>
+          <div style="margin-top:14px">
+            <div class="lp-ts-hm" id="lp-ts-heatmap"></div>
+            <div class="lp-ts-stats">
+              <div class="lp-ts-s"><div class="lp-ts-s-l">This week</div><div class="lp-ts-s-v">38.5h</div></div>
+              <div class="lp-ts-s"><div class="lp-ts-s-v" style="color:var(--sage)">96%</div><div class="lp-ts-s-l">Utilization</div></div>
+              <div class="lp-ts-s"><div class="lp-ts-s-l">All time</div><div class="lp-ts-s-v">284h</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-
-  <!-- How it works -->
-  <div class="hiw-section">
-    <div class="hiw-inner">
-      <div class="lp-label">How it works</div>
-      <h2>Get a project running<br><em>in minutes.</em></h2>
-      <p class="lp-sub" style="margin-bottom:0">Create a project, invite your team, and start tracking — no onboarding call, no setup, no learning curve.</p>
-      <div class="hiw-steps">
-
-        <!-- Step 1 -->
-        <div class="hiw-step">
-          <div class="hiw-num">1</div>
-          <div class="hiw-step-title">Create your<br><em>project.</em></div>
-          <p class="hiw-step-desc">Set a name, client, budget, and dates. Add milestones and tasks to build out your roadmap. The Gantt chart updates automatically as you go.</p>
-          <div class="hiw-mini">
-            <div class="hiw-mini-bar">
-              <div class="hiw-mini-dot" style="background:#E8594A"></div>
-              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
-              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
-            </div>
-            <div class="hiw-mini-body">
-              <div class="hiw-mini-card" style="border-color:var(--amber-mid);background:var(--amber-light)">
-                <div class="hiw-mini-card-icon" style="background:var(--amber-light)">🛠️</div>
-                <span class="hiw-mini-card-name" style="color:var(--amber)">Brand Redesign</span>
-                <span class="hiw-mini-card-badge" style="background:var(--amber-light);color:var(--amber)">Active</span>
-              </div>
-              <div class="hiw-mini-card">
-                <div class="hiw-mini-card-icon" style="background:#EAF1EC">✓</div>
-                <span class="hiw-mini-card-name">Milestone — Kickoff</span>
-                <span class="hiw-mini-card-badge" style="background:var(--sage-light);color:var(--sage)">Done</span>
-              </div>
-              <div class="hiw-mini-card">
-                <div class="hiw-mini-card-icon" style="background:#EDE9FE">📋</div>
-                <span class="hiw-mini-card-name">Task — Wireframes</span>
-                <span class="hiw-mini-card-badge" style="background:var(--blue-light);color:var(--blue)">In progress</span>
-              </div>
-            </div>
-          </div>
+  <!-- ─── HOW IT WORKS ─── -->
+  <div class="lp-hiw">
+    <div class="lp-hiw-inner">
+      <div class="lp-hiw-hdr lp-reveal">
+        <div class="lp-label">How it works</div>
+        <h2>Up and running<br><em>in minutes.</em></h2>
+        <p class="lp-sub" style="max-width:520px;margin:0 auto">Create a project, invite your team, and start tracking — no onboarding call, no setup, no learning curve.</p>
+      </div>
+      <div class="lp-hiw-steps">
+        <div class="lp-hiw-step lp-reveal" data-d="1">
+          <div class="lp-hiw-num">1</div>
+          <div class="lp-hiw-title">Create your<br><em>project.</em></div>
+          <p class="lp-hiw-desc">Set a name, client, budget, and dates. Add milestones and tasks. The Gantt chart updates automatically as you go.</p>
         </div>
-
-        <!-- Step 2 -->
-        <div class="hiw-step">
-          <div class="hiw-num">2</div>
-          <div class="hiw-step-title">Invite your<br><em>collaborators.</em></div>
-          <p class="hiw-step-desc">Share the project with a client or contractor by email. They accept the invite, appear instantly in the project, and can log their own time — you control what gets edited.</p>
-          <div class="hiw-mini">
-            <div class="hiw-mini-bar">
-              <div class="hiw-mini-dot" style="background:#E8594A"></div>
-              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
-              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
-              <span style="font-size:10px;color:var(--ink-light);margin-left:8px">Project shared</span>
-            </div>
-            <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
-              <div style="background:var(--surface-container);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:18px">🤝</span>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:var(--on-surface)">Invite sent</div><div style="font-size:10px;color:var(--on-surface-light)">Pending acceptance</div></div>
-                <div style="background:#FFF3E8;color:var(--amber);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px">Pending</div>
-              </div>
-              <div style="background:var(--surface-container);border-radius:6px;padding:10px 12px;display:flex;align-items:center;gap:10px">
-                <span style="font-size:18px">✅</span>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:var(--on-surface)">Collaborator joined</div><div style="font-size:10px;color:var(--on-surface-light)">Now tracking time</div></div>
-                <div style="background:var(--sage-light);color:var(--sage);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px">Active</div>
-              </div>
-            </div>
-          </div>
+        <div class="lp-hiw-step lp-reveal" data-d="2">
+          <div class="lp-hiw-num">2</div>
+          <div class="lp-hiw-title">Invite your<br><em>collaborators.</em></div>
+          <p class="lp-hiw-desc">Share any project by email. Collaborators accept, log their time, and you stay in full control of what gets edited or deleted.</p>
         </div>
-
-        <!-- Step 3 -->
-        <div class="hiw-step">
-          <div class="hiw-num">3</div>
-          <div class="hiw-step-title">Track time,<br>billing &amp; <em>progress.</em></div>
-          <p class="hiw-step-desc">Log hours, mark milestones complete, attach invoices to billing entries, and hold meeting notes — all in one project. Deliver on time, get paid faster.</p>
-          <div class="hiw-mini">
-            <div class="hiw-mini-bar">
-              <div class="hiw-mini-dot" style="background:#E8594A"></div>
-              <div class="hiw-mini-dot" style="background:#F4A73A;margin-left:2px"></div>
-              <div class="hiw-mini-dot" style="background:#5DC86A;margin-left:2px"></div>
-            </div>
-            <div style="padding:12px;display:flex;flex-direction:column;gap:7px">
-              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface-container);border-radius:6px;padding:9px 12px">
-                <span style="font-size:11px;color:var(--on-surface);font-weight:600">&#9200; Time logged</span>
-                <span style="font-size:11px;font-weight:700;color:var(--tertiary)">12.5 hrs</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface-container);border-radius:6px;padding:9px 12px">
-                <span style="font-size:11px;color:var(--on-surface);font-weight:600">&#128179; Billing</span>
-                <span style="font-size:11px;font-weight:700;color:#166534">$2,400 invoiced</span>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface-container);border-radius:6px;padding:9px 12px">
-                <span style="font-size:11px;color:var(--on-surface);font-weight:600">&#10003; Milestones</span>
-                <span style="font-size:11px;font-weight:700;color:var(--sage)">3 of 5 done</span>
-              </div>
-            </div>
-          </div>
+        <div class="lp-hiw-step lp-reveal" data-d="3">
+          <div class="lp-hiw-num">3</div>
+          <div class="lp-hiw-title">Track, invoice,<br>&amp; <em>get paid.</em></div>
+          <p class="lp-hiw-desc">Log hours, hit milestones, attach invoices to billing entries, and hold meeting notes — all in one project. Deliver on time, get paid faster.</p>
         </div>
-
       </div>
     </div>
   </div>
 
-
-
-  <!-- Pricing -->
-  <section class="lp-section" id="pricing" style="padding-top:40px">
-    <div class="lp-label">Pricing</div>
-    <h2>One price.<br><em>No surprises.</em></h2>
-    <p class="lp-sub">We're sick of paying $40/month for tools we barely use. FreelanceKit is one flat price, forever.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-tier">Free</div>
-        <div class="price-amount"><sup>$</sup>0</div>
-        <div class="price-period">forever, no card needed</div>
-        <ul class="price-features">
-          <li>My Business tools (full access)</li>
-          <li>Client directory</li>
-          <li>Invoice history</li>
-        </ul>
-        <button class="btn-price" onclick="showAuth('signup','free')">Get started free</button>
+  <!-- ─── PRICING ─── -->
+  <section class="lp-pricing" id="pricing">
+    <div class="lp-pricing-inner">
+      <div class="lp-pricing-hdr lp-reveal">
+        <div class="lp-label">Pricing</div>
+        <h2>One price.<br><em>No surprises.</em></h2>
+        <p class="lp-sub" style="max-width:460px;margin:0 auto">We're sick of paying $40/month for tools we barely use. FreelanceKit is one flat price, forever.</p>
       </div>
-      <div class="price-card featured">
-        <div class="price-tier">Pro</div>
-        <div class="price-amount" style="color:var(--cream)"><sup style="color:var(--amber-mid)">$</sup>0</div>
-        <div class="price-period">free during beta · no card needed</div>
-        <ul class="price-features">
-          <li>Everything in Free</li>
-          <li>Invoice Builder (live)</li>
-          <li>Rate Calculator</li>
-          <li>Tax Tracker</li>
-          <li>Pipeline Tracker</li>
-          <li>All templates &amp; tools</li>
-        </ul>
-        <button class="btn-price featured" onclick="showAuth('signup','pro')">Get Pro free →</button>
+      <div class="lp-price-grid">
+        <div class="lp-price-card lp-reveal" data-d="1">
+          <div class="lp-price-tier">Free</div>
+          <div class="lp-price-amt"><sup>$</sup>0</div>
+          <div class="lp-price-period">forever, no card needed</div>
+          <ul class="lp-price-feats">
+            <li>All business tools</li>
+            <li>Client directory</li>
+            <li>Invoice history</li>
+          </ul>
+          <button class="lp-price-btn" onclick="showAuth('signup','free')">Get started free</button>
+        </div>
+        <div class="lp-price-card featured lp-reveal" data-d="2">
+          <div class="lp-price-tier">Pro</div>
+          <div class="lp-price-amt" style="color:var(--cream)"><sup style="color:var(--amber-mid)">$</sup>0</div>
+          <div class="lp-price-period">free during beta · no card needed</div>
+          <ul class="lp-price-feats">
+            <li>Everything in Free</li>
+            <li>Invoice Builder + aging reports</li>
+            <li>Rate Calculator (multi-currency)</li>
+            <li>Tax Tracker (multi-currency)</li>
+            <li>Pipeline Tracker + forecast</li>
+            <li>Project sharing + collaboration</li>
+            <li>Timesheet + heatmap + goals</li>
+          </ul>
+          <button class="lp-price-btn featured" onclick="showAuth('signup','pro')">Get Pro free →</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <div class="cta-band">
-    <div class="cta-inner">
-      <div class="cta-eyebrow">Ready to stop winging it?</div>
-      <h2 style="color:var(--cream)">Your freelance business<br><em>starts running itself.</em></h2>
-      <p class="cta-sub">Use FreelanceKit to protect your time, get paid faster, and stop starting from scratch.</p>
+  <!-- ─── CTA ─── -->
+  <div class="lp-cta">
+    <div class="lp-cta-inner lp-reveal">
+      <div class="lp-cta-eyebrow">Ready to stop winging it?</div>
+      <h2>Your freelance business<br><em>starts running itself.</em></h2>
+      <p class="lp-cta-sub">Use FreelanceKit to protect your time, get paid faster, and stop starting from scratch on every project.</p>
       <button class="btn-hero-primary" style="font-size:15px;padding:15px 32px" onclick="showAuth('signup','pro')">Start your free trial →</button>
-      <p style="font-size:12px;color:rgba(250,247,242,0.35);margin-top:11px">7 days free · Cancel anytime · No credit card</p>
+      <p style="font-size:12px;color:rgba(250,247,242,.3);margin-top:12px">Free during beta · Cancel anytime · No credit card</p>
     </div>
   </div>
 
-  <footer>
-    <div class="footer-logo">Freelance<span>Kit</span></div>
-    <p>Built by freelancers, for freelancers. · Beta v0.1</p>
+  <!-- ─── FOOTER ─── -->
+  <footer class="lp-footer">
+    <div class="lp-footer-logo">Freelance<span>Kit</span></div>
+    <p class="lp-footer-r">Built by freelancers, for freelancers. · Beta v0.2</p>
   </footer>
 
 </div><!-- /landing -->
@@ -2710,7 +2813,7 @@ var RateLimiter = (function() {
           <div>
             <div class="results-box">
               <div class="rb-pre">Your floor rate</div>
-              <div class="rb-main"><div class="rb-lbl">Minimum hourly rate</div><div class="rb-val"><span id="rc-hourly">--</span> <span class="rb-unit" id="rc-sym">$</span></div><div class="rb-note">Below this = you're losing money</div></div>
+              <div class="rb-main"><div class="rb-lbl">Minimum hourly rate</div><div class="rb-val"><span class="rb-unit" id="rc-sym">$</span><span id="rc-hourly">--</span></div><div class="rb-note">Below this = you're losing money</div></div>
               <div class="rb-divider"></div>
               <div class="rb-row"><span class="rb-row-lbl">Target take-home</span><span class="rb-row-val hi" id="rc-r-takehome">--</span></div>
               <div class="rb-row"><span class="rb-row-lbl">Grossed up (pre-tax)</span><span class="rb-row-val" id="rc-r-gross">--</span></div>
@@ -2826,10 +2929,10 @@ var RateLimiter = (function() {
                 <div class="util-bar-wrap" style="margin-top:8px"><div class="util-fill" id="ptv-task-bar" style="width:0%"></div></div>
               </div>
               <div class="pt-ov-pulse-card">
-                <div class="pt-ov-pulse-lbl">Budget Used</div>
-                <div class="pt-ov-pulse-val"><span id="ptv-budget-pct">—</span></div>
-                <div class="pt-ov-pulse-sub" id="ptv-budget-sub">of project budget</div>
-                <div class="util-bar-wrap" style="margin-top:8px"><div class="util-fill" id="ptv-budget-bar" style="width:0%"></div></div>
+                <div class="pt-ov-pulse-lbl">Overdue</div>
+                <div class="pt-ov-pulse-val"><span id="ptv-overdue-count">—</span></div>
+                <div class="pt-ov-pulse-sub" id="ptv-overdue-sub">overdue tasks</div>
+                <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--ink-light)" id="ptv-overdue-note"></div>
               </div>
             </div>
             <!-- Main 2-column row: project info left, key documents right -->
@@ -3005,7 +3108,7 @@ var RateLimiter = (function() {
           <div class="tv-title">Quarterly Tax<br><em>Tracker</em></div>
           <div class="tv-desc">Log income and expenses by quarter. The estimated tax owed updates automatically. Switch quarters using the tabs and mark each one paid when you've filed.</div>
         </div>
-        <div class="tax-rate-bar"><div class="trb-label"><strong>Your estimated tax rate:</strong> Combined income + self-employment tax. Use 25–30% if unsure.</div><input class="trb-inp" type="number" id="tr-rate" value="28" min="0" max="60" oninput="recalcTax()"><span class="trb-pct">%</span></div>
+        <div class="tax-rate-bar"><div class="trb-label"><strong>Your estimated tax rate:</strong> Combined income + self-employment tax. Use 25–30% if unsure.</div><input class="trb-inp" type="number" id="tr-rate" value="28" min="0" max="60" oninput="recalcTax()"><span class="trb-pct">%</span><div class="trb-sep"></div><div class="trb-currency-wrap"><span class="trb-currency-lbl">Currency</span><select class="trb-currency-sel" id="tax-currency" onchange="recalcTax()"><option value="$">🇺🇸 USD ($)</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP (£)</option><option value="€">🇪🇺 EUR (€)</option><option value="A$">🇦🇺 AUD</option><option value="Rp">🇮🇩 IDR (Rp)</option></select></div></div>
         <div class="q-tabs">
           <button class="q-tab paid" id="q-tab-1" onclick="switchTaxQ(1,this)">Q1 ✓</button>
           <button class="q-tab active" id="q-tab-2" onclick="switchTaxQ(2,this)">Q2</button>
@@ -3414,6 +3517,30 @@ function showLanding(){
   document.getElementById('page-landing').classList.add('active');
   document.documentElement.scrollTop=0;
   document.body.scrollTop=0;
+  setTimeout(initLandingAnimations, 80);
+}
+function initLandingAnimations(){
+  // Build timesheet heatmap in bento card
+  var hmEl=document.getElementById('lp-ts-heatmap');
+  if(hmEl&&!hmEl.childElementCount){
+    var pat=[0,1,0,2,1,0,3,1,2,0,1,4,2,3,4,2,3,4,0,2,
+             1,2,1,0,2,1,2,3,1,2,3,2,4,3,2,4,3,4,1,2,
+             0,0,1,2,0,1,0,2,1,3,2,1,3,4,3,2,4,3,0,1,
+             1,1,0,1,2,0,1,0,2,1,2,3,2,3,4,3,4,2,1,2,
+             0,2,1,0,1,2,1,3,2,1,3,2,4,3,2,4,3,4,2,3];
+    var lvls=['','l1','l2','l3','l4'],h='';
+    for(var i=0;i<100;i++){var l=pat[i%pat.length];h+='<div class="lp-ts-hm-d'+(l?' '+lvls[l]:'')+'" ></div>';}
+    hmEl.innerHTML=h;
+  }
+  // IntersectionObserver for scroll reveals
+  if(!window._lpObs){
+    window._lpObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');}});
+    },{threshold:0.1});
+  }
+  document.querySelectorAll('#page-landing .lp-reveal,#page-landing .lp-reveal-r').forEach(function(el){
+    window._lpObs.observe(el);
+  });
 }
 
 function showPanel(id,el){
@@ -4509,12 +4636,12 @@ function renderTaxQ(q){
   const el=document.getElementById('tax-main-el');if(!el)return;
   el.innerHTML=`
     <div class="tax-card">
-      <div class="txc-header"><span style="font-size:14px">💰</span><span class="txc-title">Income — Q${q}</span><span class="txc-total inc">${fm(totInc)}</span></div>
+      <div class="txc-header"><span style="font-size:14px">💰</span><span class="txc-title">Income — Q${q}</span><span class="txc-total inc">${fm(totInc,getTaxSym())}</span></div>
       ${d.income.map((it,i)=>`<div class="tx-entry-row"><input class="tx-inp" value="${escapeHTML(it.desc)}" oninput="txData[${q}].income[${i}].desc=this.value;recalcTax()" placeholder="Client / project name"><input class="tx-inp amt" type="number" value="${escapeHTML(String(it.amt))}" oninput="txData[${q}].income[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].income.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
       <button class="tx-add-btn" onclick="txData[${q}].income.push({desc:'',amt:0});renderTaxQ(${q})">+ Add income</button>
     </div>
     <div class="tax-card">
-      <div class="txc-header"><span style="font-size:14px">🧾</span><span class="txc-title">Expenses — Q${q}</span><span class="txc-total exp">−${fm(totExp)}</span></div>
+      <div class="txc-header"><span style="font-size:14px">🧾</span><span class="txc-title">Expenses — Q${q}</span><span class="txc-total exp">−${fm(totExp,getTaxSym())}</span></div>
       ${d.expenses.map((it,i)=>`<div class="tx-entry-row" style="grid-template-columns:1fr 130px 28px"><input class="tx-inp" value="${escapeHTML(it.desc)}" oninput="txData[${q}].expenses[${i}].desc=this.value;recalcTax()" placeholder="What was it for?"><input class="tx-inp amt" type="number" value="${escapeHTML(String(it.amt))}" oninput="txData[${q}].expenses[${i}].amt=parseFloat(this.value)||0;recalcTax()" placeholder="0"><button class="tx-rm" onclick="txData[${q}].expenses.splice(${i},1);renderTaxQ(${q})">×</button></div>`).join('')}
       <button class="tx-add-btn" onclick="txData[${q}].expenses.push({desc:'',cat:'Other',amt:0});renderTaxQ(${q})">+ Add expense</button>
     </div>`;
@@ -4522,16 +4649,18 @@ function renderTaxQ(q){
   syncPaidBtn(q);
   updateTaxTabUI();
 }
+function getTaxSym(){return document.getElementById('tax-currency')?.value||'$'}
 function recalcTax(){
+  const sym=getTaxSym();
   const d=txData[txQ];
   const inc=d.income.reduce((s,i)=>s+i.amt,0),exp=d.expenses.reduce((s,e)=>s+e.amt,0);
   const taxable=Math.max(0,inc-exp),rate=parseFloat(document.getElementById('tr-rate')?.value)||0,due=taxable*rate/100;
   const g=id=>document.getElementById(id);
-  if(g('tsb-inc'))g('tsb-inc').textContent=fm(inc);
-  if(g('tsb-exp'))g('tsb-exp').textContent='−'+fm(exp);
-  if(g('tsb-taxable'))g('tsb-taxable').textContent=fm(taxable);
+  if(g('tsb-inc'))g('tsb-inc').textContent=fm(inc,sym);
+  if(g('tsb-exp'))g('tsb-exp').textContent='−'+fm(exp,sym);
+  if(g('tsb-taxable'))g('tsb-taxable').textContent=fm(taxable,sym);
   if(g('tsb-rate'))g('tsb-rate').textContent=rate+'%';
-  if(g('tsb-due'))g('tsb-due').textContent=fm(due);
+  if(g('tsb-due'))g('tsb-due').textContent=fm(due,sym);
 }
 
 // ═══════════════ PROJECT BRIEF ═══════════════
@@ -4664,6 +4793,10 @@ _supabase.auth.onAuthStateChange(function(event, session) {
   }
   // Mark that the initial load is complete
   window._authInitDone = true;
+  // Init landing page animations on first load if landing is visible
+  if (!session && document.getElementById('page-landing').classList.contains('active')) {
+    setTimeout(initLandingAnimations, 120);
+  }
 });
 
 // ─── CURRENT USER ───
@@ -7321,32 +7454,24 @@ function renderPtOverview() {
     tdBarEl.className = 'util-fill' + (taskPct >= 80 ? '' : taskPct >= 50 ? ' warn' : '');
   }
 
-  // Budget utilization — hours * calculated rate / budget
-  var proj = (_ptProjects || []).find(function(p){ return p.id === _ptCurrentId; });
-  var budget = proj ? (parseFloat(proj.budget) || 0) : 0;
-  var bPctEl = document.getElementById('ptv-budget-pct');
-  var bSubEl = document.getElementById('ptv-budget-sub');
-  var bBarEl = document.getElementById('ptv-budget-bar');
-  if (budget > 0) {
-    // Try to get effective rate from rate calculator result or persisted inputs
-    var rateEl = document.getElementById('rc-hourly');
-    var rateText = rateEl ? rateEl.textContent.replace(/[^0-9.]/g,'') : '';
-    var hourlyRate = parseFloat(rateText) || 0;
-    if (!hourlyRate) {
-      try { var ri2 = JSON.parse(localStorage.getItem('fk_rate_inputs')||'{}'); hourlyRate = 0; } catch(e) {}
-    }
-    var budgetUsed = hourlyRate > 0 ? totalHrs * hourlyRate : 0;
-    var bPct = budgetUsed > 0 ? Math.min(150, Math.round(budgetUsed / budget * 100)) : 0;
-    if (bPctEl) bPctEl.textContent = bPct > 0 ? bPct + '%' : totalHrs.toFixed(1) + 'h';
-    if (bSubEl) bSubEl.textContent = bPct > 0 ? '$' + Math.round(budgetUsed).toLocaleString() + ' of $' + Math.round(budget).toLocaleString() : 'of $' + Math.round(budget).toLocaleString() + ' budget';
-    if (bBarEl) {
-      setTimeout(function(){ bBarEl.style.width = Math.min(100, bPct) + '%'; }, 150);
-      bBarEl.className = 'util-fill' + (bPct > 90 ? ' bad' : bPct > 70 ? ' warn' : '');
-    }
-  } else {
-    if (bPctEl) bPctEl.textContent = '—';
-    if (bSubEl) bSubEl.textContent = 'no budget set';
-    if (bBarEl) bBarEl.style.width = '0%';
+  // Overdue tasks — count open tasks past their due date
+  var overdueCount = ts.filter(function(t) {
+    if (t.status === 'done') return false;
+    if (!t.due_date) return false;
+    var d = new Date(t.due_date + 'T00:00:00');
+    return d < now;
+  }).length;
+  var ovEl = document.getElementById('ptv-overdue-count');
+  var ovSubEl = document.getElementById('ptv-overdue-sub');
+  var ovNoteEl = document.getElementById('ptv-overdue-note');
+  if (ovEl) {
+    ovEl.textContent = String(overdueCount).padStart(2, '0');
+    ovEl.style.color = overdueCount > 0 ? '#DC2626' : 'var(--sage)';
+  }
+  if (ovSubEl) ovSubEl.textContent = overdueCount === 1 ? 'overdue task' : 'overdue tasks';
+  if (ovNoteEl) {
+    ovNoteEl.textContent = overdueCount === 0 ? '✓ All on schedule' : '⚠ Needs attention';
+    ovNoteEl.style.color = overdueCount === 0 ? 'var(--sage)' : '#DC2626';
   }
 
   // Active Timeline — all non-done tasks sorted by due date
@@ -8210,6 +8335,21 @@ function renderPtHours() {
 
 // ─── GLOBAL TIMESHEET ───
 
+function saveGtsTarget(val) {
+  var h = Math.max(1, Math.min(168, parseFloat(val) || 40));
+  try {
+    var stored = JSON.parse(localStorage.getItem('fk_rate_inputs') || '{}');
+    stored.billableHrs = h;
+    localStorage.setItem('fk_rate_inputs', JSON.stringify(stored));
+  } catch(e) {}
+  // Re-sync the rate calculator slider if it's loaded
+  var rcHrs = document.getElementById('rc-hrs');
+  var rcHrsLbl = document.getElementById('rc-hrs-lbl');
+  if (rcHrs) { rcHrs.value = h; if (rcHrsLbl) rcHrsLbl.textContent = h; }
+  // Re-render timesheet with new target
+  if (window._gtsAllEntries) renderGlobalTimesheet(window._gtsAllEntries);
+}
+
 async function loadGlobalTimesheet() {
   var body = document.getElementById('gts-body');
   var summary = document.getElementById('gts-summary');
@@ -8272,7 +8412,7 @@ function renderGlobalTimesheet(entries) {
   if (summaryEl) {
     summaryEl.innerHTML =
       '<div class="gts-stat-card"><div class="gts-stat-lbl">This week</div><div class="gts-stat-val">'+weekTotal.toFixed(1)+'h</div>'+
-        '<div class="gts-util-row"><div class="gts-util-lbl">vs '+billableHrPerWeek+'h target</div><div class="gts-util-bar"><div class="gts-util-fill" style="width:'+Math.min(100,utilPct)+'%;background:'+utilColor+'"></div></div></div>'+
+        '<div class="gts-util-row"><div class="gts-util-lbl">vs <input class="gts-target-inp" id="gts-target-inp" type="number" min="1" max="168" value="'+billableHrPerWeek+'" title="Edit weekly target hours" onchange="saveGtsTarget(this.value)" onclick="event.stopPropagation()">h target</div><div class="gts-util-bar"><div class="gts-util-fill" style="width:'+Math.min(100,utilPct)+'%;background:'+utilColor+'"></div></div></div>'+
         '<div style="font-size:10px;font-weight:700;color:'+utilColor+';margin-top:4px">'+utilLabel+'</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">All time</div><div class="gts-stat-val">'+grandTotal.toFixed(1)+'h</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">Projects</div><div class="gts-stat-val">'+projectKeys.length+'</div></div>'+
