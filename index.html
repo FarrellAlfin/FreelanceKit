@@ -1106,13 +1106,13 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 .cg-wrap{display:flex;flex-direction:column;gap:4px;width:100%}
 .cg-month-row{display:flex;gap:3px;padding-left:26px}
 .cg-ml{font-size:10px;color:var(--ink-light);text-align:left;flex:1}
-.cg-body{display:flex;gap:3px;width:100%}
-.cg-day-labels{display:flex;flex-direction:column;gap:2px;padding-top:2px}
-.cg-dl{height:11px;width:16px;font-size:9px;color:var(--ink-light);line-height:11px;text-align:right;flex-shrink:0}
-.cg-cols{display:flex;gap:2px;flex:1;justify-content:space-between}
-.cg-col{display:flex;flex-direction:column;gap:2px}
-.cg-cell{width:11px;height:11px;border-radius:2px;cursor:default;transition:transform .1s;flex-shrink:0}
-.cg-cell:hover{transform:scale(1.3)}
+.cg-body{display:flex;gap:3px;width:100%;align-items:stretch}
+.cg-day-labels{display:flex;flex-direction:column;justify-content:space-between;align-self:stretch;padding-top:0}
+.cg-dl{font-size:9px;color:var(--ink-light);text-align:right;white-space:nowrap;line-height:1;padding-right:2px}
+.cg-cols{display:flex;gap:2px;flex:1}
+.cg-col{display:flex;flex-direction:column;gap:2px;flex:1}
+.cg-cell{aspect-ratio:1;border-radius:2px;cursor:default;transition:opacity .1s;min-height:0;min-width:0}
+.cg-cell:hover{opacity:.7}
 .cg-future{background:transparent}
 .cg-l0{background:#ebedf0}
 .cg-l1{background:#9be9a8}
@@ -5888,49 +5888,50 @@ async function renderContribGrid() {
   if (!el) return;
   if (!_currentUser) { if (totalEl) totalEl.textContent = 'Sign in to see activity'; return; }
 
+  var WEEKS = 16;
   var today = new Date();
-  var year = today.getFullYear();
-  var month = today.getMonth();
-  var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var daysInMonth = new Date(year, month + 1, 0).getDate();
-  var firstDow = new Date(year, month, 1).getDay(); // 0 = Sun
-  var monthStart = year + '-' + ('0'+(month+1)).slice(-2) + '-01';
-  var monthEnd   = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+daysInMonth).slice(-2);
+  var todayStr = today.toISOString().slice(0,10);
 
-  // Query this month's timesheet entries
+  // Start from the Sunday of the week WEEKS-1 weeks ago
+  var startDate = new Date(today);
+  startDate.setDate(today.getDate() - today.getDay() - (WEEKS - 1) * 7);
+  var startStr = startDate.toISOString().slice(0, 10);
+  // End on this Saturday
+  var endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + WEEKS * 7 - 1);
+  var endStr = endDate.toISOString().slice(0, 10);
+
+  // Query timesheet entries across the window
   var counts = {};
   var res = await _supabase.from('project_timesheet')
     .select('log_date').eq('user_id', _currentUser.id)
-    .gte('log_date', monthStart).lte('log_date', monthEnd);
+    .gte('log_date', startStr).lte('log_date', endStr);
   if (res.data) {
     res.data.forEach(function(r){ if (r.log_date) { var d = r.log_date.slice(0,10); counts[d] = (counts[d]||0)+1; } });
   }
-  // Merge localStorage contributions
   try {
     var stored = JSON.parse(localStorage.getItem('fk_contribs') || '{}');
-    Object.keys(stored).forEach(function(d){ if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0)+stored[d]; });
+    Object.keys(stored).forEach(function(d){ if (d >= startStr && d <= endStr) counts[d] = (counts[d]||0)+stored[d]; });
   } catch(e) {}
 
-  var todayStr = today.toISOString().slice(0,10);
-
-  // Build weeks-as-columns heatmap (Su–Sa rows), small cells, no numbers
-  var totalCells = firstDow + daysInMonth;
-  var numWeeks = Math.ceil(totalCells / 7);
+  var total = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
   var DAY_LABELS = ['Su','M','Tu','W','Th','F','Sa'];
-  var html = '<div class="cg-body" style="gap:2px">';
+
+  // Build: day labels + week columns (each column = 1 week, flex:1 fills container)
+  var html = '<div class="cg-body">';
   html += '<div class="cg-day-labels">';
   DAY_LABELS.forEach(function(l){ html += '<div class="cg-dl">' + l + '</div>'; });
-  html += '</div><div class="cg-cols" style="gap:2px">';
-  for (var w = 0; w < numWeeks; w++) {
+  html += '</div><div class="cg-cols">';
+  for (var w = 0; w < WEEKS; w++) {
     html += '<div class="cg-col">';
     for (var dow = 0; dow < 7; dow++) {
-      var dayNum = w * 7 + dow - firstDow + 1;
-      if (dayNum < 1 || dayNum > daysInMonth) { html += '<div class="cg-cell" style="background:transparent"></div>'; continue; }
-      var ds  = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+dayNum).slice(-2);
+      var d = new Date(startDate);
+      d.setDate(startDate.getDate() + w * 7 + dow);
+      var ds = d.toISOString().slice(0, 10);
       var fut = ds > todayStr;
       var cnt = counts[ds] || 0;
       var lvl = fut ? 0 : cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
-      var extra = (ds === todayStr ? 'outline:1.5px solid var(--ink);outline-offset:1px;' : '') + (fut ? 'opacity:.25;' : '');
+      var extra = (ds === todayStr ? 'outline:1.5px solid var(--ink);outline-offset:1px;' : '') + (fut ? 'opacity:.2;' : '');
       var tip = ds + (cnt ? ': '+cnt+' contribution'+(cnt!==1?'s':'') : ': no activity');
       html += '<div class="cg-cell cg-l'+lvl+'" style="'+extra+'" title="'+tip+'"></div>';
     }
@@ -5939,8 +5940,7 @@ async function renderContribGrid() {
   html += '</div></div>';
   el.innerHTML = html;
 
-  var total = Object.values(counts).reduce(function(a,b){ return a+(b||0); }, 0);
-  if (totalEl) totalEl.textContent = total + ' contribution' + (total!==1?'s':'') + ' in ' + MONTH_NAMES[month];
+  if (totalEl) totalEl.textContent = total + ' contribution' + (total!==1?'s':'') + ' in the last 16 weeks';
 }
 
 // ─── RECENTLY VISITED ─────────────────────────────────────────────────────────
