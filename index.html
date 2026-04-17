@@ -332,7 +332,7 @@ footer p{font-size:12px;color:var(--on-surface-light)}
    DASHBOARD
 ════════════════════════════════════ */
 .dash-layout{display:grid;grid-template-columns:232px 1fr;min-height:calc(100vh - 62px);transition:grid-template-columns .22s ease}
-.dash-layout.sb-collapsed{grid-template-columns:52px 1fr}
+.dash-layout.sb-collapsed{grid-template-columns:36px 1fr}
 
 /* Sidebar */
 .dash-sidebar{background:var(--surface-low);padding:0;position:sticky;top:62px;height:calc(100vh - 62px);overflow:hidden;transition:width .22s ease;display:flex;flex-direction:column}
@@ -352,13 +352,9 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .sb-toggle:hover{background:var(--surface-high);color:var(--on-surface)}
 .sb-toggle-arrow{display:inline-block;transition:transform .22s ease}
 
-/* Collapsed sidebar state */
-.dash-layout.sb-collapsed .dsb-section{font-size:0;padding:0 8px;margin:12px 0 4px;height:1px;background:var(--outline-variant)}
-.dash-layout.sb-collapsed .dsb-item{padding:9px 0;justify-content:center;gap:0;border-left-width:0;border-bottom:2px solid transparent}
-.dash-layout.sb-collapsed .dsb-item.active{background:var(--surface-container);border-bottom-color:var(--tertiary-fixed-dim)}
-.dash-layout.sb-collapsed .dsb-item .dsb-label{max-width:0;opacity:0;overflow:hidden}
-.dash-layout.sb-collapsed .dsb-count{max-width:0;opacity:0;overflow:hidden;padding:0;margin:0}
-.dash-layout.sb-collapsed .dsb-item .dsb-icon{font-size:17px;width:auto}
+/* Collapsed sidebar state — completely hidden, only toggle visible */
+.dash-layout.sb-collapsed .dsb-scroll-area{display:none}
+.dash-layout.sb-collapsed .dash-sidebar{justify-content:center;align-items:center}
 .dash-layout.sb-collapsed .sb-toggle-arrow{transform:rotate(180deg)}
 
 /* Main area */
@@ -1046,10 +1042,11 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 .nav-timer-icon{font-size:14px;line-height:1}
 .nav-timer-mini{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--sage);letter-spacing:.04em}
 /* ── TIMER PANEL ── */
-.timer-panel{position:fixed;top:66px;right:130px;width:310px;background:#0f1624;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:490;display:none;flex-direction:column;padding:24px 22px 20px;color:#fff}
+.timer-panel{position:fixed;top:66px;right:130px;width:340px;min-height:520px;background:#0f1624;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);z-index:490;display:none;flex-direction:column;padding:24px 22px 20px;color:#fff}
 .timer-panel.open{display:flex}
+.tp-grid-section{flex:1;display:flex;flex-direction:column;min-height:0;margin-top:4px}
 .tp-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:18px;letter-spacing:-.01em}
-.tp-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px}
+.tp-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:8px}
 .tp-select{width:100%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;font-weight:500;font-family:var(--font-body);cursor:pointer;appearance:none;-webkit-appearance:none;margin-bottom:20px}
 .tp-select option{background:#1a2235;color:#fff}
 .tp-divider{height:1px;background:rgba(255,255,255,.1);margin:16px 0}
@@ -2147,8 +2144,10 @@ var RateLimiter = (function() {
       <button class="tp-btn save" id="tp-save-btn" onclick="timerStop()" disabled>&#9632; Save Log</button>
     </div>
     <div class="tp-divider"></div>
-    <div class="tp-label">This Month</div>
-    <div id="tp-mini-grid"></div>
+    <div class="tp-grid-section">
+      <div class="tp-label" style="margin-bottom:10px">This Month</div>
+      <div id="tp-mini-grid" style="flex:1;min-height:0"></div>
+    </div>
   </div>
 
   <!-- Notification panel -->
@@ -5703,28 +5702,45 @@ function _renderTimerMiniGrid() {
     if (d >= monthStart && d <= monthEnd) counts[d] = (counts[d]||0)+1;
   });
 
-  // Weeks-as-columns heatmap, Su–Sa rows, small dark cells, no numbers
-  var totalCells = firstDow + daysInMonth;
-  var numWeeks = Math.ceil(totalCells / 7);
+  // Flex-fill weeks-as-columns heatmap — cells auto-size to fill the panel
+  var WEEKS = 8;
+  var startDate2 = new Date(now);
+  startDate2.setDate(now.getDate() - now.getDay() - (WEEKS - 1) * 7);
   var DAYS = ['Su','M','Tu','W','Th','F','Sa'];
-  var html = '<div style="display:flex;gap:3px;margin-bottom:3px">';
-  DAYS.forEach(function(l){ html += '<div style="width:14px;text-align:center;font-size:8px;color:rgba(255,255,255,.3);font-weight:600">' + l + '</div>'; });
-  html += '</div><div style="display:grid;grid-template-columns:repeat('+numWeeks+',14px);gap:2px">';
-  for (var col = 0; col < numWeeks; col++) {
-    for (var row = 0; row < 7; row++) {
-      var dayNum = col * 7 + row - firstDow + 1;
-      if (dayNum < 1 || dayNum > daysInMonth) { html += '<div style="width:14px;height:14px"></div>'; continue; }
-      var ds  = year + '-' + ('0'+(month+1)).slice(-2) + '-' + ('0'+dayNum).slice(-2);
+
+  var html = '<div style="display:flex;flex-direction:column;height:100%;gap:0">';
+  // Day labels row across the top
+  html += '<div style="display:flex;gap:2px;margin-bottom:4px">';
+  html += '<div style="width:18px"></div>'; // spacer for labels
+  for (var w2 = 0; w2 < WEEKS; w2++) {
+    html += '<div style="flex:1"></div>';
+  }
+  html += '</div>';
+  // Label column + week columns
+  html += '<div style="display:flex;gap:3px;flex:1;min-height:0">';
+  // Day-of-week labels
+  html += '<div style="display:flex;flex-direction:column;justify-content:space-between;padding:1px 0">';
+  DAYS.forEach(function(l){ html += '<div style="font-size:9px;color:rgba(255,255,255,.35);font-weight:700;line-height:1;text-align:right">' + l + '</div>'; });
+  html += '</div>';
+  // Week columns
+  html += '<div style="display:flex;gap:2px;flex:1">';
+  for (var w = 0; w < WEEKS; w++) {
+    html += '<div style="display:flex;flex-direction:column;gap:2px;flex:1">';
+    for (var dow = 0; dow < 7; dow++) {
+      var dd = new Date(startDate2);
+      dd.setDate(startDate2.getDate() + w * 7 + dow);
+      var ds = dd.toISOString().slice(0, 10);
       var fut = ds > todayStr;
       var cnt = counts[ds] || 0;
       var lvl = cnt === 0 ? 0 : cnt <= 2 ? 1 : cnt <= 5 ? 2 : cnt <= 9 ? 3 : 4;
-      var bgMap = ['rgba(255,255,255,.08)','#9be9a8','#40c463','#30a14e','#216e39'];
-      var border = (ds === todayStr) ? 'border:1.5px solid rgba(255,255,255,.5);' : '';
+      var bgMap = ['rgba(255,255,255,.1)','#9be9a8','#40c463','#30a14e','#216e39'];
+      var border = (ds === todayStr) ? 'outline:1.5px solid rgba(255,255,255,.6);outline-offset:1px;' : '';
       var opacity = fut ? 'opacity:.2;' : '';
-      html += '<div style="width:14px;height:14px;border-radius:2px;background:'+bgMap[lvl]+';'+border+opacity+'" title="'+ds+(cnt?': '+cnt+' contribution'+(cnt!==1?'s':''):'')+'"></div>';
+      html += '<div style="aspect-ratio:1;border-radius:3px;background:'+bgMap[lvl]+';'+border+opacity+';min-height:0" title="'+ds+(cnt?': '+cnt+' contribution'+(cnt!==1?'s':''):'')+'"></div>';
     }
+    html += '</div>';
   }
-  html += '</div>';
+  html += '</div></div></div>';
   el.innerHTML = html;
 }
 
@@ -9049,6 +9065,11 @@ async function deletePtItem(table, i) {
   col.splice(i, 1);
   var renders = {milestones:renderPtMilestones,tasks:renderPtTasks,billing:renderPtBilling,meetings:renderPtMeetings,timesheet:renderPtHours};
   if (renders[table]) renders[table]();
+  // Recalculate heatmap grids after timesheet delete
+  if (table === 'timesheet') {
+    if (typeof renderContribGrid === 'function') renderContribGrid();
+    if (typeof _renderTimerMiniGrid === 'function') _renderTimerMiniGrid();
+  }
 }
 
 async function deletePtProject() {
