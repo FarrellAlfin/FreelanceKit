@@ -1389,6 +1389,13 @@ input[type=number]{-moz-appearance:textfield}
 .pt-ov-pulse-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:8px}
 .pt-ov-pulse-val{font-size:28px;font-weight:700;font-family:var(--font-mono);color:var(--ink);line-height:1;margin-bottom:4px}
 .pt-ov-pulse-sub{font-size:12px;color:var(--ink-mid)}
+/* Overview main layout */
+.pt-ov-main-row{display:grid;grid-template-columns:1fr 38%;gap:16px;margin-bottom:14px;align-items:start}
+.pt-ov-info-col{display:flex;flex-direction:column;gap:0}
+.pt-ov-docs-box{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.pt-ov-docs-box .pt-ov-section-hdr{margin-top:0;margin-bottom:10px}
+.pt-ov-collabs-strip{margin-bottom:14px}
+.pt-ov-collabs-strip .pt-ov-section-hdr{margin-top:0;margin-bottom:8px}
 /* Active timeline */
 .pt-ov-section{margin-top:20px}
 .pt-ov-section-hdr{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:12px}
@@ -2671,23 +2678,39 @@ var RateLimiter = (function() {
                 <div class="pt-ov-pulse-sub" style="color:rgba(250,247,242,.65)">Deadlines this week</div>
               </div>
             </div>
-            <!-- Project metadata -->
-            <div class="pt-grid2">
-              <div class="pt-field"><label>Client</label><div id="ptv-client" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
-              <div class="pt-field"><label>Status</label><div id="ptv-status" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
-              <div class="pt-field"><label>Start date</label><div id="ptv-start" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
-              <div class="pt-field"><label>End date</label><div id="ptv-end" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
-            </div>
-            <div id="ptv-client-card" style="display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:8px">Client contact</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px">
-                <div id="ptv-cl-email" style="font-size:13px;color:var(--ink)"></div>
-                <div id="ptv-cl-phone" style="font-size:13px;color:var(--ink)"></div>
-                <div id="ptv-cl-company" style="font-size:12px;color:var(--ink-mid)"></div>
-                <div id="ptv-cl-address" style="font-size:12px;color:var(--ink-mid)"></div>
+            <!-- Main 2-column row: project info left, key documents right -->
+            <div class="pt-ov-main-row">
+              <!-- Left: Client / Status / Start / End / Budget -->
+              <div class="pt-ov-info-col">
+                <div class="pt-grid2">
+                  <div class="pt-field"><label>Client</label><div id="ptv-client" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+                  <div class="pt-field"><label>Status</label><div id="ptv-status" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+                  <div class="pt-field"><label>Start date</label><div id="ptv-start" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+                  <div class="pt-field"><label>End date</label><div id="ptv-end" style="font-size:14px;color:var(--ink);padding:6px 0">—</div></div>
+                </div>
+                <div id="ptv-client-card" style="display:none;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-light);margin-bottom:8px">Client contact</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px">
+                    <div id="ptv-cl-email" style="font-size:13px;color:var(--ink)"></div>
+                    <div id="ptv-cl-phone" style="font-size:13px;color:var(--ink)"></div>
+                    <div id="ptv-cl-company" style="font-size:12px;color:var(--ink-mid)"></div>
+                    <div id="ptv-cl-address" style="font-size:12px;color:var(--ink-mid)"></div>
+                  </div>
+                </div>
+                <div class="pt-field"><label>Budget</label><div id="ptv-budget" style="font-size:16px;font-weight:700;color:var(--amber);padding:6px 0">—</div></div>
+              </div>
+              <!-- Right: Key Documents dedicated box -->
+              <div class="pt-ov-docs-box">
+                <div class="pt-ov-section-hdr">Key Documents</div>
+                <div id="ptv-docs-list"></div>
               </div>
             </div>
-            <div class="pt-field"><label>Budget</label><div id="ptv-budget" style="font-size:16px;font-weight:700;color:var(--amber);padding:6px 0">—</div></div>
+            <!-- Active Collaborators strip -->
+            <div class="pt-ov-collabs-strip" id="ptv-shares-wrap" style="display:none">
+              <div class="pt-ov-section-hdr">Active Collaborators</div>
+              <div id="ptv-shares-list" style="display:flex;flex-direction:column;gap:0;padding:4px 0"></div>
+            </div>
+            <!-- Full width: Description / Contract / People / Timeline -->
             <div class="pt-field"><label>Description</label><div id="ptv-desc" style="font-size:13px;color:var(--ink);line-height:1.7;padding:6px 0;white-space:pre-wrap">—</div></div>
             <div class="pt-field" id="ptv-contract-wrap" style="display:none">
               <label>Project contract / scope notes</label>
@@ -2699,19 +2722,10 @@ var RateLimiter = (function() {
                 <button class="pt-person-add" onclick="openAddPersonModal()">+ Add person</button>
               </div>
             </div>
-            <div class="pt-field" id="ptv-shares-wrap" style="display:none">
-              <label>Collaborators</label>
-              <div id="ptv-shares-list" style="display:flex;flex-direction:column;gap:0;padding:4px 0"></div>
-            </div>
             <!-- Active Timeline -->
             <div class="pt-ov-section">
               <div class="pt-ov-section-hdr">Active Timeline</div>
               <div id="ptv-timeline-list"></div>
-            </div>
-            <!-- Key Documents -->
-            <div class="pt-ov-section">
-              <div class="pt-ov-section-hdr">Key Documents</div>
-              <div id="ptv-docs-list"></div>
             </div>
           </div>
           <!-- Milestones tab -->
