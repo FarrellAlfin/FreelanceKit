@@ -1292,8 +1292,8 @@ input[type=number]{-moz-appearance:textfield}
 .pt-row-name.done{text-decoration:line-through;color:var(--ink-light)}
 .pt-row-badge{font-size:11px;color:var(--ink-light);background:var(--cream-dark);padding:2px 7px;border-radius:20px;flex-shrink:0}
 .pt-row-date{font-size:11px;color:var(--ink-light);flex-shrink:0}
-.pt-row-del{background:none;border:none;cursor:pointer;color:var(--ink-light);font-size:14px;padding:0 2px;flex-shrink:0}
-.pt-row-del:hover{color:#E8594A}
+.pt-row-del{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:#B91C1C;font-size:11px;font-weight:600;padding:2px 7px;flex-shrink:0;font-family:var(--font-body)}
+.pt-row-del:hover{background:#FEE2E2;border-color:#B91C1C}
 .pt-row-edit{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--ink-mid);font-size:11px;padding:2px 7px;flex-shrink:0}
 .pt-row-edit:hover{border-color:var(--amber);color:var(--amber)}
 /* Billing phases */
@@ -1320,8 +1320,8 @@ input[type=number]{-moz-appearance:textfield}
 .pt-note-item{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
 .pt-note-date{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);margin-bottom:6px}
 .pt-note-text{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap}
-.pt-note-del{background:none;border:none;cursor:pointer;color:#E8594A;font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;transition:background .15s}
-.pt-note-del:hover{background:#FEE2E2}
+.pt-note-del{background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:#B91C1C;font-size:11px;font-weight:600;padding:2px 7px;flex-shrink:0;font-family:var(--font-body);transition:all .15s}
+.pt-note-del:hover{background:#FEE2E2;border-color:#B91C1C}
 /* Timesheet */
 .pt-time-row{display:grid;grid-template-columns:90px 60px auto 1fr auto auto;align-items:center;gap:12px;padding:10px 12px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px}
 .pt-time-hrs{font-size:14px;font-weight:700;color:var(--amber)}
@@ -2653,7 +2653,7 @@ var RateLimiter = (function() {
             <span class="pt-status" id="pt-detail-status-badge"></span>
             <button class="pt-add-btn" onclick="openPtModal('edit-project')" style="margin-left:auto">Edit</button>
             <button class="pt-add-btn" style="background:var(--white);color:var(--ink);border:1.5px solid var(--border)" onclick="openShareModal()">👥 Share</button>
-            <button class="pt-row-del" onclick="deletePtProject()" title="Delete project" style="font-size:18px">🗑</button>
+            <button class="pt-row-del" onclick="deletePtProject()" title="Delete project">Delete</button>
           </div>
           <div class="pt-tabs">
             <button class="pt-tab active" onclick="showPtTab('overview',this)">Overview</button>
@@ -2787,7 +2787,7 @@ var RateLimiter = (function() {
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <button class="pt-add-btn" style="background:transparent;color:var(--ink);border:1.5px solid var(--border)" onclick="printMeetingNote()">⬇ PDF</button>
-              <button class="pt-add-btn" id="mn-edit-btn" onclick="toggleMeetingEdit()">✏️ Edit</button>
+              <button class="pt-add-btn" id="mn-edit-btn" onclick="toggleMeetingEdit()">Edit</button>
               <button class="pt-back-btn" onclick="closeMeetingPopup()">✕ Close</button>
             </div>
           </div>
@@ -2887,7 +2887,7 @@ var RateLimiter = (function() {
           </div>
         </div>
         <div class="doc-edit-bar">
-          <button class="doc-edit-toggle" id="welcome-edit-toggle" onclick="toggleDocEdit('welcome')">✏️ Edit fields</button>
+          <button class="doc-edit-toggle" id="welcome-edit-toggle" onclick="toggleDocEdit('welcome')">Edit fields</button>
           <div class="doc-edit-proj">🔗 Link to project: <select id="welcome-proj-sel" onchange="linkDocToProject('welcome',this.value)"><option value="">— none —</option></select></div>
           <span class="doc-edit-hint">Click highlighted fields to edit</span>
         </div>
@@ -5185,7 +5185,7 @@ function foRenderManualList() {
         '<div style="font-family:var(--font-mono);font-size:13px;font-weight:600">' + fmD(m.amount) + '</div>' +
         '<div style="font-size:12px;color:var(--ink-mid)">' + (m.date || '—') + '</div>' +
         '<div style="font-size:12px;color:var(--ink-mid)">' + escapeHTML(m.source || '—') + '</div>' +
-        '<button onclick="foDeleteIncome(' + m.id + ')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:14px;padding:0 4px">\u00d7</button>' +
+        '<button class="pt-btn-del" onclick="foDeleteIncome(' + m.id + ')">Delete</button>' +
         '</div>';
     }).join('') +
     '</div>';
@@ -5217,10 +5217,10 @@ function renderInvHistory() {
         statusOpts + '</select>' +
       '</div>' +
       '<div class="iht-actions">' +
-      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="editInvoiceFromHistory(this.dataset.invId)">&#9998; Edit</button>' +
-      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="foPreviewInvoice(this.dataset.invId)">&#128196; Preview</button>' +
+      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="editInvoiceFromHistory(this.dataset.invId)">Edit</button>' +
+      '<button class="iht-btn" data-inv-id="' + iid + '" onclick="foPreviewInvoice(this.dataset.invId)">Preview</button>' +
       '<button class="iht-btn" data-inv-id="' + iid + '" onclick="downloadInvoicePDFFromHistory(this.dataset.invId)">PDF</button>' +
-      '<button class="iht-btn" style="color:var(--red)" data-inv-id="' + iid + '" onclick="deleteInvoice(this.dataset.invId)">&#10005;</button></div>' +
+      '<button class="iht-btn" style="color:#B91C1C;border-color:#FECACA" data-inv-id="' + iid + '" onclick="deleteInvoice(this.dataset.invId)">Delete</button></div>' +
     '</div>';
   }).join('');
 }
@@ -5607,8 +5607,8 @@ function renderScenarios() {
     var sym = sc.currency || '$';
     var sid = sc.id;
     return '<div class="scenario-card" onclick="loadScenario(' + JSON.stringify(sc).replace(/"/g,'&quot;') + ')" data-sc-id="' + sid + '">' +
-      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario(\'' + sid + '\')">✕</button>' +
-      '<button class="sc-edit-btn" onclick="event.stopPropagation();editScenarioName(\'' + sid + '\',this)" title="Rename">✏</button>' +
+      '<button class="sc-delete" onclick="event.stopPropagation();deleteScenario(\'' + sid + '\')">Delete</button>' +
+      '<button class="sc-edit-btn" onclick="event.stopPropagation();editScenarioName(\'' + sid + '\',this)" title="Rename">Edit</button>' +
       '<div class="sc-name" id="sc-name-' + sid + '">' + escapeHTML(sc.name) + '</div>' +
       '<div class="sc-rate">' + sym + Math.round(sc.result_hourly||0) + '/hr</div>' +
       '<div class="sc-meta">Take-home: ' + sym + Math.round(sc.take_home||0).toLocaleString() + '/yr<br>' +
@@ -6241,7 +6241,7 @@ function toggleDocEdit(docId) {
   body.querySelectorAll('.field, .field-block').forEach(function(el) {
     el.contentEditable = on ? 'true' : 'false';
   });
-  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : '✏️ Edit fields'; }
+  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : 'Edit fields'; }
 }
 function populateDocProjSelects() {
   var projects = window._ptProjects || [];
@@ -6340,9 +6340,14 @@ function calShowDay(ds) {
   var contentEl = document.getElementById('cal-detail-content');
   if (!contentEl) return;
   var its = [];
+  function _projName(pid) {
+    if (!pid) return null;
+    var p = (window._ptProjects||[]).find(function(x){ return x.id === pid; });
+    return p ? p.name : null;
+  }
   try { JSON.parse(localStorage.getItem('fk_todos')||'[]').forEach(function(t){ if(t.dueDate&&t.dueDate.slice(0,10)===ds&&!t.done) its.push({type:'todo',label:t.text}); }); } catch(e){}
-  (window._ptMilestones||[]).forEach(function(m){ if(m.due_date&&m.due_date.slice(0,10)===ds) its.push({type:'milestone',label:m.title}); });
-  (window._ptTasks||[]).forEach(function(t){ if(t.due_date&&t.due_date.slice(0,10)===ds) its.push({type:'todo',label:t.title}); });
+  (window._ptMilestones||[]).forEach(function(m){ if(m.due_date&&m.due_date.slice(0,10)===ds) its.push({type:'milestone',label:m.title,project:_projName(m.project_id)}); });
+  (window._ptTasks||[]).forEach(function(t){ if(t.due_date&&t.due_date.slice(0,10)===ds) its.push({type:'todo',label:t.title,project:_projName(t.project_id)}); });
   _calEvents.filter(function(e){ return e.date===ds; }).forEach(function(e){ its.push({type:'event',label:e.title,id:e.id,location:e.location,duration:e.duration,project:e.project}); });
   var d = new Date(ds+'T12:00:00');
   var dlbl = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
@@ -6362,9 +6367,9 @@ function calShowDay(ds) {
           (it.duration?'<div style="font-size:11px;color:var(--ink-light)">\u23F1 '+escapeHTML(it.duration)+'</div>':'')+
           (it.project?'<div style="font-size:11px;color:var(--ink-light)">&#128193; '+escapeHTML(it.project)+'</div>':'')+
         '</div>'+
-        (it.id?'<div style="display:flex;gap:2px;flex-shrink:0">'+
-          '<button onclick="calEditEvent('+it.id+',\''+ds+'\')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:13px;line-height:1;padding:2px 4px">&#9998;</button>'+
-          '<button onclick="calDeleteEvent('+it.id+')" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-size:18px;line-height:1;padding:0 2px">\u00d7</button>'+
+        (it.id?'<div style="display:flex;gap:4px;flex-shrink:0">'+
+          '<button class="pt-row-edit" onclick="calEditEvent('+it.id+',\''+ds+'\')">Edit</button>'+
+          '<button class="pt-btn-del" onclick="calDeleteEvent('+it.id+')">Delete</button>'+
         '</div>':'')+
         '</div>';
     }).join('') : '<div style="font-size:12px;color:var(--ink-light);padding:6px 0">No events scheduled</div>') +
@@ -7116,7 +7121,7 @@ function renderPtMilestones() {
       '</div></td>';
     if (!msStart) {
       return '<tr style="' + rowBg + '">' + nameCell +
-        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set · <button class="pt-row-edit" onclick="openPtEditMilestone(' + i + ')">Edit</button> <button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">&#215;</button></td></tr>';
+        '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 8px;font-size:11px;color:var(--ink-light)">No dates set · <button class="pt-row-edit" onclick="openPtEditMilestone(' + i + ')">Edit</button> <button class="pt-row-del" onclick="deletePtItem(\'milestones\',' + i + ')">Delete</button></td></tr>';
     }
     if (msStart > msEnd) msEnd = msStart;
     var barStartOffset = Math.max(0, (msStart - rangeStart) / 86400000);
@@ -7133,7 +7138,7 @@ function renderPtMilestones() {
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
       '</div></div>' +
-      '<button class="pt-row-del" style="position:absolute;right:4px;top:50%;transform:translateY(-50%)" onclick="event.stopPropagation();deletePtItem(\'milestones\',' + i + ')">&#215;</button>' +
+      '<button class="pt-row-del" style="position:absolute;right:4px;top:50%;transform:translateY(-50%)" onclick="event.stopPropagation();deletePtItem(\'milestones\',' + i + ')">Delete</button>' +
       '</td></tr>';
   }).join('');
 
@@ -7459,9 +7464,9 @@ function renderPtMeetings() {
       (locBadge ? '<div style="margin-top:7px">' + locBadge + '</div>' : '') +
       (notesText ? '<div class="mn-card-notes-preview">' + escapeHTML(notesText) + (notesText.length >= 100 ? '…' : '') + '</div>' : '') +
       '<div class="mn-card-actions" onclick="event.stopPropagation()">' +
-        '<button class="pt-row-edit" onclick="openMeetingEditor(' + i + ')">✏️ Edit</button>' +
-        '<button class="pt-row-edit" onclick="openMeetingPopup(' + i + ');setTimeout(printMeetingNote,300)">⬇ PDF</button>' +
-        '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">&#215; Delete</button>' +
+        '<button class="pt-row-edit" onclick="openMeetingEditor(' + i + ')">Edit</button>' +
+        '<button class="pt-row-edit" onclick="openMeetingPopup(' + i + ');setTimeout(printMeetingNote,300)">PDF</button>' +
+        '<button class="pt-note-del" onclick="deletePtItem(\'meetings\',' + i + ')">Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -7824,8 +7829,8 @@ function renderPtHours() {
     var person = h.person_name ? '<div style="font-size:11px;color:var(--ink-light);margin-top:2px">' + escapeHTML(h.person_name) + '</div>' : '';
     var hrs = (parseFloat(h.hours) || 0).toFixed(1) + 'h';
     var actions = isOwn
-      ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" title="Edit" style="margin-right:4px">&#9998;</button>' +
-        '<button class="pt-note-del" onclick="deletePtItem(\'timesheet\',' + i + ')" title="Delete">&#215; Delete</button>'
+      ? '<button class="pt-row-edit" onclick="openPtEditTime(' + i + ')" style="margin-right:4px">Edit</button>' +
+        '<button class="pt-note-del" onclick="deletePtItem(\'timesheet\',' + i + ')">Delete</button>'
       : '';
     return '<tr>' +
       '<td style="white-space:nowrap;color:var(--ink-light);font-size:12px;padding:10px 12px">' + dateDisp + '</td>' +
@@ -8159,7 +8164,7 @@ function renderPtDocTab(type) {
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">' +
       '<div style="font-size:13px;font-weight:600;color:var(--ink)">' + title + (saved ? ' <span style="font-size:10px;color:var(--sage);font-weight:400">● saved</span>' : '') + '</div>' +
       '<div style="display:flex;gap:8px;align-items:center">' +
-        '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">✏️ Edit fields</button>' +
+        '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">Edit fields</button>' +
         '<span class="doc-edit-hint">Click highlighted fields to edit</span>' +
         '<button class="btn-primary" style="font-size:12px;padding:5px 12px" onclick="ptSaveDoc(\'' + type + '\')">&#128190; Save</button>' +
         '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128196; Download PDF</button>' +
@@ -8201,7 +8206,7 @@ function ptToggleDocEdit(prefix) {
   body.querySelectorAll('.field, .field-block').forEach(function(el) {
     el.contentEditable = on ? 'true' : 'false';
   });
-  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : '✏️ Edit fields'; }
+  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : 'Edit fields'; }
 }
 
 function _ptAutoFillDoc(prefix, p) {
