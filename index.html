@@ -1555,6 +1555,14 @@ input[type=number]{-moz-appearance:textfield}
 .pt-filter-btn{padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:11px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);transition:all .15s}
 .pt-filter-btn:hover{border-color:var(--ink);color:var(--ink)}
 .pt-filter-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+/* Task board — 3-column kanban */
+.pt-task-board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px}
+.pt-task-col{background:var(--cream);border:1.5px solid var(--border);border-radius:10px;padding:12px 12px 14px}
+.pt-task-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1.5px solid var(--border)}
+.pt-task-col-title{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.pt-task-col-count{font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;background:var(--border);color:var(--ink-mid)}
+.pt-task-col-body{display:flex;flex-direction:column;gap:10px}
+.pt-task-col-empty{text-align:center;padding:18px 0;color:var(--ink-light);font-size:12px}
 /* Task cards */
 .pt-tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:4px}
 .pt-task-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;position:relative;transition:border-color .15s}
@@ -2797,12 +2805,12 @@ var RateLimiter = (function() {
         <div class="calc-grid">
           <div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
-              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="" placeholder="e.g. 60000" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-takehome">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="" placeholder="e.g. 60000" oninput="calcRate()"></div></div>
               <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option><option value="Rp">🇮🇩 IDR</option></select></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
-              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="" placeholder="e.g. 3600" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-expenses">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="" placeholder="e.g. 3600" oninput="calcRate()"></div></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl"><span>Weeks off per year: <strong id="rc-woff-lbl">6</strong></span><span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="0" max="51" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0 wks</span><span>51 wks</span></div></div>
@@ -4411,6 +4419,8 @@ function calcRate(){
   const weeks=52-woff,totalHrs=weeks*hrs,rate=totalHrs>0?withBuf/totalHrs:0;
   const F=n=>sym+Math.round(n).toLocaleString();
   if(g('rc-sym'))g('rc-sym').textContent=sym;
+  if(g('rc-pfx-takehome'))g('rc-pfx-takehome').textContent=sym;
+  if(g('rc-pfx-expenses'))g('rc-pfx-expenses').textContent=sym;
   if(g('rc-hourly'))g('rc-hourly').textContent=Math.round(rate).toLocaleString();
   if(g('rc-r-takehome'))g('rc-r-takehome').textContent=F(takeHome);
   if(g('rc-r-gross'))g('rc-r-gross').textContent=F(grossed);
@@ -6264,6 +6274,11 @@ function closeProfileMenu() {
   var dd = document.getElementById('profile-dropdown');
   if (dd) dd.classList.remove('open');
 }
+// Block scroll-to-increment on all number inputs
+document.addEventListener('wheel', function(e) {
+  if (document.activeElement === e.target && e.target.type === 'number') e.preventDefault();
+}, { passive: false });
+
 // Close both menus when clicking outside
 document.addEventListener('click', function(e) {
   var timerPanel = document.getElementById('timer-panel');
@@ -7690,7 +7705,7 @@ function renderPtTasks() {
   var prioStyle = { high:'color:#B91C1C;background:#FEE2E2', medium:'color:#92400E;background:#FEF3C7', low:'color:#065F46;background:#D1FAE5' };
   var prioLabels = { high:'High', medium:'Medium', low:'Low' };
 
-  el.innerHTML = '<div class="pt-tasks-grid">' + filtered.map(function(t) {
+  function buildTaskCard(t) {
     var realIdx = ts.indexOf(t);
     var done = t.status === 'done';
     var inProgress = t.status === 'in_progress';
@@ -7702,8 +7717,6 @@ function renderPtTasks() {
       return '<span class="pt-assignee" title="' + escapeHTML(a) + '">' + ini + '</span>';
     }).join('');
     var attachArr = []; try { attachArr = JSON.parse(t.attachments||'[]'); } catch(e){}
-    var stLabel = done ? 'Done' : inProgress ? 'In Progress' : overdue ? 'Overdue' : 'To Do';
-    var stStyle = done ? 'color:#475569;background:#F1F5F9' : inProgress ? 'color:#065F46;background:#D1FAE5' : overdue ? 'color:#B91C1C;background:#FEE2E2' : 'color:#92400E;background:#FEF3C7';
     return '<div class="pt-task-card' + (done ? ' done-card' : '') + '" data-idx="' + realIdx + '">' +
       '<div class="pt-task-card-hdr">' +
         '<div class="pt-check' + (done ? ' done' : '') + '" onclick="togglePtTask(' + realIdx + ')" title="' + (done ? 'Mark to do' : 'Mark done') + '">' + (done ? '&#10003;' : '') + '</div>' +
@@ -7712,7 +7725,6 @@ function renderPtTasks() {
       '</div>' +
       (t.notes ? '<div class="pt-task-card-notes">' + escapeHTML(t.notes) + '</div>' : '') +
       '<div class="pt-task-card-meta">' +
-        '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;' + stStyle + '">' + stLabel + '</span>' +
         (t.due_date ? '<span class="pt-row-date" style="' + (overdue && !done ? 'color:#DC2626;font-weight:600' : '') + '">' + (overdue && !done ? '⚠ ' : '') + t.due_date.slice(0,10) + '</span>' : '') +
         (attachArr.length ? '<span style="font-size:11px;color:var(--ink-mid)">📎 ' + attachArr.length + '</span>' : '') +
       '</div>' +
@@ -7722,7 +7734,32 @@ function renderPtTasks() {
         '<button class="pt-btn-del" onclick="deletePtItem(\'tasks\',' + realIdx + ')">Delete</button>' +
       '</div>' +
     '</div>';
-  }).join('') + '</div>';
+  }
+
+  // Split into 3 columns by status
+  var cols = {
+    todo: filtered.filter(function(t){ return t.status !== 'in_progress' && t.status !== 'done'; }),
+    in_progress: filtered.filter(function(t){ return t.status === 'in_progress'; }),
+    done: filtered.filter(function(t){ return t.status === 'done'; })
+  };
+
+  function colHtml(tasks, title, accentColor, emptyMsg) {
+    return '<div class="pt-task-col">' +
+      '<div class="pt-task-col-hdr">' +
+        '<span class="pt-task-col-title" style="color:' + accentColor + '">' + title + '</span>' +
+        '<span class="pt-task-col-count">' + tasks.length + '</span>' +
+      '</div>' +
+      '<div class="pt-task-col-body">' +
+        (tasks.length ? tasks.map(buildTaskCard).join('') : '<div class="pt-task-col-empty">' + emptyMsg + '</div>') +
+      '</div>' +
+    '</div>';
+  }
+
+  el.innerHTML = '<div class="pt-task-board">' +
+    colHtml(cols.todo,        'To Do',       '#92400E', 'No tasks yet') +
+    colHtml(cols.in_progress, 'In Progress', '#009668', 'Nothing in progress') +
+    colHtml(cols.done,        'Done',        '#475569', 'No completed tasks') +
+  '</div>';
   setTimeout(_attachPersonDropToTasks, 0);
 }
 
@@ -8412,7 +8449,7 @@ function renderGlobalTimesheet(entries) {
   if (summaryEl) {
     summaryEl.innerHTML =
       '<div class="gts-stat-card"><div class="gts-stat-lbl">This week</div><div class="gts-stat-val">'+weekTotal.toFixed(1)+'h</div>'+
-        '<div class="gts-util-row"><div class="gts-util-lbl">vs <input class="gts-target-inp" id="gts-target-inp" type="number" min="1" max="168" value="'+billableHrPerWeek+'" title="Edit weekly target hours" onchange="saveGtsTarget(this.value)" onclick="event.stopPropagation()">h target</div><div class="gts-util-bar"><div class="gts-util-fill" style="width:'+Math.min(100,utilPct)+'%;background:'+utilColor+'"></div></div></div>'+
+        '<div class="gts-util-row"><div class="gts-util-lbl">vs <input class="gts-target-inp" id="gts-target-inp" type="number" min="1" max="168" value="'+billableHrPerWeek+'" title="Edit weekly target hours" onchange="saveGtsTarget(this.value);this.blur()" onclick="event.stopPropagation()">h target</div><div class="gts-util-bar"><div class="gts-util-fill" style="width:'+Math.min(100,utilPct)+'%;background:'+utilColor+'"></div></div></div>'+
         '<div style="font-size:10px;font-weight:700;color:'+utilColor+';margin-top:4px">'+utilLabel+'</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">All time</div><div class="gts-stat-val">'+grandTotal.toFixed(1)+'h</div></div>'+
       '<div class="gts-stat-card"><div class="gts-stat-lbl">Projects</div><div class="gts-stat-val">'+projectKeys.length+'</div></div>'+
