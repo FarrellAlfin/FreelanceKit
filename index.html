@@ -1996,7 +1996,30 @@ var RateLimiter = (function() {
             <div class="lp-pt-stats">
               <div class="lp-pt-stat"><div class="lp-pt-stat-v">3</div><div class="lp-pt-stat-l">Projects</div></div>
               <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">+32%</div><div class="lp-pt-stat-l">ROI</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">91%</div><div class="lp-pt-stat-l">Utilisation</div></div>
+            </div>
+            <!-- Overview pulse preview -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px">
+              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
+                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Hours</div>
+                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">47.5</div>
+                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">logged</div>
+              </div>
+              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
+                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Upcoming</div>
+                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">02</div>
+                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">deadlines</div>
+              </div>
+              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
+                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Done</div>
+                <div style="font-size:17px;font-weight:700;color:rgba(0,200,140,.8);font-family:'DM Mono',monospace;line-height:1">72%</div>
+                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">8 of 11</div>
+              </div>
+              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
+                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Overdue</div>
+                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">00</div>
+                <div style="font-size:8px;color:rgba(0,200,140,.7);margin-top:3px">✓ on track</div>
+              </div>
             </div>
           </div>
         </div>
@@ -2301,36 +2324,36 @@ var RateLimiter = (function() {
       <!-- Right panel -->
       <div class="auth-panel-col">
         <div class="ap-eyebrow">What you're getting</div>
-        <div class="ap-heading">Everything to run<br>your business <em>properly.</em></div>
-        <p class="ap-sub">10 templates. Six categories. The contracts, invoices, and trackers every freelancer needs — already written.</p>
+        <div class="ap-heading">Every tool your<br>freelance business <em>actually needs.</em></div>
+        <p class="ap-sub">Invoice builder, project tracker, pipeline, timesheet, tax tracker, rate calculator — one kit, fully connected.</p>
 
         <div class="ap-items">
           <div class="ap-item">
-            <div class="ap-item-icon">📑</div>
+            <div class="ap-item-icon">🗂️</div>
             <div>
-              <div class="ap-item-title">Stop scope creep cold</div>
-              <div class="ap-item-desc">Client contract + scope change order. One email, professionally handled.</div>
+              <div class="ap-item-title">Run every project end-to-end</div>
+              <div class="ap-item-desc">Tasks, Gantt chart, milestones, time logs, billing phases, and collaborators — all inside one project.</div>
             </div>
           </div>
           <div class="ap-item">
             <div class="ap-item-icon">💰</div>
             <div>
-              <div class="ap-item-title">Get paid. On time.</div>
-              <div class="ap-item-desc">Invoice builder + late payment sequence. Recovers most unpaid invoices without the awkward call.</div>
+              <div class="ap-item-title">Get paid and stay on top of money</div>
+              <div class="ap-item-desc">Invoice builder with history and aging reports. Financial overview tracks every payment — paid, pending, overdue.</div>
             </div>
           </div>
           <div class="ap-item">
-            <div class="ap-item-icon">🗂️</div>
+            <div class="ap-item-icon">📈</div>
             <div>
-              <div class="ap-item-title">See dry months before they hit</div>
-              <div class="ap-item-desc">Pipeline tracker with weighted forecast. Know 4–6 weeks early when work is running out.</div>
+              <div class="ap-item-title">Forecast before the dry month hits</div>
+              <div class="ap-item-desc">Pipeline tracker with weighted revenue forecast. Timesheet monitors billable utilisation against your weekly target.</div>
             </div>
           </div>
           <div class="ap-item">
-            <div class="ap-item-icon">📊</div>
+            <div class="ap-item-icon">🧮</div>
             <div>
-              <div class="ap-item-title">Know your real rate</div>
-              <div class="ap-item-desc">Rate calculator that works backwards from your take-home target. No more guessing.</div>
+              <div class="ap-item-title">Know your numbers exactly</div>
+              <div class="ap-item-desc">Rate calculator works backwards from your take-home. Tax tracker estimates quarterly dues from your logged income.</div>
             </div>
           </div>
         </div>
