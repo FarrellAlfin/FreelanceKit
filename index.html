@@ -9111,37 +9111,7 @@ function ptPrintDoc(prefix) {
 }
 
 function _ptContractDocHTML() {
-  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Freelance Services Agreement</div>' +
-    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · freelancekit.io</div>' +
-    '<hr class="doc-thick"><h2>1. The Parties</h2>' +
-    '<p>This Agreement is entered into as of <span class="field">[DATE]</span> between <strong>Freelancer:</strong> <span class="field">[YOUR FULL NAME OR BUSINESS NAME]</span>, located at <span class="field">[YOUR CITY, STATE/PROVINCE, COUNTRY]</span>, and <strong>Client:</strong> <span class="field">[CLIENT FULL NAME OR COMPANY NAME]</span>, located at <span class="field">[CLIENT ADDRESS]</span>, represented by <span class="field">[CLIENT CONTACT NAME, TITLE]</span>.</p>' +
-    '<hr class="doc-divider"><h2>2. Project Scope &amp; Deliverables</h2>' +
-    '<p>Freelancer agrees to provide the following services:</p>' +
-    '<span class="field-block">[DESCRIBE THE PROJECT IN SPECIFIC, MEASURABLE TERMS.]</span>' +
-    '<p>Deliverables:</p><span class="field-block">[LIST EACH DELIVERABLE]</span>' +
-    '<div class="doc-callout"><strong>Scope note:</strong> Any work, deliverables, or revisions not listed above are outside scope and will require a written Scope Change Order with additional fees.</div>' +
-    '<hr class="doc-divider"><h2>3. Timeline</h2>' +
-    '<p><strong>Start:</strong> <span class="field">[START DATE]</span> · <strong>Final delivery:</strong> <span class="field">[END DATE]</span>. Timeline assumes Client provides materials and feedback within <span class="field">[3]</span> business days of each request.</p>' +
-    '<hr class="doc-divider"><h2>4. Fees &amp; Payment</h2>' +
-    '<p><strong>Total fee:</strong> <span class="field">[AMOUNT AND CURRENCY]</span></p>' +
-    '<ul><li><span class="field">[50%]</span> deposit due on signing: <span class="field">[AMOUNT]</span></li><li><span class="field">[50%]</span> final payment due on delivery: <span class="field">[AMOUNT]</span></li></ul>' +
-    '<p>Invoices due within <span class="field">[7]</span> days of receipt. Late balances accrue <span class="field">[1.5%]</span>/month. Work does not begin until deposit clears. Final files withheld until final payment clears.</p>' +
-    '<hr class="doc-divider"><h2>5. Revision Policy</h2>' +
-    '<p>Includes <span class="field">[2]</span> rounds of revisions. Additional rounds billed at <span class="field">[YOUR HOURLY RATE]</span>/hr. Feedback must be submitted consolidated within <span class="field">[7]</span> days of delivery; late feedback treated as approval.</p>' +
-    '<hr class="doc-divider"><h2>6. Kill Fee</h2>' +
-    '<ul><li>Cancelled before work begins: deposit refunded in full.</li><li>Cancelled after work begins but before 50% completion: deposit forfeited.</li><li>Cancelled after 50% completion: full fee owed.</li></ul>' +
-    '<hr class="doc-divider"><h2>7. Intellectual Property</h2>' +
-    '<p>Upon receipt of full payment, Freelancer assigns all rights in final approved deliverables to Client. Until then, all work remains Freelancer\'s property. Freelancer retains portfolio rights unless Client requests otherwise in writing.</p>' +
-    '<hr class="doc-divider"><h2>8. Confidentiality</h2>' +
-    '<p>Both parties agree to keep confidential all proprietary information shared during this engagement.</p>' +
-    '<hr class="doc-divider"><h2>9. Independent Contractor</h2>' +
-    '<p>Freelancer is an independent contractor, not an employee. Freelancer is responsible for their own taxes, insurance, and equipment.</p>' +
-    '<hr class="doc-divider"><h2>10. Dispute Resolution</h2>' +
-    '<p>Disputes will first be addressed in good faith within <span class="field">[14]</span> days. If unresolved, disputes will proceed to binding arbitration in <span class="field">[YOUR CITY, STATE/PROVINCE]</span>.</p>' +
-    '<hr class="doc-divider"><h2>11. Governing Law</h2>' +
-    '<p>This Agreement is governed by the laws of <span class="field">[YOUR STATE/PROVINCE AND COUNTRY]</span>.</p>' +
-    '<hr class="doc-thick"><h2>Signatures</h2>' +
-    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Agreement.</p>' +
+  var sigBlock =
     '<div class="sig-grid">' +
       '<div class="sig-box">' +
         '<div class="sig-box-lbl">Freelancer</div>' +
@@ -9167,33 +9137,25 @@ function _ptContractDocHTML() {
         '</div>' +
       '</div>' +
     '</div>';
+  var sections = '';
+  for (var i = 1; i <= 11; i++) {
+    sections += (i === 1 ? '' : '<hr class="doc-divider">') + '<h2>' + i + '.</h2><p><br></p>';
+  }
+  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Freelance Services Agreement</div>' +
+    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · freelancekit.io</div>' +
+    '<hr class="doc-thick">' +
+    sections +
+    '<hr class="doc-thick"><h2>Signatures</h2>' +
+    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Agreement.</p>' +
+    sigBlock;
 }
 
 function _ptScopeDocHTML() {
-  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Scope Change Order</div>' +
-    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body)">Addendum to Freelance Services Agreement · FreelanceKit Template</div>' +
-    '<hr class="doc-thick">' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-family:var(--font-body)">' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream);width:35%">Change Order #</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[#001]</span></td></tr>' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Date issued</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DATE]</span></td></tr>' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Project</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[PROJECT NAME]</span></td></tr>' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Original contract date</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[ORIGINAL AGREEMENT DATE]</span></td></tr>' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Freelancer</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[YOUR NAME]</span></td></tr>' +
-    '<tr><td style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream)">Client</td><td style="padding:9px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[CLIENT NAME]</span></td></tr>' +
-    '</table>' +
-    '<hr class="doc-divider"><h2>Description of Requested Change</h2>' +
-    '<p>Client has requested the following addition or modification to the original scope:</p>' +
-    '<span class="field-block">[DESCRIBE THE CHANGE REQUEST SPECIFICALLY]</span>' +
-    '<div class="doc-callout"><strong>Original scope reference:</strong> Per Section 2 of the Agreement dated <span class="field">[DATE]</span>, agreed deliverables were: <span class="field">[PASTE RELEVANT DELIVERABLES HERE]</span>. The request above falls outside this scope.</div>' +
-    '<hr class="doc-divider"><h2>Additional Fee</h2>' +
-    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;font-family:var(--font-body)">' +
-    '<tr style="background:var(--cream)"><th style="text-align:left;padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border)">Item</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Hours</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Rate</th><th style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Amount</th></tr>' +
-    '<tr><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px"><span class="field">[DESCRIBE EXTRA WORK]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[X hrs]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$X/hr]</span></td><td style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"><span class="field">[$TOTAL]</span></td></tr>' +
-    '<tr><td colspan="3" style="padding:10px 12px;border:1px solid var(--border);font-size:13px;font-weight:600;text-align:right">Total additional fee:</td><td style="padding:10px 12px;border:1px solid var(--border);font-size:14px;font-weight:600;text-align:right;color:var(--amber);font-family:var(--font-mono)"><span class="field">[$GRAND TOTAL]</span></td></tr>' +
-    '</table>' +
-    '<div class="doc-callout"><strong>Important:</strong> Work on this change will not begin until this Change Order is signed.</div>' +
-    '<hr class="doc-thick"><h2>Signatures</h2>' +
-    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Agreement.</p>' +
+  var tdLbl = 'style="padding:9px 12px;border:1px solid var(--border);font-size:12px;font-weight:500;background:var(--cream);width:35%"';
+  var tdVal = 'style="padding:9px 12px;border:1px solid var(--border);font-size:13px"';
+  var thSt  = 'style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border)"';
+  var tdFee = 'style="padding:10px 12px;border:1px solid var(--border);font-size:13px"';
+  var sigBlock =
     '<div class="sig-grid">' +
       '<div class="sig-box">' +
         '<div class="sig-box-lbl">Freelancer</div>' +
@@ -9219,6 +9181,40 @@ function _ptScopeDocHTML() {
         '</div>' +
       '</div>' +
     '</div>';
+  return '<div style="text-align:center;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Scope Change Order</div>' +
+    '<div style="text-align:center;font-size:11px;color:var(--ink-light);margin-bottom:28px;font-family:var(--font-body);letter-spacing:.04em;text-transform:uppercase">FreelanceKit Template · Addendum to Freelance Services Agreement</div>' +
+    '<hr class="doc-thick">' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:20px;font-family:var(--font-body)">' +
+      '<tr><td ' + tdLbl + '>Change Order #</td><td ' + tdVal + '><span class="field">[#001]</span></td></tr>' +
+      '<tr><td ' + tdLbl + '>Date issued</td><td ' + tdVal + '><span class="field">[DATE]</span></td></tr>' +
+      '<tr><td ' + tdLbl + '>Project</td><td ' + tdVal + '><span class="field">[PROJECT NAME]</span></td></tr>' +
+      '<tr><td ' + tdLbl + '>Original contract date</td><td ' + tdVal + '><span class="field">[ORIGINAL AGREEMENT DATE]</span></td></tr>' +
+      '<tr><td ' + tdLbl + '>Freelancer</td><td ' + tdVal + '><span class="field">[YOUR NAME]</span></td></tr>' +
+      '<tr><td ' + tdLbl + '>Client</td><td ' + tdVal + '><span class="field">[CLIENT NAME]</span></td></tr>' +
+    '</table>' +
+    '<hr class="doc-divider"><h2>1.</h2><p><br></p>' +
+    '<hr class="doc-divider"><h2>2.</h2>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;margin-top:12px;font-family:var(--font-body)">' +
+      '<tr style="background:var(--cream)">' +
+        '<th ' + thSt + ' style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:left">Item</th>' +
+        '<th ' + thSt + ' style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Hours</th>' +
+        '<th ' + thSt + ' style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Rate</th>' +
+        '<th ' + thSt + ' style="padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-light);border:1px solid var(--border);text-align:right">Amount</th>' +
+      '</tr>' +
+      '<tr>' +
+        '<td ' + tdFee + '></td>' +
+        '<td ' + tdFee + ' style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"></td>' +
+        '<td ' + tdFee + ' style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"></td>' +
+        '<td ' + tdFee + ' style="padding:10px 12px;border:1px solid var(--border);font-size:13px;text-align:right;font-family:var(--font-mono)"></td>' +
+      '</tr>' +
+      '<tr>' +
+        '<td colspan="3" style="padding:10px 12px;border:1px solid var(--border);font-size:13px;font-weight:600;text-align:right">Total additional fee:</td>' +
+        '<td style="padding:10px 12px;border:1px solid var(--border);font-size:14px;font-weight:600;text-align:right;color:var(--amber);font-family:var(--font-mono)"></td>' +
+      '</tr>' +
+    '</table>' +
+    '<hr class="doc-thick"><h2>Signatures</h2>' +
+    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Change Order.</p>' +
+    sigBlock;
 }
 
 // ─── DRAG & DROP TASKS ───
