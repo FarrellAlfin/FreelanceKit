@@ -525,7 +525,7 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .cf-hint{font-size:11px;font-weight:400;color:var(--on-surface-light)}
 .cf-inp{width:100%;padding:9px 12px;border:none;border-radius:8px;font-family:var(--font-body);font-size:14px;font-weight:500;color:var(--on-surface);background:var(--surface-container);transition:all .15s;border-bottom:2px solid transparent;outline:none}
 .cf-inp:focus{background:var(--surface-white);border-bottom:2px solid var(--primary)}
-.cf-inp-prefix{padding-left:28px}
+.cf-inp-prefix{padding-left:24px}
 .cf-wrap{position:relative}
 .cf-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--on-surface-mid);pointer-events:none}
 .cf-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--on-surface-light);pointer-events:none}
@@ -749,9 +749,9 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .trb-currency-sel{padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font-body);font-size:12px;color:var(--ink);background:var(--cream);cursor:pointer}
 .trb-currency-sel:focus{outline:none;border-color:var(--amber)}
 /* Timesheet editable target */
-.gts-target-inp{width:38px;padding:1px 4px;border:1.5px solid var(--border);border-radius:4px;font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--ink);background:var(--cream);text-align:center;-moz-appearance:textfield;cursor:pointer}
-.gts-target-inp:hover{border-color:var(--sage)}
-.gts-target-inp:focus{outline:none;border-color:var(--sage)}
+.gts-target-inp{width:38px;padding:1px 4px;border:1.5px solid transparent;border-radius:4px;font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--ink);background:transparent;text-align:center;-moz-appearance:textfield;cursor:pointer;transition:border-color .15s,background .15s;outline:none}
+.gts-target-inp:hover{border-color:var(--border);background:rgba(0,0,0,.04)}
+.gts-target-inp:focus{border-color:var(--sage);background:var(--cream);cursor:text}
 .gts-target-inp::-webkit-inner-spin-button,.gts-target-inp::-webkit-outer-spin-button{-webkit-appearance:none}
 
 /* Welcome packet + brief — doc style */
@@ -1549,7 +1549,7 @@ input[type=number]{-moz-appearance:textfield}
 .pt-gantt-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .pt-gantt-title{font-size:13px;font-weight:700;color:var(--ink)}
 .pt-gantt-today-note{font-size:11px;color:#E8594A;display:flex;align-items:center;gap:5px}
-.gantt-today-line{position:absolute;top:0;bottom:0;width:2px;background:#E8594A;z-index:5;pointer-events:none}
+.gantt-today-line{position:absolute;top:0;bottom:0;width:1.5px;background:var(--ink);opacity:.7;z-index:5;pointer-events:none}
 /* Task filter bar */
 .pt-filter-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm)}
 .pt-filter-btn{padding:3px 9px;border-radius:20px;border:1px solid var(--border);background:transparent;font-size:11px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);transition:all .15s}
@@ -1954,19 +1954,39 @@ var RateLimiter = (function() {
           <div class="lp-bc-title">Run every project end-to-end.</div>
           <div class="lp-bc-desc">Milestones, tasks, time logs, billing, Gantt chart — all in one place. Share with collaborators and track velocity in real time.</div>
           <div style="margin-top:16px">
-            <div class="lp-pt-proj">
-              <div class="lp-pt-proj-hdr"><span style="background:rgba(0,150,104,.25);border-radius:4px;padding:1px 7px">🛠 Brand Redesign</span><span style="color:rgba(0,200,140,.8);font-size:11px;font-weight:700">72%</span></div>
-              <div class="lp-pt-bw"><div class="lp-pt-bf" style="width:72%"></div></div>
-              <div class="lp-pt-tasks">
-                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Brand audit complete</span></div>
-                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Wireframes approved</span></div>
-                <div class="lp-pt-tr"><div class="lp-pt-cb"></div><span class="lp-pt-tn">Final delivery</span></div>
+            <!-- Mini gantt preview -->
+            <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;margin-bottom:10px">
+              <div style="display:flex;margin-bottom:7px">
+                <div style="flex:0.38;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Jun</div>
+                <div style="flex:0.37;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Jul</div>
+                <div style="flex:0.25;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Aug</div>
+              </div>
+              <div style="position:relative">
+                <div style="position:absolute;top:0;bottom:0;left:57%;width:1.5px;background:rgba(250,247,242,.25);z-index:2"></div>
+                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center;margin-bottom:7px">
+                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brand Redesign</span>
+                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
+                    <div style="position:absolute;left:8%;width:52%;height:100%;background:rgba(0,150,104,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jun 2 → Jul 25</span></div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center;margin-bottom:7px">
+                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Web Revamp</span>
+                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
+                    <div style="position:absolute;left:36%;width:44%;height:100%;background:rgba(217,119,6,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jun 25 → Aug 5</span></div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center">
+                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">API Docs</span>
+                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
+                    <div style="position:absolute;left:60%;width:30%;height:100%;background:rgba(99,102,241,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jul 15 → Aug 10</span></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="lp-pt-stats">
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v">91%</div><div class="lp-pt-stat-l">Utilization</div></div>
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v">0</div><div class="lp-pt-stat-l">Overdue</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v">3</div><div class="lp-pt-stat-l">Projects</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">+32%</div><div class="lp-pt-stat-l">ROI</div></div>
             </div>
           </div>
         </div>
@@ -1975,7 +1995,7 @@ var RateLimiter = (function() {
         <div class="lp-bc lp-reveal" data-d="2">
           <div class="lp-bc-tag" style="background:var(--amber-light);color:var(--amber)">Rate Calculator</div>
           <div class="lp-bc-title">Know your floor rate.</div>
-          <div class="lp-bc-desc">Enter your take-home target → get your minimum hourly rate. Accounts for taxes, expenses, and slow months. Multi-currency.</div>
+          <div class="lp-bc-desc">Enter your take-home target → get your minimum hourly rate. Accounts for taxes, expenses, and slow months.</div>
           <div style="margin-top:14px">
             <div class="lp-rc-field">
               <div class="lp-rc-label">Target take-home</div>
@@ -2121,8 +2141,8 @@ var RateLimiter = (function() {
           <ul class="lp-price-feats">
             <li>Everything in Free</li>
             <li>Invoice Builder + aging reports</li>
-            <li>Rate Calculator (multi-currency)</li>
-            <li>Tax Tracker (multi-currency)</li>
+            <li>Rate Calculator</li>
+            <li>Tax Tracker</li>
             <li>Pipeline Tracker + forecast</li>
             <li>Project sharing + collaboration</li>
             <li>Timesheet + heatmap + goals</li>
@@ -2805,12 +2825,12 @@ var RateLimiter = (function() {
         <div class="calc-grid">
           <div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🎯</span><span class="cc-title">Income target</span></div><div class="cc-body">
-              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-takehome">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="" placeholder="e.g. 60000" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Target annual take-home <span class="cf-hint">after tax, in your pocket</span></div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-takehome">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-takehome" value="" placeholder="60000" oninput="calcRate()"></div></div>
               <div class="cf"><div class="cf-lbl">Currency</div><select class="cf-sel" id="rc-currency" onchange="calcRate()"><option value="$">🇺🇸 USD</option><option value="CA$">🇨🇦 CAD</option><option value="£">🇬🇧 GBP</option><option value="€">🇪🇺 EUR</option><option value="A$">🇦🇺 AUD</option><option value="Rp">🇮🇩 IDR</option></select></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">🏛️</span><span class="cc-title">Tax & expenses</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl">Self-employment tax rate <span class="cf-hint">combined</span></div><div class="cf-wrap"><input class="cf-inp" type="number" id="rc-tax" value="30" min="5" max="60" oninput="calcRate()" style="padding-right:28px"><span class="cf-suffix">%</span></div></div>
-              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-expenses">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="" placeholder="e.g. 3600" oninput="calcRate()"></div></div>
+              <div class="cf"><div class="cf-lbl">Annual business expenses</div><div class="cf-wrap"><span class="cf-prefix" id="rc-pfx-expenses">$</span><input class="cf-inp cf-inp-prefix" type="number" id="rc-expenses" value="" placeholder="3600" oninput="calcRate()"></div></div>
             </div></div>
             <div class="calc-card"><div class="cc-header"><span class="cc-icon">📅</span><span class="cc-title">Time & availability</span></div><div class="cc-body">
               <div class="cf"><div class="cf-lbl"><span>Weeks off per year: <strong id="rc-woff-lbl">6</strong></span><span class="cf-hint">vacation + sick + slow</span></div><input class="cf-slider" type="range" id="rc-woff" min="0" max="51" value="6" oninput="document.getElementById('rc-woff-lbl').textContent=this.value;calcRate()"><div class="cf-slider-labels"><span>0 wks</span><span>51 wks</span></div></div>
@@ -2943,6 +2963,19 @@ var RateLimiter = (function() {
                 <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--ink-light)" id="ptv-overdue-note"></div>
               </div>
             </div>
+              <div class="pt-ov-pulse-row" id="ptv-roi-row" style="grid-template-columns:1fr 1fr;margin-top:0">
+                <div class="pt-ov-pulse-card">
+                  <div class="pt-ov-pulse-lbl">Project ROI</div>
+                  <div class="pt-ov-pulse-val"><span id="ptv-roi-val">—</span></div>
+                  <div class="pt-ov-pulse-sub" id="ptv-roi-sub">return on time invested</div>
+                  <div style="margin-top:6px;font-size:10px;font-weight:600;color:var(--ink-light)" id="ptv-roi-detail"></div>
+                </div>
+                <div class="pt-ov-pulse-card">
+                  <div class="pt-ov-pulse-lbl">Effective Rate</div>
+                  <div class="pt-ov-pulse-val"><span id="ptv-eff-rate">—</span></div>
+                  <div class="pt-ov-pulse-sub">earned per hour</div>
+                </div>
+              </div>
             <!-- Main 2-column row: project info left, key documents right -->
             <div class="pt-ov-main-row">
               <!-- Left: Client / Status / Start / End / Budget -->
@@ -4421,6 +4454,9 @@ function calcRate(){
   if(g('rc-sym'))g('rc-sym').textContent=sym;
   if(g('rc-pfx-takehome'))g('rc-pfx-takehome').textContent=sym;
   if(g('rc-pfx-expenses'))g('rc-pfx-expenses').textContent=sym;
+  var _pfxPad = sym.length <= 1 ? '24px' : sym.length === 2 ? '30px' : '40px';
+  if(g('rc-takehome')) g('rc-takehome').style.paddingLeft = _pfxPad;
+  if(g('rc-expenses')) g('rc-expenses').style.paddingLeft = _pfxPad;
   if(g('rc-hourly'))g('rc-hourly').textContent=Math.round(rate).toLocaleString();
   if(g('rc-r-takehome'))g('rc-r-takehome').textContent=F(takeHome);
   if(g('rc-r-gross'))g('rc-r-gross').textContent=F(grossed);
@@ -4436,6 +4472,8 @@ function calcRate(){
   try { localStorage.setItem('fk_rate_inputs', JSON.stringify({ takeHome: takeHome, billableHrs: hrs, weeksOff: woff })); } catch(e) {}
   // Refresh home goal bar if it's visible
   if (typeof renderHomeGoalBar === 'function') renderHomeGoalBar();
+  window._rcRate = rate;
+  window._rcSym = sym;
 }
 
 // ═══════════════ PIPELINE ═══════════════
@@ -7489,6 +7527,41 @@ function renderPtOverview() {
     ovNoteEl.style.color = overdueCount === 0 ? 'var(--sage)' : '#DC2626';
   }
 
+  // ROI & Effective Rate
+  var _bs = window._ptBilling || [];
+  var _revenue = _bs.reduce(function(s,b){ return s+(parseFloat(b.amount)||0); }, 0);
+  var _rate = window._rcRate || 0;
+  if (!_rate) {
+    try { var _ri=JSON.parse(localStorage.getItem('fk_rate_inputs')||'{}');
+      var _th=_ri.takeHome||0,_exp=0,_woff=_ri.weeksOff||0,_h=_ri.billableHrs||40;
+      var _gr=_th>0?_th/(1-0.3):0; var _wb=(_gr+_exp)*1.15; var _wk=52-_woff;
+      _rate = _wk*_h>0 ? _wb/(_wk*_h) : 0;
+    } catch(e){}
+  }
+  var _timeCost = totalHrs * _rate;
+  var _roi = _timeCost > 0 ? ((_revenue - _timeCost) / _timeCost * 100) : null;
+  var _effRate = totalHrs > 0 ? (_revenue / totalHrs) : null;
+  var _sym = window._rcSym || '$';
+  var roiValEl = document.getElementById('ptv-roi-val');
+  var roiSubEl2 = document.getElementById('ptv-roi-sub');
+  var roiDetEl = document.getElementById('ptv-roi-detail');
+  var effRateEl = document.getElementById('ptv-eff-rate');
+  if (roiValEl) {
+    if (_roi !== null && _revenue > 0) {
+      var _roiStr = (_roi >= 0 ? '+' : '') + Math.round(_roi) + '%';
+      roiValEl.textContent = _roiStr;
+      roiValEl.style.color = _roi >= 0 ? 'var(--sage)' : '#DC2626';
+      if (roiSubEl2) roiSubEl2.textContent = 'return on time invested';
+      if (roiDetEl) { roiDetEl.textContent = 'Revenue ' + fm(_revenue,_sym) + ' · Cost ' + fm(_timeCost,_sym); roiDetEl.style.color = _roi >= 0 ? 'var(--sage)' : '#DC2626'; }
+    } else {
+      roiValEl.textContent = '—';
+      roiValEl.style.color = 'var(--ink)';
+      if (roiSubEl2) roiSubEl2.textContent = _rate > 0 ? 'add billing to calculate' : 'set rate in calculator';
+      if (roiDetEl) roiDetEl.textContent = '';
+    }
+  }
+  if (effRateEl) effRateEl.textContent = _effRate ? fm(Math.round(_effRate),_sym)+'/h' : '—';
+
   // Active Timeline — all non-done tasks sorted by due date
   var active = ts.filter(function(t){ return t.status !== 'done'; })
     .slice().sort(function(a,b){
@@ -8546,44 +8619,35 @@ function togglePtListView() {
 }
 
 function _buildGanttRuler(rangeStart, totalDays, months, todayPct) {
-  var tickInterval = totalDays > 120 ? 14 : 7;
+  var todayDate = new Date(); todayDate.setHours(0,0,0,0);
+  var interval = totalDays > 90 ? 7 : 1;
   var ticks = [];
   var td = new Date(rangeStart);
-  var rangeEnd = new Date(rangeStart.getTime() + totalDays * 86400000);
+  var rangeEnd = new Date(rangeStart.getTime() + (totalDays - 1) * 86400000);
   while (td <= rangeEnd) {
     var pct = ((td - rangeStart) / 86400000 / totalDays * 100).toFixed(2);
-    ticks.push({pct: pct, d: td.getDate()});
-    td = new Date(td.getTime() + tickInterval * 86400000);
+    var isToday = td.getFullYear() === todayDate.getFullYear() && td.getMonth() === todayDate.getMonth() && td.getDate() === todayDate.getDate();
+    ticks.push({ pct: pct, d: td.getDate(), isToday: isToday });
+    td = new Date(td.getTime() + interval * 86400000);
   }
-  // Check if today falls on a tick
-  var todayOnTick = todayPct !== null && ticks.some(function(t){ return Math.abs(parseFloat(t.pct) - parseFloat(todayPct)) < 0.5; });
-
+  // Ensure today tick is always present
+  if (todayPct !== null && !ticks.some(function(t){ return t.isToday; })) {
+    ticks.push({ pct: todayPct, d: todayDate.getDate(), isToday: true });
+  }
   var tickHtml = ticks.map(function(t) {
-    var isToday = todayPct !== null && Math.abs(parseFloat(t.pct) - parseFloat(todayPct)) < 0.5;
-    if (isToday) {
-      return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;pointer-events:none;z-index:2">' +
-        '<span style="font-size:9px;color:#E8594A;font-weight:600;transform:translateX(-50%);white-space:nowrap;line-height:1.3">' + t.d + '</span>' +
-        '<span style="font-size:9px;font-weight:700;color:#E8594A;white-space:nowrap;transform:translateX(-100%);margin-top:auto;padding-right:2px;line-height:1.3">Today</span>' +
+    if (t.isToday) {
+      return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:4">' +
+        '<span style="display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;background:var(--ink);color:#fff;border-radius:4px;font-size:9px;font-weight:700;padding:0 3px;line-height:1;white-space:nowrap">' + t.d + '</span>' +
         '</div>';
     }
-    return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;pointer-events:none">' +
-      '<div style="width:1px;height:5px;background:var(--border)"></div>' +
-      '<span style="font-size:9px;color:var(--ink-light);transform:translateX(-50%);white-space:nowrap;line-height:1.3">' + t.d + '</span>' +
+    return '<div style="position:absolute;left:' + t.pct + '%;top:0;bottom:0;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;pointer-events:none">' +
+      '<span style="font-size:9px;color:var(--ink-light);white-space:nowrap;line-height:1">' + t.d + '</span>' +
       '</div>';
   }).join('');
-
-  // If today falls between ticks, add a standalone "Today" marker
-  if (todayPct !== null && !todayOnTick) {
-    tickHtml += '<div style="position:absolute;left:' + todayPct + '%;top:0;bottom:0;display:flex;flex-direction:column;pointer-events:none;z-index:2">' +
-      '<div style="width:1px;flex:1;background:#E8594A;opacity:.5"></div>' +
-      '<span style="font-size:9px;font-weight:700;color:#E8594A;white-space:nowrap;transform:translateX(-100%);padding-right:2px;line-height:1.3">Today</span>' +
-      '</div>';
-  }
-
   return '<tr>' +
     '<th style="background:#F8F7F4;position:sticky;left:0;z-index:11;border-right:1px solid var(--border)"></th>' +
     '<th colspan="' + months.length + '" style="padding:0;border-left:none;border-top:1px solid var(--border);background:#F8F7F4">' +
-    '<div style="position:relative;height:30px;overflow:visible">' + tickHtml + '</div></th></tr>';
+    '<div style="position:relative;height:26px;overflow:hidden">' + tickHtml + '</div></th></tr>';
 }
 
 function ganttScrollToToday(wrapperId) {
