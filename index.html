@@ -185,7 +185,7 @@ h1 em,h2 em{font-style:normal;color:var(--tertiary)}
 .lp-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .lp-bc{background:var(--white);border-radius:16px;padding:26px;border:1.5px solid var(--border);transition:transform .25s,box-shadow .25s,border-color .25s;overflow:hidden;position:relative}
 .lp-bc:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(25,28,30,.08);border-color:rgba(0,150,104,.2)}
-.lp-bc-a{grid-column:span 2;grid-row:span 2;background:var(--ink);border-color:transparent}
+.lp-bc-a{grid-column:span 2;grid-row:span 2;background:var(--ink);border-color:transparent;display:flex;flex-direction:column}
 .lp-bc-a:hover{border-color:rgba(0,200,140,.25)}
 .lp-bc-d{grid-column:span 3}
 .lp-bc-f{grid-column:span 2}
@@ -195,20 +195,20 @@ h1 em,h2 em{font-style:normal;color:var(--tertiary)}
 .lp-bc-a .lp-bc-title{color:#fff;font-size:22px}
 .lp-bc-a .lp-bc-desc{color:rgba(250,247,242,.55)}
 /* Bento mini UIs */
-.lp-pt-proj{background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;margin-bottom:8px}
-.lp-pt-proj-hdr{font-size:11px;font-weight:600;color:rgba(250,247,242,.9);margin-bottom:7px;display:flex;align-items:center;justify-content:space-between}
-.lp-pt-bw{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:8px;overflow:hidden}
-.lp-pt-bf{height:100%;border-radius:2px;background:var(--sage);transition:width 1.2s ease}
-.lp-pt-tasks{display:flex;flex-direction:column;gap:4px}
-.lp-pt-tr{display:flex;align-items:center;gap:7px}
-.lp-pt-cb{width:13px;height:13px;border-radius:3px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px}
+.lp-pt-proj{background:rgba(255,255,255,.06);border-radius:10px;padding:14px 16px}
+.lp-pt-proj-hdr{font-size:13px;font-weight:700;color:rgba(250,247,242,.9);margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;font-family:'Manrope',sans-serif}
+.lp-pt-bw{height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:10px;overflow:hidden}
+.lp-pt-bf{height:100%;border-radius:3px;background:var(--sage);transition:width 1.2s ease}
+.lp-pt-tasks{display:flex;flex-direction:column;gap:7px}
+.lp-pt-tr{display:flex;align-items:center;gap:10px}
+.lp-pt-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
 .lp-pt-cb.done{background:var(--sage);border-color:var(--sage);color:#fff}
-.lp-pt-tn{font-size:10.5px;color:rgba(250,247,242,.7)}
+.lp-pt-tn{font-size:13px;color:rgba(250,247,242,.75);font-family:'Inter',sans-serif}
 .lp-pt-tn.done{color:rgba(250,247,242,.35);text-decoration:line-through}
-.lp-pt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
-.lp-pt-stat{text-align:center;background:rgba(255,255,255,.05);border-radius:6px;padding:7px 4px}
-.lp-pt-stat-v{font-size:14px;font-weight:700;color:rgba(0,200,140,.9);font-family:'Manrope',sans-serif}
-.lp-pt-stat-l{font-size:8px;color:rgba(250,247,242,.4);margin-top:1px}
+.lp-pt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lp-pt-stat{text-align:center;background:rgba(255,255,255,.05);border-radius:8px;padding:11px 6px}
+.lp-pt-stat-v{font-size:20px;font-weight:800;color:rgba(0,200,140,.9);font-family:'Manrope',sans-serif;letter-spacing:-.03em}
+.lp-pt-stat-l{font-size:10px;color:rgba(250,247,242,.4);margin-top:3px;font-family:'Inter',sans-serif}
 .lp-rc-field{margin-bottom:8px}
 .lp-rc-label{font-size:9.5px;color:var(--ink-light);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 .lp-rc-result{background:var(--amber-light);border-radius:8px;padding:12px;display:flex;align-items:baseline;gap:3px;margin-top:12px}
@@ -1953,10 +1953,12 @@ var RateLimiter = (function() {
           <div class="lp-bc-tag" style="background:rgba(0,150,104,.2);color:rgba(0,200,140,.9)">Project Tracker</div>
           <div class="lp-bc-title">Run every project end-to-end.</div>
           <div class="lp-bc-desc">Milestones, tasks, time logs, billing, Gantt chart — all in one place. Share with collaborators and track velocity in real time.</div>
-          <div style="margin-top:16px">
-            <!-- Project card preview -->
+          <!-- flex:1 content fills remaining card height -->
+          <div style="margin-top:16px;flex:1;display:flex;flex-direction:column;gap:12px;min-height:0">
+
+            <!-- Project card -->
             <div class="lp-pt-proj">
-              <div class="lp-pt-proj-hdr"><span style="background:rgba(0,150,104,.25);border-radius:4px;padding:1px 7px">🛠 Brand Redesign</span><span style="color:rgba(0,200,140,.8);font-size:11px;font-weight:700">72%</span></div>
+              <div class="lp-pt-proj-hdr"><span style="background:rgba(0,150,104,.25);border-radius:5px;padding:2px 9px">🛠 Brand Redesign</span><span style="color:rgba(0,200,140,.8);font-size:13px;font-weight:800">72%</span></div>
               <div class="lp-pt-bw"><div class="lp-pt-bf" style="width:72%"></div></div>
               <div class="lp-pt-tasks">
                 <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Brand audit complete</span></div>
@@ -1964,63 +1966,68 @@ var RateLimiter = (function() {
                 <div class="lp-pt-tr"><div class="lp-pt-cb"></div><span class="lp-pt-tn">Final delivery</span></div>
               </div>
             </div>
-            <!-- Mini gantt preview -->
-            <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;margin-bottom:10px">
-              <div style="display:flex;margin-bottom:7px">
-                <div style="flex:0.38;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Jun</div>
-                <div style="flex:0.37;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Jul</div>
-                <div style="flex:0.25;font-size:9px;font-weight:700;color:rgba(250,247,242,.35);letter-spacing:.06em;text-transform:uppercase">Aug</div>
+
+            <!-- Gantt — grows to fill available space -->
+            <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;flex:1;display:flex;flex-direction:column;min-height:0">
+              <div style="display:flex;margin-bottom:10px">
+                <div style="flex:0.38;font-size:11px;font-weight:700;color:rgba(250,247,242,.4);letter-spacing:.06em;text-transform:uppercase;font-family:'Manrope',sans-serif">Jun</div>
+                <div style="flex:0.37;font-size:11px;font-weight:700;color:rgba(250,247,242,.4);letter-spacing:.06em;text-transform:uppercase;font-family:'Manrope',sans-serif">Jul</div>
+                <div style="flex:0.25;font-size:11px;font-weight:700;color:rgba(250,247,242,.4);letter-spacing:.06em;text-transform:uppercase;font-family:'Manrope',sans-serif">Aug</div>
               </div>
-              <div style="position:relative">
-                <div style="position:absolute;top:0;bottom:0;left:57%;width:1.5px;background:rgba(250,247,242,.25);z-index:2"></div>
-                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center;margin-bottom:7px">
-                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Brand Redesign</span>
-                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
-                    <div style="position:absolute;left:8%;width:52%;height:100%;background:rgba(0,150,104,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jun 2 → Jul 25</span></div>
+              <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:space-around">
+                <div style="position:absolute;top:0;bottom:0;left:57%;width:2px;background:rgba(250,247,242,.2);z-index:2;border-radius:1px"></div>
+                <div style="display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center">
+                  <span style="font-size:12px;color:rgba(250,247,242,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Inter',sans-serif">Brand Redesign</span>
+                  <div style="position:relative;height:20px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden">
+                    <div style="position:absolute;left:8%;width:52%;height:100%;background:rgba(0,150,104,.8);border-radius:5px;display:flex;align-items:center;padding:0 8px"><span style="font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;font-family:'Inter Tight',monospace">Jun 2 → Jul 25</span></div>
                   </div>
                 </div>
-                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center;margin-bottom:7px">
-                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Web Revamp</span>
-                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
-                    <div style="position:absolute;left:36%;width:44%;height:100%;background:rgba(217,119,6,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jun 25 → Aug 5</span></div>
+                <div style="display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center">
+                  <span style="font-size:12px;color:rgba(250,247,242,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Inter',sans-serif">Web Revamp</span>
+                  <div style="position:relative;height:20px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden">
+                    <div style="position:absolute;left:36%;width:44%;height:100%;background:rgba(217,119,6,.8);border-radius:5px;display:flex;align-items:center;padding:0 8px"><span style="font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;font-family:'Inter Tight',monospace">Jun 25 → Aug 5</span></div>
                   </div>
                 </div>
-                <div style="display:grid;grid-template-columns:68px 1fr;gap:8px;align-items:center">
-                  <span style="font-size:9px;color:rgba(250,247,242,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">API Docs</span>
-                  <div style="position:relative;height:14px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
-                    <div style="position:absolute;left:60%;width:30%;height:100%;background:rgba(99,102,241,.75);border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="font-size:8px;color:rgba(255,255,255,.85);font-weight:600;white-space:nowrap">Jul 15 → Aug 10</span></div>
+                <div style="display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:center">
+                  <span style="font-size:12px;color:rgba(250,247,242,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Inter',sans-serif">API Docs</span>
+                  <div style="position:relative;height:20px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden">
+                    <div style="position:absolute;left:60%;width:30%;height:100%;background:rgba(99,102,241,.8);border-radius:5px;display:flex;align-items:center;padding:0 8px"><span style="font-size:10px;color:rgba(255,255,255,.9);font-weight:600;white-space:nowrap;font-family:'Inter Tight',monospace">Jul 15 → Aug 10</span></div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Stats row -->
             <div class="lp-pt-stats">
               <div class="lp-pt-stat"><div class="lp-pt-stat-v">3</div><div class="lp-pt-stat-l">Projects</div></div>
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
-              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.8)">91%</div><div class="lp-pt-stat-l">Utilisation</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.85)">47.5h</div><div class="lp-pt-stat-l">Logged</div></div>
+              <div class="lp-pt-stat"><div class="lp-pt-stat-v" style="color:rgba(0,200,140,.85)">91%</div><div class="lp-pt-stat-l">Utilisation</div></div>
             </div>
-            <!-- Overview pulse preview -->
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px">
-              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
-                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Hours</div>
-                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">47.5</div>
-                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">logged</div>
+
+            <!-- Pulse metrics -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:12px 12px">
+                <div style="font-size:10px;font-weight:700;color:rgba(250,247,242,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-family:'Manrope',sans-serif">Hours</div>
+                <div style="font-size:24px;font-weight:700;color:rgba(250,247,242,.9);font-family:'Inter Tight',monospace;line-height:1;letter-spacing:-.02em">47.5</div>
+                <div style="font-size:10px;color:rgba(250,247,242,.35);margin-top:4px;font-family:'Inter',sans-serif">logged</div>
               </div>
-              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
-                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Upcoming</div>
-                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">02</div>
-                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">deadlines</div>
+              <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:12px 12px">
+                <div style="font-size:10px;font-weight:700;color:rgba(250,247,242,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-family:'Manrope',sans-serif">Upcoming</div>
+                <div style="font-size:24px;font-weight:700;color:rgba(250,247,242,.9);font-family:'Inter Tight',monospace;line-height:1;letter-spacing:-.02em">02</div>
+                <div style="font-size:10px;color:rgba(250,247,242,.35);margin-top:4px;font-family:'Inter',sans-serif">deadlines</div>
               </div>
-              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
-                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Done</div>
-                <div style="font-size:17px;font-weight:700;color:rgba(0,200,140,.8);font-family:'DM Mono',monospace;line-height:1">72%</div>
-                <div style="font-size:8px;color:rgba(250,247,242,.3);margin-top:3px">8 of 11</div>
+              <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:12px 12px">
+                <div style="font-size:10px;font-weight:700;color:rgba(250,247,242,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-family:'Manrope',sans-serif">Done</div>
+                <div style="font-size:24px;font-weight:700;color:rgba(0,200,140,.85);font-family:'Inter Tight',monospace;line-height:1;letter-spacing:-.02em">72%</div>
+                <div style="font-size:10px;color:rgba(250,247,242,.35);margin-top:4px;font-family:'Inter',sans-serif">8 of 11</div>
               </div>
-              <div style="background:rgba(255,255,255,.06);border-radius:6px;padding:9px 10px">
-                <div style="font-size:8px;font-weight:700;color:rgba(250,247,242,.35);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Overdue</div>
-                <div style="font-size:17px;font-weight:700;color:rgba(250,247,242,.9);font-family:'DM Mono',monospace;line-height:1">00</div>
-                <div style="font-size:8px;color:rgba(0,200,140,.7);margin-top:3px">✓ on track</div>
+              <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:12px 12px">
+                <div style="font-size:10px;font-weight:700;color:rgba(250,247,242,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;font-family:'Manrope',sans-serif">Overdue</div>
+                <div style="font-size:24px;font-weight:700;color:rgba(250,247,242,.9);font-family:'Inter Tight',monospace;line-height:1;letter-spacing:-.02em">00</div>
+                <div style="font-size:10px;color:rgba(0,200,140,.75);margin-top:4px;font-family:'Inter',sans-serif">✓ on track</div>
               </div>
             </div>
+
           </div>
         </div>
 
