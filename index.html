@@ -1954,6 +1954,16 @@ var RateLimiter = (function() {
           <div class="lp-bc-title">Run every project end-to-end.</div>
           <div class="lp-bc-desc">Milestones, tasks, time logs, billing, Gantt chart — all in one place. Share with collaborators and track velocity in real time.</div>
           <div style="margin-top:16px">
+            <!-- Project card preview -->
+            <div class="lp-pt-proj">
+              <div class="lp-pt-proj-hdr"><span style="background:rgba(0,150,104,.25);border-radius:4px;padding:1px 7px">🛠 Brand Redesign</span><span style="color:rgba(0,200,140,.8);font-size:11px;font-weight:700">72%</span></div>
+              <div class="lp-pt-bw"><div class="lp-pt-bf" style="width:72%"></div></div>
+              <div class="lp-pt-tasks">
+                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Brand audit complete</span></div>
+                <div class="lp-pt-tr"><div class="lp-pt-cb done">✓</div><span class="lp-pt-tn done">Wireframes approved</span></div>
+                <div class="lp-pt-tr"><div class="lp-pt-cb"></div><span class="lp-pt-tn">Final delivery</span></div>
+              </div>
+            </div>
             <!-- Mini gantt preview -->
             <div style="background:rgba(255,255,255,.05);border-radius:8px;padding:10px 12px;margin-bottom:10px">
               <div style="display:flex;margin-bottom:7px">
@@ -2963,19 +2973,6 @@ var RateLimiter = (function() {
                 <div style="margin-top:8px;font-size:10px;font-weight:600;color:var(--ink-light)" id="ptv-overdue-note"></div>
               </div>
             </div>
-              <div class="pt-ov-pulse-row" id="ptv-roi-row" style="grid-template-columns:1fr 1fr;margin-top:0">
-                <div class="pt-ov-pulse-card">
-                  <div class="pt-ov-pulse-lbl">Project ROI</div>
-                  <div class="pt-ov-pulse-val"><span id="ptv-roi-val">—</span></div>
-                  <div class="pt-ov-pulse-sub" id="ptv-roi-sub">return on time invested</div>
-                  <div style="margin-top:6px;font-size:10px;font-weight:600;color:var(--ink-light)" id="ptv-roi-detail"></div>
-                </div>
-                <div class="pt-ov-pulse-card">
-                  <div class="pt-ov-pulse-lbl">Effective Rate</div>
-                  <div class="pt-ov-pulse-val"><span id="ptv-eff-rate">—</span></div>
-                  <div class="pt-ov-pulse-sub">earned per hour</div>
-                </div>
-              </div>
             <!-- Main 2-column row: project info left, key documents right -->
             <div class="pt-ov-main-row">
               <!-- Left: Client / Status / Start / End / Budget -->
@@ -4472,8 +4469,6 @@ function calcRate(){
   try { localStorage.setItem('fk_rate_inputs', JSON.stringify({ takeHome: takeHome, billableHrs: hrs, weeksOff: woff })); } catch(e) {}
   // Refresh home goal bar if it's visible
   if (typeof renderHomeGoalBar === 'function') renderHomeGoalBar();
-  window._rcRate = rate;
-  window._rcSym = sym;
 }
 
 // ═══════════════ PIPELINE ═══════════════
@@ -7527,40 +7522,6 @@ function renderPtOverview() {
     ovNoteEl.style.color = overdueCount === 0 ? 'var(--sage)' : '#DC2626';
   }
 
-  // ROI & Effective Rate
-  var _bs = window._ptBilling || [];
-  var _revenue = _bs.reduce(function(s,b){ return s+(parseFloat(b.amount)||0); }, 0);
-  var _rate = window._rcRate || 0;
-  if (!_rate) {
-    try { var _ri=JSON.parse(localStorage.getItem('fk_rate_inputs')||'{}');
-      var _th=_ri.takeHome||0,_exp=0,_woff=_ri.weeksOff||0,_h=_ri.billableHrs||40;
-      var _gr=_th>0?_th/(1-0.3):0; var _wb=(_gr+_exp)*1.15; var _wk=52-_woff;
-      _rate = _wk*_h>0 ? _wb/(_wk*_h) : 0;
-    } catch(e){}
-  }
-  var _timeCost = totalHrs * _rate;
-  var _roi = _timeCost > 0 ? ((_revenue - _timeCost) / _timeCost * 100) : null;
-  var _effRate = totalHrs > 0 ? (_revenue / totalHrs) : null;
-  var _sym = window._rcSym || '$';
-  var roiValEl = document.getElementById('ptv-roi-val');
-  var roiSubEl2 = document.getElementById('ptv-roi-sub');
-  var roiDetEl = document.getElementById('ptv-roi-detail');
-  var effRateEl = document.getElementById('ptv-eff-rate');
-  if (roiValEl) {
-    if (_roi !== null && _revenue > 0) {
-      var _roiStr = (_roi >= 0 ? '+' : '') + Math.round(_roi) + '%';
-      roiValEl.textContent = _roiStr;
-      roiValEl.style.color = _roi >= 0 ? 'var(--sage)' : '#DC2626';
-      if (roiSubEl2) roiSubEl2.textContent = 'return on time invested';
-      if (roiDetEl) { roiDetEl.textContent = 'Revenue ' + fm(_revenue,_sym) + ' · Cost ' + fm(_timeCost,_sym); roiDetEl.style.color = _roi >= 0 ? 'var(--sage)' : '#DC2626'; }
-    } else {
-      roiValEl.textContent = '—';
-      roiValEl.style.color = 'var(--ink)';
-      if (roiSubEl2) roiSubEl2.textContent = _rate > 0 ? 'add billing to calculate' : 'set rate in calculator';
-      if (roiDetEl) roiDetEl.textContent = '';
-    }
-  }
-  if (effRateEl) effRateEl.textContent = _effRate ? fm(Math.round(_effRate),_sym)+'/h' : '—';
 
   // Active Timeline — all non-done tasks sorted by due date
   var active = ts.filter(function(t){ return t.status !== 'done'; })
@@ -7704,6 +7665,7 @@ function renderPtMilestones() {
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + '→' + endLbl : (endLbl || startLbl);
     return '<tr style="' + rowBg + '">' + nameCell +
       '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:4px 0;position:relative">' +
+      todayLine +
       '<div style="position:relative;height:26px;background:var(--cream-dark);border-radius:4px;cursor:pointer;overflow:hidden" onclick="openPtEditMilestone(' + i + ')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + barColor + ';border-radius:4px;display:flex;align-items:center;padding:0 8px;min-width:4px;box-sizing:border-box;transition:opacity .15s;z-index:1" onmouseover="this.style.opacity=\'.8\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:var(--white);white-space:nowrap;overflow:hidden;font-weight:600">' + barLabel + '</span>' +
@@ -8729,6 +8691,7 @@ function renderGlobalGantt() {
     var barLabel = startLbl && endLbl && startLbl !== endLbl ? startLbl + ' → ' + endLbl : (endLbl || startLbl);
     return '<tr>' + nameCell +
       '<td colspan="' + months.length + '" style="border-top:1px solid var(--border);padding:5px 0;position:relative">' +
+      todayLine +
       '<div style="position:relative;height:28px;background:#F0EDE8;border-radius:6px;overflow:hidden;cursor:pointer" onclick="selectPtProject(\'' + p.id + '\')">' +
       '<div style="position:absolute;left:' + leftPct + '%;width:' + widthPct + '%;height:100%;background:' + color + ';border-radius:6px;display:flex;align-items:center;padding:0 10px;min-width:6px;box-sizing:border-box;z-index:1;transition:opacity .15s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">' +
       '<span style="font-size:10px;color:#fff;white-space:nowrap;overflow:hidden;font-weight:600;letter-spacing:.01em">' + barLabel + '</span>' +
