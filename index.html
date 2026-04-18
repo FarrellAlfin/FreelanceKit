@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FreelanceKit — Run your freelance business like a pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Inter+Tight:wght@700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Lato:wght@300;400;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -487,9 +487,39 @@ footer p{font-size:12px;color:var(--on-surface-light)}
 .field-block{display:block;background:rgba(111,251,190,0.1);color:var(--on-tertiary-fixed-variant);padding:10px 14px;border-radius:8px;font-family:var(--font-mono);font-size:12px;border:1px dashed var(--tertiary-fixed-dim);margin:8px 0 14px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
 .disclaimer{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin-bottom:22px;font-family:var(--font-body);font-size:12px;color:#78350f;line-height:1.65}
 .disclaimer strong{font-weight:600}
-.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:36px}
 .sig-line{border-bottom:1px solid var(--on-surface);height:34px;margin-bottom:5px}
 .sig-label{font-size:11px;color:var(--on-surface-light);font-family:var(--font-body)}
+/* Interactive signature boxes */
+.sig-box{border:1.5px solid var(--border);border-radius:10px;padding:16px 18px;background:var(--surface)}
+.sig-box-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-light);margin-bottom:12px;font-family:var(--font-body)}
+.sig-img-area{min-height:60px;border-bottom:1.5px solid var(--on-surface);margin-bottom:6px;display:flex;align-items:flex-end;padding-bottom:6px}
+.sig-img-area img{max-height:56px;max-width:100%;object-fit:contain}
+.sig-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--ink-light);font-family:var(--font-body);margin-top:4px;gap:8px}
+.sig-date-field{border-bottom:1px dashed var(--border);padding:1px 4px;cursor:text;font-family:var(--font-body);font-size:11px;display:inline;min-width:70px}
+.sig-date-field:focus{outline:none;border-bottom-color:var(--sage)}
+.sig-actions-row{display:flex;gap:6px;margin-top:12px}
+.sig-btn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;border:1.5px solid var(--border);background:var(--cream);color:var(--ink);cursor:pointer;font-family:var(--font-body);transition:all .15s;white-space:nowrap}
+.sig-btn:hover{border-color:var(--ink)}
+.sig-btn-primary{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.sig-btn-primary:hover{opacity:.82}
+/* Signature modal */
+.sig-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.sig-modal{background:var(--white);border-radius:16px;padding:28px;width:460px;max-width:95vw;box-shadow:0 28px 70px rgba(0,0,0,.25)}
+.sig-modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.sig-modal-title{font-size:17px;font-weight:700;color:var(--ink);font-family:var(--font-display)}
+.sig-modal-close{width:30px;height:30px;border:none;background:var(--cream);cursor:pointer;font-size:20px;color:var(--ink-mid);border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background .15s;line-height:1}
+.sig-modal-close:hover{background:var(--border)}
+.sig-tab-row{display:flex;gap:3px;background:var(--cream);border-radius:9px;padding:3px;margin-bottom:18px}
+.sig-tab{flex:1;padding:8px;text-align:center;border:none;background:transparent;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-mid);font-family:var(--font-body);transition:all .15s}
+.sig-tab.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.sig-canvas-wrap{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;background:#fafaf8;touch-action:none;cursor:crosshair;position:relative}
+#sig-canvas{display:block;width:100%;height:120px}
+.sig-canvas-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink-light);pointer-events:none;font-family:var(--font-body)}
+.sig-type-preview{min-height:72px;border:1.5px solid var(--border);border-radius:8px;background:#fafaf8;display:flex;align-items:center;justify-content:center;font-family:'Dancing Script',cursive;font-size:40px;color:var(--ink);padding:8px 16px;margin-top:10px;text-align:center;overflow:hidden;letter-spacing:.01em}
+.sig-modal-footer{display:flex;gap:8px;margin-top:20px;align-items:center}
+.sig-save-lbl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-mid);cursor:pointer;font-family:var(--font-body);flex:1}
+.sig-save-lbl input[type=checkbox]{cursor:pointer;accent-color:var(--sage)}
 
 /* Email card */
 .email-card{background:var(--surface-white);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
@@ -2381,6 +2411,42 @@ var RateLimiter = (function() {
   </div>
 </div><!-- /auth -->
 
+<!-- ══ SIGNATURE MODAL ══ -->
+<div id="sig-modal-overlay" class="sig-modal-overlay" style="display:none" onclick="if(event.target===this)closeSigModal()">
+  <div class="sig-modal">
+    <div class="sig-modal-hdr">
+      <div class="sig-modal-title" id="sig-modal-title">Your signature</div>
+      <button class="sig-modal-close" onclick="closeSigModal()">&#215;</button>
+    </div>
+    <div class="sig-tab-row">
+      <button class="sig-tab active" id="sig-tab-draw" onclick="switchSigTab('draw')">✏️ Draw</button>
+      <button class="sig-tab" id="sig-tab-type" onclick="switchSigTab('type')">Aa&nbsp;Type</button>
+    </div>
+    <!-- Draw panel -->
+    <div id="sig-draw-panel">
+      <div class="sig-canvas-wrap">
+        <canvas id="sig-canvas" width="400" height="120"></canvas>
+        <div class="sig-canvas-hint" id="sig-canvas-hint">Draw your signature here</div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:6px">
+        <button class="sig-btn" onclick="clearSigCanvas()" style="padding:4px 10px">Clear</button>
+      </div>
+    </div>
+    <!-- Type panel -->
+    <div id="sig-type-panel" style="display:none">
+      <input class="auth-input" id="sig-type-inp" type="text" placeholder="Type your full name" oninput="updateSigTypePreview()" style="margin-bottom:0">
+      <div class="sig-type-preview" id="sig-type-preview">Your Name</div>
+    </div>
+    <div class="sig-modal-footer">
+      <label class="sig-save-lbl" id="sig-save-lbl-wrap">
+        <input type="checkbox" id="sig-save-chk" checked>
+        Save signature for future use
+      </label>
+      <button class="sig-btn" onclick="closeSigModal()">Cancel</button>
+      <button class="sig-btn sig-btn-primary" onclick="applySig()">Apply →</button>
+    </div>
+  </div>
+</div>
 
 
 
@@ -8740,6 +8806,174 @@ function renderGlobalGantt() {
   setTimeout(function(){ ganttScrollToToday('gg-scroll'); }, 50);
 }
 
+// ─── SIGNATURES ───
+var _sigTarget = null;
+var _sigCanvas = null;
+var _sigCtx = null;
+var _sigDrawing = false;
+var _sigTab = 'draw';
+
+function openSigModal(target) {
+  _sigTarget = target;
+  var overlay = document.getElementById('sig-modal-overlay');
+  if (!overlay) return;
+  var titleEl = document.getElementById('sig-modal-title');
+  if (titleEl) titleEl.textContent = target === 'freelancer' ? 'Your signature' : 'Client signature';
+  var saveWrap = document.getElementById('sig-save-lbl-wrap');
+  if (saveWrap) saveWrap.style.display = target === 'freelancer' ? '' : 'none';
+  overlay.style.display = 'flex';
+  // Init canvas
+  _sigCanvas = document.getElementById('sig-canvas');
+  if (_sigCanvas) {
+    _sigCtx = _sigCanvas.getContext('2d');
+    _sigCtx.clearRect(0, 0, _sigCanvas.width, _sigCanvas.height);
+    _sigCtx.strokeStyle = '#191c1e';
+    _sigCtx.lineWidth = 2.5;
+    _sigCtx.lineCap = 'round';
+    _sigCtx.lineJoin = 'round';
+    _sigDrawing = false;
+    // Show hint
+    var hint = document.getElementById('sig-canvas-hint');
+    if (hint) hint.style.display = '';
+    // Load saved sig if available and target is freelancer
+    if (target === 'freelancer') {
+      var saved = localStorage.getItem('fk_sig_user');
+      if (saved) {
+        var img = new Image();
+        img.onload = function() {
+          _sigCtx.drawImage(img, 0, 0, _sigCanvas.width, _sigCanvas.height);
+          if (hint) hint.style.display = 'none';
+        };
+        img.src = saved;
+      }
+    }
+    // Attach pointer events once
+    if (!_sigCanvas._sigEventsAttached) {
+      _sigCanvas._sigEventsAttached = true;
+      _sigCanvas.addEventListener('pointerdown', function(e) {
+        _sigDrawing = true;
+        var hint = document.getElementById('sig-canvas-hint');
+        if (hint) hint.style.display = 'none';
+        var r = _sigCanvas.getBoundingClientRect();
+        var sx = _sigCanvas.width / r.width, sy = _sigCanvas.height / r.height;
+        _sigCtx.beginPath();
+        _sigCtx.moveTo((e.clientX - r.left) * sx, (e.clientY - r.top) * sy);
+        e.preventDefault();
+      });
+      _sigCanvas.addEventListener('pointermove', function(e) {
+        if (!_sigDrawing) return;
+        var r = _sigCanvas.getBoundingClientRect();
+        var sx = _sigCanvas.width / r.width, sy = _sigCanvas.height / r.height;
+        _sigCtx.lineTo((e.clientX - r.left) * sx, (e.clientY - r.top) * sy);
+        _sigCtx.stroke();
+        _sigCtx.beginPath();
+        _sigCtx.moveTo((e.clientX - r.left) * sx, (e.clientY - r.top) * sy);
+        e.preventDefault();
+      });
+      _sigCanvas.addEventListener('pointerup', function() { _sigDrawing = false; });
+      _sigCanvas.addEventListener('pointerleave', function() { _sigDrawing = false; });
+    }
+  }
+  // Reset type input
+  var inp = document.getElementById('sig-type-inp');
+  if (inp) inp.value = '';
+  var preview = document.getElementById('sig-type-preview');
+  if (preview) preview.textContent = 'Your Name';
+  switchSigTab('draw');
+}
+
+function closeSigModal() {
+  var overlay = document.getElementById('sig-modal-overlay');
+  if (overlay) overlay.style.display = 'none';
+  _sigTarget = null;
+}
+
+function switchSigTab(tab) {
+  _sigTab = tab;
+  var drawPanel = document.getElementById('sig-draw-panel');
+  var typePanel = document.getElementById('sig-type-panel');
+  var tabDraw = document.getElementById('sig-tab-draw');
+  var tabType = document.getElementById('sig-tab-type');
+  if (drawPanel) drawPanel.style.display = tab === 'draw' ? '' : 'none';
+  if (typePanel) typePanel.style.display = tab === 'type' ? '' : 'none';
+  if (tabDraw) tabDraw.classList.toggle('active', tab === 'draw');
+  if (tabType) tabType.classList.toggle('active', tab === 'type');
+}
+
+function clearSigCanvas() {
+  if (_sigCtx && _sigCanvas) {
+    _sigCtx.clearRect(0, 0, _sigCanvas.width, _sigCanvas.height);
+    var hint = document.getElementById('sig-canvas-hint');
+    if (hint) hint.style.display = '';
+  }
+}
+
+function updateSigTypePreview() {
+  var inp = document.getElementById('sig-type-inp');
+  var preview = document.getElementById('sig-type-preview');
+  if (inp && preview) preview.textContent = inp.value.trim() || 'Your Name';
+}
+
+function _getSigDataUrl() {
+  if (_sigTab === 'type') {
+    var inp = document.getElementById('sig-type-inp');
+    var name = inp ? inp.value.trim() : '';
+    if (!name) return null;
+    var oc = document.createElement('canvas');
+    oc.width = 400; oc.height = 120;
+    var ctx = oc.getContext('2d');
+    ctx.font = '600 48px "Dancing Script", cursive';
+    ctx.fillStyle = '#191c1e';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, 200, 65);
+    return oc.toDataURL('image/png');
+  } else {
+    if (!_sigCanvas) return null;
+    var data = _sigCtx.getImageData(0, 0, _sigCanvas.width, _sigCanvas.height).data;
+    var empty = true;
+    for (var i = 3; i < data.length; i += 4) { if (data[i] > 10) { empty = false; break; } }
+    return empty ? null : _sigCanvas.toDataURL('image/png');
+  }
+}
+
+function applySig() {
+  var dataUrl = _getSigDataUrl();
+  if (!dataUrl) { showToast('Please draw or type a signature first'); return; }
+  // Save if checkbox ticked and target is freelancer
+  var saveChk = document.getElementById('sig-save-chk');
+  if (_sigTarget === 'freelancer' && saveChk && saveChk.checked) {
+    try { localStorage.setItem('fk_sig_user', dataUrl); } catch(e) {}
+    showToast('✓ Signature saved for future use');
+  }
+  // Place image in document
+  var imgArea = document.getElementById('sig-img-area-' + _sigTarget);
+  if (imgArea) {
+    imgArea.innerHTML = '<img src="' + dataUrl + '" style="max-height:56px;max-width:100%;object-fit:contain">';
+  }
+  // Set printed name when typed
+  if (_sigTab === 'type') {
+    var inp = document.getElementById('sig-type-inp');
+    var printedEl = document.getElementById('sig-printed-' + _sigTarget);
+    if (inp && printedEl) printedEl.textContent = inp.value.trim();
+  }
+  closeSigModal();
+  if (!(_sigTarget === 'freelancer' && saveChk && saveChk.checked)) {
+    showToast('✓ Signature applied');
+  }
+}
+
+function loadSavedSig(target) {
+  var saved = null;
+  try { saved = localStorage.getItem('fk_sig_user'); } catch(e) {}
+  if (!saved) { showToast('No saved signature — use ✍ Sign to create one'); return; }
+  var imgArea = document.getElementById('sig-img-area-' + target);
+  if (imgArea) {
+    imgArea.innerHTML = '<img src="' + saved + '" style="max-height:56px;max-width:100%;object-fit:contain">';
+    showToast('✓ Saved signature applied');
+  }
+}
+
 // ─── DOC LINKING ───
 
 function openDocForProject(docId) {
@@ -8870,8 +9104,32 @@ function _ptContractDocHTML() {
     '<hr class="doc-divider"><h2>11. Governing Law</h2>' +
     '<p>This Agreement is governed by the laws of <span class="field">[YOUR STATE/PROVINCE AND COUNTRY]</span>.</p>' +
     '<hr class="doc-thick"><h2>Signatures</h2>' +
-    '<div class="sig-grid"><div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Date</div></div>' +
-    '<div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Printed name · Title · Date</div></div></div>';
+    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Agreement.</p>' +
+    '<div class="sig-grid">' +
+      '<div class="sig-box">' +
+        '<div class="sig-box-lbl">Freelancer</div>' +
+        '<div class="sig-img-area" id="sig-img-area-freelancer"></div>' +
+        '<div class="sig-meta">' +
+          '<span id="sig-printed-freelancer" style="font-size:12px;color:var(--ink-mid);font-family:var(--font-body);font-style:italic"></span>' +
+          '<span>Date: <span class="sig-date-field" contenteditable="true">[DATE]</span></span>' +
+        '</div>' +
+        '<div class="sig-actions-row">' +
+          '<button class="sig-btn sig-btn-primary" onclick="openSigModal(\'freelancer\')">✍&nbsp;Sign</button>' +
+          '<button class="sig-btn" onclick="loadSavedSig(\'freelancer\')">Use saved</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sig-box">' +
+        '<div class="sig-box-lbl">Client</div>' +
+        '<div class="sig-img-area" id="sig-img-area-client"></div>' +
+        '<div class="sig-meta">' +
+          '<span id="sig-printed-client" style="font-size:12px;color:var(--ink-mid);font-family:var(--font-body);font-style:italic"></span>' +
+          '<span>Date: <span class="sig-date-field" contenteditable="true">[DATE]</span></span>' +
+        '</div>' +
+        '<div class="sig-actions-row">' +
+          '<button class="sig-btn sig-btn-primary" onclick="openSigModal(\'client\')">✍&nbsp;Sign</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
 }
 
 function _ptScopeDocHTML() {
@@ -8898,8 +9156,32 @@ function _ptScopeDocHTML() {
     '</table>' +
     '<div class="doc-callout"><strong>Important:</strong> Work on this change will not begin until this Change Order is signed.</div>' +
     '<hr class="doc-thick"><h2>Signatures</h2>' +
-    '<div class="sig-grid"><div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Freelancer</div><div class="sig-line"></div><div class="sig-label">Signature · Date</div></div>' +
-    '<div><div style="font-size:12px;font-weight:500;margin-bottom:8px;font-family:var(--font-body)">Client</div><div class="sig-line"></div><div class="sig-label">Signature · Title · Date</div></div></div>';
+    '<p style="font-size:12px;color:var(--on-surface-light);margin-bottom:20px;font-family:var(--font-body)">By signing below, both parties agree to the terms of this Agreement.</p>' +
+    '<div class="sig-grid">' +
+      '<div class="sig-box">' +
+        '<div class="sig-box-lbl">Freelancer</div>' +
+        '<div class="sig-img-area" id="sig-img-area-freelancer"></div>' +
+        '<div class="sig-meta">' +
+          '<span id="sig-printed-freelancer" style="font-size:12px;color:var(--ink-mid);font-family:var(--font-body);font-style:italic"></span>' +
+          '<span>Date: <span class="sig-date-field" contenteditable="true">[DATE]</span></span>' +
+        '</div>' +
+        '<div class="sig-actions-row">' +
+          '<button class="sig-btn sig-btn-primary" onclick="openSigModal(\'freelancer\')">✍&nbsp;Sign</button>' +
+          '<button class="sig-btn" onclick="loadSavedSig(\'freelancer\')">Use saved</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sig-box">' +
+        '<div class="sig-box-lbl">Client</div>' +
+        '<div class="sig-img-area" id="sig-img-area-client"></div>' +
+        '<div class="sig-meta">' +
+          '<span id="sig-printed-client" style="font-size:12px;color:var(--ink-mid);font-family:var(--font-body);font-style:italic"></span>' +
+          '<span>Date: <span class="sig-date-field" contenteditable="true">[DATE]</span></span>' +
+        '</div>' +
+        '<div class="sig-actions-row">' +
+          '<button class="sig-btn sig-btn-primary" onclick="openSigModal(\'client\')">✍&nbsp;Sign</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
 }
 
 // ─── DRAG & DROP TASKS ───
