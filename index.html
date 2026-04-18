@@ -1380,6 +1380,15 @@ select.inv-badge{appearance:none;-webkit-appearance:none;border:none;outline:non
 .doc-edit-proj{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-mid)}
 .doc-edit-proj select{border:1px solid var(--border);border-radius:4px;padding:5px 10px;background:var(--white);font-size:12px;color:var(--ink);font-family:var(--font-body);cursor:pointer}
 .doc-edit-hint{font-size:11px;color:var(--ink-light);margin-left:auto}
+.doc-toolbar{display:none;align-items:center;gap:4px;background:var(--surface-container);border:1px solid var(--border);border-radius:8px;padding:6px 10px;margin-bottom:12px;flex-wrap:wrap}
+.doc-toolbar.active{display:flex}
+.doc-tb-btn{padding:4px 9px;border-radius:5px;border:1.5px solid transparent;background:transparent;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;font-family:var(--font-body);transition:all .12s;line-height:1.3}
+.doc-tb-btn:hover{background:var(--surface-white);border-color:var(--border)}
+.doc-tb-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.doc-tb-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
+.doc-body.editable-mode{outline:none;caret-color:var(--ink)}
+.doc-body.editable-mode:focus{outline:none}
+.doc-body.editable-mode .field,.doc-body.editable-mode .field-block{background:transparent;color:inherit;border-bottom:none;cursor:text}
 .field[contenteditable=true]:hover{background:rgba(111,251,190,0.25);cursor:text}
 .field[contenteditable=true]:focus{outline:2px solid var(--tertiary);border-color:var(--tertiary);background:rgba(111,251,190,0.3);cursor:text}
 .field-block[contenteditable=true]:hover{background:rgba(111,251,190,0.2);cursor:text}
@@ -3041,6 +3050,8 @@ var RateLimiter = (function() {
             <button class="pt-tab" onclick="showPtTab('billing',this)">Billing</button>
             <button class="pt-tab" onclick="showPtTab('meetings',this)">Meeting Notes</button>
             <button class="pt-tab" onclick="showPtTab('hours',this)">Timesheet</button>
+            <button class="pt-tab" onclick="showPtTab('contract',this)">📄 Contract</button>
+            <button class="pt-tab" onclick="showPtTab('scope',this)">⚠️ Scope Change</button>
           </div>
           <!-- Overview tab -->
           <div class="pt-tab-content" id="pt-tab-overview">
@@ -3158,6 +3169,10 @@ var RateLimiter = (function() {
             <div class="pt-sec-hdr">Time log <button class="pt-add-btn" onclick="openPtModal('add-time')">+ Log time</button></div>
             <div id="pt-hours-list"></div>
           </div>
+          <!-- Contract tab -->
+          <div class="pt-tab-content" id="pt-tab-contract" style="display:none"></div>
+          <!-- Scope Change Order tab -->
+          <div class="pt-tab-content" id="pt-tab-scope" style="display:none"></div>
 
         </div>
       </div>
@@ -9003,11 +9018,26 @@ function renderPtDocTab(type) {
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">' +
       '<div style="font-size:13px;font-weight:600;color:var(--ink)">' + title + (saved ? ' <span style="font-size:10px;color:var(--sage);font-weight:400">● saved</span>' : '') + '</div>' +
       '<div style="display:flex;gap:8px;align-items:center">' +
-        '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">Edit fields</button>' +
-        '<span class="doc-edit-hint">Click highlighted fields to edit</span>' +
+        '<button class="doc-edit-toggle" id="' + prefix + '-edit-toggle" onclick="ptToggleDocEdit(\'' + prefix + '\')">&#9998;&nbsp;Edit</button>' +
         '<button class="btn-primary" style="font-size:12px;padding:5px 12px" onclick="ptSaveDoc(\'' + type + '\')">&#128190; Save</button>' +
         '<button class="btn-outline" style="font-size:12px;padding:5px 10px;color:#E8594A;border-color:#E8594A" onclick="ptPrintDoc(\'' + prefix + '\')">&#128196; Download PDF</button>' +
       '</div>' +
+    '</div>' +
+    '<div class="doc-toolbar" id="' + prefix + '-toolbar">' +
+      '<button class="doc-tb-btn" title="Bold" onmousedown="event.preventDefault();document.execCommand(\'bold\')"><b>B</b></button>' +
+      '<button class="doc-tb-btn" title="Italic" onmousedown="event.preventDefault();document.execCommand(\'italic\')"><i>I</i></button>' +
+      '<button class="doc-tb-btn" title="Underline" onmousedown="event.preventDefault();document.execCommand(\'underline\')"><u>U</u></button>' +
+      '<div class="doc-tb-sep"></div>' +
+      '<button class="doc-tb-btn" title="Heading" onmousedown="event.preventDefault();document.execCommand(\'formatBlock\',false,\'h2\')" style="font-size:11px;font-weight:700">H2</button>' +
+      '<button class="doc-tb-btn" title="Normal text" onmousedown="event.preventDefault();document.execCommand(\'formatBlock\',false,\'p\')" style="font-size:11px">¶</button>' +
+      '<div class="doc-tb-sep"></div>' +
+      '<button class="doc-tb-btn" title="Align left" onmousedown="event.preventDefault();document.execCommand(\'justifyLeft\')" style="font-size:11px;font-weight:600">Left</button>' +
+      '<button class="doc-tb-btn" title="Center" onmousedown="event.preventDefault();document.execCommand(\'justifyCenter\')" style="font-size:11px;font-weight:600">Center</button>' +
+      '<button class="doc-tb-btn" title="Align right" onmousedown="event.preventDefault();document.execCommand(\'justifyRight\')" style="font-size:11px;font-weight:600">Right</button>' +
+      '<div class="doc-tb-sep"></div>' +
+      '<button class="doc-tb-btn" title="Undo" onmousedown="event.preventDefault();document.execCommand(\'undo\')" style="font-size:13px">&#8630;</button>' +
+      '<button class="doc-tb-btn" title="Redo" onmousedown="event.preventDefault();document.execCommand(\'redo\')" style="font-size:13px">&#8631;</button>' +
+      '<span style="font-size:11px;color:var(--ink-light);margin-left:8px">Click anywhere in the document to edit</span>' +
     '</div>' +
     '<div class="doc-wrap" style="max-height:70vh;overflow-y:auto">' +
       '<div class="doc-bar"><div class="db-dot" style="background:#E8594A"></div><div class="db-dot" style="background:#F4A73A;margin-left:4px"></div><div class="db-dot" style="background:#5DC86A;margin-left:4px"></div>' +
@@ -9039,13 +9069,20 @@ function ptSaveDoc(type) {
 function ptToggleDocEdit(prefix) {
   _ptDocEditMode[prefix] = !_ptDocEditMode[prefix];
   var toggle = document.getElementById(prefix + '-edit-toggle');
+  var toolbar = document.getElementById(prefix + '-toolbar');
   var body = document.getElementById(prefix + '-doc-body');
   if (!body) return;
   var on = _ptDocEditMode[prefix];
+  // Make entire doc body editable (word-processor mode)
+  body.contentEditable = on ? 'true' : 'false';
+  body.classList.toggle('editable-mode', on);
+  // Remove individual field contenteditable (whole body is now editable)
   body.querySelectorAll('.field, .field-block').forEach(function(el) {
-    el.contentEditable = on ? 'true' : 'false';
+    el.contentEditable = on ? 'inherit' : 'false';
   });
-  if (toggle) { toggle.classList.toggle('on', on); toggle.textContent = on ? '✓ Editing on' : 'Edit fields'; }
+  if (toolbar) toolbar.classList.toggle('active', on);
+  if (toggle) { toggle.classList.toggle('on', on); toggle.innerHTML = on ? '&#10003;&nbsp;Editing' : '&#9998;&nbsp;Edit'; }
+  if (on) { body.focus(); }
 }
 
 function _ptAutoFillDoc(prefix, p) {
